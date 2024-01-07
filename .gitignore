@@ -109,6 +109,7 @@ Temporary Items
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/style.xml
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -148,31 +149,21 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
-
-# # VS Code Specific Java Settings
+# # VS WCode Specific Java Settings
 # DO NOT REMOVE .classpath and .project
 .classpath
 .project
 .settings/
 bin/
-
-# IntelliJ
-*.iml
-*.ipr
-*.iws
-.idea/
-out/
-
-# Fleet
-.fleet
-
-# Simulation GUI and other tools window save file
-*-window.json
-
-# Simulation data log directory
-logs/
-
-# Folder that has CTRE Phoenix Sim device config storage
 ctre_sim/
+
+# Simulation GUI and other tools window save files
+*-window.json
+simgui*.json
+networktables.json
+
+# Python files
+**/__pycache__
+**/venv
+
+*.wpilog
