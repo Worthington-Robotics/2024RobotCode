@@ -4,10 +4,12 @@
 
 package frc.WorBots;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.commands.DriveWithJoysticks;
 import frc.WorBots.subsystems.drive.*;
+import frc.WorBots.util.Logger;
 import frc.WorBots.util.StatusPage;
 
 public class RobotContainer {
@@ -25,6 +27,7 @@ public class RobotContainer {
       drive = new Drive(new GyroIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
     }
     bindControls();
+    SmartDashboard.putNumberArray("April Pose 1", Logger.pose3dToArray(FieldConstants.aprilTags.getTagPose(1).get()));
   }
 
   private void bindControls() {
