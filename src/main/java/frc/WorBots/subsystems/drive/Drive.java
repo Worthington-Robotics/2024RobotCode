@@ -33,6 +33,7 @@ public class Drive extends SubsystemBase {
   private PoseEstimator poseEstimator = new PoseEstimator(VecBuilder.fill(0.003, 0.003, 0.0002));
   private NetworkTableInstance instance = NetworkTableInstance.getDefault();
   private Twist2d fieldVelocity = new Twist2d();
+  private Translation2d centerOfRotation = new Translation2d();
   private NetworkTable driveTable = instance.getTable("Drive");
   private DoubleArrayPublisher setpointPublisher = driveTable.getDoubleArrayTopic("Setpoint").publish();
   private DoubleArrayPublisher measuredPublisher = driveTable.getDoubleArrayTopic("Measured").publish();
@@ -65,7 +66,7 @@ public class Drive extends SubsystemBase {
               new Rotation2d(setpoint.omegaRadiansPerSecond * 0.02)));
       var adjustedSpeeds = new ChassisSpeeds(setpointTwist.dx / 0.02, setpointTwist.dy / 0.02,
           setpointTwist.dtheta / 0.02);
-      SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(adjustedSpeeds);
+      SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(adjustedSpeeds, centerOfRotation);
       SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, 4.5);
 
       lastSetpointStates = setpointStates;
@@ -167,6 +168,10 @@ public class Drive extends SubsystemBase {
 
   public void setPose(Pose2d pose) {
     poseEstimator.resetPose(pose);
+  }
+
+  public void setCenterOfRotation(Translation2d center) {
+    this.centerOfRotation = center;
   }
 
   public SwerveModulePosition[] getLastSwerveModulePositions() {

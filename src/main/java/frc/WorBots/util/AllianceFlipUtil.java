@@ -6,16 +6,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.WorBots.Constants;
+import frc.WorBots.FieldConstants;
 import frc.WorBots.util.trajectory.RotationSequence;
 
 /**
- * Utility functions for flipping from the blue to red alliance. By default, all translations and
- * poses in {@link FieldConstants} are stored with the origin at the rightmost point on the blue
+ * Utility functions for flipping from the blue to red alliance. By default, all
+ * translations and
+ * poses in {@link FieldConstants} are stored with the origin at the rightmost
+ * point on the blue
  * alliance wall.
  */
 public class AllianceFlipUtil {
-  /** Flips a translation to the correct side of the field based on the current alliance color. */
+  /**
+   * Flips a translation to the correct side of the field based on the current
+   * alliance color.
+   */
   public static Translation2d apply(Translation2d translation) {
     if (shouldFlip()) {
       return applyAgnostic(translation);
@@ -24,15 +29,21 @@ public class AllianceFlipUtil {
     }
   }
 
-  /** Flips a translation to the other side of the field not based on the current alliance color. */
+  /**
+   * Flips a translation to the other side of the field not based on the current
+   * alliance color.
+   */
   public static Translation2d applyAgnostic(Translation2d translation) {
-    return new Translation2d(Constants.Field.FIELD_LENGTH - translation.getX(), translation.getY());
+    return new Translation2d(FieldConstants.fieldLength - translation.getX(), translation.getY());
   }
 
-  /** Flips an x coordinate to the correct side of the field based on the current alliance color. */
+  /**
+   * Flips an x coordinate to the correct side of the field based on the current
+   * alliance color.
+   */
   public static double apply(double xCoordinate) {
     if (shouldFlip()) {
-      return Constants.Field.FIELD_LENGTH - xCoordinate;
+      return FieldConstants.fieldLength - xCoordinate;
     } else {
       return xCoordinate;
     }
@@ -47,11 +58,14 @@ public class AllianceFlipUtil {
     }
   }
 
-  /** Flips a pose to the correct side of the field based on the current alliance color. */
+  /**
+   * Flips a pose to the correct side of the field based on the current alliance
+   * color.
+   */
   public static Pose2d apply(Pose2d pose) {
     if (shouldFlip()) {
       return new Pose2d(
-          Constants.Field.FIELD_LENGTH - pose.getX(),
+          FieldConstants.fieldLength - pose.getX(),
           pose.getY(),
           new Rotation2d(-pose.getRotation().getCos(), pose.getRotation().getSin()));
     } else {
@@ -60,7 +74,8 @@ public class AllianceFlipUtil {
   }
 
   /**
-   * Flips a trajectory state to the correct side of the field based on the current alliance color.
+   * Flips a trajectory state to the correct side of the field based on the
+   * current alliance color.
    */
   public static Trajectory.State apply(Trajectory.State state) {
     if (shouldFlip()) {
@@ -69,7 +84,7 @@ public class AllianceFlipUtil {
           state.velocityMetersPerSecond,
           state.accelerationMetersPerSecondSq,
           new Pose2d(
-              Constants.Field.FIELD_LENGTH - state.poseMeters.getX(),
+              FieldConstants.fieldLength - state.poseMeters.getX(),
               state.poseMeters.getY(),
               new Rotation2d(
                   -state.poseMeters.getRotation().getCos(),
