@@ -19,7 +19,17 @@ public class FieldConstants {
   public static final double tapeWidth = Units.inchesToMeters(2.0);
 
   public static final class Wing {
+    public static final double startX = 0;
+    public static final double endX = Units.inchesToMeters(231.2);
+    public static final double startY = fieldWidth;
+    public static final double endY = 0;
 
+    public static final Translation2d[] regionCorners = new Translation2d[] {
+      new Translation2d(startX, startY),
+      new Translation2d(startX, endY),
+      new Translation2d(endX, endY),
+      new Translation2d(endX, startY)
+    };
   }
 
   public static final class Amp {
@@ -42,6 +52,20 @@ public class FieldConstants {
     };
   }
 
+    public static final class StartingZone {
+    public static final double startX = 0;
+    public static final double endX = Units.inchesToMeters((9.0 * 12) + 10.25);
+    public static final double startY = fieldWidth - Units.inchesToMeters(10);
+    public static final double endY = startY - Units.inchesToMeters((12.0 * 23.0) + 8.125);
+
+    public static final Translation2d[] regionCorners = new Translation2d[] {
+      new Translation2d(startX, startY),
+      new Translation2d(startX, endY),
+      new Translation2d(endX, endY),
+      new Translation2d(endX, startY)
+    };
+  }
+
   public static final class Speaker {
 
   }
@@ -52,6 +76,10 @@ public class FieldConstants {
 
   public static final class Stage {
 
+  }
+
+  public static final class GamePieces {
+    
   }
 
   // April Tags
