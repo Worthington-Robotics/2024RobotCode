@@ -35,6 +35,7 @@ public class FieldConstants {
     Logger.getInstance().logTranslation2d("Field", "Stage foot 1 center", Stage.foot1Center);
     Logger.getInstance().logTranslation2d("Field", "Stage foot 2 center", Stage.foot2Center);
     Logger.getInstance().logTranslation2d("Field", "Stage foot 3 center", Stage.foot3Center);
+    Logger.getInstance().logTranslation2d("Field", "Stage center", Stage.center);
     Logger.getInstance().logTranslation2d("Field", "Subwoofer corner 1", Speaker.regionCorners[0]);
     Logger.getInstance().logTranslation2d("Field", "Subwoofer corner 2", Speaker.regionCorners[1]);
     Logger.getInstance().logTranslation2d("Field", "Subwoofer corner 3", Speaker.regionCorners[2]);
@@ -112,6 +113,7 @@ public class FieldConstants {
     public static final double trussToTrussDistance = Units.inchesToMeters(85.9);
     public static final double trussDistanceAtAngle = Units.feetToMeters((Math.sqrt(3) + 1) / 2);
     public static final double footToFootDistance = trussToTrussDistance + trussDistanceAtAngle;
+    // The altitude of the equilateral triangle formed by the feet
     private static final double temp = footToFootDistance / 2 * Math.sqrt(3);
 
     public static final Translation2d foot1Center = new Translation2d(Units.inchesToMeters(121.0) + footWidth / 2,
@@ -121,7 +123,10 @@ public class FieldConstants {
     public static final Translation2d foot3Center = foot1Center
         .plus(new Translation2d(temp, footToFootDistance / -2));
 
+    public static final Translation2d center = foot1Center.plus(new Translation2d(temp / 2, 0));
+
     public static final double verticalClearance = Units.inchesToMeters(27.83);
+    public static final double trapOpeningBottomHeight = Units.inchesToMeters(56.5);
   }
 
   public static final class GamePieces {
@@ -149,6 +154,12 @@ public class FieldConstants {
         new Translation2d(midLineX, fourthMidGamePieceY),
         new Translation2d(midLineX, fifthMidGamePieceY)
     };
+  }
+
+  public static final class Note {
+    public static double insideDiameter = Units.inchesToMeters(10);
+    public static double outsideDiameter = Units.inchesToMeters(14);
+    public static double thickness = Units.inchesToMeters(2);
   }
 
   // April Tags
