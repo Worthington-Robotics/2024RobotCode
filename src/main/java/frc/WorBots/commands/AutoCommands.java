@@ -58,4 +58,11 @@ public class AutoCommands extends Command {
     return path(Arrays.asList(waypoints));
   }
 
+  private Command driveAndIntakeWing() {
+    return Commands.none();
+  }
+
+  private Command driveAndIntakeCenter() {
+    return Commands.none();
+  }
 }
