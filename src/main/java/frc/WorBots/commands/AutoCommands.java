@@ -4,19 +4,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.WorBots.subsystems.drive.Drive;
-import frc.WorBots.util.AllianceFlipUtil;
-import frc.WorBots.util.trajectory.Waypoint;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.trajectory.constraint.*;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.WorBots.*;
+import frc.WorBots.subsystems.drive.*;
+import frc.WorBots.util.*;
+import frc.WorBots.util.trajectory.*;
 
 public class AutoCommands extends Command {
+  // Subsystems
   private final Drive drive;
+
+  // Poses
+  private final Pose2d[] startingLocations;
 
   public AutoCommands(Drive drive) {
     this.drive = drive;
+    startingLocations = new Pose2d[] {
+        new Pose2d(FieldConstants.StartingZone.regionCorners[0].plus(new Translation2d(-1, 1)), new Rotation2d())
+    };
   }
 
   private Command reset(Pose2d pose) {

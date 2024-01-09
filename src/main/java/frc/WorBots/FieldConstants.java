@@ -14,10 +14,8 @@ import frc.WorBots.util.Logger;
 
 // Units are in meters and radians
 // Some measurements in the field manual are incorrect, reference drawings.
-// Units are in meters and radians
-// Some measurements in the field manual are incorrect, reference drawings.
 public class FieldConstants {
-  public static final boolean isWPIField = true; // Red alliance
+  public static final boolean isWPIField = true;
 
   public static final double fieldLength = Units.inchesToMeters(651.25); // 16.451 m
   public static final double fieldWidth = Units.inchesToMeters(323.25); // 8.211 m
