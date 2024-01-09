@@ -54,6 +54,16 @@ public class Logger {
     topic.close();
   }
 
+  public void logTranslation2d(String tableName, String topicName, Translation2d pose) {
+    NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+    NetworkTable table = defaultInstance.getTable(tableName);
+    DoubleArrayPublisher topic = table.getDoubleArrayTopic(topicName).publish();
+    topic.set(new double[] {
+        pose.getX(), pose.getY()
+    });
+    topic.close();
+  }
+
   public void logTrajectory(String tableName, String topicName, Trajectory trajectory) {
     NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
     NetworkTable table = defaultInstance.getTable(tableName);
