@@ -33,7 +33,10 @@ public class RobotContainer {
     }
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
-    SmartDashboard.putNumberArray("POSE", Logger.translation3dToArray(FieldConstants.Amp.test));
+    SmartDashboard.putNumberArray("POSE0", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.GamePieces.wingPieces[1])));
+    SmartDashboard.putNumberArray("POSE1", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.StartingZone.regionCorners[1])));
+    SmartDashboard.putNumberArray("POSE2", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.StartingZone.regionCorners[2])));
+    SmartDashboard.putNumberArray("POSE3", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.StartingZone.regionCorners[3])));
   }
 
   private void bindControls() {

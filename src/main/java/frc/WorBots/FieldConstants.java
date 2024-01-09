@@ -11,12 +11,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
+// Units are in meters and radians
+// Some measurements in the field manual are incorrect, reference drawings.
 public class FieldConstants {
   public static final boolean isWPIField = true; // Red alliance
 
   public static final double fieldLength = Units.inchesToMeters(651.25); // 16.451 m
   public static final double fieldWidth = Units.inchesToMeters(323.25); // 8.211 m
   public static final double tapeWidth = Units.inchesToMeters(2.0);
+  public static final double midLineY = fieldWidth / 2.0;
+  public static final double midLineX = fieldLength / 2.0;
 
   public static final class Wing {
     public static final double startX = 0;
@@ -25,10 +29,10 @@ public class FieldConstants {
     public static final double endY = 0;
 
     public static final Translation2d[] regionCorners = new Translation2d[] {
-      new Translation2d(startX, startY),
-      new Translation2d(startX, endY),
-      new Translation2d(endX, endY),
-      new Translation2d(endX, startY)
+        new Translation2d(startX, startY),
+        new Translation2d(startX, endY),
+        new Translation2d(endX, endY),
+        new Translation2d(endX, startY)
     };
   }
 
@@ -41,7 +45,7 @@ public class FieldConstants {
     public static final Translation3d test = new Translation3d(openingStartX, fieldWidth, openingBottomZ);
 
     public static final double bottomY = fieldWidth;
-    public static final double topY = bottomY - Units.inchesToMeters(10);
+    public static final double topY = bottomY - Units.inchesToMeters(18);
     public static final double startX = 0;
     public static final double endX = Units.feetToMeters(10);
     public static final Translation2d[] regionCorners = new Translation2d[] {
@@ -52,17 +56,18 @@ public class FieldConstants {
     };
   }
 
-    public static final class StartingZone {
+  public static final class StartingZone {
     public static final double startX = 0;
-    public static final double endX = Units.inchesToMeters((9.0 * 12) + 10.25);
-    public static final double startY = fieldWidth - Units.inchesToMeters(10);
-    public static final double endY = startY - Units.inchesToMeters((12.0 * 23.0) + 8.125);
+    public static final double endX = Units.inchesToMeters(76.1);
+    public static final double startY = fieldWidth - Units.inchesToMeters(18);
+    public static final double midY = startY - Units.inchesToMeters((12.0 * 23.0) + 8.125);
+    public static final double endY = 0;
 
     public static final Translation2d[] regionCorners = new Translation2d[] {
-      new Translation2d(startX, startY),
-      new Translation2d(startX, endY),
-      new Translation2d(endX, endY),
-      new Translation2d(endX, startY)
+        new Translation2d(startX, startY),
+        new Translation2d(startX, midY),
+        new Translation2d(endX, endY),
+        new Translation2d(endX, startY)
     };
   }
 
@@ -79,7 +84,16 @@ public class FieldConstants {
   }
 
   public static final class GamePieces {
-    
+    public static final double startX = 0;
+    public static final double wingX = startX + Units.inchesToMeters(114);
+    public static final double secondPieceY = midLineY + Units.inchesToMeters(57);
+    public static final double thirdPieceY = secondPieceY + Units.inchesToMeters(57);
+
+    public static final Translation2d[] wingPieces = new Translation2d[] {
+      new Translation2d(wingX, midLineY),
+      new Translation2d(wingX, secondPieceY),
+      new Translation2d(wingX, thirdPieceY)
+    };
   }
 
   // April Tags
