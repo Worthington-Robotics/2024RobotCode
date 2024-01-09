@@ -6,6 +6,7 @@ import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
@@ -129,6 +130,12 @@ public class Logger {
   public static double[] translation2dToArray(Translation2d translation) {
     return new double[] {
         translation.getX(), translation.getY(), translation.getAngle().getRadians()
+    };
+  }
+
+  public static double[] translation3dToArray(Translation3d translation) {
+    return new double[] {
+      translation.getX(), translation.getY(), translation.getZ(), -0.7071067811865475, 0.0, 0.0, 0.7071067811865476
     };
   }
 

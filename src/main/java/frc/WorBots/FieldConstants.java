@@ -7,6 +7,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public class FieldConstants {
@@ -17,6 +19,38 @@ public class FieldConstants {
   public static final double tapeWidth = Units.inchesToMeters(2.0);
 
   public static final class Wing {
+
+  }
+
+  public static final class Amp {
+    public static final double openingBottomZ = Units.inchesToMeters(26);
+    public static final double openingTopZ = openingBottomZ + Units.inchesToMeters(18);
+    public static final double faceStartX = Units.inchesToMeters(49.5);
+    public static final double openingStartX = faceStartX + Units.inchesToMeters(11);
+    public static final double openingEndX = openingStartX + Units.feetToMeters(2);
+    public static final Translation3d test = new Translation3d(openingStartX, fieldWidth, openingBottomZ);
+
+    public static final double bottomY = fieldWidth;
+    public static final double topY = bottomY - Units.inchesToMeters(10);
+    public static final double startX = 0;
+    public static final double endX = Units.feetToMeters(10);
+    public static final Translation2d[] regionCorners = new Translation2d[] {
+        new Translation2d(startX, bottomY),
+        new Translation2d(startX, topY),
+        new Translation2d(endX, topY),
+        new Translation2d(endX, bottomY)
+    };
+  }
+
+  public static final class Speaker {
+
+  }
+
+  public static final class Source {
+
+  }
+
+  public static final class Stage {
 
   }
 
