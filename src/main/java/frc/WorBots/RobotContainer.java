@@ -33,7 +33,7 @@ public class RobotContainer {
     }
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
-    SmartDashboard.putNumberArray("POSE0", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.GamePieces.wingPieces[1])));
+    SmartDashboard.putNumberArray("POSE0", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.GamePieces.centerPieces[4])));
     SmartDashboard.putNumberArray("POSE1", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.StartingZone.regionCorners[1])));
     SmartDashboard.putNumberArray("POSE2", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.StartingZone.regionCorners[2])));
     SmartDashboard.putNumberArray("POSE3", Logger.pose2dToArray(GeomUtil.translationToPose(FieldConstants.StartingZone.regionCorners[3])));
@@ -48,6 +48,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return Commands.print("AAAAAAAAAA");
   }
 }

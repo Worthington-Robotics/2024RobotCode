@@ -80,7 +80,7 @@ public class FieldConstants {
   }
 
   public static final class Stage {
-
+    
   }
 
   public static final class GamePieces {
@@ -89,10 +89,24 @@ public class FieldConstants {
     public static final double secondPieceY = midLineY + Units.inchesToMeters(57);
     public static final double thirdPieceY = secondPieceY + Units.inchesToMeters(57);
 
+    public static final double firstMidGamePieceY = fieldWidth - Units.inchesToMeters(29.64);
+    public static final double secondMidGamePieceY = firstMidGamePieceY - Units.inchesToMeters(66);
+    public static final double thirdMidGamePieceY = secondMidGamePieceY - Units.inchesToMeters(66);
+    public static final double fourthMidGamePieceY = thirdMidGamePieceY - Units.inchesToMeters(66);
+    public static final double fifthMidGamePieceY = fourthMidGamePieceY - Units.inchesToMeters(66);
+
     public static final Translation2d[] wingPieces = new Translation2d[] {
       new Translation2d(wingX, midLineY),
       new Translation2d(wingX, secondPieceY),
       new Translation2d(wingX, thirdPieceY)
+    };
+
+    public static final Translation2d[] centerPieces = new Translation2d[] {
+      new Translation2d(midLineX, firstMidGamePieceY),
+      new Translation2d(midLineX, secondMidGamePieceY),
+      new Translation2d(midLineX, thirdMidGamePieceY),
+      new Translation2d(midLineX, fourthMidGamePieceY),
+      new Translation2d(midLineX, fifthMidGamePieceY)
     };
   }
 
