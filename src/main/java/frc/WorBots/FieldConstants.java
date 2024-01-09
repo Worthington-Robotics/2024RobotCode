@@ -40,6 +40,10 @@ public class FieldConstants {
     Logger.getInstance().logTranslation2d("Field", "Subwoofer corner 2", Speaker.regionCorners[1]);
     Logger.getInstance().logTranslation2d("Field", "Subwoofer corner 3", Speaker.regionCorners[2]);
     Logger.getInstance().logTranslation2d("Field", "Subwoofer corner 4", Speaker.regionCorners[3]);
+    Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 1", Speaker.openingCorners[0]);
+    Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 2", Speaker.openingCorners[1]);
+    Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 3", Speaker.openingCorners[2]);
+    Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 4", Speaker.openingCorners[3]);
   }
 
   public static final class Wing {
@@ -92,15 +96,31 @@ public class FieldConstants {
   }
 
   public static final class Speaker {
-    public static final double subwooferY = fieldWidth - 5.547867999999999;
+    public static final double speakerY = fieldWidth - 5.547867999999999;
     public static final double subwooferDepth = Units.inchesToMeters(36.37);
     public static final double subwooferSideLength = Units.inchesToMeters(41);
     public static final double subwooferBackLength = Units.inchesToMeters(77.96);
     public static final Translation2d[] regionCorners = new Translation2d[] {
-        new Translation2d(subwooferDepth, subwooferY + subwooferSideLength / 2),
-        new Translation2d(subwooferDepth, subwooferY - subwooferSideLength / 2),
-        new Translation2d(0, subwooferY + subwooferBackLength / 2),
-        new Translation2d(0, subwooferY - subwooferBackLength / 2),
+        new Translation2d(subwooferDepth, speakerY + subwooferSideLength / 2),
+        new Translation2d(subwooferDepth, speakerY - subwooferSideLength / 2),
+        new Translation2d(0, speakerY + subwooferBackLength / 2),
+        new Translation2d(0, speakerY - subwooferBackLength / 2),
+    };
+    public static final double subwooferBaseHeight = Units.inchesToMeters(8.375);
+
+    public static final double openingHeightLower = Units.inchesToMeters(78);
+    public static final double openingHeightHigher = Units.inchesToMeters(82.875);
+    public static final double openingWidth = Units.inchesToMeters(41.375);
+    // Distance from the wall to the end of the opening. Acts as the base of the
+    // right triangle formed by the opening. Game manual is wrong and says 1'16"
+    public static final double openingDepth = Units.inchesToMeters(18);
+    public static final Translation3d[] openingCorners = new Translation3d[] {
+      // Back corners
+      new Translation3d(0, speakerY - openingWidth / 2, openingHeightLower),
+      new Translation3d(0, speakerY + openingWidth / 2, openingHeightLower),
+      // Front corners
+      new Translation3d(openingDepth, speakerY - openingWidth / 2, openingHeightHigher),
+      new Translation3d(openingDepth, speakerY + openingWidth / 2, openingHeightHigher),
     };
   }
 

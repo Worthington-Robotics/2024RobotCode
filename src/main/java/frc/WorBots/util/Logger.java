@@ -64,6 +64,16 @@ public class Logger {
     topic.close();
   }
 
+  public void logTranslation3d(String tableName, String topicName, Translation3d pose) {
+    NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+    NetworkTable table = defaultInstance.getTable(tableName);
+    DoubleArrayPublisher topic = table.getDoubleArrayTopic(topicName).publish();
+    topic.set(new double[] {
+        pose.getX(), pose.getY(), pose.getZ()
+    });
+    topic.close();
+  }
+
   public void logTrajectory(String tableName, String topicName, Trajectory trajectory) {
     NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
     NetworkTable table = defaultInstance.getTable(tableName);
@@ -145,7 +155,7 @@ public class Logger {
 
   public static double[] translation3dToArray(Translation3d translation) {
     return new double[] {
-      translation.getX(), translation.getY(), translation.getZ(), -0.7071067811865475, 0.0, 0.0, 0.7071067811865476
+        translation.getX(), translation.getY(), translation.getZ(), -0.7071067811865475, 0.0, 0.0, 0.7071067811865476
     };
   }
 
