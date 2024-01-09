@@ -12,9 +12,13 @@ import edu.wpi.first.math.util.Units;
 public class FieldConstants {
   public static final boolean isWPIField = true; // Red alliance
 
-  public static final double fieldLength = Units.inchesToMeters(651.25);
-  public static final double fieldWidth = Units.inchesToMeters(323.25);
+  public static final double fieldLength = Units.inchesToMeters(651.25); // 16.451 m
+  public static final double fieldWidth = Units.inchesToMeters(323.25); // 8.211 m
   public static final double tapeWidth = Units.inchesToMeters(2.0);
+
+  public static final class Wing {
+
+  }
 
   // April Tags
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
@@ -88,6 +92,48 @@ public class FieldConstants {
                   0.24587199999999998,
                   1.355852,
                   new Rotation3d(
-                      new Quaternion(0.8660254037844387, 0.0, 0.0, 0.5))))),
+                      new Quaternion(0.8660254037844387, 0.0, 0.0, 0.5)))),
+          new AprilTag(11,
+              new Pose3d(
+                  11.904726,
+                  3.7132259999999997,
+                  1.3208,
+                  new Rotation3d(
+                      new Quaternion(-0.8660254037844387, 0.0, 0.0, 0.5)))),
+          new AprilTag(12,
+              new Pose3d(
+                  11.904726,
+                  4.49834,
+                  1.3208,
+                  new Rotation3d(
+                      new Quaternion(0.8660254037844387, 0.0, 0.0, 0.5)))),
+          new AprilTag(13,
+              new Pose3d(
+                  11.220196,
+                  4.105148,
+                  1.3208,
+                  new Rotation3d(
+                      new Quaternion(0.0, 0.0, 0.0, 1.0)))),
+          new AprilTag(14,
+              new Pose3d(
+                  5.320792,
+                  4.105148,
+                  1.3208,
+                  new Rotation3d(
+                      new Quaternion(1.0, 0.0, 0.0, 0.0)))),
+          new AprilTag(15,
+              new Pose3d(
+                  4.641342,
+                  4.49834,
+                  1.3208,
+                  new Rotation3d(
+                      new Quaternion(0.5, 0.0, 0.0, 0.8660254037844386)))),
+          new AprilTag(16,
+              new Pose3d(
+                  4.641342,
+                  3.7132259999999997,
+                  1.3208,
+                  new Rotation3d(
+                      new Quaternion(-0.5, 0.0, 0.0, 0.8660254037844387))))),
       fieldLength, fieldWidth) : null;
 }
