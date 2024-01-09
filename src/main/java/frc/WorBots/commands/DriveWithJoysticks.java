@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.drive.Drive;
-import frc.WorBots.util.StatusPage;
 
 public class DriveWithJoysticks extends Command {
   private Drive drive;
