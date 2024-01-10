@@ -1,6 +1,5 @@
 package frc.WorBots.subsystems.intake;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,7 +14,6 @@ public class Intake extends SubsystemBase {
   private double setpointVolts = 0.0;
   private double velocityThreshold;
   private double ampsThreshold;
-  private double backCurrentVolts;
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -23,11 +21,9 @@ public class Intake extends SubsystemBase {
     if (Constants.getSim()) {
       velocityThreshold = 1.0;
       ampsThreshold = 8.0;
-      backCurrentVolts = 1.5;
     } else {
       velocityThreshold = 1.0;
       ampsThreshold = 2.0;
-      backCurrentVolts = 1.5;
     }
 
     StatusPage.reportStatus(StatusPage.INTAKE_SUBSYSTEM, true);

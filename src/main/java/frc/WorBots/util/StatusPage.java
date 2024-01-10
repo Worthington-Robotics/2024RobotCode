@@ -21,6 +21,8 @@ public class StatusPage {
   public static final String INTAKE_SUBSYSTEM = "Intake Subsystem";
   public static final String LIGHTS_SUBSYSTEM = "Lights Subsystem";
   public static final String VISION_SUBSYSTEM = "Vision Subsystem";
+  public static final String SHOOTER_SUBSYSTEM = "Shooter Subsystem";
+  public static final String SHOOTER_CONNECTED = "Shooter Connected";
   public static final String GYROSCOPE = "Gyroscope";
   public static final String SMODULE_PREFIX = "SModule";
   public static final String NODE_SELECTOR = "Node Selector";
@@ -51,6 +53,8 @@ public class StatusPage {
       INTAKE_SUBSYSTEM,
       LIGHTS_SUBSYSTEM,
       VISION_SUBSYSTEM,
+      SHOOTER_SUBSYSTEM,
+      SHOOTER_CONNECTED,
       GYROSCOPE,
       SMODULE_PREFIX + "0",
       SMODULE_PREFIX + "1",
