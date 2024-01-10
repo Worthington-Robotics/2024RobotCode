@@ -7,7 +7,7 @@ public class Constants {
     return RobotBase.isSimulation();
   }
 
-  public class Field {
-    
+  public static final class Ids {
+    public static final int LIGHTS = 8;
   }
 }
