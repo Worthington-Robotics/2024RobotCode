@@ -44,6 +44,7 @@ public class FieldConstants {
     Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 2", Speaker.openingCorners[1]);
     Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 3", Speaker.openingCorners[2]);
     Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 4", Speaker.openingCorners[3]);
+    Logger.getInstance().logTranslation2d("Field", "Source center", Source.center);
   }
 
   public static final class Wing {
@@ -115,17 +116,24 @@ public class FieldConstants {
     // right triangle formed by the opening. Game manual is wrong and says 1'16"
     public static final double openingDepth = Units.inchesToMeters(18);
     public static final Translation3d[] openingCorners = new Translation3d[] {
-      // Back corners
-      new Translation3d(0, speakerY - openingWidth / 2, openingHeightLower),
-      new Translation3d(0, speakerY + openingWidth / 2, openingHeightLower),
-      // Front corners
-      new Translation3d(openingDepth, speakerY - openingWidth / 2, openingHeightHigher),
-      new Translation3d(openingDepth, speakerY + openingWidth / 2, openingHeightHigher),
+        // Back corners
+        new Translation3d(0, speakerY - openingWidth / 2, openingHeightLower),
+        new Translation3d(0, speakerY + openingWidth / 2, openingHeightLower),
+        // Front corners
+        new Translation3d(openingDepth, speakerY - openingWidth / 2, openingHeightHigher),
+        new Translation3d(openingDepth, speakerY + openingWidth / 2, openingHeightHigher),
     };
   }
 
   public static final class Source {
+    // The angle of the source wall to the field wall
+    public static final double wallAngle = 2.0943951;
+    public static final double chuteBottomHeight = Units.inchesToMeters(36.71);
 
+    // Midpoint of both source apriltags
+    public static final Translation2d center = new Translation2d(
+        (15.079471999999997 + 16.185134) / 2,
+        (fieldWidth - 0.24587199999999998 + fieldWidth - 0.883666) / 2);
   }
 
   public static final class Stage {
