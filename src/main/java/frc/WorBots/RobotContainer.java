@@ -21,7 +21,7 @@ public class RobotContainer {
 
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
-  private final CommandJoystick operator = new CommandJoystick(0);
+  private final CommandXboxController operator = new CommandXboxController(0);
 
   public RobotContainer() {
     if (!Constants.getSim()) { // Real Robot
