@@ -1,7 +1,6 @@
 package frc.WorBots.subsystems.intake;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
@@ -49,36 +48,6 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake/AppliedPowerVolts", inputs.appliedPowerVolts);
     StatusPage.reportStatus(StatusPage.INTAKE_CONNECTED, inputs.isConnected);
 
-    // io.setIntakeVoltage(hasGamePiece ? MathUtil.clamp(setpointVolts,
-    // backCurrentVolts, 12) : setpointVolts);
     io.setIntakeVoltage(setpointVolts);
-  }
-
-  public Command intakeGamePiece() {
-    return this.run(() -> setpointVolts = -10).until(() -> hasGamePiece);
-  }
-
-  public Command spitGamePiece() {
-    return this.run(() -> setpointVolts = 10).until(() -> !hasGamePiece);
-  }
-
-  public Command spitGamePieceRaw() {
-    return this.run(() -> setpointVolts = -8).withTimeout(0.5)
-        .finallyDo((bool) -> setpointVolts = 0.0);
-  }
-
-  public Command intakeGamePieceRaw() {
-    return this.run(() -> setpointVolts = 8).withTimeout(0.5)
-        .finallyDo((bool) -> setpointVolts = 0.0);
-  }
-
-  public Command intakeGamePieceDriver() {
-    return this.run(() -> setpointVolts = 8)
-        .finallyDo((bool) -> setpointVolts = 0.0);
-  }
-
-  public Command spitGamePieceDriver() {
-    return this.run(() -> setpointVolts = -8)
-        .finallyDo((bool) -> setpointVolts = 0.0);
   }
 }

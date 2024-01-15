@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.WorBots.Constants;
 import frc.WorBots.util.StatusPage;
 
 public class Lights extends SubsystemBase {
@@ -20,12 +19,13 @@ public class Lights extends SubsystemBase {
     return instance;
   }
 
-  public static final int LIGHT_COUNT = 56;
+  public static final int LIGHT_COUNT = 12;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
-  private LightsMode mode = LightsMode.MatchTime;
+  private LightsMode mode = LightsMode.Rainbow;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
+  private final int lightsID = 8;
 
   public enum LightsMode {
     Rainbow,
@@ -36,7 +36,7 @@ public class Lights extends SubsystemBase {
   }
 
   private Lights() {
-    leds = new AddressableLED(Constants.Ids.LIGHTS);
+    leds = new AddressableLED(lightsID);
     io = new AddressableLEDBuffer(LIGHT_COUNT);
     leds.setLength(LIGHT_COUNT);
     leds.start();
@@ -157,21 +157,19 @@ public class Lights extends SubsystemBase {
 
   private void alliance() {
     int t = 1 - ((int) (Timer.getFPGATimestamp() / 0.2) % LIGHT_COUNT);
-    int hue = 0;
-    int sat = 255;
-    int val = 255;
+    Color color = Color.kBlack;
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {
       switch (alliance.get()) {
         case Red:
+        color = Color.kRed;
           break;
         case Blue:
-          hue = 120;
+          color = Color.kBlue;
           break;
       }
     } else {
-      sat = 0;
-      val = 55;
+      color = Color.kPurple;
     }
 
     // We create a moving 4145 pattern
@@ -180,9 +178,9 @@ public class Lights extends SubsystemBase {
       final boolean usePattern = (pos >= 0 && pos < 4) || pos == 5 || (pos >= 7 && pos < 11)
           || (pos >= 12 && pos < 17);
       if (usePattern) {
-        io.setHSV(i, hue, sat, val);
+        io.setLED(i, color);
       } else {
-        io.setHSV(i, hue, 127, 127);
+        io.setLED(i, color);
       }
     }
   }

@@ -44,17 +44,6 @@ public class ModuleIOKraken implements ModuleIO {
     }
     driveMotor.setInverted(true);
     turnMotor.setInverted(true);
-    // driveMotor.setControl
-    // driveMotor.configSelectedFeedbackSensor();
-    // driveMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
-    // driveMotor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
-    // turnMotor.configFactoryDefault();
-    // driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    // absoluteEncoder.configFactoryDefault();
-    // absoluteEncoder.clearStickyFaults();
-    // absoluteEncoder.setPosition(0.0);
-    // absoluteEncoder.configMagnetOffset(0);
-    // absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
   }
 
   public void updateInputs(ModuleIOInputs inputs) {
