@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.trajectory.constraint.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.*;
 import frc.WorBots.subsystems.drive.*;
@@ -22,8 +23,9 @@ public class AutoCommands extends Command {
   public AutoCommands(Drive drive) {
     this.drive = drive;
     startingLocations = new Pose2d[] {
-        new Pose2d(FieldConstants.StartingZone.regionCorners[0].plus(new Translation2d(-1, 1)), new Rotation2d())
+        new Pose2d(FieldConstants.StartingZone.regionCorners[0].plus(new Translation2d(1, -1)), new Rotation2d())
     };
+    SmartDashboard.putNumberArray("Starting", Logger.pose2dToArray(startingLocations[0]));
   }
 
   private Command reset(Pose2d pose) {
