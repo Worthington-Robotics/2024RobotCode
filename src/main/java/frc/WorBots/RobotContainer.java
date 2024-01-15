@@ -25,7 +25,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (!Constants.getSim()) { // Real Robot
-      drive = new Drive(new GyroIOPigeon2(), new ModuleIOKraken(0), new ModuleIOKraken(1), new ModuleIOKraken(2),
+      drive = new Drive(new GyroIOPigeon(), new ModuleIOKraken(0), new ModuleIOKraken(1), new ModuleIOKraken(2),
           new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       shooter = new Shooter(new ShooterIOSim());

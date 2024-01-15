@@ -33,9 +33,6 @@ public class VisionIOCustom implements VisionIO {
 
     for (int i = 0; i < frame.length; i++) {
       inputs.timestamps[i] = frame[i].timestamp / 1000000.0;
-      if (index == 1) {
-        System.out.println(inputs.timestamps[i]);
-      }
       inputs.frames[i] = frame[i].value;
     }
     

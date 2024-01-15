@@ -19,10 +19,10 @@ public class Lights extends SubsystemBase {
     return instance;
   }
 
-  public static final int LIGHT_COUNT = 12;
+  public static final int LIGHT_COUNT = 56;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
-  private LightsMode mode = LightsMode.Rainbow;
+  private LightsMode mode = LightsMode.CLAIRE;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
   private final int lightsID = 8;
@@ -32,7 +32,8 @@ public class Lights extends SubsystemBase {
     Status,
     Alliance,
     MatchTime,
-    Disabled
+    Disabled,
+    CLAIRE
   }
 
   private Lights() {
@@ -69,6 +70,9 @@ public class Lights extends SubsystemBase {
       case Disabled:
         wave(100, Color.kBlack, Color.kBlue, 25.0, 2.0, 0.4);
         break;
+      case CLAIRE:
+        wave(100, Color.kPurple, Color.kGreen, 25.0, 2.0, 0.4);
+      break;
     }
     leds.setData(io);
     SmartDashboard.putString("Lights/Mode", mode.toString());
