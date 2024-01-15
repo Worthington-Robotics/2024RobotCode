@@ -45,6 +45,9 @@ public class FieldConstants {
     Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 3", Speaker.openingCorners[2]);
     Logger.getInstance().logTranslation3d("Field", "Speaker opening corner 4", Speaker.openingCorners[3]);
     Logger.getInstance().logTranslation2d("Field", "Source center", Source.center);
+    for (var tag : aprilTags.getTags()) {
+        Logger.getInstance().logPose3d("Field", "AprilTag " + tag.ID, tag.pose);
+    }
   }
 
   public static final class Wing {
