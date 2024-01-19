@@ -3,12 +3,18 @@ package frc.WorBots.util;
 import java.util.HashMap;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.IntegerLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class StatusPage {
   private ShuffleboardTab tab = Shuffleboard.getTab("Status");
   private HashMap<String, GenericEntry> entries = new HashMap<>();
+  private static boolean hasMetadataBeenLogged = false;
 
   // System name constants
   public static final String AUTO_RUNNING = "Auto Running";
@@ -102,6 +108,21 @@ public class StatusPage {
     StatusPage instance = getInstance();
     GenericEntry entry = instance.getEntry(system);
     return entry.getBoolean(false);
+  }
+
+  public static void reportMetadata() {
+    if (!hasMetadataBeenLogged) {
+      DataLog log = DataLogManager.getLog();
+      StringLogEntry name = new StringLogEntry(log, "/Metadata/Event Name");
+      name.append(DriverStation.getEventName());
+      IntegerLogEntry number = new IntegerLogEntry(log, "/Metadata/Match Number");
+      number.append(DriverStation.getMatchNumber());
+      StringLogEntry type = new StringLogEntry(log, "/Metadata/Match Type");
+      type.append(DriverStation.getMatchType().toString());
+      StringLogEntry alliance = new StringLogEntry(log, "/Metadata/Alliance");
+      alliance.append(DriverStation.getAlliance().get().name());
+    }
+    hasMetadataBeenLogged = true;
   }
 
   private GenericEntry getEntry(String system) {

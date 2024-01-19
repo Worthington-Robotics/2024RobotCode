@@ -71,9 +71,14 @@ public class Lights extends SubsystemBase {
         wave(100, Color.kBlack, Color.kBlue, 25.0, 2.0, 0.4);
         break;
       case CLAIRE:
-        wave(100, Color.kPurple, Color.kGreen, 25.0, 2.0, 0.4);
+        wave(100, Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
       break;
     }
+    // for (int i =0; i<LIGHT_COUNT; i++) {
+    //   Color color = io.getLED(i);
+    //   Color reverseColor = new Color(color.red, color.green, color.blue);
+    //   io.setLED(i, reverseColor);
+    // }
     leds.setData(io);
     SmartDashboard.putString("Lights/Mode", mode.toString());
   }
