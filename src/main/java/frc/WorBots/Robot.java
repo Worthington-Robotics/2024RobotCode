@@ -6,8 +6,6 @@ package frc.WorBots;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.datalog.IntegerLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -33,6 +31,12 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer();
     StatusPage.reportStatus(StatusPage.ROBOT_CODE, true);
+
+    if (Constants.getSim()) {
+      DriverStation.silenceJoystickConnectionWarning(true);
+    } else {
+      DriverStation.silenceJoystickConnectionWarning(false);
+    }
 
     this.addPeriodic(() -> {
       // Simple status updates
