@@ -121,6 +121,8 @@ public class StatusPage {
       type.append(DriverStation.getMatchType().toString());
       StringLogEntry alliance = new StringLogEntry(log, "/Metadata/Alliance");
       alliance.append(DriverStation.getAlliance().get().name());
+      IntegerLogEntry stationNumber = new IntegerLogEntry(log, "/Metadata/Alliance Station");
+      stationNumber.append(DriverStation.getLocation().getAsInt());
     }
     hasMetadataBeenLogged = true;
   }
