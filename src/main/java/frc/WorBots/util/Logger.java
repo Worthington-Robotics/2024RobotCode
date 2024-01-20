@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringPublisher;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.trajectory.RotationSequence;
 
@@ -35,14 +36,25 @@ public class Logger {
   DoubleArrayPublisher robotPoses3dPublisher = visionTable.getDoubleArrayTopic("RobotPoses3d").publish();
 
   NetworkTable superstructureTable = defaultInstance.getTable("Superstructure");
+  StringPublisher modePublisher = superstructureTable.getStringTopic("Mode").publish();
+  DoublePublisher setpointPositionPivot = superstructureTable.getDoubleTopic("Pivot Setpoint Rad").publish();
+  DoublePublisher setpointPositionElevator = superstructureTable.getDoubleTopic("Elevator Setpoint Meters").publish();
+  DoublePublisher setpointVoltagePivot = superstructureTable.getDoubleTopic("Pivot Setpoint Voltage").publish();
+  DoublePublisher setpointVoltageElevator = superstructureTable.getDoubleTopic("Elevator Setpoint Voltage").publish();
+
   NetworkTable pivotTable = superstructureTable.getSubTable("Pivot");
-  DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Meters Rel").publish();
-  DoublePublisher pivotPositionAbs = pivotTable.getDoubleTopic("Position Meters Abs").publish();
-  DoublePublisher pivotVelocity = pivotTable.getDoubleTopic("Velocity Meters Per Sec").publish();
+  DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Rad Rel").publish();
+  DoublePublisher pivotPositionAbs = pivotTable.getDoubleTopic("Position Rad Abs").publish();
+  DoublePublisher pivotVelocity = pivotTable.getDoubleTopic("Velocity Rad Per Sec").publish();
   DoublePublisher pivotVoltage = pivotTable.getDoubleTopic("Voltage Applied").publish();
   DoublePublisher pivotTemp = pivotTable.getDoubleTopic("Temp Celsius").publish();
 
   NetworkTable elevatorTable = superstructureTable.getSubTable("Elevator");
+  DoublePublisher elevatorPositionRel = elevatorTable.getDoubleTopic("Position Meters Rel").publish();
+  DoublePublisher elevatorPositionAbs = elevatorTable.getDoubleTopic("Position Meters Abs").publish();
+  DoublePublisher elevatorVelocity = elevatorTable.getDoubleTopic("Velocity Meters Per Sec").publish();
+  DoublePublisher elevatorVoltage = elevatorTable.getDoubleTopic("Voltage Applied").publish();
+  DoublePublisher elevatorTemp = elevatorTable.getDoubleTopic("Temp Celsius").publish();
 
   public void logPose3d(String tableName, String topicName, Pose3d pose) {
     NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
@@ -235,5 +247,39 @@ public class Logger {
     pivotVelocity.set(inputs.pivotVelocityRadPerSec);
     pivotVoltage.set(inputs.pivotVoltageApplied);
     pivotTemp.set(inputs.pivotTemp);
+    elevatorPositionRel.set(inputs.elevatorPositionMeters);
+    elevatorPositionAbs.set(0.0);
+    elevatorVelocity.set(inputs.elevatorVelocityMetersPerSec);
+    elevatorVoltage.set(inputs.elevatorVoltage);
+    elevatorTemp.set(inputs.elevatorTemp);
+  }
+
+  public void setSuperstructureSetpoints(String mode, double pivotPos, double elevatorPos, double pivotVoltage,
+      double elevatorVoltage) {
+    modePublisher.set(mode);
+    setpointPositionElevator.set(elevatorPos);
+    setpointPositionPivot.set(pivotPos);
+    setpointVoltageElevator.set(elevatorVoltage);
+    setpointVoltagePivot.set(pivotVoltage);
+  }
+
+  public void setSuperstructureMode(String mode) {
+    modePublisher.set(mode);
+  }
+
+  public void setSuperstructurePivotPosSetpoint(double value) {
+    setpointPositionPivot.set(value);
+  }
+
+  public void setSuperstructureElevatorPosSetpoint(double value) {
+    setpointPositionElevator.set(value);
+  }
+
+  public void setSuperstructureElevatorVoltageSetpoint(double value) {
+    setpointVoltageElevator.set(value);
+  }
+
+  public void setSuperstructurePivotVoltageSetpoint(double value) {
+    setpointVoltagePivot.set(value);
   }
 }

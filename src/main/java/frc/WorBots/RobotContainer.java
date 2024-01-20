@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
+import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.*;
 
@@ -15,6 +16,7 @@ public class RobotContainer {
   // Subsystems
   private Drive drive;
   private Vision vision;
+  private Superstructure superstructure;
 
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -25,9 +27,11 @@ public class RobotContainer {
       drive = new Drive(new GyroIOPigeon(), new ModuleIOKraken(0), new ModuleIOKraken(1), new ModuleIOKraken(2),
           new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
+      superstructure = new Superstructure(new SuperstructureIOTalon());
     } else { // Sim
       drive = new Drive(new GyroIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
       vision = new Vision(new VisionIOCustom(0));
+      superstructure = new Superstructure(new SuperstructureIOSim());
     }
 
     var autoCommands = new AutoCommands(drive);

@@ -14,29 +14,28 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final DutyCycleEncoder pivotAbsEncoder;
   private final Encoder pivotRelEncoder;
 
-  private static final double elevatorGearing = 1.0; //in meters per revolution
+  private static final double elevatorGearing = 1.0; // in meters per revolution
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(0);
     pivot = new TalonFX(0);
     pivotAbsEncoder = new DutyCycleEncoder(0);
     pivotRelEncoder = new Encoder(0, 0);
-    }
+  }
 
-    @Override
-    public void setElevatorVoltage(double volts) {
-      elevator.setVoltage(volts);
-    }
+  public void setElevatorVoltage(double volts) {
+    elevator.setVoltage(volts);
+  }
 
-    @Override
-    public void setPivotVoltage(double volts) {
-      pivot.setVoltage(volts);
-    }
+  public void setPivotVoltage(double volts) {
+    pivot.setVoltage(volts);
+  }
 
-  @Override
   public void updateInputs(SuperstructureIOInputs inputs) {
-    inputs.elevatorPositionMeters = (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
-    inputs.elevatorVelocityMetersPerSec = (elevator.getVelocity().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
+    inputs.elevatorPositionMeters = (elevator.getPosition().getValue() / elevatorGearing)
+        * (isElevatorInverted ? 1.0 : -1.0);
+    inputs.elevatorVelocityMetersPerSec = (elevator.getVelocity().getValue() / elevatorGearing)
+        * (isElevatorInverted ? 1.0 : -1.0);
     inputs.elevatorVoltage = elevator.getMotorVoltage().getValue();
     inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
 
