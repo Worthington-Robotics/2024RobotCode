@@ -34,13 +34,13 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
     pivotAbsAngleRad = inputs.pivotPositionAbsRad;
     if (!Constants.getSim()) { // Real
-      pivotController = new ProfiledPIDController(5.0, 0, 0, new Constraints(1.0, 1.0));
-      elevatorController = new ProfiledPIDController(5.0, 0, 0, new Constraints(1.0, 1.0));
+      pivotController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
+      elevatorController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     } else { // Sim
-      pivotController = new ProfiledPIDController(5.0, 0, 0, new Constraints(1.0, 1.0));
-      elevatorController = new ProfiledPIDController(5.0, 0, 0, new Constraints(1.0, 1.0));
+      pivotController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
+      elevatorController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     }
@@ -87,4 +87,7 @@ public class Superstructure extends SubsystemBase {
     shootingAngleRad = supplier;
   }
 
+  public void setMode(SuperstructureState state) {
+    this.state = state;
+  }
 }

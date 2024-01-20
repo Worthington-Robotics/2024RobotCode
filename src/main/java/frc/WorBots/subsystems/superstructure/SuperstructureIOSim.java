@@ -9,7 +9,7 @@ public class SuperstructureIOSim implements SuperstructureIO {
   private SingleJointedArmSim pivot;
 
   public SuperstructureIOSim() {
-    elevator = new ElevatorSim(DCMotor.getKrakenX60(1), 2.0, 1.0, 0.02, 0.0, 1.0, true, 0.5);
+    elevator = new ElevatorSim(DCMotor.getKrakenX60(1), 10.0, 3.0, 0.02, 0.0, 0.4, true, 0.1);
     pivot = new SingleJointedArmSim(DCMotor.getKrakenX60(1), 1.0, 1.0, 0.02, 0, 3.14, true, 0);
   }
 
@@ -27,7 +27,6 @@ public class SuperstructureIOSim implements SuperstructureIO {
     
     inputs.elevatorPositionMeters = elevator.getPositionMeters();
     inputs.elevatorVelocityMetersPerSec = elevator.getVelocityMetersPerSecond();
-    inputs.elevatorVoltage = elevator.getOutput(0);
     
     inputs.pivotPositionAbsRad = 0.0;
     inputs.pivotPositionRelRad = pivot.getAngleRads();
