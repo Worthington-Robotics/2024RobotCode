@@ -26,7 +26,7 @@ public class SuperstructureIOSim implements SuperstructureIO {
     inputs.elevatorPositionMeters = elevator.getPositionMeters();
     inputs.elevatorVelocityMetersPerSec = elevator.getVelocityMetersPerSecond();
     
-    inputs.pivotPositionAbsRad = pivot.getAngleRads();
+    inputs.pivotPositionAbsRad = 0.0;
     inputs.pivotPositionRelRad = pivot.getAngleRads();
     inputs.elevatorVelocityMetersPerSec = pivot.getVelocityRadPerSec();
   }

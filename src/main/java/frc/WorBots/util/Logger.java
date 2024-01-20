@@ -10,8 +10,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.trajectory.RotationSequence;
 
 public class Logger {
@@ -31,6 +33,16 @@ public class Logger {
   DoubleArrayPublisher robotPosesPublisher = visionTable.getDoubleArrayTopic("RobotPoses").publish();
   DoubleArrayPublisher tagsPosesPublisher = visionTable.getDoubleArrayTopic("TagPoses").publish();
   DoubleArrayPublisher robotPoses3dPublisher = visionTable.getDoubleArrayTopic("RobotPoses3d").publish();
+
+  NetworkTable superstructureTable = defaultInstance.getTable("Superstructure");
+  NetworkTable pivotTable = superstructureTable.getSubTable("Pivot");
+  DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Meters Rel").publish();
+  DoublePublisher pivotPositionAbs = pivotTable.getDoubleTopic("Position Meters Abs").publish();
+  DoublePublisher pivotVelocity = pivotTable.getDoubleTopic("Velocity Meters Per Sec").publish();
+  DoublePublisher pivotVoltage = pivotTable.getDoubleTopic("Voltage Applied").publish();
+  DoublePublisher pivotTemp = pivotTable.getDoubleTopic("Temp Celsius").publish();
+
+  NetworkTable elevatorTable = superstructureTable.getSubTable("Elevator");
 
   public void logPose3d(String tableName, String topicName, Pose3d pose) {
     NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
@@ -215,5 +227,13 @@ public class Logger {
       data[i * 3 + 2] = value[i].getRotation().getRadians();
     }
     trajectorySetpointPublisher.set(data);
+  }
+
+  public void setSuperstructureInputs(SuperstructureIOInputs inputs) {
+    pivotPositionRel.set(inputs.pivotPositionRelRad);
+    pivotPositionAbs.set(inputs.pivotPositionAbsRad);
+    pivotVelocity.set(inputs.pivotVelocityRadPerSec);
+    pivotVoltage.set(inputs.pivotVoltageApplied);
+    pivotTemp.set(inputs.pivotTemp);
   }
 }
