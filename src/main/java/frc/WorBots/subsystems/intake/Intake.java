@@ -1,41 +1,30 @@
 package frc.WorBots.subsystems.intake;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.WorBots.Constants;
 import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
 import frc.WorBots.util.StatusPage;
 
 public class Intake extends SubsystemBase {
   private IntakeIO io;
   private IntakeIOInputs inputs = new IntakeIOInputs();
-  private boolean hasGamePiece = true;
   private double setpointVolts = 0.0;
-  private double velocityThreshold;
-  private double ampsThreshold;
+  private boolean hasGamepiece = false;
+  private static final double velocityThresholdRadsPerSec = 1.0;
+  private static final double currentThresholdAmps = 100.0;
 
   public Intake(IntakeIO io) {
     this.io = io;
-
-    if (Constants.getSim()) {
-      velocityThreshold = 1.0;
-      ampsThreshold = 8.0;
-    } else {
-      velocityThreshold = 1.0;
-      ampsThreshold = 2.0;
-    }
-
     StatusPage.reportStatus(StatusPage.INTAKE_SUBSYSTEM, true);
   }
 
   public void periodic() {
     io.updateInputs(inputs);
-    if (inputs.velocityRadsPerSec > velocityThreshold && inputs.currentDrawAmps > ampsThreshold) {
-      hasGamePiece = true;
-    } else {
-      hasGamePiece = false;
-    }
-    // hasGamePiece = true;
+
+    hasGamepiece = (inputs.currentDrawAmps > currentThresholdAmps
+        && inputs.velocityRadsPerSec < velocityThresholdRadsPerSec ? true : false);
 
     if (inputs.temperatureCelsius > 75) {
       setpointVolts = 0.0;
@@ -49,5 +38,21 @@ public class Intake extends SubsystemBase {
     StatusPage.reportStatus(StatusPage.INTAKE_CONNECTED, inputs.isConnected);
 
     io.setIntakeVoltage(setpointVolts);
+  }
+
+  public Command intake() {
+    return this.runOnce(() -> {
+      if (hasGamepiece == true) {
+        setpointVolts = 1.0;
+      } else {
+        setpointVolts = 8.0;
+      }
+    }).andThen(Commands.waitUntil(this::hasGamePiece)).finallyDo(() -> {
+      setpointVolts = 1.0;
+    });
+  }
+
+  public boolean hasGamePiece() {
+    return hasGamepiece;
   }
 }

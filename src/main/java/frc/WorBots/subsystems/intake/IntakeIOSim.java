@@ -7,7 +7,7 @@ public class IntakeIOSim implements IntakeIO {
   FlywheelSim sim;
 
   public IntakeIOSim() {
-    sim = new FlywheelSim(DCMotor.getFalcon500(1), 1, 0.05);
+    sim = new FlywheelSim(DCMotor.getKrakenX60(1), 1, 0.05);
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
