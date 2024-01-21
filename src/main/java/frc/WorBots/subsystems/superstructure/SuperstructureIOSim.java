@@ -10,7 +10,7 @@ public class SuperstructureIOSim implements SuperstructureIO {
 
   public SuperstructureIOSim() {
     elevator = new ElevatorSim(DCMotor.getKrakenX60(1), 10.0, 3.0, 0.02, 0.0, 0.4, true, 0.1);
-    pivot = new SingleJointedArmSim(DCMotor.getKrakenX60(1), 1.0, 1.0, 0.02, 0, 3.14, true, 0);
+    pivot = new SingleJointedArmSim(DCMotor.getKrakenX60(1), 250, 0.25, 0.07, -Math.PI/6, Math.PI, true, 0);
   }
 
   public void setElevatorVoltage(double volts) {

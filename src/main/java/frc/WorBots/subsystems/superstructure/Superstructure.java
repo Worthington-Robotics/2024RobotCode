@@ -25,7 +25,7 @@ public class Superstructure extends SubsystemBase {
   private ElevatorFeedforward elevatorFeedForward;
   private ArmFeedforward pivotFeedForward;
 
-  private enum SuperstructureState {
+  public enum SuperstructureState {
     POSE, SHOOTING
   }
 
@@ -66,6 +66,8 @@ public class Superstructure extends SubsystemBase {
         io.setPivotVoltage(pivotVoltage);
         break;
       case SHOOTING:
+        Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
+        Logger.getInstance().setSuperstructurePivotPosSetpoint(shootingAngleRad.get());
         io.setElevatorVoltage(elevatorController.calculate(inputs.elevatorPositionMeters, 0.0)
             + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec));
         io.setPivotVoltage(pivotController.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad,
