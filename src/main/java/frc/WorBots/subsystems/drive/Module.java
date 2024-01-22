@@ -16,9 +16,9 @@ public class Module {
   private final ModuleIOInputs inputs = new ModuleIOInputs();
 
   private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-  private static TunablePIDGains driveFeedbackGains = new TunablePIDGains("Drive", "SModule Drive Feedback");
+  private static TunablePIDGains driveFeedbackGains = new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
   private TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
-  private static TunablePIDGains turnFeedbackGains = new TunablePIDGains("Drive", "SModule Turn Feedback");
+  private static TunablePIDGains turnFeedbackGains = new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
   private TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
   public Module(ModuleIO io, int index) {
