@@ -101,7 +101,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:afc3d95ccb9f09b30540595da9ff6cf4d"><td class="memItemLeft" align="right" valign="top">static record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1PoseEstimator.html#afc3d95ccb9f09b30540595da9ff6cf4d">TimestampedVisionUpdate</a> (double timestamp, Pose2d pose, Matrix&lt; N3, N1 &gt; stdDevs)</td></tr>
 <tr class="separator:afc3d95ccb9f09b30540595da9ff6cf4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >A class to estimate the absolute position and rotation of the robot on the field using a combination of robot odometry and vision data. Used for both real operation and simulation </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a01e28e7de4cdfdefd36d49cd280ce1b2" name="a01e28e7de4cdfdefd36d49cd280ce1b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01e28e7de4cdfdefd36d49cd280ce1b2">&#9670;&#160;</a></span>PoseEstimator()</h2>
 
@@ -125,6 +127,13 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Create a <a class="el" href="classfrc_1_1WorBots_1_1util_1_1PoseEstimator.html">PoseEstimator</a> with standard deviation noise</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stateStdDevs</td><td>A matrix of the standard deviation parameters </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -162,7 +171,14 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Records a new drive movement. </p>
+<p >Records a new drive movement.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timestamp</td><td>The timestamp in seconds where the event occurred </td></tr>
+    <tr><td class="paramname">twist</td><td>The twist of the robot that represents the movement </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -189,7 +205,13 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Records a new set of vision updates. </p>
+<p >Records a new set of vision updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visionData</td><td>A list of timestamped vision updates </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -215,7 +237,8 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Returns the latest robot pose based on drive and vision data. </p>
+<p >Returns the latest robot pose based on drive and vision data.</p>
+<dl class="section return"><dt>Returns</dt><dd>The latest pose of the robot </dd></dl>
 
 </div>
 </div>
@@ -242,7 +265,13 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Resets the odometry to a known pose. </p>
+<p >Resets the odometry to a known pose.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The pose to reset the robot to </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

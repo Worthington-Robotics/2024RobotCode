@@ -108,7 +108,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad66be6e201e0d18c7ff1578a09ca05d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A PIDController that can be tuned by the dashboard </p>
+<div class="textblock"><p >A PIDController that can be tuned by the dashboard. It will hold a TunablePIDGains object and updates gains to the PID every time it updates. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a987e43d54e7ae1f50204dfa25af42407" name="a987e43d54e7ae1f50204dfa25af42407"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a987e43d54e7ae1f50204dfa25af42407">&#9670;&#160;</a></span>TunablePIDController() <span class="overload">[1/2]</span></h2>
@@ -161,6 +161,17 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Create a <a class="el" href="classfrc_1_1WorBots_1_1util_1_1TunablePIDController.html">TunablePIDController</a> and its gains with the specified NT location</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td>The NT table to put the gains on </td></tr>
+    <tr><td class="paramname">name</td><td>The NT key to put the gains on </td></tr>
+    <tr><td class="paramname">kP</td><td>The P constant </td></tr>
+    <tr><td class="paramname">kD</td><td>The D constant </td></tr>
+    <tr><td class="paramname">kI</td><td>The I constant </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -187,6 +198,13 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Construct a <a class="el" href="classfrc_1_1WorBots_1_1util_1_1TunablePIDController.html">TunablePIDController</a> using existing gains. This is useful to be able to share a single static gains object between multiple controllers or instances</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gains</td><td>The gains to use </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -214,7 +232,13 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Change gains </p>
+<p >Change the gains that are used</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gains</td><td>The gains to set </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -256,6 +280,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >The PIDController that is used. This can be safely accessed to run methods on it, however, you should use the update method of the tunable controller to ensure gains are updated </p>
 
 </div>
 </div>
