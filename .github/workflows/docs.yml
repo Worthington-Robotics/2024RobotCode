@@ -1,0 +1,21 @@
+# Builds Doxygen documentation from our code and publishes it to GitHub Pages
+
+name: Docs
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events
+on: [push]
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build docs
+        uses: mattnotmitt/doxygen-action@v1.9.5
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/html

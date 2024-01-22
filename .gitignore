@@ -167,3 +167,6 @@ networktables.json
 **/venv
 /logs/
 *.wpilog
+
+# Built documentation
+/docs
