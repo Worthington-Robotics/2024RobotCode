@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.drive.Drive;
 
+/**
+ * Command for teleop that drives the robot
+ * using controllers
+ */
 public class DriveWithJoysticks extends Command {
   private Drive drive;
   private Supplier<Double> leftXSupplier;

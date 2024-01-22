@@ -5,17 +5,40 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 /**
- * A PIDController that can be tuned by the dashboard
+ * A PIDController that can be tuned by the dashboard.
+ * It will hold a TunablePIDGains object and updates gains to the PID
+ * every time it updates.
  */
 public class TunablePIDController {
 	private TunablePIDGains gains;
+	/**
+	 * The PIDController that is used. This can be safely accessed
+	 * to run methods on it, however, you should use the update method
+	 * of the tunable controller to ensure gains are updated
+	 */
 	public PIDController pid;
 
+	/**
+	 * Create a TunablePIDController and its gains with the specified NT location
+	 * 
+	 * @param table The NT table to put the gains on
+	 * @param name The NT key to put the gains on
+	 * @param kP The P constant
+	 * @param kD The D constant
+	 * @param kI The I constant
+	 */
 	public TunablePIDController(String table, String name, double kP, double kD, double kI) {
 		this.gains = new TunablePIDGains(table, name, kP, kD, kI);
 		this.pid = new PIDController(kP, kI, kD, this.gains.period);
 	}
 
+	/**
+	 * Construct a TunablePIDController using existing gains.
+	 * This is useful to be able to share a single static gains object
+	 * between multiple controllers or instances
+	 * 
+	 * @param gains The gains to use
+	 */
 	public TunablePIDController(TunablePIDGains gains) {
 		this.gains = gains;
 		this.pid = new PIDController(gains.kP.getDefault(), gains.kI.getDefault(), gains.kD.getDefault(), gains.period);
@@ -32,13 +55,18 @@ public class TunablePIDController {
 	}
 
 	/**
-	 * Change gains
+	 * Change the gains that are used
+	 * 
+	 * @param gains The gains to set
 	 */
 	public void setGains(TunablePIDGains gains) {
 		this.gains = gains;
 		this.update();
 	}
 
+	/**
+	 * Tunable PID gains that can be set by NetworkTables
+	 */
 	public static class TunablePIDGains {
 		public TunableDouble kP;
 		public TunableDouble kD;

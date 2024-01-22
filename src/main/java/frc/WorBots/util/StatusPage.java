@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
+/**
+ * A utility class which shows the status of systems on the robot to
+ * NetworkTables
+ */
 public class StatusPage {
   private ShuffleboardTab tab = Shuffleboard.getTab("Status");
   private HashMap<String, GenericEntry> entries = new HashMap<>();
@@ -48,6 +52,9 @@ public class StatusPage {
   public static final String CAM1 = "Cam 1";
   public static final String LAUNCHPAD = "Launchpad";
 
+  /**
+   * All systems that the StatusPage reports
+   */
   public static final String[] ALL_SYSTEMS = {
       AUTO_RUNNING,
       ALL_AUTO_QUESTIONS,
@@ -94,22 +101,40 @@ public class StatusPage {
 
   private static StatusPage instance = new StatusPage();
 
+  /**
+   * Get the singleton instance of the StatusPage
+   */
   public static StatusPage getInstance() {
     return instance;
   }
 
+  /**
+   * Report the status of a system
+   * 
+   * @param system The system to report. One of the static constants
+   * provided by this class should be used
+   * @param status The status of the system to set. True represents a working
+   * system
+   */
   public static void reportStatus(String system, boolean status) {
     StatusPage instance = getInstance();
     GenericEntry entry = instance.getEntry(system);
     entry.setBoolean(status);
   }
 
+  /**
+   * Get the current status of a system from NetworkTables
+   */
   public static boolean getStatus(String system) {
     StatusPage instance = getInstance();
     GenericEntry entry = instance.getEntry(system);
     return entry.getBoolean(false);
   }
 
+  /**
+   * Report metadata for AdvantageScope to use.
+   * Also starts the WPILib DataLog
+   */
   public static void reportMetadata() {
     if (!hasMetadataBeenLogged) {
       DataLog log = DataLogManager.getLog();

@@ -20,6 +20,9 @@ public class AllianceFlipUtil {
   /**
    * Flips a translation to the correct side of the field based on the current
    * alliance color.
+   * 
+   * @param translation The translation to modify
+   * @return The modified translation
    */
   public static Translation2d apply(Translation2d translation) {
     if (shouldFlip()) {
@@ -32,6 +35,9 @@ public class AllianceFlipUtil {
   /**
    * Flips a translation to the other side of the field not based on the current
    * alliance color.
+   * 
+   * @param translation The translation to modify
+   * @return The modified translation
    */
   public static Translation2d applyAgnostic(Translation2d translation) {
     return new Translation2d(FieldConstants.fieldLength - translation.getX(), translation.getY());

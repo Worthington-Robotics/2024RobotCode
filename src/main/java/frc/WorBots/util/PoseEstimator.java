@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+/**
+ * A class to estimate the absolute position and rotation
+ * of the robot on the field using a combination of robot odometry
+ * and vision data. Used for both real operation and simulation
+ */
 public class PoseEstimator {
   private static final double historyLengthSecs = 0.3;
 
@@ -22,36 +27,57 @@ public class PoseEstimator {
   private final NavigableMap<Double, PoseUpdate> updates = new TreeMap<>();
   private final Matrix<N3, N1> q = new Matrix<>(Nat.N3(), Nat.N1());
 
+  /**
+   * Create a PoseEstimator with standard deviation noise
+   * 
+   * @param stateStdDevs A matrix of the standard deviation parameters
+   */
   public PoseEstimator(Matrix<N3, N1> stateStdDevs) {
     for (int i = 0; i < 3; ++i) {
       q.set(i, 0, stateStdDevs.get(i, 0) * stateStdDevs.get(i, 0));
     }
   }
 
-  /** Returns the latest robot pose based on drive and vision data. */
+  /**
+   * Returns the latest robot pose based on drive and vision data.
+   * 
+   * @return The latest pose of the robot
+   */
   public Pose2d getLatestPose() {
     return latestPose;
   }
 
-  /** Resets the odometry to a known pose. */
+  /**
+   * Resets the odometry to a known pose.
+   * 
+   * @param pose The pose to reset the robot to
+   */
   public void resetPose(Pose2d pose) {
     basePose = pose;
     updates.clear();
     update();
   }
 
-  /** Records a new drive movement. */
+  /**
+   * Records a new drive movement.
+   * 
+   * @param timestamp The timestamp in seconds where the event occurred
+   * @param twist     The twist of the robot that represents the movement
+   */
   public void addDriveData(double timestamp, Twist2d twist) {
     updates.put(timestamp, new PoseUpdate(twist, new ArrayList<>()));
     update();
   }
 
-  /** Records a new set of vision updates. */
+  /**
+   * Records a new set of vision updates.
+   * 
+   * @param visionData A list of timestamped vision updates
+   */
   public void addVisionData(List<TimestampedVisionUpdate> visionData) {
     for (var timestampedVisionUpdate : visionData) {
       var timestamp = timestampedVisionUpdate.timestamp();
-      var visionUpdate =
-          new VisionUpdate(timestampedVisionUpdate.pose(), timestampedVisionUpdate.stdDevs());
+      var visionUpdate = new VisionUpdate(timestampedVisionUpdate.pose(), timestampedVisionUpdate.stdDevs());
 
       if (updates.containsKey(timestamp)) {
         // There was already an update at this timestamp, add to it
@@ -69,14 +95,12 @@ public class PoseEstimator {
         }
 
         // Create partial twists (prev -> vision, vision -> next)
-        var twist0 =
-            GeomUtil.multiplyTwist(
-                nextUpdate.getValue().twist(),
-                (timestamp - prevUpdate.getKey()) / (nextUpdate.getKey() - prevUpdate.getKey()));
-        var twist1 =
-            GeomUtil.multiplyTwist(
-                nextUpdate.getValue().twist(),
-                (nextUpdate.getKey() - timestamp) / (nextUpdate.getKey() - prevUpdate.getKey()));
+        var twist0 = GeomUtil.multiplyTwist(
+            nextUpdate.getValue().twist(),
+            (timestamp - prevUpdate.getKey()) / (nextUpdate.getKey() - prevUpdate.getKey()));
+        var twist1 = GeomUtil.multiplyTwist(
+            nextUpdate.getValue().twist(),
+            (nextUpdate.getKey() - timestamp) / (nextUpdate.getKey() - prevUpdate.getKey()));
 
         // Add new pose updates
         var newVisionUpdates = new ArrayList<VisionUpdate>();
@@ -109,7 +133,8 @@ public class PoseEstimator {
   }
 
   /**
-   * Represents a sequential update to a pose estimate, with a twist (drive movement) and list of
+   * Represents a sequential update to a pose estimate, with a twist (drive
+   * movement) and list of
    * vision updates.
    */
   private static record PoseUpdate(Twist2d twist, ArrayList<VisionUpdate> visionUpdates) {
@@ -139,13 +164,11 @@ public class PoseEstimator {
         var visionTwist = pose.log(visionUpdate.pose());
 
         // Multiply by Kalman gain matrix
-        var twistMatrix =
-            visionK.times(VecBuilder.fill(visionTwist.dx, visionTwist.dy, visionTwist.dtheta));
+        var twistMatrix = visionK.times(VecBuilder.fill(visionTwist.dx, visionTwist.dy, visionTwist.dtheta));
 
         // Apply twist
-        pose =
-            pose.exp(
-                new Twist2d(twistMatrix.get(0, 0), twistMatrix.get(1, 0), twistMatrix.get(2, 0)));
+        pose = pose.exp(
+            new Twist2d(twistMatrix.get(0, 0), twistMatrix.get(1, 0), twistMatrix.get(2, 0)));
       }
 
       return pose;
@@ -154,15 +177,18 @@ public class PoseEstimator {
 
   /** Represents a single vision pose with associated standard deviations. */
   public static record VisionUpdate(Pose2d pose, Matrix<N3, N1> stdDevs) {
-    public static final Comparator<VisionUpdate> compareDescStdDev =
-        (VisionUpdate a, VisionUpdate b) -> {
-          return -Double.compare(
-              a.stdDevs().get(0, 0) + a.stdDevs().get(1, 0),
-              b.stdDevs().get(0, 0) + b.stdDevs().get(1, 0));
-        };
+    public static final Comparator<VisionUpdate> compareDescStdDev = (VisionUpdate a, VisionUpdate b) -> {
+      return -Double.compare(
+          a.stdDevs().get(0, 0) + a.stdDevs().get(1, 0),
+          b.stdDevs().get(0, 0) + b.stdDevs().get(1, 0));
+    };
   }
 
-  /** Represents a single vision pose with a timestamp and associated standard deviations. */
+  /**
+   * Represents a single vision pose with a timestamp and associated standard
+   * deviations.
+   */
   public static record TimestampedVisionUpdate(
-      double timestamp, Pose2d pose, Matrix<N3, N1> stdDevs) {}
+      double timestamp, Pose2d pose, Matrix<N3, N1> stdDevs) {
+  }
 }

@@ -17,6 +17,10 @@ import edu.wpi.first.networktables.StringPublisher;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.trajectory.RotationSequence;
 
+/**
+ * A collection of methods to output WPILib classes to NetworkTables,
+ * for use with AdvantageScope
+ */
 public class Logger {
   private static Logger instance = new Logger();
 

@@ -20,6 +20,10 @@ public class TunableDouble {
 
   /**
    * Creates a new TunableDouble with a name and the value set to 0.0
+   * 
+   * @param table The main NT table
+   * @param subtable The NT subtable
+   * @param name The NT key
    */
   public TunableDouble(String table, String subtable, String name) {
     this(table, subtable, name, 0.0);
@@ -27,6 +31,12 @@ public class TunableDouble {
 
   /**
    * Creates a new TunableDouble with a name and a default value
+   * 
+   * @param table The main NT table
+   * @param subtable The NT subtable
+   * @param name The NT key
+   * @param defaultValue The default value for the tunable to have before it is updated
+   * or if the update fails
    */
   public TunableDouble(String table, String subtable, String name, double defaultValue) {
     value = defaultValue;
@@ -47,6 +57,8 @@ public class TunableDouble {
 
   /**
    * Update the current value and then get it.
+   * 
+   * @return The latest updated value from NetworkTables
    */
   public double get() {
     update();
@@ -55,6 +67,8 @@ public class TunableDouble {
 
   /**
    * Set the value and default value
+   * 
+   * @param value The value to set
    */
   public void set(double value) {
     defaultValue = value;
@@ -65,6 +79,8 @@ public class TunableDouble {
 
   /**
    * Get the default value
+   * 
+   * @return The default value of the tunable
    */
   public double getDefault() {
     return defaultValue;

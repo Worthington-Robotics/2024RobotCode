@@ -49,6 +49,9 @@ public class RobotContainer {
     bindControls();
   }
 
+  /**
+   * Bind driver controls to commands
+   */
   private void bindControls() {
     StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER, driver.getHID().isConnected());
     drive.setDefaultCommand(new DriveWithJoysticks(drive,

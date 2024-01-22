@@ -12,8 +12,15 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.util.Logger;
 
-// Units are in meters and radians
-// Some measurements in the field manual are incorrect, reference drawings.
+/**
+ * Physical constants for the field.
+ * 
+ * Values are sourced from the layout diagram, field element drawings,
+ * AprilTag positions, and physical measurements
+ * 
+ * Units are in meters and radians. Some measurements in the field manual are incorrect,
+ * reference drawings
+ */
 public class FieldConstants {
   public static final boolean isWPIField = false;
 
