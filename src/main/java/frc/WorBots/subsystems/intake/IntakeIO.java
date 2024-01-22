@@ -6,6 +6,7 @@ public interface IntakeIO {
     double velocityRadsPerSec = 0.0;
     double appliedPowerVolts = 0.0;
     double currentDrawAmps = 0.0;
+    double timeOfFlightDistanceMeters = 0.0;
     boolean isConnected = false;
   }
 
