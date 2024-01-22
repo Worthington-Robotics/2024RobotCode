@@ -52,8 +52,8 @@ public class DriveWithJoysticks extends Command {
     Rotation2d linearDirection = new Rotation2d(leftX, leftY);
 
     // Apply deadband
-    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.08);
-    rightY = MathUtil.applyDeadband(rightY, 0.08);
+    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.05);
+    rightY = MathUtil.applyDeadband(rightY, 0.05);
 
     // Apply squaring
     linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
@@ -80,7 +80,7 @@ public class DriveWithJoysticks extends Command {
     // var driveTranslation = FlipFieldUtil.apply(drive.getPose().getTranslation());
     if (Math.abs(speeds.vxMetersPerSecond) < 1e-3 && Math.abs(speeds.vyMetersPerSecond) < 1e-3
         && Math.abs(speeds.omegaRadiansPerSecond) < 1e-3) {
-      drive.stopWithLock();
+      drive.stop();
     } else {
       drive.runVelocity(speeds);
     }

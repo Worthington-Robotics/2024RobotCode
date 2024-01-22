@@ -5,15 +5,13 @@ import java.util.List;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.networktables.DoubleArrayPublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.WorBots.util.*;
-import frc.WorBots.util.PoseEstimator.TimestampedVisionUpdate;
+import frc.WorBots.util.PoseEstimator.*;
 
 public class Drive extends SubsystemBase {
   private final Module[] modules = new Module[4];
@@ -67,7 +65,7 @@ public class Drive extends SubsystemBase {
       var adjustedSpeeds = new ChassisSpeeds(setpointTwist.dx / 0.02, setpointTwist.dy / 0.02,
           setpointTwist.dtheta / 0.02);
       SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(adjustedSpeeds, centerOfRotation);
-      SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, 4.5);
+      SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, getMaxLinearSpeedMetersPerSec());
 
       lastSetpointStates = setpointStates;
 
@@ -127,7 +125,7 @@ public class Drive extends SubsystemBase {
   }
 
   public double getMaxLinearSpeedMetersPerSec() {
-    return 4.0;
+    return 4.5;
   }
 
   public Rotation2d getRotation() {
@@ -205,10 +203,10 @@ public class Drive extends SubsystemBase {
 
   public Translation2d[] getModuleTranslations() {
     return new Translation2d[] {
-        new Translation2d(0.41, 0.41),
-        new Translation2d(0.41, -0.41),
-        new Translation2d(-0.41, 0.41),
-        new Translation2d(-0.41, -0.41)
+        new Translation2d(Units.inchesToMeters(13), Units.inchesToMeters(13)),
+        new Translation2d(Units.inchesToMeters(13), -Units.inchesToMeters(13)),
+        new Translation2d(-Units.inchesToMeters(13), Units.inchesToMeters(13)),
+        new Translation2d(-Units.inchesToMeters(13), -Units.inchesToMeters(13))
     };
   }
 }
