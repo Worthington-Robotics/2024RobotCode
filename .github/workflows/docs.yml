@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
+      
       - name: Build docs
         uses: mattnotmitt/doxygen-action@v1.9.5
 
