@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
+import frc.WorBots.subsystems.intake.*;
+import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.*;
@@ -17,6 +19,9 @@ public class RobotContainer {
   private Drive drive;
   private Vision vision;
   private Superstructure superstructure;
+  private Intake intake;
+  private Shooter shooter;
+  private AutoSelector selector;
 
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -28,13 +33,17 @@ public class RobotContainer {
           new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       superstructure = new Superstructure(new SuperstructureIOTalon());
+      intake = new Intake(new IntakeIOTalon());
+      shooter = new Shooter(new ShooterIOTalon());
     } else { // Sim
       drive = new Drive(new GyroIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
       vision = new Vision(new VisionIOCustom(0));
       superstructure = new Superstructure(new SuperstructureIOSim());
+      intake = new Intake(new IntakeIOSim());
+      shooter = new Shooter(new ShooterIOSim());
     }
-
-    var autoCommands = new AutoCommands(drive);
+    selector = new AutoSelector("Auto Selector");
+    var autoCommands = new AutoCommands(drive, superstructure, intake, shooter, selector);
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();

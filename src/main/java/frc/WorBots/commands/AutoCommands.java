@@ -10,18 +10,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.*;
 import frc.WorBots.subsystems.drive.*;
+import frc.WorBots.subsystems.intake.*;
+import frc.WorBots.subsystems.shooter.*;
+import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.util.*;
 import frc.WorBots.util.trajectory.*;
 
 public class AutoCommands extends Command {
   // Subsystems
   private final Drive drive;
+  private final Superstructure superstructure;
+  private final Intake intake;
+  private final Shooter shooter;
+  private final AutoSelector selector;
 
   // Poses
   private final Pose2d[] startingLocations;
 
-  public AutoCommands(Drive drive) {
+  public AutoCommands(Drive drive, Superstructure superstructure, Intake intake, Shooter shooter, AutoSelector selector) {
     this.drive = drive;
+    this.superstructure = superstructure;
+    this.intake = intake;
+    this.shooter = shooter;
+    this.selector = selector;
     startingLocations = new Pose2d[] {
         new Pose2d(FieldConstants.StartingZone.regionCorners[0].plus(new Translation2d(1, -1)), new Rotation2d())
     };
