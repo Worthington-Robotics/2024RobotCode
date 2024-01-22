@@ -2,6 +2,7 @@ package frc.WorBots.subsystems.intake;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.util.Units;
 
@@ -12,6 +13,7 @@ public class IntakeIOTalon implements IntakeIO {
   public IntakeIOTalon() {
     intakeMotor = new TalonFX(0);
     timeOfFlight= new TimeOfFlight(0);
+    timeOfFlight.setRangingMode(RangingMode.Short, 24);
   }
 
   @Override

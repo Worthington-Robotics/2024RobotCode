@@ -2,6 +2,7 @@ package frc.WorBots.subsystems.shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.util.Units;
 
@@ -16,6 +17,7 @@ public class ShooterIOTalon implements ShooterIO {
     bottomFlywheel = new TalonFX(0);
     feederWheel = new TalonFX(0);
     timeOfFlight = new TimeOfFlight(0);
+    timeOfFlight.setRangingMode(RangingMode.Short, 24);
   }
 
   @Override

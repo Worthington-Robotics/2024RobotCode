@@ -10,6 +10,8 @@ import frc.WorBots.util.StatusPage;
 public class Shooter extends SubsystemBase {// 532 rpm/v
   private ShooterIO io;
   private ShooterIOInputs inputs = new ShooterIOInputs();
+  private boolean hasGamePiece = false;
+  private static final double distanceThreshold = 0.25;
 
   private PIDController topFlywheelController;
   private PIDController bottomFlywheelController;
@@ -37,5 +39,10 @@ public class Shooter extends SubsystemBase {// 532 rpm/v
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+    if (inputs.timeOfFlightDistanceMeters < distanceThreshold) {
+      hasGamePiece = true;
+    } else {
+      hasGamePiece = false;
+    }
   }
 }
