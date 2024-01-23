@@ -112,9 +112,9 @@ public class StatusPage {
    * Report the status of a system
    * 
    * @param system The system to report. One of the static constants
-   * provided by this class should be used
+   *               provided by this class should be used
    * @param status The status of the system to set. True represents a working
-   * system
+   *               system
    */
   public static void reportStatus(String system, boolean status) {
     StatusPage instance = getInstance();
@@ -145,7 +145,8 @@ public class StatusPage {
       StringLogEntry type = new StringLogEntry(log, "/Metadata/Match Type");
       type.append(DriverStation.getMatchType().toString());
       StringLogEntry alliance = new StringLogEntry(log, "/Metadata/Alliance");
-      alliance.append(DriverStation.getAlliance().get().name());
+      alliance
+          .append((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get().name() : "Not present"));
       IntegerLogEntry stationNumber = new IntegerLogEntry(log, "/Metadata/Alliance Station");
       stationNumber.append(DriverStation.getLocation().getAsInt());
     }

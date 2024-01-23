@@ -107,7 +107,7 @@ public class FieldConstants {
   }
 
   public static final class Speaker {
-    public static final double speakerY = fieldWidth - 5.547867999999999;
+    public static final double speakerY = fieldWidth - Units.inchesToMeters(103.875);
     public static final double subwooferDepth = Units.inchesToMeters(36.37);
     public static final double subwooferSideLength = Units.inchesToMeters(41);
     public static final double subwooferBackLength = Units.inchesToMeters(77.96);

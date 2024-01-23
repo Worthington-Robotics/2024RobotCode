@@ -1,67 +1,49 @@
 package frc.WorBots.commands;
 
-import java.util.function.Supplier;
+import java.util.function.*;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.WorBots.util.*;
 
-public class AutoShoot extends Command {
-  private Supplier<Pose2d> robotPose;
-  private Supplier<Double> joystickLeftX;
-  private Supplier<Double> joystickLeftY;
-  private Superstructure superstructure;
-  private Drive drive;
-  private double openingHeight;
+public class AutoShoot extends SequentialCommandGroup {
+  // Locations
+  private double speakerOpeningHeightZ;
+  private double speakerOpeningCenterY;
+  private double forwardLineY;
 
-  public AutoShoot(Supplier<Pose2d> robotPose, Supplier<Double> joystickLeftX, Supplier<Double> joystickLeftY,
-      Superstructure superstructure, Drive drive) {
-    addRequirements(drive, superstructure);
-    this.robotPose = robotPose;
-    this.superstructure = superstructure;
-    this.drive = drive;
-    this.joystickLeftX = joystickLeftX;
-    this.joystickLeftY = joystickLeftY;
-    openingHeight = (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower) / 2;
-  }
+  public AutoShoot(Superstructure superstructure, Drive drive) {
+    addRequirements(superstructure);
+    speakerOpeningHeightZ = (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
+        / 2;
+    speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
+    forwardLineY = FieldConstants.Stage.foot1Center.getY();
 
-  @Override
-  public void initialize() {
-    superstructure.setMode(SuperstructureState.SHOOTING);
-  }
+    Supplier<Pose2d> driveTargetSupplier = () -> {
+      // Robot Pose
+      Pose2d robotPose = drive.getPose();
 
-  public void execute() {
-    double adjascent = robotPose.get().getX();
-    double opposite = FieldConstants.Speaker.openingHeightLower + openingHeight;
-    superstructure.setShootingAngleRad(() -> Math.atan2(opposite, adjascent));
+      // Calculates the shooting angle
+      double adjascent = AllianceFlipUtil.apply(robotPose).getX();
+      double opposite = FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ;
+      superstructure.setShootingAngleRad(() -> Math.atan2(opposite, adjascent));
 
-    double robotError = robotPose.get().getY() - FieldConstants.Speaker.openingCorners[0].getY();
-    double robotAngle = Math.hypot(adjascent, robotError);
+      // Calculates the robot shooting rotation
+      double robotAngle;
+      double robotY = robotPose.getY();
+      robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), adjascent) + Math.PI;
 
-    double leftX = joystickLeftX.get();
-    double leftY = joystickLeftY.get();
+      if (robotPose.getY() > forwardLineY) {
 
-    double linearMagnitude = Math.hypot(leftX, leftY);
-    Rotation2d linearDirection = new Rotation2d(leftX, leftY);
-
-    MathUtil.applyDeadband(linearMagnitude, 0.05);
-
-    linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
-
-    Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection)
-        .transformBy(new Transform2d(new Translation2d(linearMagnitude, new Rotation2d()), new Rotation2d()))
-        .getTranslation();
-
-    ChassisSpeeds speeds = new ChassisSpeeds(linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-        linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(), 0.0);
-  }
-
-  public void end(boolean interrupted) {
-    superstructure.setMode(SuperstructureState.POSE);
+      }
+      return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
+    };
+    var driveToPose = new DriveToPose(drive, driveTargetSupplier);
+    addCommands(driveToPose);
   }
 }

@@ -4,6 +4,8 @@
 
 package frc.WorBots;
 
+import java.util.*;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.commands.*;
@@ -43,7 +45,9 @@ public class RobotContainer {
       shooter = new Shooter(new ShooterIOSim());
     }
     selector = new AutoSelector("Auto Selector");
-    var autoCommands = new AutoCommands(drive, superstructure, intake, shooter, selector);
+    var autoCommands = new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
+
+    selector.addRoutine("TESTING", List.of(), autoCommands.onePiece());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
@@ -58,10 +62,10 @@ public class RobotContainer {
         () -> -driver.getLeftY(),
         () -> -driver.getLeftX(),
         () -> -driver.getRightX()));
-    // driver.a().toggleOnTrue(new AutoShoot(drive::getPose, superstructure));
+    driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("AAAAAAAAAA");
+    return selector.getCommand();
   }
 }
