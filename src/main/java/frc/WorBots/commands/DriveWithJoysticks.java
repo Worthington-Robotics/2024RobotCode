@@ -23,8 +23,6 @@ public class DriveWithJoysticks extends Command {
   private Supplier<Double> leftYSupplier;
   private Supplier<Double> rightYSupplier;
 
-  private ChassisSpeeds lastSpeeds = new ChassisSpeeds();
-
   public DriveWithJoysticks(Drive drive, Supplier<Double> leftXSupplier, Supplier<Double> leftYSupplier,
       Supplier<Double> rightYSupplier) {
     addRequirements(drive);
@@ -35,17 +33,7 @@ public class DriveWithJoysticks extends Command {
   }
 
   @Override
-  public void initialize() {
-    lastSpeeds = new ChassisSpeeds();
-  }
-
-  @Override
   public void execute() {
-    if (DriverStation.getMatchTime() >= 0.0 && DriverStation.getMatchTime() < 0.25) {
-      drive.stopWithLock();
-      return;
-    }
-
     // Get values from double suppliers
     double leftX = leftXSupplier.get();
     double leftY = leftYSupplier.get();
