@@ -39,10 +39,10 @@ public class Superstructure extends SubsystemBase {
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     } else { // Sim
-      pivotController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
+      pivotController = new ProfiledPIDController(100, 0, 0, new Constraints(5.0, 5.0));
       elevatorController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
-      pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
+      pivotFeedForward = new ArmFeedforward(1.0, 1.0, 0.0);
     }
   }
 
