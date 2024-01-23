@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.superstructure.Superstructure;
@@ -22,9 +23,11 @@ public class DriverShoot extends Command {
   private Supplier<Double> leftYSupplier;
   private Supplier<Double> aimLeftXSupplier;
   private Supplier<Double> aimLeftYSupplier;
+  private double currentAngle = 0.0;
 
-  private static final double minAngleRads = 0.0;
-  private static final double maxAngleRads = 0.0;
+  private static final double minAngleRads = -0.2;
+  private static final double maxAngleRads = 1.3;
+  private static final double sensitivity = 0.01;
 
   public DriverShoot(Drive drive, Superstructure superstructure, Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier, Supplier<Double> aimLeftXSupplier, Supplier<Double> aimLeftYSupplier) {
@@ -56,10 +59,12 @@ public class DriverShoot extends Command {
     // Apply deadband
     linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.05);
     rightY = MathUtil.applyDeadband(rightY, 0.05);
+    rightX = MathUtil.applyDeadband(rightX, 0.07);
 
     // Apply squaring
     linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
     rightY = Math.copySign(rightY * rightY, rightY);
+    rightX = Math.copySign(rightX * rightX, rightX);
 
     // Calcaulate new linear components
     Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection)
@@ -86,6 +91,19 @@ public class DriverShoot extends Command {
     } else {
       drive.runVelocity(speeds);
     }
+
+    // Calculate angle shift and apply
+    if (currentAngle > maxAngleRads) {
+      currentAngle += (rightX < 0 ? rightX * sensitivity : 0.0);
+    } else if (currentAngle < minAngleRads) {
+      currentAngle += (rightX > 0 ? rightX * sensitivity : 0.0);
+    } else {
+      currentAngle += rightX * sensitivity;
+    }
+
+    superstructure.setShootingAngleRad(currentAngle);
+
+    SmartDashboard.putNumber("ManualRads", currentAngle);
   }
 
   @Override

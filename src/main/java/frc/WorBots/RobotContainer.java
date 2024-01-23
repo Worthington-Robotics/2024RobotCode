@@ -63,6 +63,11 @@ public class RobotContainer {
         () -> -driver.getLeftX(),
         () -> -driver.getRightX()));
     driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
+    operator.a().toggleOnTrue(new DriverShoot(drive, superstructure,
+        () -> -driver.getLeftY(),
+        () -> -driver.getLeftX(),
+        () -> -operator.getLeftY(),
+        () -> -operator.getLeftX()));
   }
 
   public Command getAutonomousCommand() {
