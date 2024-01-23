@@ -72,12 +72,12 @@ public class Lights extends SubsystemBase {
         break;
       case CLAIRE:
         wave(100, Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
-      break;
+        break;
     }
     // for (int i =0; i<LIGHT_COUNT; i++) {
-    //   Color color = io.getLED(i);
-    //   Color reverseColor = new Color(color.red, color.green, color.blue);
-    //   io.setLED(i, reverseColor);
+    // Color color = io.getLED(i);
+    // Color reverseColor = new Color(color.red, color.green, color.blue);
+    // io.setLED(i, reverseColor);
     // }
     leds.setData(io);
     SmartDashboard.putString("Lights/Mode", mode.toString());
@@ -136,6 +136,47 @@ public class Lights extends SubsystemBase {
     }
   }
 
+  private void bounce(double percent, Color c1, Color c2, double cycleLength, double duration, double waveExponent) {
+    double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration) * 2.0 * Math.PI);
+    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
+    for (int i = 0; i < LIGHT_COUNT; i++) {
+      if (i == 0) {
+        System.out.println(x);
+      }
+      if (x > -2) {
+        x += xDiffPerLed;
+      } else {
+        x -= xDiffPerLed;
+      }
+      if (i >= 0) {
+        double ratio = (Math.pow(Math.sin(x), waveExponent) + 1.0) / 2.0;
+        if (Double.isNaN(ratio)) {
+          ratio = (-Math.pow(Math.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
+        }
+        if (Double.isNaN(ratio)) {
+          ratio = 0.5;
+        }
+        double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
+        double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
+        double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
+        io.setLED(i, new Color(red, green, blue));
+      }
+    }
+  }
+
+  public void bounce(Color c1, double cycleLength, double duration, double waveExponent) {
+    double x = (Math.sin((Timer.getFPGATimestamp() % (Math.PI * 2))) + 1) / 2;
+    double xDiffPerLed = cycleLength;
+    System.out.println(x);
+    for (int i = 0; i < LIGHT_COUNT; i++) {
+      x -= xDiffPerLed;
+      if (i >= 0) {
+        double red = (c1.red * (x));
+        io.setLED(i, new Color(red, red, red));
+      }
+    }
+  }
+
   private void status() {
     for (int i = 0; i < StatusPage.ALL_SYSTEMS.length; i++) {
       final String system = StatusPage.ALL_SYSTEMS[i];
@@ -171,7 +212,7 @@ public class Lights extends SubsystemBase {
     if (alliance.isPresent()) {
       switch (alliance.get()) {
         case Red:
-        color = Color.kRed;
+          color = Color.kRed;
           break;
         case Blue:
           color = Color.kBlue;
