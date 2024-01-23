@@ -167,7 +167,6 @@ public class Lights extends SubsystemBase {
   public void bounce(Color c1, double cycleLength, double duration, double waveExponent) {
     double x = (Math.sin((Timer.getFPGATimestamp() % (Math.PI * 2))) + 1) / 2;
     double xDiffPerLed = cycleLength;
-    System.out.println(x);
     for (int i = 0; i < LIGHT_COUNT; i++) {
       x -= xDiffPerLed;
       if (i >= 0) {
