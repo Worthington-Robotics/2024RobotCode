@@ -17,7 +17,7 @@ var searchData=
   ['atreference_14',['atReference',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a13aa1bf6030440849b4e50c86a90b05c',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]],
   ['auto_5fchosen_15',['AUTO_CHOSEN',['../classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a19a632f4d137b1c7a4faa28188e4ceef',1,'frc::WorBots::util::StatusPage']]],
   ['auto_5frunning_16',['AUTO_RUNNING',['../classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a00ba4bfb3db506a25d3925997585d13f',1,'frc::WorBots::util::StatusPage']]],
-  ['autocommands_17',['AutoCommands',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#afb1135745a29b385f365562fe72c441c',1,'frc.WorBots.commands.AutoCommands.AutoCommands()'],['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html',1,'frc.WorBots.commands.AutoCommands']]],
+  ['autocommands_17',['AutoCommands',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a19900e71583e8d9376c368670bdc025b',1,'frc.WorBots.commands.AutoCommands.AutoCommands()'],['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html',1,'frc.WorBots.commands.AutoCommands']]],
   ['autocommands_2ejava_18',['AutoCommands.java',['../AutoCommands_8java.html',1,'']]],
   ['autonomousexit_19',['autonomousExit',['../classfrc_1_1WorBots_1_1Robot.html#a4f19dd8f8cc0e6043358596bc7c8ae05',1,'frc::WorBots::Robot']]],
   ['autonomousinit_20',['autonomousInit',['../classfrc_1_1WorBots_1_1Robot.html#ab6ef326c60ffe7140c843e16963fe6ab',1,'frc::WorBots::Robot']]],
@@ -25,6 +25,6 @@ var searchData=
   ['autoquestion_22',['AutoQuestion',['../classfrc_1_1WorBots_1_1AutoSelector.html#a08022ea935002a3fadbe89e1fff38c21',1,'frc::WorBots::AutoSelector']]],
   ['autoselector_23',['AutoSelector',['../classfrc_1_1WorBots_1_1AutoSelector.html#a1d0889254586fab3549795ddf984dd6d',1,'frc.WorBots.AutoSelector.AutoSelector()'],['../classfrc_1_1WorBots_1_1AutoSelector.html',1,'frc.WorBots.AutoSelector']]],
   ['autoselector_2ejava_24',['AutoSelector.java',['../AutoSelector_8java.html',1,'']]],
-  ['autoshoot_25',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#ab62b4ec6defaf7620e9e30281ba9960e',1,'frc.WorBots.commands.AutoShoot.AutoShoot()'],['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html',1,'frc.WorBots.commands.AutoShoot']]],
+  ['autoshoot_25',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#a2c81763f88e7a37e522537ef30816e97',1,'frc.WorBots.commands.AutoShoot.AutoShoot()'],['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html',1,'frc.WorBots.commands.AutoShoot']]],
   ['autoshoot_2ejava_26',['AutoShoot.java',['../AutoShoot_8java.html',1,'']]]
 ];
