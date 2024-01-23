@@ -1,7 +1,11 @@
-package frc.WorBots;
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
-import java.util.ArrayList;
-import java.util.List;
+package frc.WorBots;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
@@ -11,10 +15,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.util.StatusPage;
 import frc.WorBots.util.SwitchableChooser;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutoSelector extends SubsystemBase {
   public static final int maxQuestions = 4;
-  private static final AutoRoutine defaultRoutine = new AutoRoutine("Do Nothing", List.of(), Commands.none());
+  private static final AutoRoutine defaultRoutine =
+      new AutoRoutine("Do Nothing", List.of(), Commands.none());
 
   private SwitchableChooser routineChooser;
   private final List<StringPublisher> questionPublishers;
@@ -34,9 +41,10 @@ public class AutoSelector extends SubsystemBase {
     questionPublishers = new ArrayList<>();
     questionChoosers = new ArrayList<>();
     for (int i = 0; i < maxQuestions; i++) {
-      var publisher = NetworkTableInstance.getDefault()
-          .getStringTopic("/SmartDashboard/" + key + "/Question #" + Integer.toString(i + 1))
-          .publish();
+      var publisher =
+          NetworkTableInstance.getDefault()
+              .getStringTopic("/SmartDashboard/" + key + "/Question #" + Integer.toString(i + 1))
+              .publish();
       publisher.set("NA");
       questionPublishers.add(publisher);
       questionChoosers.add(
@@ -124,24 +132,25 @@ public class AutoSelector extends SubsystemBase {
   }
 
   /**
-   * We have to do this once at the beginning when the command is registered
-   * otherwise WPILib gives us errors
+   * We have to do this once at the beginning when the command is registered otherwise WPILib gives
+   * us errors
    */
   private static Command createRoutineCommand(Command command) {
-    return Commands.deadline(command, Commands.startEnd(() -> {
-      StatusPage.reportStatus(StatusPage.AUTO_RUNNING, true);
-    },
-        () -> {
-          StatusPage.reportStatus(StatusPage.AUTO_RUNNING, false);
-        }));
+    return Commands.deadline(
+        command,
+        Commands.startEnd(
+            () -> {
+              StatusPage.reportStatus(StatusPage.AUTO_RUNNING, true);
+            },
+            () -> {
+              StatusPage.reportStatus(StatusPage.AUTO_RUNNING, false);
+            }));
   }
 
   private static final record AutoRoutine(
-      String name, List<AutoQuestion> questions, Command command) {
-  }
+      String name, List<AutoQuestion> questions, Command command) {}
 
-  public static record AutoQuestion(String question, List<AutoQuestionResponse> responses) {
-  }
+  public static record AutoQuestion(String question, List<AutoQuestionResponse> responses) {}
 
   public static enum AutoQuestionResponse {
     YES,

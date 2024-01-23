@@ -1,10 +1,11 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.WorBots;
-
-import java.util.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
@@ -15,6 +16,7 @@ import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.*;
+import java.util.*;
 
 public class RobotContainer {
   // Subsystems
@@ -31,21 +33,33 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (!Constants.getSim()) { // Real Robot
-      drive = new Drive(new GyroIOPigeon(), new ModuleIOKraken(0), new ModuleIOKraken(1), new ModuleIOKraken(2),
-          new ModuleIOKraken(3));
+      drive =
+          new Drive(
+              new GyroIOPigeon(),
+              new ModuleIOKraken(0),
+              new ModuleIOKraken(1),
+              new ModuleIOKraken(2),
+              new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       superstructure = new Superstructure(new SuperstructureIOTalon());
       intake = new Intake(new IntakeIOTalon());
       shooter = new Shooter(new ShooterIOTalon());
     } else { // Sim
-      drive = new Drive(new GyroIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
+      drive =
+          new Drive(
+              new GyroIOSim(),
+              new ModuleIOSim(),
+              new ModuleIOSim(),
+              new ModuleIOSim(),
+              new ModuleIOSim());
       vision = new Vision(new VisionIOCustom(0));
       superstructure = new Superstructure(new SuperstructureIOSim());
       intake = new Intake(new IntakeIOSim());
       shooter = new Shooter(new ShooterIOSim());
     }
     selector = new AutoSelector("Auto Selector");
-    var autoCommands = new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
+    var autoCommands =
+        new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
 
     selector.addRoutine("TESTING", List.of(), autoCommands.onePiece());
 
@@ -53,21 +67,23 @@ public class RobotContainer {
     bindControls();
   }
 
-  /**
-   * Bind driver controls to commands
-   */
+  /** Bind driver controls to commands */
   private void bindControls() {
     StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER, driver.getHID().isConnected());
-    drive.setDefaultCommand(new DriveWithJoysticks(drive,
-        () -> -driver.getLeftY(),
-        () -> -driver.getLeftX(),
-        () -> -driver.getRightX()));
+    drive.setDefaultCommand(
+        new DriveWithJoysticks(
+            drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
     driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
-    operator.a().toggleOnTrue(new DriverShoot(drive, superstructure,
-        () -> -driver.getLeftY(),
-        () -> -driver.getLeftX(),
-        () -> -operator.getLeftY(),
-        () -> -operator.getLeftX()));
+    operator
+        .a()
+        .toggleOnTrue(
+            new DriverShoot(
+                drive,
+                superstructure,
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX(),
+                () -> -operator.getLeftY(),
+                () -> -operator.getLeftX()));
   }
 
   public Command getAutonomousCommand() {

@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.*;
@@ -35,15 +42,19 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intake() {
-    return this.runOnce(() -> {
-      if (hasGamepiece == true) {
-        setpointVolts = 1.0;
-      } else {
-        setpointVolts = 8.0;
-      }
-    }).andThen(Commands.waitUntil(this::hasGamePiece)).finallyDo(() -> {
-      setpointVolts = 1.0;
-    });
+    return this.runOnce(
+            () -> {
+              if (hasGamepiece == true) {
+                setpointVolts = 1.0;
+              } else {
+                setpointVolts = 8.0;
+              }
+            })
+        .andThen(Commands.waitUntil(this::hasGamePiece))
+        .finallyDo(
+            () -> {
+              setpointVolts = 1.0;
+            });
   }
 
   public boolean hasGamePiece() {

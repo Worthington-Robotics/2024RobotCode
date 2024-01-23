@@ -1,20 +1,23 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.util;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringArrayPublisher;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
-
 import java.util.Arrays;
 
-/**
- * A string chooser for the dashboard where the options can be changed
- * on-the-fly.
- */
+/** A string chooser for the dashboard where the options can be changed on-the-fly. */
 public class SwitchableChooser {
   private static final String placeholder = "<NA>";
 
-  private String[] options = new String[] { placeholder };
+  private String[] options = new String[] {placeholder};
   private String active = placeholder;
 
   private final StringPublisher namePublisher;
@@ -48,7 +51,7 @@ public class SwitchableChooser {
     if (Arrays.equals(options, this.options)) {
       return;
     }
-    this.options = options.length == 0 ? new String[] { placeholder } : options;
+    this.options = options.length == 0 ? new String[] {placeholder} : options;
     optionsPublisher.set(this.options);
     periodic();
   }

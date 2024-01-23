@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -19,7 +26,6 @@ import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.util.AllianceFlipUtil;
 import frc.WorBots.util.Logger;
 import frc.WorBots.util.trajectory.*;
-
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -33,8 +39,8 @@ public class DriveTrajectory extends Command {
   private PIDController yController = new PIDController(2.5, 0.0, 0.0);
   private PIDController thetaController = new PIDController(5.0, 0.0, 0.0);
 
-  private final CustomHolonomicDriveController customHolonomicDriveController = new CustomHolonomicDriveController(
-      xController, yController, thetaController);
+  private final CustomHolonomicDriveController customHolonomicDriveController =
+      new CustomHolonomicDriveController(xController, yController, thetaController);
 
   private final Drive drive;
   private final Timer timer = new Timer();
@@ -49,10 +55,7 @@ public class DriveTrajectory extends Command {
     this(drive, waypointsSupplier, () -> List.of(), () -> 0.0);
   }
 
-  /**
-   * Creates a DriveTrajectory command with a dynamic set of waypoints and
-   * constraints.
-   */
+  /** Creates a DriveTrajectory command with a dynamic set of waypoints and constraints. */
   public DriveTrajectory(
       Drive drive,
       Supplier<List<Waypoint>> waypointsSupplier,
@@ -70,10 +73,7 @@ public class DriveTrajectory extends Command {
     this(drive, waypoints, List.of(), 0.0);
   }
 
-  /**
-   * Creates a DriveTrajectory command with a static set of waypoints and
-   * constraints.
-   */
+  /** Creates a DriveTrajectory command with a static set of waypoints and constraints. */
   public DriveTrajectory(
       Drive drive,
       List<Waypoint> waypoints,
@@ -98,7 +98,8 @@ public class DriveTrajectory extends Command {
       yController = new PIDController(2.5, 0, 0.0);
       thetaController = new PIDController(5.0, 0, 0.0);
     }
-    customHolonomicDriveController.setTolerance(new Pose2d(new Translation2d(0.02, 0.02), new Rotation2d(0.02)));
+    customHolonomicDriveController.setTolerance(
+        new Pose2d(new Translation2d(0.02, 0.02), new Rotation2d(0.02)));
     generate(waypoints, constraints, startVelocity, true);
   }
 
@@ -109,13 +110,14 @@ public class DriveTrajectory extends Command {
       double startVelocity,
       boolean alertOnFail) {
     // Set up trajectory configuration
-    TrajectoryConfig config = new TrajectoryConfig(maxVelocityMetersPerSec, maxAccelerationMetersPerSec2)
-        .setKinematics(new SwerveDriveKinematics(drive.getModuleTranslations()))
-        .setStartVelocity(startVelocity)
-        .setEndVelocity(0.0)
-        .addConstraint(
-            new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2))
-        .addConstraints(constraints);
+    TrajectoryConfig config =
+        new TrajectoryConfig(maxVelocityMetersPerSec, maxAccelerationMetersPerSec2)
+            .setKinematics(new SwerveDriveKinematics(drive.getModuleTranslations()))
+            .setStartVelocity(startVelocity)
+            .setEndVelocity(0.0)
+            .addConstraint(
+                new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2))
+            .addConstraints(constraints);
 
     // Generate trajectory
     customGenerator = new CustomTrajectoryGenerator(); // Reset generator
@@ -159,20 +161,23 @@ public class DriveTrajectory extends Command {
     }
 
     // Get setpoint
-    Trajectory.State driveState = AllianceFlipUtil.apply(customGenerator.getDriveTrajectory().sample(timer.get()));
-    RotationSequence.State holonomicRotationState = AllianceFlipUtil
-        .apply(customGenerator.getHolonomicRotationSequence().sample(timer.get()));
+    Trajectory.State driveState =
+        AllianceFlipUtil.apply(customGenerator.getDriveTrajectory().sample(timer.get()));
+    RotationSequence.State holonomicRotationState =
+        AllianceFlipUtil.apply(customGenerator.getHolonomicRotationSequence().sample(timer.get()));
 
     // Log Setpoint
     Logger.getInstance()
-        .setDriveTrajSetpoint(new Pose2d(driveState.poseMeters.getTranslation(), holonomicRotationState.position));
+        .setDriveTrajSetpoint(
+            new Pose2d(driveState.poseMeters.getTranslation(), holonomicRotationState.position));
 
     // Log Errors
     SmartDashboard.putNumberArray("Traj Errors", customHolonomicDriveController.getErrors());
 
     // Calculate velocity
-    ChassisSpeeds nextDriveState = customHolonomicDriveController.calculate(
-        drive.getPose(), driveState, holonomicRotationState);
+    ChassisSpeeds nextDriveState =
+        customHolonomicDriveController.calculate(
+            drive.getPose(), driveState, holonomicRotationState);
     drive.runVelocity(nextDriveState);
   }
 

@@ -1,6 +1,11 @@
-package frc.WorBots.subsystems.superstructure;
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
-import java.util.function.Supplier;
+package frc.WorBots.subsystems.superstructure;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -11,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.Logger;
+import java.util.function.Supplier;
 
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
@@ -18,7 +24,7 @@ public class Superstructure extends SubsystemBase {
   private SuperstructureState state = SuperstructureState.POSE;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.CLIMB;
   private double pivotAbsAngleRad = 0.0;
-  private Supplier<Double> shootingAngleRad = () -> 0.5;
+  private Supplier<Double> shootingAngleRad = () -> 0.0;
 
   private ProfiledPIDController pivotController;
   private ProfiledPIDController elevatorController;
@@ -26,7 +32,8 @@ public class Superstructure extends SubsystemBase {
   private ArmFeedforward pivotFeedForward;
 
   public enum SuperstructureState {
-    POSE, SHOOTING
+    POSE,
+    SHOOTING
   }
 
   public Superstructure(SuperstructureIO io) {
@@ -54,12 +61,15 @@ public class Superstructure extends SubsystemBase {
       case POSE:
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(setpoint.getVecPose().get(0, 0));
         Logger.getInstance().setSuperstructurePivotPosSetpoint(setpoint.getVecPose().get(1, 0));
-        double elevatorVoltage = elevatorController.calculate(inputs.elevatorPositionMeters,
-            setpoint.getVecPose().get(0, 0))
-            + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
-        double pivotVoltage = pivotController.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad,
-            setpoint.getVecPose().get(1, 0))
-            + pivotFeedForward.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
+        double elevatorVoltage =
+            elevatorController.calculate(
+                    inputs.elevatorPositionMeters, setpoint.getVecPose().get(0, 0))
+                + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
+        double pivotVoltage =
+            pivotController.calculate(
+                    inputs.pivotPositionRelRad + pivotAbsAngleRad, setpoint.getVecPose().get(1, 0))
+                + pivotFeedForward.calculate(
+                    inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
         Logger.getInstance().setSuperstructurePivotVoltageSetpoint(pivotVoltage);
         Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(elevatorVoltage);
         io.setElevatorVoltage(elevatorVoltage);
@@ -68,11 +78,14 @@ public class Superstructure extends SubsystemBase {
       case SHOOTING:
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
         Logger.getInstance().setSuperstructurePivotPosSetpoint(shootingAngleRad.get());
-        io.setElevatorVoltage(elevatorController.calculate(inputs.elevatorPositionMeters, 0.0)
-            + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec));
-        io.setPivotVoltage(pivotController.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad,
-            shootingAngleRad.get())
-            + pivotFeedForward.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec));
+        io.setElevatorVoltage(
+            elevatorController.calculate(inputs.elevatorPositionMeters, 0.0)
+                + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec));
+        io.setPivotVoltage(
+            pivotController.calculate(
+                    inputs.pivotPositionRelRad + pivotAbsAngleRad, shootingAngleRad.get())
+                + pivotFeedForward.calculate(
+                    inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec));
         break;
     }
     if (DriverStation.isDisabled()) {

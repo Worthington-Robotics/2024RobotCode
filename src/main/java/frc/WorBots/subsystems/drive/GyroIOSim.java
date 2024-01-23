@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,8 +15,7 @@ public class GyroIOSim implements GyroIO {
   private SimAxis rollAxis = new SimAxis();
   private SimAxis yawAxis = new SimAxis();
 
-  public GyroIOSim() {
-  }
+  public GyroIOSim() {}
 
   public void updateInputs(GyroIOInputs inputs) {
     pitchAxis.update();
@@ -41,9 +47,8 @@ public class GyroIOSim implements GyroIO {
   }
 
   /**
-   * Simulation for one axis of the gyroscope.
-   * It basically just applies a rotational velocity to a stored rotation
-   * every update, with compensation for time difference
+   * Simulation for one axis of the gyroscope. It basically just applies a rotational velocity to a
+   * stored rotation every update, with compensation for time difference
    */
   private static class SimAxis {
     private Rotation2d angle = new Rotation2d();

@@ -1,7 +1,13 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.superstructure;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 
@@ -32,10 +38,10 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {
-    inputs.elevatorPositionMeters = (elevator.getPosition().getValue() / elevatorGearing)
-        * (isElevatorInverted ? 1.0 : -1.0);
-    inputs.elevatorVelocityMetersPerSec = (elevator.getVelocity().getValue() / elevatorGearing)
-        * (isElevatorInverted ? 1.0 : -1.0);
+    inputs.elevatorPositionMeters =
+        (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
+    inputs.elevatorVelocityMetersPerSec =
+        (elevator.getVelocity().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
     inputs.elevatorVoltage = elevator.getMotorVoltage().getValue();
     inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
 

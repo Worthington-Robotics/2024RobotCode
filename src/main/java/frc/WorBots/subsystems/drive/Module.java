@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.drive;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -16,9 +23,11 @@ public class Module {
   private final ModuleIOInputs inputs = new ModuleIOInputs();
 
   private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-  private static TunablePIDGains driveFeedbackGains = new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
+  private static TunablePIDGains driveFeedbackGains =
+      new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
   private TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
-  private static TunablePIDGains turnFeedbackGains = new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
+  private static TunablePIDGains turnFeedbackGains =
+      new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
   private TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
   public Module(ModuleIO io, int index) {
@@ -47,13 +56,15 @@ public class Module {
   public SwerveModuleState runState(SwerveModuleState state) {
     var optimizedState = SwerveModuleState.optimize(state, getAngle());
 
-    io.setTurnVoltage(turnFeedback.pid.calculate(getAngle().getRadians(), optimizedState.angle.getRadians()));
+    io.setTurnVoltage(
+        turnFeedback.pid.calculate(getAngle().getRadians(), optimizedState.angle.getRadians()));
 
     optimizedState.speedMetersPerSecond *= Math.cos(turnFeedback.pid.getPositionError());
 
     double velocityRadPerSec = optimizedState.speedMetersPerSecond / Units.inchesToMeters(2.0);
-    io.setDriveVoltage(driveFeedforward.calculate(velocityRadPerSec)
-        + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+    io.setDriveVoltage(
+        driveFeedforward.calculate(velocityRadPerSec)
+            + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
 
     return optimizedState;
   }

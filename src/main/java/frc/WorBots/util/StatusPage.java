@@ -1,6 +1,11 @@
-package frc.WorBots.util;
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
-import java.util.HashMap;
+package frc.WorBots.util;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.datalog.DataLog;
@@ -10,11 +15,9 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import java.util.HashMap;
 
-/**
- * A utility class which shows the status of systems on the robot to
- * NetworkTables
- */
+/** A utility class which shows the status of systems on the robot to NetworkTables */
 public class StatusPage {
   private ShuffleboardTab tab = Shuffleboard.getTab("Status");
   private HashMap<String, GenericEntry> entries = new HashMap<>();
@@ -52,43 +55,41 @@ public class StatusPage {
   public static final String CAM1 = "Cam 1";
   public static final String LAUNCHPAD = "Launchpad";
 
-  /**
-   * All systems that the StatusPage reports
-   */
+  /** All systems that the StatusPage reports */
   public static final String[] ALL_SYSTEMS = {
-      AUTO_RUNNING,
-      ALL_AUTO_QUESTIONS,
-      AUTO_CHOSEN,
-      ROBOT_CODE,
-      DRIVE_CONTROLLER,
-      ARM_SUBSYSTEM,
-      DRIVE_SUBSYSTEM,
-      INTAKE_SUBSYSTEM,
-      LIGHTS_SUBSYSTEM,
-      VISION_SUBSYSTEM,
-      SHOOTER_SUBSYSTEM,
-      SHOOTER_CONNECTED,
-      GYROSCOPE,
-      SMODULE_PREFIX + "0",
-      SMODULE_PREFIX + "1",
-      SMODULE_PREFIX + "2",
-      SMODULE_PREFIX + "3",
-      NODE_SELECTOR,
-      NETWORK_TABLES,
-      DRIVER_STATION,
-      FMS,
-      BATTERY,
-      IDEAL_BATTERY,
-      INTAKE_CONNECTED,
-      BROWNOUT,
-      OPERATOR_CONTROLLER,
-      NOT_ESTOPPED,
-      PDP_BREAKERS,
-      CAN_WARNING,
-      PDP_HARDWARE,
-      CAM0,
-      CAM1,
-      LAUNCHPAD,
+    AUTO_RUNNING,
+    ALL_AUTO_QUESTIONS,
+    AUTO_CHOSEN,
+    ROBOT_CODE,
+    DRIVE_CONTROLLER,
+    ARM_SUBSYSTEM,
+    DRIVE_SUBSYSTEM,
+    INTAKE_SUBSYSTEM,
+    LIGHTS_SUBSYSTEM,
+    VISION_SUBSYSTEM,
+    SHOOTER_SUBSYSTEM,
+    SHOOTER_CONNECTED,
+    GYROSCOPE,
+    SMODULE_PREFIX + "0",
+    SMODULE_PREFIX + "1",
+    SMODULE_PREFIX + "2",
+    SMODULE_PREFIX + "3",
+    NODE_SELECTOR,
+    NETWORK_TABLES,
+    DRIVER_STATION,
+    FMS,
+    BATTERY,
+    IDEAL_BATTERY,
+    INTAKE_CONNECTED,
+    BROWNOUT,
+    OPERATOR_CONTROLLER,
+    NOT_ESTOPPED,
+    PDP_BREAKERS,
+    CAN_WARNING,
+    PDP_HARDWARE,
+    CAM0,
+    CAM1,
+    LAUNCHPAD,
   };
 
   private StatusPage() {
@@ -101,20 +102,17 @@ public class StatusPage {
 
   private static StatusPage instance = new StatusPage();
 
-  /**
-   * Get the singleton instance of the StatusPage
-   */
+  /** Get the singleton instance of the StatusPage */
   public static StatusPage getInstance() {
     return instance;
   }
 
   /**
    * Report the status of a system
-   * 
-   * @param system The system to report. One of the static constants
-   *               provided by this class should be used
-   * @param status The status of the system to set. True represents a working
-   *               system
+   *
+   * @param system The system to report. One of the static constants provided by this class should
+   *     be used
+   * @param status The status of the system to set. True represents a working system
    */
   public static void reportStatus(String system, boolean status) {
     StatusPage instance = getInstance();
@@ -122,19 +120,14 @@ public class StatusPage {
     entry.setBoolean(status);
   }
 
-  /**
-   * Get the current status of a system from NetworkTables
-   */
+  /** Get the current status of a system from NetworkTables */
   public static boolean getStatus(String system) {
     StatusPage instance = getInstance();
     GenericEntry entry = instance.getEntry(system);
     return entry.getBoolean(false);
   }
 
-  /**
-   * Report metadata for AdvantageScope to use.
-   * Also starts the WPILib DataLog
-   */
+  /** Report metadata for AdvantageScope to use. Also starts the WPILib DataLog */
   public static void reportMetadata() {
     if (!hasMetadataBeenLogged) {
       DataLog log = DataLogManager.getLog();
@@ -145,8 +138,10 @@ public class StatusPage {
       StringLogEntry type = new StringLogEntry(log, "/Metadata/Match Type");
       type.append(DriverStation.getMatchType().toString());
       StringLogEntry alliance = new StringLogEntry(log, "/Metadata/Alliance");
-      alliance
-          .append((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get().name() : "Not present"));
+      alliance.append(
+          (DriverStation.getAlliance().isPresent()
+              ? DriverStation.getAlliance().get().name()
+              : "Not present"));
       IntegerLogEntry stationNumber = new IntegerLogEntry(log, "/Metadata/Alliance Station");
       stationNumber.append(DriverStation.getLocation().getAsInt());
     }

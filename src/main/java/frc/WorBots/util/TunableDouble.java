@@ -1,11 +1,18 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.util;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
- * Simple utility that allows you to have a double value that is modifiable
- * at runtime using the dashboard.
+ * Simple utility that allows you to have a double value that is modifiable at runtime using the
+ * dashboard.
  */
 public class TunableDouble {
   // Set this to false to disable tuning and improve performance.
@@ -20,7 +27,7 @@ public class TunableDouble {
 
   /**
    * Creates a new TunableDouble with a name and the value set to 0.0
-   * 
+   *
    * @param table The main NT table
    * @param subtable The NT subtable
    * @param name The NT key
@@ -31,12 +38,12 @@ public class TunableDouble {
 
   /**
    * Creates a new TunableDouble with a name and a default value
-   * 
+   *
    * @param table The main NT table
    * @param subtable The NT subtable
    * @param name The NT key
-   * @param defaultValue The default value for the tunable to have before it is updated
-   * or if the update fails
+   * @param defaultValue The default value for the tunable to have before it is updated or if the
+   *     update fails
    */
   public TunableDouble(String table, String subtable, String name, double defaultValue) {
     value = defaultValue;
@@ -44,9 +51,7 @@ public class TunableDouble {
     entry = NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable).getEntry(name);
   }
 
-  /**
-   * Update the value to the latest version and log that value
-   */
+  /** Update the value to the latest version and log that value */
   public void update() {
     if (enableTuning) {
       value = entry.getDouble(defaultValue);
@@ -57,7 +62,7 @@ public class TunableDouble {
 
   /**
    * Update the current value and then get it.
-   * 
+   *
    * @return The latest updated value from NetworkTables
    */
   public double get() {
@@ -67,7 +72,7 @@ public class TunableDouble {
 
   /**
    * Set the value and default value
-   * 
+   *
    * @param value The value to set
    */
   public void set(double value) {
@@ -79,7 +84,7 @@ public class TunableDouble {
 
   /**
    * Get the default value
-   * 
+   *
    * @return The default value of the tunable
    */
   public double getDefault() {

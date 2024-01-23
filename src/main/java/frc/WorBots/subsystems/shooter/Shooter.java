@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.shooter;
 
 import edu.wpi.first.math.controller.*;
@@ -6,7 +13,7 @@ import frc.WorBots.Constants;
 import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.WorBots.util.StatusPage;
 
-public class Shooter extends SubsystemBase {// 532 rpm/v
+public class Shooter extends SubsystemBase { // 532 rpm/v
   private ShooterIO io;
   private ShooterIOInputs inputs = new ShooterIOInputs();
   private boolean hasGamePiece = false;

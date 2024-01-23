@@ -1,8 +1,14 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.drive;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -47,22 +53,26 @@ public class ModuleIOKraken implements ModuleIO {
   }
 
   public void updateInputs(ModuleIOInputs inputs) {
-    inputs.drivePositionRad = Units
-        .rotationsToRadians(driveMotor.getPosition().getValue() * ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)));
-    inputs.driveVelocityRadPerSec = Units
-        .rotationsToRadians(driveMotor.getVelocity().getValue() * ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)));
+    inputs.drivePositionRad =
+        Units.rotationsToRadians(
+            driveMotor.getPosition().getValue() * ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)));
+    inputs.driveVelocityRadPerSec =
+        Units.rotationsToRadians(
+            driveMotor.getVelocity().getValue() * ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)));
     inputs.driveAppliedVolts = driveMotor.get() * driveMotor.getSupplyVoltage().getValue();
-    inputs.driveCurrentAmps = new double[] { driveMotor.getStatorCurrent().getValue() };
-    inputs.driveTempCelcius = new double[] { driveMotor.getDeviceTemp().getValue() };
+    inputs.driveCurrentAmps = new double[] {driveMotor.getStatorCurrent().getValue()};
+    inputs.driveTempCelcius = new double[] {driveMotor.getDeviceTemp().getValue()};
 
-    inputs.turnAbsolutePositionRad = MathUtil
-        .angleModulus(Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValue())
-            - encoderOffset.getRadians());
-    inputs.turnVelocityRadPerSec = Units.rotationsToRadians(absoluteEncoder.getVelocity().getValue());
+    inputs.turnAbsolutePositionRad =
+        MathUtil.angleModulus(
+            Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValue())
+                - encoderOffset.getRadians());
+    inputs.turnVelocityRadPerSec =
+        Units.rotationsToRadians(absoluteEncoder.getVelocity().getValue());
     inputs.turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getPosition().getValue());
     inputs.turnAppliedVolts = turnMotor.get() * turnMotor.getSupplyVoltage().getValue();
-    inputs.turnCurrentAmps = new double[] { turnMotor.getStatorCurrent().getValue() };
-    inputs.turnTempCelcius = new double[] { turnMotor.getDeviceTemp().getValue() };
+    inputs.turnCurrentAmps = new double[] {turnMotor.getStatorCurrent().getValue()};
+    inputs.turnTempCelcius = new double[] {turnMotor.getDeviceTemp().getValue()};
 
     inputs.isConnected = true;
     if (!turnMotor.isAlive()) {
@@ -82,9 +92,7 @@ public class ModuleIOKraken implements ModuleIO {
     turnMotor.setVoltage(-volts);
   }
 
-  public void setDriveBrakeMode(boolean enable) {
-  }
+  public void setDriveBrakeMode(boolean enable) {}
 
-  public void setTurnBrakeMode(boolean enable) {
-  }
+  public void setTurnBrakeMode(boolean enable) {}
 }

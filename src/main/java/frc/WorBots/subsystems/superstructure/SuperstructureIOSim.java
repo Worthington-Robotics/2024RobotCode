@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.superstructure;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -10,7 +17,9 @@ public class SuperstructureIOSim implements SuperstructureIO {
 
   public SuperstructureIOSim() {
     elevator = new ElevatorSim(DCMotor.getKrakenX60(1), 10.0, 3.0, 0.02, 0.0, 0.4, true, 0.1);
-    pivot = new SingleJointedArmSim(DCMotor.getKrakenX60(1), 100, 0.25, 0.07, -Math.PI/6, Math.PI, true, 0);
+    pivot =
+        new SingleJointedArmSim(
+            DCMotor.getKrakenX60(1), 100, 0.25, 0.07, -Math.PI / 6, Math.PI, true, 0);
   }
 
   public void setElevatorVoltage(double volts) {
@@ -24,10 +33,10 @@ public class SuperstructureIOSim implements SuperstructureIO {
   public void updateInputs(SuperstructureIOInputs inputs) {
     elevator.update(0.02);
     pivot.update(0.02);
-    
+
     inputs.elevatorPositionMeters = elevator.getPositionMeters();
     inputs.elevatorVelocityMetersPerSec = elevator.getVelocityMetersPerSecond();
-    
+
     inputs.pivotPositionAbsRad = 0.0;
     inputs.pivotPositionRelRad = pivot.getAngleRads();
     inputs.elevatorVelocityMetersPerSec = pivot.getVelocityRadPerSec();

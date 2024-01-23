@@ -1,6 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.WorBots;
 
@@ -38,75 +41,81 @@ public class Robot extends TimedRobot {
       DriverStation.silenceJoystickConnectionWarning(false);
     }
 
-    this.addPeriodic(() -> {
-      // Simple status updates
-      StatusPage.reportStatus(StatusPage.NETWORK_TABLES, NetworkTableInstance.getDefault().isConnected());
-      StatusPage.reportStatus(StatusPage.DRIVER_STATION, DriverStation.isDSAttached());
-      StatusPage.reportStatus(StatusPage.FMS, DriverStation.isFMSAttached());
-      StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
-      StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
-      StatusPage.reportStatus(StatusPage.BROWNOUT, !HAL.getBrownedOut());
-      StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER,
-          DriverStation.isJoystickConnected(0) && DriverStation.getJoystickIsXbox(0));
-      StatusPage.reportStatus(StatusPage.OPERATOR_CONTROLLER,
-          DriverStation.isJoystickConnected(1) && !DriverStation.getJoystickIsXbox(1));
-      StatusPage.reportStatus(StatusPage.NOT_ESTOPPED, !DriverStation.isEStopped());
-      var pdpFaults = pdp.getFaults();
-      boolean breakerFault = pdpFaults.Channel0BreakerFault ||
-          pdpFaults.Channel1BreakerFault ||
-          pdpFaults.Channel2BreakerFault ||
-          pdpFaults.Channel3BreakerFault ||
-          pdpFaults.Channel4BreakerFault ||
-          pdpFaults.Channel5BreakerFault ||
-          pdpFaults.Channel6BreakerFault ||
-          pdpFaults.Channel7BreakerFault ||
-          pdpFaults.Channel8BreakerFault ||
-          pdpFaults.Channel9BreakerFault ||
-          pdpFaults.Channel10BreakerFault ||
-          pdpFaults.Channel11BreakerFault ||
-          pdpFaults.Channel12BreakerFault ||
-          pdpFaults.Channel13BreakerFault ||
-          pdpFaults.Channel14BreakerFault ||
-          pdpFaults.Channel15BreakerFault ||
-          pdpFaults.Channel16BreakerFault ||
-          pdpFaults.Channel17BreakerFault ||
-          pdpFaults.Channel18BreakerFault ||
-          pdpFaults.Channel19BreakerFault ||
-          pdpFaults.Channel20BreakerFault ||
-          pdpFaults.Channel21BreakerFault ||
-          pdpFaults.Channel22BreakerFault ||
-          pdpFaults.Channel23BreakerFault;
-      StatusPage.reportStatus(StatusPage.PDP_BREAKERS, !breakerFault);
-      StatusPage.reportStatus(StatusPage.CAN_WARNING, !pdpFaults.CanWarning);
-      StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
+    this.addPeriodic(
+        () -> {
+          // Simple status updates
+          StatusPage.reportStatus(
+              StatusPage.NETWORK_TABLES, NetworkTableInstance.getDefault().isConnected());
+          StatusPage.reportStatus(StatusPage.DRIVER_STATION, DriverStation.isDSAttached());
+          StatusPage.reportStatus(StatusPage.FMS, DriverStation.isFMSAttached());
+          StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
+          StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
+          StatusPage.reportStatus(StatusPage.BROWNOUT, !HAL.getBrownedOut());
+          StatusPage.reportStatus(
+              StatusPage.DRIVE_CONTROLLER,
+              DriverStation.isJoystickConnected(0) && DriverStation.getJoystickIsXbox(0));
+          StatusPage.reportStatus(
+              StatusPage.OPERATOR_CONTROLLER,
+              DriverStation.isJoystickConnected(1) && !DriverStation.getJoystickIsXbox(1));
+          StatusPage.reportStatus(StatusPage.NOT_ESTOPPED, !DriverStation.isEStopped());
+          var pdpFaults = pdp.getFaults();
+          boolean breakerFault =
+              pdpFaults.Channel0BreakerFault
+                  || pdpFaults.Channel1BreakerFault
+                  || pdpFaults.Channel2BreakerFault
+                  || pdpFaults.Channel3BreakerFault
+                  || pdpFaults.Channel4BreakerFault
+                  || pdpFaults.Channel5BreakerFault
+                  || pdpFaults.Channel6BreakerFault
+                  || pdpFaults.Channel7BreakerFault
+                  || pdpFaults.Channel8BreakerFault
+                  || pdpFaults.Channel9BreakerFault
+                  || pdpFaults.Channel10BreakerFault
+                  || pdpFaults.Channel11BreakerFault
+                  || pdpFaults.Channel12BreakerFault
+                  || pdpFaults.Channel13BreakerFault
+                  || pdpFaults.Channel14BreakerFault
+                  || pdpFaults.Channel15BreakerFault
+                  || pdpFaults.Channel16BreakerFault
+                  || pdpFaults.Channel17BreakerFault
+                  || pdpFaults.Channel18BreakerFault
+                  || pdpFaults.Channel19BreakerFault
+                  || pdpFaults.Channel20BreakerFault
+                  || pdpFaults.Channel21BreakerFault
+                  || pdpFaults.Channel22BreakerFault
+                  || pdpFaults.Channel23BreakerFault;
+          StatusPage.reportStatus(StatusPage.PDP_BREAKERS, !breakerFault);
+          StatusPage.reportStatus(StatusPage.CAN_WARNING, !pdpFaults.CanWarning);
+          StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
 
-      // Statuses for different clients
-      boolean cam0 = false;
-      boolean cam1 = false;
-      boolean launchpad = false;
-      for (var connection : NetworkTableInstance.getDefault().getConnections()) {
-        if (connection.remote_id.contains("VisionModule0")) {
-          cam0 = true;
-        }
-        if (connection.remote_id.contains("VisionModule1")) {
-          cam1 = true;
-        }
-        if (connection.remote_id.contains("Launchpad")) {
-          launchpad = true;
-        }
-      }
-      if(DriverStation.isFMSAttached()) {
-        StatusPage.reportMetadata();
-      }
-      StatusPage.reportStatus(StatusPage.CAM0, cam0);
-      StatusPage.reportStatus(StatusPage.CAM1, cam1);
-      StatusPage.reportStatus(StatusPage.LAUNCHPAD, launchpad);
+          // Statuses for different clients
+          boolean cam0 = false;
+          boolean cam1 = false;
+          boolean launchpad = false;
+          for (var connection : NetworkTableInstance.getDefault().getConnections()) {
+            if (connection.remote_id.contains("VisionModule0")) {
+              cam0 = true;
+            }
+            if (connection.remote_id.contains("VisionModule1")) {
+              cam1 = true;
+            }
+            if (connection.remote_id.contains("Launchpad")) {
+              launchpad = true;
+            }
+          }
+          if (DriverStation.isFMSAttached()) {
+            StatusPage.reportMetadata();
+          }
+          StatusPage.reportStatus(StatusPage.CAM0, cam0);
+          StatusPage.reportStatus(StatusPage.CAM1, cam1);
+          StatusPage.reportStatus(StatusPage.LAUNCHPAD, launchpad);
 
-      // Robot information
-      SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
-      SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
-      SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
-    }, kDefaultPeriod);
+          // Robot information
+          SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
+          SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
+          SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
+        },
+        kDefaultPeriod);
   }
 
   @Override
@@ -116,16 +125,13 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   @Override
-  public void disabledExit() {
-  }
+  public void disabledExit() {}
 
   @Override
   public void autonomousInit() {
@@ -137,12 +143,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {
-  }
+  public void autonomousExit() {}
 
   @Override
   public void teleopInit() {
@@ -152,12 +156,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   @Override
-  public void teleopExit() {
-  }
+  public void teleopExit() {}
 
   @Override
   public void testInit() {
@@ -165,10 +167,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 
   @Override
-  public void testExit() {
-  }
+  public void testExit() {}
 }

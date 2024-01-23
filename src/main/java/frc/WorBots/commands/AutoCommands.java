@@ -1,8 +1,11 @@
-package frc.WorBots.commands;
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.function.*;
+package frc.WorBots.commands;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.trajectory.constraint.*;
@@ -17,6 +20,8 @@ import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.util.*;
 import frc.WorBots.util.trajectory.*;
+import java.util.*;
+import java.util.function.*;
 
 public class AutoCommands extends Command {
   // Subsystems
@@ -30,26 +35,39 @@ public class AutoCommands extends Command {
   private final Pose2d[] startingLocations;
   private final Pose2d[] wingGamePieceLocations;
 
-  public AutoCommands(Drive drive, Superstructure superstructure, Intake intake, Shooter shooter,
+  public AutoCommands(
+      Drive drive,
+      Superstructure superstructure,
+      Intake intake,
+      Shooter shooter,
       Supplier<List<AutoQuestionResponse>> responses) {
     this.drive = drive;
     this.superstructure = superstructure;
     this.intake = intake;
     this.shooter = shooter;
     this.responses = responses;
-    startingLocations = new Pose2d[] {
-        new Pose2d(
-            FieldConstants.StartingZone.regionCorners[3].plus(new Translation2d(-Units.inchesToMeters(16), -0.8)),
-            new Rotation2d())
-    };
-    wingGamePieceLocations = new Pose2d[] {
-        new Pose2d(FieldConstants.GamePieces.wingPieces[0].plus(new Translation2d(-Units.inchesToMeters(12), 0)),
-            new Rotation2d()),
-        new Pose2d(FieldConstants.GamePieces.wingPieces[1].plus(new Translation2d(-Units.inchesToMeters(12), 0)),
-            new Rotation2d()),
-        new Pose2d(FieldConstants.GamePieces.wingPieces[2].plus(new Translation2d(-Units.inchesToMeters(12), 0)),
-            new Rotation2d())
-    };
+    startingLocations =
+        new Pose2d[] {
+          new Pose2d(
+              FieldConstants.StartingZone.regionCorners[3].plus(
+                  new Translation2d(-Units.inchesToMeters(16), -0.8)),
+              new Rotation2d())
+        };
+    wingGamePieceLocations =
+        new Pose2d[] {
+          new Pose2d(
+              FieldConstants.GamePieces.wingPieces[0].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.GamePieces.wingPieces[1].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.GamePieces.wingPieces[2].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d())
+        };
     SmartDashboard.putNumberArray("Starting", Logger.pose2dToArray(startingLocations[0]));
   }
 
@@ -68,12 +86,14 @@ public class AutoCommands extends Command {
         && waypoints.get(0).getDriveRotation().isEmpty()
         && waypoints.get(1).getDriveRotation().isEmpty()
         && waypoints.get(0).getTranslation().getDistance(waypoints.get(1).getTranslation()) < 0.5) {
-      var driveToPose = new DriveToPose(
-          drive,
-          () -> AllianceFlipUtil.apply(
-              new Pose2d(
-                  waypoints.get(1).getTranslation(),
-                  waypoints.get(1).getHolonomicRotation().get())));
+      var driveToPose =
+          new DriveToPose(
+              drive,
+              () ->
+                  AllianceFlipUtil.apply(
+                      new Pose2d(
+                          waypoints.get(1).getTranslation(),
+                          waypoints.get(1).getHolonomicRotation().get())));
       return driveToPose.until(driveToPose::atGoal);
     }
     List<TrajectoryConstraint> allConstraints = new ArrayList<>();
@@ -100,9 +120,11 @@ public class AutoCommands extends Command {
   public Command onePiece() {
     return Commands.sequence(
         reset(startingLocations[0]),
-        path(Waypoint.fromHolonomicPose(startingLocations[0]),
+        path(
+            Waypoint.fromHolonomicPose(startingLocations[0]),
             Waypoint.fromHolonomicPose(wingGamePieceLocations[2]),
             Waypoint.fromHolonomicPose(
-                wingGamePieceLocations[0].plus(new Transform2d(new Translation2d(), new Rotation2d(-Math.PI / 2))))));
+                wingGamePieceLocations[0].plus(
+                    new Transform2d(new Translation2d(), new Rotation2d(-Math.PI / 2))))));
   }
 }

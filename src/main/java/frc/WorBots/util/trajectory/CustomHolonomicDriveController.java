@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.util.trajectory;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -7,21 +14,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 
 /**
- * This holonomic drive controller can be used to follow trajectories using a
- * holonomic drivetrain
- * (i.e. swerve or mecanum). Holonomic trajectory following is a much simpler
- * problem to solve
- * compared to skid-steer style drivetrains because it is possible to
- * individually control forward,
+ * This holonomic drive controller can be used to follow trajectories using a holonomic drivetrain
+ * (i.e. swerve or mecanum). Holonomic trajectory following is a much simpler problem to solve
+ * compared to skid-steer style drivetrains because it is possible to individually control forward,
  * sideways, and angular velocity.
  *
- * <p>
- * The holonomic drive controller takes in one PID controller for each
- * direction, forward and
- * sideways, and one profiled PID controller for the angular direction. Because
- * the heading dynamics
- * are decoupled from translations, users can specify a custom heading that the
- * drivetrain should
+ * <p>The holonomic drive controller takes in one PID controller for each direction, forward and
+ * sideways, and one profiled PID controller for the angular direction. Because the heading dynamics
+ * are decoupled from translations, users can specify a custom heading that the drivetrain should
  * point toward. This heading reference is profiled for smoothness.
  */
 @SuppressWarnings("MemberName")
@@ -38,10 +38,8 @@ public class CustomHolonomicDriveController {
   /**
    * Constructs a holonomic drive controller.
    *
-   * @param xController     A PID Controller to respond to error in the
-   *                        field-relative x direction.
-   * @param yController     A PID Controller to respond to error in the
-   *                        field-relative y direction.
+   * @param xController A PID Controller to respond to error in the field-relative x direction.
+   * @param yController A PID Controller to respond to error in the field-relative y direction.
    * @param thetaController A PID controller to respond to error in angle.
    */
   @SuppressWarnings("ParameterName")
@@ -80,10 +78,10 @@ public class CustomHolonomicDriveController {
   /**
    * Returns the next output of the holonomic drive controller.
    *
-   * @param currentPose             The current pose.
-   * @param poseRef                 The desired pose.
+   * @param currentPose The current pose.
+   * @param poseRef The desired pose.
    * @param linearVelocityRefMeters The linear velocity reference.
-   * @param angleRef                The angular reference.
+   * @param angleRef The angular reference.
    * @param angleVelocityRefRadians The angular velocity reference.
    * @return The next output of the holonomic drive controller.
    */
@@ -110,7 +108,8 @@ public class CustomHolonomicDriveController {
     // Calculate feedback velocities (based on position error).
     double xFeedback = m_xController.calculate(currentPose.getX(), poseRef.getX());
     double yFeedback = m_yController.calculate(currentPose.getY(), poseRef.getY());
-    double thetaFeedback = m_thetaController.calculate(currentPose.getRotation().getRadians(), angleRef.getRadians());
+    double thetaFeedback =
+        m_thetaController.calculate(currentPose.getRotation().getRadians(), angleRef.getRadians());
 
     // Return next output.
     return ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -120,8 +119,8 @@ public class CustomHolonomicDriveController {
   /**
    * Returns the next output of the holonomic drive controller.
    *
-   * @param currentPose            The current pose.
-   * @param driveState             The desired drive trajectory state.
+   * @param currentPose The current pose.
+   * @param driveState The desired drive trajectory state.
    * @param holonomicRotationState The desired holonomic rotation state.
    * @return The next output of the holonomic drive controller.
    */
@@ -138,8 +137,7 @@ public class CustomHolonomicDriveController {
   }
 
   /**
-   * Enables and disables the controller for troubleshooting problems. When
-   * calculate() is called on
+   * Enables and disables the controller for troubleshooting problems. When calculate() is called on
    * a disabled controller, only feedforward values are returned.
    *
    * @param enabled If the controller is enabled or not.
@@ -148,12 +146,12 @@ public class CustomHolonomicDriveController {
     m_enabled = enabled;
   }
 
-  /**
-   * Gets the errors of the PID controllers
-   */
+  /** Gets the errors of the PID controllers */
   public double[] getErrors() {
     return new double[] {
-        m_xController.getPositionError(), m_yController.getPositionError(), m_thetaController.getPositionError()
+      m_xController.getPositionError(),
+      m_yController.getPositionError(),
+      m_thetaController.getPositionError()
     };
   }
 }

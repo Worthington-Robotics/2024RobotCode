@@ -1,9 +1,15 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
-
 import edu.wpi.first.math.util.Units;
 
 public class ShooterIOTalon implements ShooterIO {
@@ -26,7 +32,8 @@ public class ShooterIOTalon implements ShooterIO {
     inputs.velocityRPMTop = topFlywheel.getVelocity().getValue() * 60;
 
     inputs.feederWheelPositionRads = Units.rotationsToRadians(feederWheel.getPosition().getValue());
-    inputs.feederWheelVelocityRadPerSec = Units.rotationsToRadians(feederWheel.getVelocity().getValue());
+    inputs.feederWheelVelocityRadPerSec =
+        Units.rotationsToRadians(feederWheel.getVelocity().getValue());
     inputs.feederWheelCurrentAmps = feederWheel.getStatorCurrent().getValue();
     inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000.0;
   }

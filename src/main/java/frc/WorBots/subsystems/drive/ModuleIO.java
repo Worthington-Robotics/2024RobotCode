@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.drive;
 
 public interface ModuleIO {
@@ -19,22 +26,17 @@ public interface ModuleIO {
   }
 
   /** Updates the set of loggable inputs. */
-  public default void updateInputs(ModuleIOInputs inputs) {
-  }
+  public default void updateInputs(ModuleIOInputs inputs) {}
 
   /** Run the drive motor at the specified voltage. */
-  public default void setDriveVoltage(double volts) {
-  }
+  public default void setDriveVoltage(double volts) {}
 
   /** Run the turn motor at the specified voltage. */
-  public default void setTurnVoltage(double volts) {
-  }
+  public default void setTurnVoltage(double volts) {}
 
   /** Enable or disable brake mode on the drive motor. */
-  public default void setDriveBrakeMode(boolean enable) {
-  }
+  public default void setDriveBrakeMode(boolean enable) {}
 
   /** Enable or disable brake mode on the turn motor. */
-  public default void setTurnBrakeMode(boolean enable) {
-  }
+  public default void setTurnBrakeMode(boolean enable) {}
 }

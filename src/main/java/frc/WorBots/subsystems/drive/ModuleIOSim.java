@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
@@ -27,18 +34,18 @@ public class ModuleIOSim implements ModuleIO {
       turnAbsolutePositionRad -= 2.0 * Math.PI;
     }
 
-    inputs.drivePositionRad = inputs.drivePositionRad
-        + (driveSim.getAngularVelocityRadPerSec() * 0.02);
+    inputs.drivePositionRad =
+        inputs.drivePositionRad + (driveSim.getAngularVelocityRadPerSec() * 0.02);
     inputs.driveVelocityRadPerSec = driveSim.getAngularVelocityRadPerSec();
     inputs.driveAppliedVolts = driveAppliedVolts;
-    inputs.driveCurrentAmps = new double[] { Math.abs(driveSim.getCurrentDrawAmps()) };
+    inputs.driveCurrentAmps = new double[] {Math.abs(driveSim.getCurrentDrawAmps())};
     inputs.driveTempCelcius = new double[] {};
 
     inputs.turnAbsolutePositionRad = turnAbsolutePositionRad;
     inputs.turnPositionRad = turnRelativePositionRad;
     inputs.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
     inputs.turnAppliedVolts = turnAppliedVolts;
-    inputs.turnCurrentAmps = new double[] { Math.abs(turnSim.getCurrentDrawAmps()) };
+    inputs.turnCurrentAmps = new double[] {Math.abs(turnSim.getCurrentDrawAmps())};
     inputs.turnTempCelcius = new double[] {};
     inputs.isConnected = true;
   }

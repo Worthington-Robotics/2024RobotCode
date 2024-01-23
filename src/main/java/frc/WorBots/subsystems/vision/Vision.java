@@ -1,12 +1,11 @@
-package frc.WorBots.subsystems.vision;
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+package frc.WorBots.subsystems.vision;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,15 +20,21 @@ import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.WorBots.util.GeomUtil;
 import frc.WorBots.util.Logger;
-import frc.WorBots.util.StatusPage;
 import frc.WorBots.util.PoseEstimator.TimestampedVisionUpdate;
+import frc.WorBots.util.StatusPage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputs[] inputs;
 
-  private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {
-  };
+  private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
   private Supplier<Pose2d> poseSupplier = () -> new Pose2d();
   private final Pose3d[] cameraPoses;
   private final double xyStdDevCoefficient;
@@ -46,14 +51,14 @@ public class Vision extends SubsystemBase {
     for (int i = 0; i < io.length; i++) {
       inputs[i] = new VisionIOInputs();
     }
-    cameraPoses = new Pose3d[] {
-        new Pose3d(
-            new Translation3d(0, 0, 0),
-            new Rotation3d(0, 0, 0)),
-        new Pose3d(
-            new Translation3d(Units.inchesToMeters(-13), Units.inchesToMeters(13), Units.inchesToMeters(-11.4)),
-            new Rotation3d(0, 0.24, 0.0))
-    };
+    cameraPoses =
+        new Pose3d[] {
+          new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)),
+          new Pose3d(
+              new Translation3d(
+                  Units.inchesToMeters(-13), Units.inchesToMeters(13), Units.inchesToMeters(-11.4)),
+              new Rotation3d(0, 0.24, 0.0))
+        };
     xyStdDevCoefficient = 0.01;
     thetaStdDevCoefficient = 0.01;
     StatusPage.reportStatus(StatusPage.VISION_SUBSYSTEM, true);
@@ -83,25 +88,34 @@ public class Vision extends SubsystemBase {
 
         switch ((int) values[0]) {
           case 1:
-            cameraPose = new Pose3d(values[2], values[3], values[4],
-                new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
+            cameraPose =
+                new Pose3d(
+                    values[2],
+                    values[3],
+                    values[4],
+                    new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
             robotPose3d = cameraPose.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
             break;
           case 2:
             double error0 = values[1];
             double error1 = values[9];
 
-            Pose3d cameraPose0 = new Pose3d(values[2], values[3], values[4],
-                new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
-            Pose3d cameraPose1 = new Pose3d(
-                values[10],
-                values[11],
-                values[12],
-                new Rotation3d(new Quaternion(values[13], values[14], values[15], values[16])));
-            Pose3d robotPose3d0 = cameraPose0.transformBy(
-                GeomUtil.pose3dToTransform3d(cameraPoses[index]));
-            Pose3d robotPose3d1 = cameraPose1.transformBy(
-                GeomUtil.pose3dToTransform3d(cameraPoses[index]));
+            Pose3d cameraPose0 =
+                new Pose3d(
+                    values[2],
+                    values[3],
+                    values[4],
+                    new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
+            Pose3d cameraPose1 =
+                new Pose3d(
+                    values[10],
+                    values[11],
+                    values[12],
+                    new Rotation3d(new Quaternion(values[13], values[14], values[15], values[16])));
+            Pose3d robotPose3d0 =
+                cameraPose0.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
+            Pose3d robotPose3d1 =
+                cameraPose1.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
 
             // Select pose using projection errors
             if (error0 < error1 * ambiguityThreshold) {
@@ -166,12 +180,14 @@ public class Vision extends SubsystemBase {
         }
       }
       Logger.getInstance().setTagPoses(allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
-      Logger.getInstance().setRobotPoses3d(allRobotPoses3d.toArray(new Pose3d[allRobotPoses3d.size()]));
+      Logger.getInstance()
+          .setRobotPoses3d(allRobotPoses3d.toArray(new Pose3d[allRobotPoses3d.size()]));
       visionConsumer.accept(visionUpdates);
     }
   }
 
-  public void setDataInterfaces(Consumer<List<TimestampedVisionUpdate>> visionConsumer, Supplier<Pose2d> poseSupplier) {
+  public void setDataInterfaces(
+      Consumer<List<TimestampedVisionUpdate>> visionConsumer, Supplier<Pose2d> poseSupplier) {
     this.visionConsumer = visionConsumer;
     this.poseSupplier = poseSupplier;
   }

@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.lights;
 
 import edu.wpi.first.networktables.IntegerPublisher;
@@ -115,7 +122,13 @@ public class Lights extends SubsystemBase {
     }
   }
 
-  private void wave(double percent, Color c1, Color c2, double cycleLength, double duration, double waveExponent) {
+  private void wave(
+      double percent,
+      Color c1,
+      Color c2,
+      double cycleLength,
+      double duration,
+      double waveExponent) {
     double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration)) * 2.0 * Math.PI;
     double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < LIGHT_COUNT; i++) {
@@ -136,7 +149,13 @@ public class Lights extends SubsystemBase {
     }
   }
 
-  private void bounce(double percent, Color c1, Color c2, double cycleLength, double duration, double waveExponent) {
+  private void bounce(
+      double percent,
+      Color c1,
+      Color c2,
+      double cycleLength,
+      double duration,
+      double waveExponent) {
     double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration) * 2.0 * Math.PI);
     double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < LIGHT_COUNT; i++) {
@@ -182,7 +201,8 @@ public class Lights extends SubsystemBase {
       // Some statuses are not necessarily errors and
       // we want to display them as yellow
       boolean isWarning = false;
-      if (system.equals(StatusPage.FMS) || system.equals(StatusPage.AUTO_RUNNING)
+      if (system.equals(StatusPage.FMS)
+          || system.equals(StatusPage.AUTO_RUNNING)
           || system.equals(StatusPage.LAUNCHPAD)
           || system.equals(StatusPage.IDEAL_BATTERY)) {
         isWarning = true;
@@ -224,8 +244,8 @@ public class Lights extends SubsystemBase {
     // We create a moving 4145 pattern
     for (int i = 0; i < LIGHT_COUNT; i++) {
       final int pos = (i - t) % LIGHT_COUNT;
-      final boolean usePattern = (pos >= 0 && pos < 4) || pos == 5 || (pos >= 7 && pos < 11)
-          || (pos >= 12 && pos < 17);
+      final boolean usePattern =
+          (pos >= 0 && pos < 4) || pos == 5 || (pos >= 7 && pos < 11) || (pos >= 12 && pos < 17);
       if (usePattern) {
         io.setLED(i, color);
       } else {

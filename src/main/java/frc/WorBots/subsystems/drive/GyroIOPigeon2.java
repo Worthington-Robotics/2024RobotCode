@@ -1,8 +1,14 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.subsystems.drive;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.util.Units;
 
 /** IO implementation for Pigeon2 */
@@ -22,8 +28,11 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.rollPositionRad = Units.degreesToRadians(pigeon.getRoll().getValue());
     inputs.pitchPositionRad = Units.degreesToRadians(pigeon.getPitch().getValue());
     inputs.yawPositionRad = Units.degreesToRadians(pigeon.getYaw().getValue());
-    inputs.rollVelocityRadPerSec = Units.degreesToRadians(pigeon.getAngularVelocityXWorld().getValue());
-    inputs.pitchVelocityRadPerSec = Units.degreesToRadians(pigeon.getAngularVelocityYDevice().getValue());
-    inputs.yawVelocityRadPerSec = Units.degreesToRadians(pigeon.getAngularVelocityZDevice().getValue());
+    inputs.rollVelocityRadPerSec =
+        Units.degreesToRadians(pigeon.getAngularVelocityXWorld().getValue());
+    inputs.pitchVelocityRadPerSec =
+        Units.degreesToRadians(pigeon.getAngularVelocityYDevice().getValue());
+    inputs.yawVelocityRadPerSec =
+        Units.degreesToRadians(pigeon.getAngularVelocityZDevice().getValue());
   }
 }

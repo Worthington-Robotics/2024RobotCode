@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 4145
+// http://github.com/Worthington-Robotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.WorBots.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -142,7 +149,8 @@ public class GeomUtil {
    * @param bounds The two corners of the bounding box to check for collision with
    * @return The resulting translation
    */
-  public static boolean translation2dInBoundingBox(Translation2d translation, Translation2d[] bounds) {
+  public static boolean translation2dInBoundingBox(
+      Translation2d translation, Translation2d[] bounds) {
     if (translation.getX() < bounds[0].getX()) {
       return false;
     }
