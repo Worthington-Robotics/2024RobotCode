@@ -90,6 +90,8 @@ Inheritance diagram for frc.WorBots.commands.AutoShoot:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c81763f88e7a37e522537ef30816e97"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#a2c81763f88e7a37e522537ef30816e97">AutoShoot</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html">Superstructure</a> superstructure, <a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a> drive)</td></tr>
 <tr class="separator:a2c81763f88e7a37e522537ef30816e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa489a354ca50a2f427ac7f2d12d8477f"><td class="memItemLeft" align="right" valign="top">Rotation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#aa489a354ca50a2f427ac7f2d12d8477f">getRobotRotationToShoot</a> (Pose2d robotPose)</td></tr>
+<tr class="separator:aa489a354ca50a2f427ac7f2d12d8477f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2c81763f88e7a37e522537ef30816e97" name="a2c81763f88e7a37e522537ef30816e97"></a>
@@ -125,6 +127,41 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa489a354ca50a2f427ac7f2d12d8477f" name="aa489a354ca50a2f427ac7f2d12d8477f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa489a354ca50a2f427ac7f2d12d8477f">&#9670;&#160;</a></span>getRobotRotationToShoot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rotation2d frc.WorBots.commands.AutoShoot.getRobotRotationToShoot </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>robotPose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Calculates the needed robot rotation in order to shoot into the speaker for a given pose, automatically factors in alliance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">robotPose</td><td>The desired pose to be shot from, ignores rotation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The rotation of the robot needed to shoot at the provided pose. </dd></dl>
 
 </div>
 </div>
