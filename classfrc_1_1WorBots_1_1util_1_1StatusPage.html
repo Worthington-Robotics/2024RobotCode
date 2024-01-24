@@ -91,6 +91,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a11e1107a66f7a1350d35124299d567a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98bca9216ef078bc94e5ff8c1c91dfa7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a98bca9216ef078bc94e5ff8c1c91dfa7">reportMetadata</a> ()</td></tr>
 <tr class="separator:a98bca9216ef078bc94e5ff8c1c91dfa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2373cc434869b5524b869afa284b7b0d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a2373cc434869b5524b869afa284b7b0d">periodic</a> (PowerDistribution pdp)</td></tr>
+<tr class="separator:a2373cc434869b5524b869afa284b7b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -104,8 +106,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:affd58cac7f79715d33d480c844f77621"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a935c866dc1868f57daf3a9eb1b7672b2"><td class="memItemLeft" align="right" valign="top">static final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a935c866dc1868f57daf3a9eb1b7672b2">DRIVE_CONTROLLER</a> = &quot;Drive Controller&quot;</td></tr>
 <tr class="separator:a935c866dc1868f57daf3a9eb1b7672b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ea5fc25f26ce61c035c2b5e222419da"><td class="memItemLeft" align="right" valign="top">static final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a9ea5fc25f26ce61c035c2b5e222419da">ARM_SUBSYSTEM</a> = &quot;Arm Subsystem&quot;</td></tr>
-<tr class="separator:a9ea5fc25f26ce61c035c2b5e222419da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a420d7893f74689fdfeccdbd98ee8d85d"><td class="memItemLeft" align="right" valign="top">static final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a420d7893f74689fdfeccdbd98ee8d85d">SUPERSTRUCTURE_SUBSYSTEM</a> = &quot;Superstructure Subsystem&quot;</td></tr>
+<tr class="separator:a420d7893f74689fdfeccdbd98ee8d85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1617425bac92d5cf01833ce5ddf995a"><td class="memItemLeft" align="right" valign="top">static final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#aa1617425bac92d5cf01833ce5ddf995a">DRIVE_SUBSYSTEM</a> = &quot;Drive Subsystem&quot;</td></tr>
 <tr class="separator:aa1617425bac92d5cf01833ce5ddf995a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc37e485e45afa74f0fb8ea507561910"><td class="memItemLeft" align="right" valign="top">static final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html#adc37e485e45afa74f0fb8ea507561910">INTAKE_SUBSYSTEM</a> = &quot;Intake Subsystem&quot;</td></tr>
@@ -210,6 +212,39 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Get the current status of a system from NetworkTables </p>
+
+</div>
+</div>
+<a id="a2373cc434869b5524b869afa284b7b0d" name="a2373cc434869b5524b869afa284b7b0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2373cc434869b5524b869afa284b7b0d">&#9670;&#160;</a></span>periodic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void frc.WorBots.util.StatusPage.periodic </td>
+          <td>(</td>
+          <td class="paramtype">PowerDistribution&#160;</td>
+          <td class="paramname"><em>pdp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Periodic method to run from the robot base to report common statuses</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pdp</td><td>The PowerDistribution panel </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -326,28 +361,6 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >All systems that the <a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html">StatusPage</a> reports </p>
-
-</div>
-</div>
-<a id="a9ea5fc25f26ce61c035c2b5e222419da" name="a9ea5fc25f26ce61c035c2b5e222419da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ea5fc25f26ce61c035c2b5e222419da">&#9670;&#160;</a></span>ARM_SUBSYSTEM</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">final String frc.WorBots.util.StatusPage.ARM_SUBSYSTEM = &quot;Arm Subsystem&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -934,6 +947,28 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">final String frc.WorBots.util.StatusPage.SMODULE_PREFIX = &quot;SModule&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a420d7893f74689fdfeccdbd98ee8d85d" name="a420d7893f74689fdfeccdbd98ee8d85d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a420d7893f74689fdfeccdbd98ee8d85d">&#9670;&#160;</a></span>SUPERSTRUCTURE_SUBSYSTEM</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final String frc.WorBots.util.StatusPage.SUPERSTRUCTURE_SUBSYSTEM = &quot;Superstructure Subsystem&quot;</td>
         </tr>
       </table>
   </td>
