@@ -22,7 +22,6 @@ public class AutoShoot extends SequentialCommandGroup {
   // Locations
   private double speakerOpeningHeightZ;
   private double speakerOpeningCenterY;
-  private double forwardLineX;
   private static final double shootingLineX = 3.0;
 
   public AutoShoot(Superstructure superstructure, Drive drive) {
@@ -31,28 +30,19 @@ public class AutoShoot extends SequentialCommandGroup {
         (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
             / 2;
     speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
-    forwardLineX = FieldConstants.Stage.foot1Center.getX();
 
     Supplier<Pose2d> driveTargetSupplier =
         () -> {
           // Robot Pose
           Pose2d robotPose = drive.getPose();
           Pose2d flippedRobotPose = AllianceFlipUtil.apply(robotPose);
-          Alliance currentAlliance = DriverStation.getAlliance().get();
-
-          double translatedX =
-              (currentAlliance == Alliance.Red
-                  ? robotPose.getX() - FieldConstants.fieldLength
-                  : robotPose.getX());
 
           // Calculates the shooting angle
           double opposite = FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ;
           superstructure.setShootingAngleRad(() -> Math.atan2(opposite, flippedRobotPose.getX()));
 
           // Calculates the robot shooting rotation
-          double robotAngle;
-          double robotY = robotPose.getY();
-          robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
+          double robotAngle = getRobotRotationToShoot(robotPose).getRadians();
 
           if (flippedRobotPose.getX()
               > FieldConstants.Wing.endX) { // if robot is outside of the wing
@@ -81,5 +71,23 @@ public class AutoShoot extends SequentialCommandGroup {
         superstructure.setMode(SuperstructureState.SHOOTING),
         driveToPose,
         superstructure.setMode(SuperstructureState.POSE));
+  }
+
+  /**
+   * Calculates the needed robot rotation in order to shoot into the speaker for a given pose,
+   * automatically factors in alliance.
+   *
+   * @param robotPose The desired pose to be shot from, ignores rotation.
+   * @return The rotation of the robot needed to shoot at the provided pose.
+   */
+  public Rotation2d getRobotRotationToShoot(Pose2d robotPose) {
+    Alliance currentAlliance = DriverStation.getAlliance().get();
+    double translatedX =
+        (currentAlliance == Alliance.Red
+            ? robotPose.getX() - FieldConstants.fieldLength
+            : robotPose.getX());
+    double robotY = robotPose.getY();
+    double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
+    return new Rotation2d(robotAngle);
   }
 }
