@@ -42,7 +42,7 @@ public class AutoShoot extends SequentialCommandGroup {
           // Calculates the robot shooting rotation
           double robotAngle;
           double robotY = robotPose.getY();
-          robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), adjascent) + Math.PI;
+          robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), adjascent);
 
           if (robotPose.getY() > forwardLineY) {}
 

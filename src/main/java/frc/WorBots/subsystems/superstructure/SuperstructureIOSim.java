@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.superstructure;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
@@ -16,7 +17,16 @@ public class SuperstructureIOSim implements SuperstructureIO {
   private SingleJointedArmSim pivot;
 
   public SuperstructureIOSim() {
-    elevator = new ElevatorSim(DCMotor.getKrakenX60(1), 10.0, 3.0, 0.02, 0.0, 0.4, true, 0.1);
+    elevator =
+        new ElevatorSim(
+            DCMotor.getKrakenX60(1),
+            10.0,
+            Units.lbsToKilograms(5),
+            0.02,
+            0,
+            Units.inchesToMeters(33 - 5.74),
+            true,
+            Units.inchesToMeters(12));
     pivot =
         new SingleJointedArmSim(
             DCMotor.getKrakenX60(1), 100, 0.25, 0.07, -Math.PI / 6, Math.PI, true, 0);

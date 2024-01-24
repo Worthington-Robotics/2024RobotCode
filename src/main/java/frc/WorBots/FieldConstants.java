@@ -206,9 +206,9 @@ public class FieldConstants {
 
     public static final Translation2d[] wingPieces =
         new Translation2d[] {
-          new Translation2d(wingX, midLineY),
+          new Translation2d(wingX, thirdPieceY),
           new Translation2d(wingX, secondPieceY),
-          new Translation2d(wingX, thirdPieceY)
+          new Translation2d(wingX, midLineY),
         };
 
     public static final Translation2d[] centerPieces =

@@ -34,6 +34,7 @@ public class AutoCommands extends Command {
   // Poses
   private final Pose2d[] startingLocations;
   private final Pose2d[] wingGamePieceLocations;
+  private final Pose2d[] centerGamePieceLocations;
 
   public AutoCommands(
       Drive drive,
@@ -50,8 +51,16 @@ public class AutoCommands extends Command {
         new Pose2d[] {
           new Pose2d(
               FieldConstants.StartingZone.regionCorners[3].plus(
-                  new Translation2d(-Units.inchesToMeters(16), -0.8)),
-              new Rotation2d())
+                  new Translation2d(-Units.inchesToMeters(22), -0.8)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
+              FieldConstants.Speaker.speakerY,
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
+              FieldConstants.Stage.foot1Center.getY(),
+              new Rotation2d()),
         };
     wingGamePieceLocations =
         new Pose2d[] {
@@ -67,6 +76,29 @@ public class AutoCommands extends Command {
               FieldConstants.GamePieces.wingPieces[2].plus(
                   new Translation2d(-Units.inchesToMeters(12), 0)),
               new Rotation2d())
+        };
+    centerGamePieceLocations =
+        new Pose2d[] {
+          new Pose2d(
+              FieldConstants.GamePieces.centerPieces[0].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.GamePieces.centerPieces[1].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.GamePieces.centerPieces[2].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.GamePieces.centerPieces[3].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
+          new Pose2d(
+              FieldConstants.GamePieces.centerPieces[4].plus(
+                  new Translation2d(-Units.inchesToMeters(12), 0)),
+              new Rotation2d()),
         };
     SmartDashboard.putNumberArray("Starting", Logger.pose2dToArray(startingLocations[0]));
   }
@@ -118,13 +150,13 @@ public class AutoCommands extends Command {
   }
 
   public Command onePiece() {
+    Pose2d startingPose = startingLocations[0];
     return Commands.sequence(
-        reset(startingLocations[0]),
+        reset(startingPose),
         path(
-            Waypoint.fromHolonomicPose(startingLocations[0]),
-            Waypoint.fromHolonomicPose(wingGamePieceLocations[2]),
-            Waypoint.fromHolonomicPose(
-                wingGamePieceLocations[0].plus(
-                    new Transform2d(new Translation2d(), new Rotation2d(-Math.PI / 2))))));
+            Waypoint.fromHolonomicPose(startingPose),
+            Waypoint.fromHolonomicPose(wingGamePieceLocations[0]),
+            Waypoint.fromHolonomicPose(startingPose),
+            Waypoint.fromHolonomicPose(centerGamePieceLocations[1])));
   }
 }
