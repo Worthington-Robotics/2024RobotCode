@@ -171,3 +171,6 @@ networktables.json
 
 # Built documentation
 /docs
+
+# Build data file
+/src/main/java/frc/WorBots/util/BuildConstants.java

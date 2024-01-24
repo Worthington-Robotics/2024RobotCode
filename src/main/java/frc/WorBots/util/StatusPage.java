@@ -131,27 +131,6 @@ public class StatusPage {
     return entry.getBoolean(false);
   }
 
-  /** Report metadata for AdvantageScope to use. Also starts the WPILib DataLog */
-  public static void reportMetadata() {
-    if (!hasBeenStarted) {
-      DataLog log = DataLogManager.getLog();
-      StringLogEntry name = new StringLogEntry(log, "/Metadata/Event Name");
-      name.append(DriverStation.getEventName());
-      IntegerLogEntry number = new IntegerLogEntry(log, "/Metadata/Match Number");
-      number.append(DriverStation.getMatchNumber());
-      StringLogEntry type = new StringLogEntry(log, "/Metadata/Match Type");
-      type.append(DriverStation.getMatchType().toString());
-      StringLogEntry alliance = new StringLogEntry(log, "/Metadata/Alliance");
-      alliance.append(
-          (DriverStation.getAlliance().isPresent()
-              ? DriverStation.getAlliance().get().name()
-              : "Not present"));
-      IntegerLogEntry stationNumber = new IntegerLogEntry(log, "/Metadata/Alliance Station");
-      stationNumber.append(DriverStation.getLocation().getAsInt());
-    }
-    hasBeenStarted = true;
-  }
-
   /**
    * Periodic method to run from the robot base to report common statuses
    *
@@ -233,10 +212,49 @@ public class StatusPage {
     SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
     SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
 
-    // Report metadata if we are on a real field
-    if (DriverStation.isFMSAttached()) {
-      StatusPage.reportMetadata();
+    // Report metadata
+    StatusPage.reportMetadata();
+  }
+
+  /** Report metadata for AdvantageScope to use. Also starts the WPILib DataLog */
+  public static void reportMetadata() {
+    if (!hasBeenStarted) {
+      // Build metadata
+      var nt = NetworkTableInstance.getDefault();
+      var table = nt.getTable("Metadata");
+      var repo = table.getEntry("Repository");
+      repo.setString(BuildConstants.MAVEN_NAME);
+      var gitBranch = table.getEntry("Git Branch");
+      gitBranch.setString(BuildConstants.GIT_BRANCH);
+      var gitSHA = table.getEntry("Git SHA");
+      gitSHA.setString(BuildConstants.GIT_SHA);
+      var gitDate = table.getEntry("Git Date");
+      gitDate.setString(BuildConstants.GIT_DATE);
+      var buildDate = table.getEntry("Build Date");
+      buildDate.setString(BuildConstants.BUILD_DATE);
+      var dirty = table.getEntry("Is Dirty");
+      dirty.setInteger(BuildConstants.DIRTY);
+
+      // Match metadata can be put only in the WPILog
+      // and only when we are using a real robot
+      if (DriverStation.isFMSAttached()) {
+        DataLog log = DataLogManager.getLog();
+        StringLogEntry name = new StringLogEntry(log, "/Metadata/Event Name");
+        name.append(DriverStation.getEventName());
+        IntegerLogEntry number = new IntegerLogEntry(log, "/Metadata/Match Number");
+        number.append(DriverStation.getMatchNumber());
+        StringLogEntry type = new StringLogEntry(log, "/Metadata/Match Type");
+        type.append(DriverStation.getMatchType().toString());
+        StringLogEntry alliance = new StringLogEntry(log, "/Metadata/Alliance");
+        alliance.append(
+            (DriverStation.getAlliance().isPresent()
+                ? DriverStation.getAlliance().get().name()
+                : "Not present"));
+        IntegerLogEntry stationNumber = new IntegerLogEntry(log, "/Metadata/Alliance Station");
+        stationNumber.append(DriverStation.getLocation().getAsInt());
+      }
     }
+    hasBeenStarted = true;
   }
 
   private GenericEntry getEntry(String system) {

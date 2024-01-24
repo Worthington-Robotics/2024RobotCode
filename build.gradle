@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.2.1"
     id 'com.diffplug.spotless' version '6.20.0'
+    id "com.peterabeles.gversion" version "1.10"
 }
 
 java {
@@ -109,6 +110,8 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+// Configure Spotless
 project.compileJava.dependsOn(spotlessApply)
 spotless {
     java {
@@ -149,4 +152,15 @@ spotless {
         indentWithSpaces(2)
         endWithNewline()
     }
+}
+
+// Include Git data in deploy
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+    srcDir       = "src/main/java/"
+    classPackage = "frc.WorBots.util"
+    className    = "BuildConstants"
+    dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+    timeZone     = "America/New_York" // Use preferred time zone
+    indent       = "  "
 }
