@@ -11,6 +11,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.numbers.N2;
 
+/** This class is a simple record of all of the poses that the Superstructure can be in */
 public record SuperstructurePose(Vector<N2> vectorPose) {
   public static enum Preset {
     HOME(new SuperstructurePose(VecBuilder.fill(0, 0))),

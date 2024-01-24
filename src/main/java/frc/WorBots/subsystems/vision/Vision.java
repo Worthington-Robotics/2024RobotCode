@@ -30,6 +30,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * This subsystem manages all of the camera inputs from our robot, reads them, decides which ones to
+ * use, or throw out, logs them, adds the to the pose estimator, and repeats.
+ */
 public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputs[] inputs;
@@ -186,6 +190,10 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  /**
+   * This function accepts the interfaces in and out of the vision system, such as giving out vision
+   * updates, and recieving poses.
+   */
   public void setDataInterfaces(
       Consumer<List<TimestampedVisionUpdate>> visionConsumer, Supplier<Pose2d> poseSupplier) {
     this.visionConsumer = visionConsumer;
