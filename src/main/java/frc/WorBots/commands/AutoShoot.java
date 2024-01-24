@@ -8,6 +8,8 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
@@ -19,7 +21,7 @@ public class AutoShoot extends SequentialCommandGroup {
   // Locations
   private double speakerOpeningHeightZ;
   private double speakerOpeningCenterY;
-  private double forwardLineY;
+  private double forwardLineX;
 
   public AutoShoot(Superstructure superstructure, Drive drive) {
     addRequirements(superstructure);
@@ -27,26 +29,48 @@ public class AutoShoot extends SequentialCommandGroup {
         (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
             / 2;
     speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
-    forwardLineY = FieldConstants.Stage.foot1Center.getY();
+    forwardLineX = FieldConstants.Stage.foot1Center.getX();
 
     Supplier<Pose2d> driveTargetSupplier =
         () -> {
           // Robot Pose
           Pose2d robotPose = drive.getPose();
+          Pose2d flippedRobotPose = AllianceFlipUtil.apply(robotPose);
+          Alliance currentAlliance = DriverStation.getAlliance().get();
 
           // Calculates the shooting angle
-          double adjascent = AllianceFlipUtil.apply(robotPose).getX();
+          double adjascent = robotPose.getX();
           double opposite = FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ;
           superstructure.setShootingAngleRad(() -> Math.atan2(opposite, adjascent));
 
           // Calculates the robot shooting rotation
           double robotAngle;
           double robotY = robotPose.getY();
-          robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), adjascent);
+          if (currentAlliance == Alliance.Red) {
+            robotAngle =
+                Math.atan2(
+                    robotY - (speakerOpeningCenterY), adjascent - FieldConstants.fieldLength);
+          } else {
+            robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), adjascent);
+          }
 
-          if (robotPose.getY() > forwardLineY) {}
-
-          return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
+          if (flippedRobotPose.getX()
+              > FieldConstants.Wing.endX) { // if robot is outside of the wing
+            if (flippedRobotPose.getY()
+                < FieldConstants.Stage.center.getY()) { // if its on the right side from blue
+              return new Pose2d(
+                  AllianceFlipUtil.apply(FieldConstants.Wing.endX),
+                  robotY,
+                  new Rotation2d(robotAngle));
+            } else { // if its on the left side relative to blue
+              return new Pose2d(
+                  AllianceFlipUtil.apply(FieldConstants.Wing.endX),
+                  robotY,
+                  new Rotation2d(robotAngle));
+            }
+          } else {
+            return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
+          }
         };
     var driveToPose = new DriveToPose(drive, driveTargetSupplier);
     addCommands(driveToPose);
