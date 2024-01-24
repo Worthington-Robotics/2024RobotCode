@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.Logger;
+import frc.WorBots.util.StatusPage;
 import java.util.function.Supplier;
 
 public class Superstructure extends SubsystemBase {
@@ -52,6 +53,8 @@ public class Superstructure extends SubsystemBase {
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(1.0, 1.0, 0.0);
     }
+
+    StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
 
   public void periodic() {

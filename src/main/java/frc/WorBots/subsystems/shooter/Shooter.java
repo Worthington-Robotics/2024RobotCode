@@ -50,5 +50,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     } else {
       hasGamePiece = false;
     }
+    StatusPage.reportStatus(StatusPage.SHOOTER_CONNECTED, inputs.isConnected);
   }
 }

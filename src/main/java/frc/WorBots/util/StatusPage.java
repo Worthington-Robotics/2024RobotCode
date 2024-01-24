@@ -7,21 +7,25 @@
 
 package frc.WorBots.util;
 
+import edu.wpi.first.hal.HAL;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.IntegerLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.HashMap;
 
 /** A utility class which shows the status of systems on the robot to NetworkTables */
 public class StatusPage {
   private ShuffleboardTab tab = Shuffleboard.getTab("Status");
   private HashMap<String, GenericEntry> entries = new HashMap<>();
-  private static boolean hasMetadataBeenLogged = false;
+  private static boolean hasBeenStarted = false;
 
   // System name constants
   public static final String AUTO_RUNNING = "Auto Running";
@@ -29,7 +33,7 @@ public class StatusPage {
   public static final String AUTO_CHOSEN = "Auto Chosen";
   public static final String ROBOT_CODE = "Robot Code";
   public static final String DRIVE_CONTROLLER = "Drive Controller";
-  public static final String ARM_SUBSYSTEM = "Arm Subsystem";
+  public static final String SUPERSTRUCTURE_SUBSYSTEM = "Superstructure Subsystem";
   public static final String DRIVE_SUBSYSTEM = "Drive Subsystem";
   public static final String INTAKE_SUBSYSTEM = "Intake Subsystem";
   public static final String LIGHTS_SUBSYSTEM = "Lights Subsystem";
@@ -62,7 +66,7 @@ public class StatusPage {
     AUTO_CHOSEN,
     ROBOT_CODE,
     DRIVE_CONTROLLER,
-    ARM_SUBSYSTEM,
+    SUPERSTRUCTURE_SUBSYSTEM,
     DRIVE_SUBSYSTEM,
     INTAKE_SUBSYSTEM,
     LIGHTS_SUBSYSTEM,
@@ -129,7 +133,7 @@ public class StatusPage {
 
   /** Report metadata for AdvantageScope to use. Also starts the WPILib DataLog */
   public static void reportMetadata() {
-    if (!hasMetadataBeenLogged) {
+    if (!hasBeenStarted) {
       DataLog log = DataLogManager.getLog();
       StringLogEntry name = new StringLogEntry(log, "/Metadata/Event Name");
       name.append(DriverStation.getEventName());
@@ -145,7 +149,94 @@ public class StatusPage {
       IntegerLogEntry stationNumber = new IntegerLogEntry(log, "/Metadata/Alliance Station");
       stationNumber.append(DriverStation.getLocation().getAsInt());
     }
-    hasMetadataBeenLogged = true;
+    hasBeenStarted = true;
+  }
+
+  /**
+   * Periodic method to run from the robot base to report common statuses
+   *
+   * @param pdp The PowerDistribution panel
+   */
+  public static void periodic(PowerDistribution pdp) {
+    // Connection of main robot systems
+    StatusPage.reportStatus(
+        StatusPage.NETWORK_TABLES, NetworkTableInstance.getDefault().isConnected());
+    StatusPage.reportStatus(StatusPage.DRIVER_STATION, DriverStation.isDSAttached());
+    StatusPage.reportStatus(StatusPage.FMS, DriverStation.isFMSAttached());
+
+    // Power
+    StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
+    StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
+    StatusPage.reportStatus(StatusPage.BROWNOUT, !HAL.getBrownedOut());
+
+    // Controllers
+    StatusPage.reportStatus(
+        StatusPage.DRIVE_CONTROLLER,
+        DriverStation.isJoystickConnected(0) && DriverStation.getJoystickIsXbox(0));
+    StatusPage.reportStatus(
+        StatusPage.OPERATOR_CONTROLLER,
+        DriverStation.isJoystickConnected(1) && !DriverStation.getJoystickIsXbox(1));
+    StatusPage.reportStatus(StatusPage.NOT_ESTOPPED, !DriverStation.isEStopped());
+
+    // PDP
+    var pdpFaults = pdp.getFaults();
+    boolean breakerFault =
+        pdpFaults.Channel0BreakerFault
+            || pdpFaults.Channel1BreakerFault
+            || pdpFaults.Channel2BreakerFault
+            || pdpFaults.Channel3BreakerFault
+            || pdpFaults.Channel4BreakerFault
+            || pdpFaults.Channel5BreakerFault
+            || pdpFaults.Channel6BreakerFault
+            || pdpFaults.Channel7BreakerFault
+            || pdpFaults.Channel8BreakerFault
+            || pdpFaults.Channel9BreakerFault
+            || pdpFaults.Channel10BreakerFault
+            || pdpFaults.Channel11BreakerFault
+            || pdpFaults.Channel12BreakerFault
+            || pdpFaults.Channel13BreakerFault
+            || pdpFaults.Channel14BreakerFault
+            || pdpFaults.Channel15BreakerFault
+            || pdpFaults.Channel16BreakerFault
+            || pdpFaults.Channel17BreakerFault
+            || pdpFaults.Channel18BreakerFault
+            || pdpFaults.Channel19BreakerFault
+            || pdpFaults.Channel20BreakerFault
+            || pdpFaults.Channel21BreakerFault
+            || pdpFaults.Channel22BreakerFault
+            || pdpFaults.Channel23BreakerFault;
+    StatusPage.reportStatus(StatusPage.PDP_BREAKERS, !breakerFault);
+    StatusPage.reportStatus(StatusPage.CAN_WARNING, !pdpFaults.CanWarning);
+    StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
+
+    // Statuses for different clients
+    boolean cam0 = false;
+    boolean cam1 = false;
+    boolean launchpad = false;
+    for (var connection : NetworkTableInstance.getDefault().getConnections()) {
+      if (connection.remote_id.contains("VisionModule0")) {
+        cam0 = true;
+      }
+      if (connection.remote_id.contains("VisionModule1")) {
+        cam1 = true;
+      }
+      if (connection.remote_id.contains("Launchpad")) {
+        launchpad = true;
+      }
+    }
+    StatusPage.reportStatus(StatusPage.CAM0, cam0);
+    StatusPage.reportStatus(StatusPage.CAM1, cam1);
+    StatusPage.reportStatus(StatusPage.LAUNCHPAD, launchpad);
+
+    // Robot information
+    SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
+    SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
+    SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
+
+    // Report metadata if we are on a real field
+    if (DriverStation.isFMSAttached()) {
+      StatusPage.reportMetadata();
+    }
   }
 
   private GenericEntry getEntry(String system) {
