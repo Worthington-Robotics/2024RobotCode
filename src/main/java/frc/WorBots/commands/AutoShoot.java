@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.superstructure.Superstructure;
+import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.*;
 import java.util.function.*;
 
@@ -38,21 +39,19 @@ public class AutoShoot extends SequentialCommandGroup {
           Pose2d flippedRobotPose = AllianceFlipUtil.apply(robotPose);
           Alliance currentAlliance = DriverStation.getAlliance().get();
 
+          double translatedX =
+              (currentAlliance == Alliance.Red
+                  ? robotPose.getX() - FieldConstants.fieldLength
+                  : robotPose.getX());
+
           // Calculates the shooting angle
-          double adjascent = robotPose.getX();
           double opposite = FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ;
-          superstructure.setShootingAngleRad(() -> Math.atan2(opposite, adjascent));
+          superstructure.setShootingAngleRad(() -> Math.atan2(opposite, flippedRobotPose.getX()));
 
           // Calculates the robot shooting rotation
           double robotAngle;
           double robotY = robotPose.getY();
-          if (currentAlliance == Alliance.Red) {
-            robotAngle =
-                Math.atan2(
-                    robotY - (speakerOpeningCenterY), adjascent - FieldConstants.fieldLength);
-          } else {
-            robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), adjascent);
-          }
+          robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
 
           if (flippedRobotPose.getX()
               > FieldConstants.Wing.endX) { // if robot is outside of the wing
@@ -73,6 +72,9 @@ public class AutoShoot extends SequentialCommandGroup {
           }
         };
     var driveToPose = new DriveToPose(drive, driveTargetSupplier);
-    addCommands(driveToPose);
+    addCommands(
+        superstructure.setMode(SuperstructureState.SHOOTING),
+        driveToPose,
+        superstructure.setMode(SuperstructureState.POSE));
   }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
@@ -22,7 +23,7 @@ public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
   private SuperstructureState state = SuperstructureState.POSE;
-  private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.CLIMB;
+  private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
 
@@ -102,7 +103,10 @@ public class Superstructure extends SubsystemBase {
     shootingAngleRad = supplier;
   }
 
-  public void setMode(SuperstructureState state) {
-    this.state = state;
+  public Command setMode(SuperstructureState state) {
+    return this.runOnce(
+        () -> {
+          this.state = state;
+        });
   }
 }
