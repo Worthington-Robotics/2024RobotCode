@@ -23,6 +23,7 @@ public class AutoShoot extends SequentialCommandGroup {
   private double speakerOpeningHeightZ;
   private double speakerOpeningCenterY;
   private double forwardLineX;
+  private static final double shootingLineX = 3.0;
 
   public AutoShoot(Superstructure superstructure, Drive drive) {
     addRequirements(superstructure);
@@ -56,16 +57,20 @@ public class AutoShoot extends SequentialCommandGroup {
           if (flippedRobotPose.getX()
               > FieldConstants.Wing.endX) { // if robot is outside of the wing
             if (flippedRobotPose.getY()
-                < FieldConstants.Stage.center.getY()) { // if its on the right side from blue
+                < FieldConstants.Stage.foot3Center.getY()) { // if robot is right of stage
+              return new Pose2d(
+                  AllianceFlipUtil.apply(FieldConstants.Wing.endX), 1, new Rotation2d(robotAngle));
+            } else if (flippedRobotPose.getY() < FieldConstants.Stage.foot2Center.getY()
+                && flippedRobotPose.getY()
+                    > FieldConstants.Stage.foot3Center
+                        .getY()) { // if robot is right of center, but not right of stage
               return new Pose2d(
                   AllianceFlipUtil.apply(FieldConstants.Wing.endX),
-                  robotY,
+                  FieldConstants.Stage.center.getY(),
                   new Rotation2d(robotAngle));
-            } else { // if its on the left side relative to blue
+            } else { // if robot is left of stage
               return new Pose2d(
-                  AllianceFlipUtil.apply(FieldConstants.Wing.endX),
-                  robotY,
-                  new Rotation2d(robotAngle));
+                  AllianceFlipUtil.apply(FieldConstants.Wing.endX), 7, new Rotation2d(robotAngle));
             }
           } else {
             return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
