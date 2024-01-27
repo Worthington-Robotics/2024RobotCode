@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase {
     return this.runOnce(
             () -> {
               if (hasGamepiece == true) {
-                setpointVolts = 1.0;
+                setpointVolts = 0.5;
               } else {
                 setpointVolts = 8.0;
               }
@@ -53,7 +53,18 @@ public class Intake extends SubsystemBase {
         .andThen(Commands.waitUntil(this::hasGamePiece))
         .finallyDo(
             () -> {
-              setpointVolts = 1.0;
+              setpointVolts = 0.5;
+            });
+  }
+
+  public Command handoff() {
+    return this.runOnce(
+            () -> {
+              setpointVolts = 8.0;
+            })
+        .finallyDo(
+            () -> {
+              setpointVolts = 0.5;
             });
   }
 
