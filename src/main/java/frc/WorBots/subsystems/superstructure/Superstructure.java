@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.superstructure;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.*;
@@ -97,6 +98,9 @@ public class Superstructure extends SubsystemBase {
       io.setElevatorVoltage(0.0);
       io.setPivotVoltage(0.0);
     }
+    visualizer.update(
+        VecBuilder.fill(
+            inputs.elevatorPositionMeters, inputs.pivotPositionRelRad + pivotAbsAngleRad));
   }
 
   public void setShootingAngleRad(double angle) {
