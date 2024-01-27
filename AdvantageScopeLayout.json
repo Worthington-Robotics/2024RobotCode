@@ -59,6 +59,12 @@
             "key": "NT:/Vision/TagPoses",
             "sourceTypeIndex": 0,
             "sourceType": 5
+          },
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/Superstructure/3d Poses",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
           }
         ],
         [
@@ -79,7 +85,7 @@
       "options": {
         "field": "2024 Field",
         "alliance": "blue",
-        "robot": "2024 KitBot",
+        "robot": "WorBotsTest",
         "unitDistance": "meters",
         "unitRotation": "radians",
         "cameraIndex": -2,
@@ -87,6 +93,22 @@
       },
       "configHidden": false,
       "title": "3D Field"
+    },
+    {
+      "type": 10,
+      "fields": [
+        {
+          "key": "NT:/SmartDashboard/Superstructure",
+          "sourceTypeIndex": 0,
+          "sourceType": "Mechanism2d"
+        },
+        null,
+        null
+      ],
+      "listFields": [],
+      "options": {},
+      "configHidden": false,
+      "title": "Mechanism"
     },
     {
       "type": 9,
