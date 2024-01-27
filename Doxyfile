@@ -4,4 +4,4 @@ RECURSIVE = YES
 OUTPUT_DIRECTORY = docs
 EXTRACT_ALL = YES
 PROJECT_NAME = 2024 Robot Code
-INCLUDE = manual/mainpage.dox
+INCLUDE = manual/
