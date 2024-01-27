@@ -129,4 +129,8 @@ public class Superstructure extends SubsystemBase {
           this.state = state;
         });
   }
+
+  public void setModeVoid(SuperstructureState state) {
+    this.state = state;
+  }
 }
