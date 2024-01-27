@@ -9,10 +9,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -50,23 +46,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html',''); initResizable(); });
-/* @license-end */
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -88,6 +67,11 @@ $(document).ready(function(){initNavTree('classfrc_1_1WorBots_1_1subsystems_1_1d
 </div>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>frc</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots.html">WorBots</a></li><li class="navelem"><b>subsystems</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots_1_1subsystems_1_1drive.html">drive</a></li><li class="navelem"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html">Module</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
@@ -149,6 +133,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >This module represents one swerve module, which includes a turn motor, and drive motor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">io</td><td>The module IO to be ran with. </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the module from 0-3. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -175,6 +167,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current angle of the module.</p>
+<dl class="section return"><dt>Returns</dt><dd>The angle as a rotation. </dd></dl>
 
 </div>
 </div>
@@ -200,6 +194,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current position of the drive motor.</p>
+<dl class="section return"><dt>Returns</dt><dd>The position in meters. </dd></dl>
 
 </div>
 </div>
@@ -225,6 +221,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current state of the module.</p>
+<dl class="section return"><dt>Returns</dt><dd>The state. </dd></dl>
 
 </div>
 </div>
@@ -250,6 +248,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current velocity of the module.</p>
+<dl class="section return"><dt>Returns</dt><dd>The velocity in meters per second. </dd></dl>
 
 </div>
 </div>
@@ -301,6 +301,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Calculates and sets the current motors to the provided state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>The desired state. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The actual state, measured. </dd></dl>
 
 </div>
 </div>
@@ -326,6 +334,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Sets both motors to 0 volts </p>
 
 </div>
 </div>
@@ -333,13 +342,9 @@ Public Member Functions</h2></td></tr>
 <li>src/main/java/frc/WorBots/subsystems/drive/<a class="el" href="Module_8java.html">Module.java</a></li>
 </ul>
 </div><!-- contents -->
-</div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>frc</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots.html">WorBots</a></li><li class="navelem"><b>subsystems</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots_1_1subsystems_1_1drive.html">drive</a></li><li class="navelem"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html">Module</a></li>
-    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
-  </ul>
-</div>
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
+</small></address>
 </body>
 </html>

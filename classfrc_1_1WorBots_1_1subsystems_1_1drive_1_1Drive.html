@@ -9,10 +9,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -50,23 +46,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html',''); initResizable(); });
-/* @license-end */
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -88,6 +67,11 @@ $(document).ready(function(){initNavTree('classfrc_1_1WorBots_1_1subsystems_1_1d
 </div>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>frc</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots.html">WorBots</a></li><li class="navelem"><b>subsystems</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots_1_1subsystems_1_1drive.html">drive</a></li><li class="navelem"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
@@ -144,8 +128,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4a1a85ec516c2d359da98b2e6b025c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3940d9f4a7ba7b26750c42bc3b981f6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a3940d9f4a7ba7b26750c42bc3b981f6d">stopWithLock</a> ()</td></tr>
 <tr class="separator:a3940d9f4a7ba7b26750c42bc3b981f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dd1131e687a7ca76e441ab54c46c69b"><td class="memItemLeft" align="right" valign="top">Rotation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a5dd1131e687a7ca76e441ab54c46c69b">getYawRotation</a> ()</td></tr>
-<tr class="separator:a5dd1131e687a7ca76e441ab54c46c69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aa66277fb1d314de13ed8a7355ef370"><td class="memItemLeft" align="right" valign="top">Translation2d[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a8aa66277fb1d314de13ed8a7355ef370">getModuleTranslations</a> ()</td></tr>
 <tr class="separator:a8aa66277fb1d314de13ed8a7355ef370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -201,6 +183,17 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >The main swerve drive subsystem.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gyroIO</td><td>The IO to use for the gyro. </td></tr>
+    <tr><td class="paramname">flModule</td><td>The IO to use for the front left module. </td></tr>
+    <tr><td class="paramname">frModule</td><td>The IO to use for the front right module. </td></tr>
+    <tr><td class="paramname">blModule</td><td>The IO to use for the back left module. </td></tr>
+    <tr><td class="paramname">brModule</td><td>The IO to use for the back right module. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -228,6 +221,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Adds vision data to the drive subsystem.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">updates</td><td>The vision updates to be added. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -253,6 +253,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current velocity on the field.</p>
+<dl class="section return"><dt>Returns</dt><dd>Returns the velocity as a twist. </dd></dl>
 
 </div>
 </div>
@@ -278,6 +280,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the most recent swerve module positions.</p>
+<dl class="section return"><dt>Returns</dt><dd>The positions. </dd></dl>
 
 </div>
 </div>
@@ -303,6 +307,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the last swerve module states.</p>
+<dl class="section return"><dt>Returns</dt><dd>The last measured swerve module states. </dd></dl>
 
 </div>
 </div>
@@ -328,6 +334,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Returns the maximum linear speed (free speed) that the drive train can physically attain.</p>
+<dl class="section return"><dt>Returns</dt><dd>The value in meters per second. </dd></dl>
 
 </div>
 </div>
@@ -353,6 +361,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the module translation, basically where they are relative to the robots center.</p>
+<dl class="section return"><dt>Returns</dt><dd>The translations. </dd></dl>
 
 </div>
 </div>
@@ -378,6 +388,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current pitch.</p>
+<dl class="section return"><dt>Returns</dt><dd>The pitch as a rotation. </dd></dl>
 
 </div>
 </div>
@@ -403,6 +415,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current pitch velocity.</p>
+<dl class="section return"><dt>Returns</dt><dd>The pitch velocity in rads per second. </dd></dl>
 
 </div>
 </div>
@@ -428,6 +442,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current pose of the robot.</p>
+<dl class="section return"><dt>Returns</dt><dd>The X,Y, and \theta </dd></dl>
 
 </div>
 </div>
@@ -453,6 +469,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current roll.</p>
+<dl class="section return"><dt>Returns</dt><dd>The roll as a rotation. </dd></dl>
 
 </div>
 </div>
@@ -478,6 +496,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current roll velocity.</p>
+<dl class="section return"><dt>Returns</dt><dd>The roll velocity in rads per second. </dd></dl>
 
 </div>
 </div>
@@ -503,6 +523,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current rotation of the drive base.</p>
+<dl class="section return"><dt>Returns</dt><dd>The current yaw of the robot. </dd></dl>
 
 </div>
 </div>
@@ -528,31 +550,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5dd1131e687a7ca76e441ab54c46c69b" name="a5dd1131e687a7ca76e441ab54c46c69b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dd1131e687a7ca76e441ab54c46c69b">&#9670;&#160;</a></span>getYawRotation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Rotation2d frc.WorBots.subsystems.drive.Drive.getYawRotation </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p >Gets the current yaw.</p>
+<dl class="section return"><dt>Returns</dt><dd>The pitch as a rotation. </dd></dl>
 
 </div>
 </div>
@@ -578,6 +577,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Gets the current yaw velocity.</p>
+<dl class="section return"><dt>Returns</dt><dd>The yaw velocity in rads per second. </dd></dl>
 
 </div>
 </div>
@@ -629,6 +630,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Runs the provided ChassisSpeeds.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speeds</td><td>The speeds to be run. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -655,6 +663,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Sets the center of rotation to orbit around.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center</td><td>The center of rotation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -681,6 +696,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Sets the pose of the pose estimator, used on starting auto.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The pose to be set. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -706,6 +728,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Stops the drive train by clearing the chassis speeds. </p>
 
 </div>
 </div>
@@ -731,6 +754,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Stops the drive train in an X pattern, locking it in place. </p>
 
 </div>
 </div>
@@ -738,13 +762,9 @@ Public Member Functions</h2></td></tr>
 <li>src/main/java/frc/WorBots/subsystems/drive/<a class="el" href="Drive_8java.html">Drive.java</a></li>
 </ul>
 </div><!-- contents -->
-</div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>frc</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots.html">WorBots</a></li><li class="navelem"><b>subsystems</b></li><li class="navelem"><a class="el" href="namespacefrc_1_1WorBots_1_1subsystems_1_1drive.html">drive</a></li><li class="navelem"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a></li>
-    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
-  </ul>
-</div>
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
+</small></address>
 </body>
 </html>
