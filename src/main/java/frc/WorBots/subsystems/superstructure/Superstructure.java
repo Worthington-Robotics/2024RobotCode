@@ -7,23 +7,20 @@
 
 package frc.WorBots.subsystems.superstructure;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
-import frc.WorBots.util.Logger;
-import frc.WorBots.util.StatusPage;
+import frc.WorBots.util.*;
 import java.util.function.Supplier;
 
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
   private SuperstructureState state = SuperstructureState.POSE;
+  private SuperstructureVisualizer visualizer;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
@@ -53,7 +50,7 @@ public class Superstructure extends SubsystemBase {
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(1.0, 1.0, 0.0);
     }
-
+    visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
 
@@ -82,14 +79,18 @@ public class Superstructure extends SubsystemBase {
       case SHOOTING:
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
         Logger.getInstance().setSuperstructurePivotPosSetpoint(shootingAngleRad.get());
-        io.setElevatorVoltage(
+        double elevatorVoltageShooting =
             elevatorController.calculate(inputs.elevatorPositionMeters, 0.0)
-                + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec));
-        io.setPivotVoltage(
+                + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
+        double pivotVoltageShooting =
             pivotController.calculate(
                     inputs.pivotPositionRelRad + pivotAbsAngleRad, shootingAngleRad.get())
                 + pivotFeedForward.calculate(
-                    inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec));
+                    inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
+        Logger.getInstance().setSuperstructurePivotVoltageSetpoint(pivotVoltageShooting);
+        Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(elevatorVoltageShooting);
+        io.setElevatorVoltage(elevatorVoltageShooting);
+        io.setPivotVoltage(pivotVoltageShooting);
         break;
     }
     if (DriverStation.isDisabled()) {
@@ -104,6 +105,18 @@ public class Superstructure extends SubsystemBase {
 
   public void setShootingAngleRad(Supplier<Double> supplier) {
     shootingAngleRad = supplier;
+  }
+
+  public boolean isAtSetpoint() {
+    return elevatorController.atSetpoint() && pivotController.atSetpoint();
+  }
+
+  public Command setPose(SuperstructurePose.Preset pose) {
+    return this.runOnce(
+            () -> {
+              this.setpoint = pose;
+            })
+        .alongWith(Commands.waitUntil(this::isAtSetpoint));
   }
 
   public Command setMode(SuperstructureState state) {

@@ -7,4 +7,33 @@
 
 package frc.WorBots.subsystems.superstructure;
 
-public class SuperstructureVisualizer {}
+import edu.wpi.first.math.*;
+import edu.wpi.first.math.numbers.*;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.*;
+
+public class SuperstructureVisualizer {
+  private Mechanism2d superstructure;
+  private MechanismRoot2d fromGround;
+  private MechanismLigament2d base;
+  private MechanismLigament2d stageOne;
+  private MechanismLigament2d stageTwo;
+
+  private static final double zeroPositionToGroundMeters = Units.inchesToMeters(5.250);
+  private static final double elevatorAngleDegrees = 90 - 10;
+  private static final double elevatorPositionX =
+      Units.inchesToMeters(13.293); // From center of elevator to edge of front frame - not intake;
+  private static final double elevatorFrameLengthAngledMeters = Units.inchesToMeters(18.750);
+
+  public SuperstructureVisualizer(String name) {
+    superstructure = new Mechanism2d(Units.inchesToMeters(30), Units.inchesToMeters(36));
+    fromGround =
+        superstructure.getRoot("fromGround", elevatorPositionX, zeroPositionToGroundMeters);
+    base =
+        fromGround.append(
+            new MechanismLigament2d(name, elevatorFrameLengthAngledMeters, elevatorAngleDegrees));
+    SmartDashboard.putData(name, superstructure);
+  }
+
+  public void update(Vector<N2> angles) {}
+}
