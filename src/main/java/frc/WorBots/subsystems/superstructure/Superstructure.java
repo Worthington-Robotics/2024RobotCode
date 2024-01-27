@@ -17,6 +17,7 @@ import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOIn
 import frc.WorBots.util.*;
 import java.util.function.Supplier;
 
+/** The elevator and pivot of the robot, responsible for shooting and climbing. */
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
@@ -31,11 +32,17 @@ public class Superstructure extends SubsystemBase {
   private ElevatorFeedforward elevatorFeedForward;
   private ArmFeedforward pivotFeedForward;
 
+  /** The states that the superstructure can be in. */
   public enum SuperstructureState {
     POSE,
     SHOOTING
   }
 
+  /**
+   * Constructs an instance of the superstructure.
+   *
+   * @param io The IO interface to be used.
+   */
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     io.updateInputs(inputs);
@@ -55,6 +62,7 @@ public class Superstructure extends SubsystemBase {
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
 
+  /** The function that runs once per cycle. */
   public void periodic() {
     io.updateInputs(inputs);
     Logger.getInstance().setSuperstructureInputs(inputs);
@@ -103,18 +111,39 @@ public class Superstructure extends SubsystemBase {
             inputs.elevatorPositionMeters, inputs.pivotPositionRelRad + pivotAbsAngleRad));
   }
 
+  /**
+   * Sets the desired shooting angle.
+   *
+   * @param angle The desired angle in radians.
+   */
   public void setShootingAngleRad(double angle) {
     shootingAngleRad = () -> angle;
   }
 
+  /**
+   * Sets the desired shooting angle.
+   *
+   * @param angle The desired angle in radians, as a supplier.
+   */
   public void setShootingAngleRad(Supplier<Double> supplier) {
     shootingAngleRad = supplier;
   }
 
+  /**
+   * Returns whether or not the superstructure is in position.
+   *
+   * @return True if in position, false if not.
+   */
   public boolean isAtSetpoint() {
     return elevatorController.atSetpoint() && pivotController.atSetpoint();
   }
 
+  /**
+   * Sets the desired pose of the subsystem.
+   *
+   * @param pose The desired pose.
+   * @return The command.
+   */
   public Command setPose(SuperstructurePose.Preset pose) {
     return this.runOnce(
             () -> {
@@ -123,6 +152,12 @@ public class Superstructure extends SubsystemBase {
         .alongWith(Commands.waitUntil(this::isAtSetpoint));
   }
 
+  /**
+   * Sets the desired state of the superstructure subsystem.
+   *
+   * @param state The state to be set.
+   * @return The command.
+   */
   public Command setMode(SuperstructureState state) {
     return this.runOnce(
         () -> {
@@ -130,6 +165,11 @@ public class Superstructure extends SubsystemBase {
         });
   }
 
+  /**
+   * Sets the desired mode of the superstrucutre subsystem, not a command.
+   *
+   * @param state The state to be set.
+   */
   public void setModeVoid(SuperstructureState state) {
     this.state = state;
   }

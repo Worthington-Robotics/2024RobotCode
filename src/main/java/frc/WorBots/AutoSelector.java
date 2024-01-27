@@ -32,6 +32,12 @@ public class AutoSelector extends SubsystemBase {
   private List<AutoRoutine> routines = new ArrayList<>();
   private List<AutoQuestionResponse> lastResponses;
 
+  /**
+   * The auto selector is logged onto SmartDashboard and allows for the drivers to set the desired
+   * auto before a match.
+   *
+   * @param key The SmartDashboard table to be logged under.
+   */
   public AutoSelector(String key) {
     StatusPage.reportStatus(StatusPage.AUTO_RUNNING, false);
 
@@ -52,6 +58,13 @@ public class AutoSelector extends SubsystemBase {
     }
   }
 
+  /**
+   * Adds a auto the the auto selector.
+   *
+   * @param name The name of the auto.
+   * @param questions The auto questions to be asked.
+   * @param command The command that needs to be ran.
+   */
   public void addRoutine(String name, List<AutoQuestion> questions, Command command) {
     if (questions.size() > maxQuestions) {
       throw new RuntimeException(
@@ -75,6 +88,11 @@ public class AutoSelector extends SubsystemBase {
     return returnRoutine;
   }
 
+  /**
+   * Gets the current chosen auto.
+   *
+   * @return The responses in the form of a list.
+   */
   public List<AutoQuestionResponse> getResponses() {
     return lastResponses;
   }
@@ -127,6 +145,11 @@ public class AutoSelector extends SubsystemBase {
     StatusPage.reportStatus(StatusPage.AUTO_CHOSEN, lastRoutine != null);
   }
 
+  /**
+   * Return the selected auto command.
+   *
+   * @return The command.
+   */
   public Command getCommand() {
     return lastRoutine.command();
   }
@@ -152,6 +175,7 @@ public class AutoSelector extends SubsystemBase {
 
   public static record AutoQuestion(String question, List<AutoQuestionResponse> responses) {}
 
+  /** The potential answers to auto questions */
   public static enum AutoQuestionResponse {
     YES,
     NO,

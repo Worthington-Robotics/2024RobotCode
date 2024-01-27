@@ -18,6 +18,12 @@ public class Intake extends SubsystemBase {
   private boolean hasGamepiece = false;
   public static final double distanceThreshold = 0.25;
 
+  /**
+   * The intake subsystem, responsible for intaking game pieces from the ground and passing them to
+   * the shooter.
+   *
+   * @param io
+   */
   public Intake(IntakeIO io) {
     this.io = io;
     StatusPage.reportStatus(StatusPage.INTAKE_SUBSYSTEM, true);
@@ -41,6 +47,11 @@ public class Intake extends SubsystemBase {
     io.setIntakeVoltage(setpointVolts);
   }
 
+  /**
+   * A command that runs the intake until a game piece is detected.
+   *
+   * @return The command.
+   */
   public Command intake() {
     return this.runOnce(
             () -> {
@@ -57,6 +68,11 @@ public class Intake extends SubsystemBase {
             });
   }
 
+  /**
+   * Hands off the game piece to the shooter.
+   *
+   * @return The command.
+   */
   public Command handoff() {
     return this.runOnce(
             () -> {
@@ -68,6 +84,11 @@ public class Intake extends SubsystemBase {
             });
   }
 
+  /**
+   * Gets wether or not a game piece is currently held.
+   *
+   * @return The command.
+   */
   public boolean hasGamePiece() {
     return hasGamepiece;
   }

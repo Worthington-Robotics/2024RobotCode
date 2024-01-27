@@ -47,6 +47,15 @@ public class Drive extends SubsystemBase {
   private DoubleArrayPublisher posePublisher =
       driveTable.getDoubleArrayTopic("Pose Estimator").publish();
 
+  /**
+   * The main swerve drive subsystem.
+   *
+   * @param gyroIO The IO to use for the gyro.
+   * @param flModule The IO to use for the front left module.
+   * @param frModule The IO to use for the front right module.
+   * @param blModule The IO to use for the back left module.
+   * @param brModule The IO to use for the back right module.
+   */
   public Drive(
       GyroIO gyroIO, ModuleIO flModule, ModuleIO frModule, ModuleIO blModule, ModuleIO brModule) {
     this.gyroIO = gyroIO;
@@ -136,62 +145,137 @@ public class Drive extends SubsystemBase {
                 : chassisSpeeds.omegaRadiansPerSecond);
   }
 
+  /**
+   * Gets the last swerve module states.
+   *
+   * @return The last measured swerve module states.
+   */
   public SwerveModuleState[] getLastSwerveModuleStates() {
     return lastSetpointStates;
   }
 
+  /**
+   * Adds vision data to the drive subsystem.
+   *
+   * @param updates The vision updates to be added.
+   */
   public void addVisionData(List<TimestampedVisionUpdate> updates) {
     poseEstimator.addVisionData(updates);
   }
 
+  /**
+   * Returns the maximum linear speed (free speed) that the drive train can physically attain.
+   *
+   * @return The value in meters per second.
+   */
   public double getMaxLinearSpeedMetersPerSec() {
     return 4.5;
   }
 
+  /**
+   * Gets the current rotation of the drive base.
+   *
+   * @return The current yaw of the robot.
+   */
   public Rotation2d getRotation() {
     return poseEstimator.getLatestPose().getRotation();
   }
 
+  /**
+   * Gets the current pose of the robot.
+   *
+   * @return The X,Y, and \theta
+   */
   public Pose2d getPose() {
     return poseEstimator.getLatestPose();
   }
 
+  /**
+   * Gets the current velocity on the field.
+   *
+   * @return Returns the velocity as a twist.
+   */
   public Twist2d getFieldVelocity() {
     return fieldVelocity;
   }
 
+  /**
+   * Gets the current yaw velocity.
+   *
+   * @return The yaw velocity in rads per second.
+   */
   public double getYawVelocity() {
     return gyroInputs.yawVelocityRadPerSec;
   }
 
+  /**
+   * Gets the current pitch velocity.
+   *
+   * @return The pitch velocity in rads per second.
+   */
   public double getPitchVelocity() {
     return gyroInputs.pitchVelocityRadPerSec;
   }
 
+  /**
+   * Gets the current roll velocity.
+   *
+   * @return The roll velocity in rads per second.
+   */
   public double getRollVelocity() {
     return gyroInputs.rollVelocityRadPerSec;
   }
 
+  /**
+   * Gets the current pitch.
+   *
+   * @return The pitch as a rotation.
+   */
   public Rotation2d getPitch() {
     return new Rotation2d(gyroInputs.pitchPositionRad);
   }
 
+  /**
+   * Gets the current yaw.
+   *
+   * @return The pitch as a rotation.
+   */
   public Rotation2d getYaw() {
     return new Rotation2d(gyroInputs.yawPositionRad);
   }
 
+  /**
+   * Gets the current roll.
+   *
+   * @return The roll as a rotation.
+   */
   public Rotation2d getRoll() {
     return new Rotation2d(gyroInputs.rollPositionRad);
   }
 
+  /**
+   * Sets the pose of the pose estimator, used on starting auto.
+   *
+   * @param pose The pose to be set.
+   */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPose(pose);
   }
 
+  /**
+   * Sets the center of rotation to orbit around.
+   *
+   * @param center The center of rotation.
+   */
   public void setCenterOfRotation(Translation2d center) {
     this.centerOfRotation = center;
   }
 
+  /**
+   * Gets the most recent swerve module positions.
+   *
+   * @return The positions.
+   */
   public SwerveModulePosition[] getLastSwerveModulePositions() {
     return new SwerveModulePosition[] {
       new SwerveModulePosition(
@@ -205,14 +289,21 @@ public class Drive extends SubsystemBase {
     };
   }
 
+  /**
+   * Runs the provided ChassisSpeeds.
+   *
+   * @param speeds The speeds to be run.
+   */
   public void runVelocity(ChassisSpeeds speeds) {
     setpoint = speeds;
   }
 
+  /** Stops the drive train by clearing the chassis speeds. */
   public void stop() {
     runVelocity(new ChassisSpeeds());
   }
 
+  /** Stops the drive train in an X pattern, locking it in place. */
   public void stopWithLock() {
     stop();
     for (int i = 0; i < 4; i++) {
@@ -222,10 +313,11 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public Rotation2d getYawRotation() {
-    return new Rotation2d(gyroInputs.yawPositionRad);
-  }
-
+  /**
+   * Gets the module translation, basically where they are relative to the robots center.
+   *
+   * @return The translations.
+   */
   public Translation2d[] getModuleTranslations() {
     return new Translation2d[] {
       new Translation2d(Units.inchesToMeters(13), Units.inchesToMeters(13)),

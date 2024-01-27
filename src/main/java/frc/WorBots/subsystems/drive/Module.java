@@ -30,6 +30,12 @@ public class Module {
       new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
   private TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
+  /**
+   * This module represents one swerve module, which includes a turn motor, and drive motor.
+   *
+   * @param io The module IO to be ran with.
+   * @param index The index of the module from 0-3.
+   */
   public Module(ModuleIO io, int index) {
     this.io = io;
     this.index = index;
@@ -53,6 +59,12 @@ public class Module {
     StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, inputs.isConnected);
   }
 
+  /**
+   * Calculates and sets the current motors to the provided state.
+   *
+   * @param state The desired state.
+   * @return The actual state, measured.
+   */
   public SwerveModuleState runState(SwerveModuleState state) {
     var optimizedState = SwerveModuleState.optimize(state, getAngle());
 
@@ -69,23 +81,44 @@ public class Module {
     return optimizedState;
   }
 
+  /**
+   * Gets the current state of the module.
+   *
+   * @return The state.
+   */
   public SwerveModuleState getState() {
     return new SwerveModuleState(getVelocityMetersPerSec(), getAngle());
   }
 
+  /** Sets both motors to 0 volts */
   public void stop() {
     io.setTurnVoltage(0.0);
     io.setDriveVoltage(0.0);
   }
 
+  /**
+   * Gets the current position of the drive motor.
+   *
+   * @return The position in meters.
+   */
   public double getPositionMeters() {
     return inputs.drivePositionRad * Units.inchesToMeters(2.0);
   }
 
+  /**
+   * Gets the current velocity of the module.
+   *
+   * @return The velocity in meters per second.
+   */
   public double getVelocityMetersPerSec() {
     return inputs.driveVelocityRadPerSec * Units.inchesToMeters(2.0);
   }
 
+  /**
+   * Gets the current angle of the module.
+   *
+   * @return The angle as a rotation.
+   */
   public Rotation2d getAngle() {
     return new Rotation2d(inputs.turnAbsolutePositionRad);
   }

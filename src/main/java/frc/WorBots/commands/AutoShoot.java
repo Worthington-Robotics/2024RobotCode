@@ -24,6 +24,12 @@ public class AutoShoot extends SequentialCommandGroup {
   private double speakerOpeningCenterY;
   private static final double shootingLineX = 3.0;
 
+  /**
+   * This command automatically drives to a known safe shooting location and shoots a game piece.
+   *
+   * @param superstructure The superstructure subsystem.
+   * @param drive The drive subsystem.
+   */
   public AutoShoot(Superstructure superstructure, Drive drive) {
     addRequirements(superstructure);
     speakerOpeningHeightZ =

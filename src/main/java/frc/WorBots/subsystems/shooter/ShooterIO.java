@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.shooter;
 
 public interface ShooterIO {
+  /** The shooter inputs that need to be updated every cycle. */
   public static class ShooterIOInputs {
     boolean isConnected = false;
     public double velocityRPMTop = 0;
@@ -19,11 +20,31 @@ public interface ShooterIO {
     public double timeOfFlightDistanceMeters = 0.0;
   }
 
+  /**
+   * Sets the top flywheel's voltage.
+   *
+   * @param volts The voltage to be set.
+   */
   public default void setTopFlywheelVolts(double volts) {}
 
+  /**
+   * Sets the bottom flywheel's voltage.
+   *
+   * @param volts The voltage to be set.
+   */
   public default void setBottomFlywheelVolts(double volts) {}
 
+  /**
+   * Sets the feeder wheels voltage.
+   *
+   * @param volts The voltage to be set.
+   */
   public default void setFeederWheelVoltage(double volts) {}
 
+  /**
+   * The current inputs that need to be updated.
+   *
+   * @param inputs The inputs to be modified.
+   */
   public default void updateInputs(ShooterIOInputs inputs) {}
 }

@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.intake;
 
 public interface IntakeIO {
+  /** The inputs to the intake. */
   public static class IntakeIOInputs {
     double temperatureCelsius = 0.0;
     double velocityRadsPerSec = 0.0;
@@ -17,7 +18,17 @@ public interface IntakeIO {
     boolean isConnected = false;
   }
 
+  /**
+   * Updates the current inputs of the intake.
+   *
+   * @param inputs The inpus to be updated.
+   */
   public default void updateInputs(IntakeIOInputs inputs) {}
 
+  /**
+   * Sets the voltage of the intake motor.
+   *
+   * @param volts The voltage.
+   */
   public default void setIntakeVoltage(double volts) {}
 }

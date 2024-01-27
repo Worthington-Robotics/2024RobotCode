@@ -35,6 +35,17 @@ public class DriverShoot extends Command {
   private static final double maxAngleRads = 1.3;
   private static final double sensitivity = 0.01;
 
+  /**
+   * This command takes in the drivers joystick input and allows the driver to control XY of the
+   * robot, and the operator to control the \theta and pivot.
+   *
+   * @param drive The drive subsystem.
+   * @param superstructure The superstructure subsystem.
+   * @param leftXSupplier The vertical driver input.
+   * @param leftYSupplier The horizontal driver input.
+   * @param aimLeftXSupplier The vertical aiming input.
+   * @param aimLeftYSupplier The horizontal aiming input.
+   */
   public DriverShoot(
       Drive drive,
       Superstructure superstructure,

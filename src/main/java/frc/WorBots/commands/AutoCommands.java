@@ -36,6 +36,15 @@ public class AutoCommands extends Command {
   private final Pose2d[] wingGamePieceLocations;
   private final Pose2d[] centerGamePieceLocations;
 
+  /**
+   * This command houses all of the auto commands that are selected by the auto chooser.
+   *
+   * @param drive The drive subsystem.
+   * @param superstructure The superstrucute subsystem.
+   * @param intake The intake subsystem.
+   * @param shooter The shooter subsystem.
+   * @param responses The list of auto responses from the AutoSelector.
+   */
   public AutoCommands(
       Drive drive,
       Superstructure superstructure,
@@ -137,18 +146,39 @@ public class AutoCommands extends Command {
     return path(Arrays.asList(waypoints));
   }
 
+  /**
+   * Drives to the specified game piece in the wing and intakes it.
+   *
+   * @return The command.
+   */
   private Command driveAndIntakeWing() {
     return Commands.none();
   }
 
+  /**
+   * Drives to the specified game piece in the center of the field and intakes it.
+   *
+   * @return The command.
+   */
   private Command driveAndIntakeCenter() {
     return Commands.none();
   }
 
+  /**
+   * Drives to a specified safe shooting position and shoots a game piece in the speaker.
+   *
+   * @return The command.
+   */
   private Command driveAndShoot() {
     return Commands.none();
   }
 
+  /**
+   * An auto that starts at one of the starting locations, scores a game piece, and then drives past
+   * the line.
+   *
+   * @return The command.
+   */
   public Command onePiece() {
     Pose2d startingPose = startingLocations[0];
     return Commands.sequence(

@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import frc.WorBots.util.*;
 
+/** The visualizer class of the superstrucutre, logs a Mechanism2d, as well as Pose3d's. */
 public class SuperstructureVisualizer {
   private Mechanism2d superstructure;
   private MechanismRoot2d fromGround;
@@ -27,6 +28,11 @@ public class SuperstructureVisualizer {
   private static final double elevatorFrameLengthAngledMeters = Units.inchesToMeters(18.750);
   private static final double pivotLengthMeters = 0.25;
 
+  /**
+   * Constructs a new instance of the visualizer.
+   *
+   * @param name The name in NT.
+   */
   public SuperstructureVisualizer(String name) {
     superstructure = new Mechanism2d(Units.inchesToMeters(30), Units.inchesToMeters(36));
     fromGround =
@@ -38,6 +44,11 @@ public class SuperstructureVisualizer {
     SmartDashboard.putData(name, superstructure);
   }
 
+  /**
+   * The function that updates the current visualizer.
+   *
+   * @param angles The current position of the superstructure.
+   */
   public void update(Vector<N2> angles) {
     base.setLength(angles.get(0, 0));
     pivot.setAngle(Units.radiansToDegrees(-angles.get(1, 0)) + 80);

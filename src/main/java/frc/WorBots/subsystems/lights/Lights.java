@@ -43,6 +43,7 @@ public class Lights extends SubsystemBase {
     CLAIRE
   }
 
+  /** The lights subsystem, which is rather pretty. */
   private Lights() {
     leds = new AddressableLED(lightsID);
     io = new AddressableLEDBuffer(LIGHT_COUNT);

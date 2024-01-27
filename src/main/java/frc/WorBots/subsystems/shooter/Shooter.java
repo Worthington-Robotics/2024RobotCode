@@ -32,6 +32,11 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   private SimpleMotorFeedforward topFlywheelFeedForward;
   private SimpleMotorFeedforward bottomFlywheelFeedforward;
 
+  /**
+   * The shooter subsystem, responsible for shooting into the speaker.
+   *
+   * @param io The IO inputs.
+   */
   public Shooter(ShooterIO io) {
     this.io = io;
 

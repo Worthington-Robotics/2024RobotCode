@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.drive;
 
 public interface ModuleIO {
+  /** The module inputs that need to be updated once per cycle */
   public static class ModuleIOInputs {
     public double drivePositionRad = 0.0;
     public double driveVelocityRadPerSec = 0.0;

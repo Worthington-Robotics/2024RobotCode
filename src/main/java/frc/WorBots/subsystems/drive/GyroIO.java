@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.drive;
 
 public interface GyroIO {
+  /** The inputs of the gyro */
   public static class GyroIOInputs {
     public boolean connected = false;
     public double rollPositionRad = 0.0;
@@ -18,6 +19,11 @@ public interface GyroIO {
     public double yawVelocityRadPerSec = 0.0;
   }
 
+  /**
+   * Updates the current inputs of the selected IO implementation.
+   *
+   * @param inputs The inputs to be modified.
+   */
   public default void updateInputs(GyroIOInputs inputs) {}
 
   /**
@@ -26,7 +32,15 @@ public interface GyroIO {
    */
   public default void setExpectedPitchVelocity(double vPitch) {}
 
+  /**
+   * Set the rotational velocity (in rads/sec) that the drive is expected to be moving at so that
+   * the simulated gyro can work
+   */
   public default void setExpectedRollVelocity(double vRoll) {}
 
+  /**
+   * Set the rotational velocity (in rads/sec) that the drive is expected to be moving at so that
+   * the simulated gyro can work
+   */
   public default void setExpectedYawVelocity(double vYaw) {}
 }

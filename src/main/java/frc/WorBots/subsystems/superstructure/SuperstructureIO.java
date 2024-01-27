@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.superstructure;
 
 public interface SuperstructureIO {
+  /** The superstructure inputs. */
   public static class SuperstructureIOInputs {
     public double elevatorPositionMeters = 0.0;
     public double elevatorVelocityMetersPerSec = 0.0;
@@ -21,9 +22,24 @@ public interface SuperstructureIO {
     public double pivotTemp = 0.0;
   }
 
+  /**
+   * Sets the elevator motor's voltage.
+   *
+   * @param volts The volts to be set.
+   */
   public default void setElevatorVoltage(double volts) {}
 
+  /**
+   * Sets the pivot motor's voltage.
+   *
+   * @param volts The volts to be set.
+   */
   public default void setPivotVoltage(double volts) {}
 
+  /**
+   * Updates the current inputs of the superstructure subsystem.
+   *
+   * @param inputs The inputs to be updated.
+   */
   public default void updateInputs(SuperstructureIOInputs inputs) {}
 }
