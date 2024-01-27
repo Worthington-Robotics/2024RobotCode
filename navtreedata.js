@@ -25,33 +25,13 @@
 var NAVTREE =
 [
   [ "2024 Robot Code", "index.html", [
-    [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", null ],
-      [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ]
-      ] ]
-    ] ],
-    [ "Classes", "annotated.html", [
-      [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ]
-      ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
-    ] ]
+    [ "Documentation", "index.html#autotoc_md1", null ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"AllianceFlipUtil_8java.html",
-"classfrc_1_1WorBots_1_1util_1_1Logger.html#a3d9f0465530c83560397b3d0adfbebce"
+"index.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
