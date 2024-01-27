@@ -5,6 +5,7 @@ var searchData=
   ['intake_2',['intake',['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1Intake.html#a9558724fcb276246786c61ad949fddee',1,'frc::WorBots::subsystems::intake::Intake']]],
   ['intakeiosim_3',['IntakeIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1IntakeIOSim.html#a397710f2fa7de83173fcaf713805638f',1,'frc::WorBots::subsystems::intake::IntakeIOSim']]],
   ['intakeiotalon_4',['IntakeIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1IntakeIOTalon.html#aab08bdfdb2fb3d8933eb9aebadb1645a',1,'frc::WorBots::subsystems::intake::IntakeIOTalon']]],
-  ['isfinished_5',['isFinished',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#adfbf8f476c95cdd9214500ac8b2d8e58',1,'frc.WorBots.commands.DriveToPose.isFinished()'],['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory.html#a4762802db7d6cac9c3f5ed6938a0fa33',1,'frc.WorBots.commands.DriveTrajectory.isFinished()']]],
-  ['isrunning_6',['isRunning',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a68768e154a39cc5bd4062ee668045f52',1,'frc::WorBots::commands::DriveToPose']]]
+  ['isatsetpoint_5',['isAtSetpoint',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a9dbd2db7c5b751394ba1bf6f4d17d307',1,'frc::WorBots::subsystems::shooter::Shooter']]],
+  ['isfinished_6',['isFinished',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#adfbf8f476c95cdd9214500ac8b2d8e58',1,'frc.WorBots.commands.DriveToPose.isFinished()'],['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory.html#a4762802db7d6cac9c3f5ed6938a0fa33',1,'frc.WorBots.commands.DriveTrajectory.isFinished()']]],
+  ['isrunning_7',['isRunning',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a68768e154a39cc5bd4062ee668045f52',1,'frc::WorBots::commands::DriveToPose']]]
 ];

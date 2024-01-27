@@ -14,7 +14,8 @@ var searchData=
   ['intakeiosim_2ejava_11',['IntakeIOSim.java',['../IntakeIOSim_8java.html',1,'']]],
   ['intakeiotalon_12',['IntakeIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1IntakeIOTalon.html',1,'frc.WorBots.subsystems.intake.IntakeIOTalon'],['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1IntakeIOTalon.html#aab08bdfdb2fb3d8933eb9aebadb1645a',1,'frc.WorBots.subsystems.intake.IntakeIOTalon.IntakeIOTalon()']]],
   ['intakeiotalon_2ejava_13',['IntakeIOTalon.java',['../IntakeIOTalon_8java.html',1,'']]],
-  ['isfinished_14',['isFinished',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#adfbf8f476c95cdd9214500ac8b2d8e58',1,'frc.WorBots.commands.DriveToPose.isFinished()'],['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory.html#a4762802db7d6cac9c3f5ed6938a0fa33',1,'frc.WorBots.commands.DriveTrajectory.isFinished()']]],
-  ['isrunning_15',['isRunning',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a68768e154a39cc5bd4062ee668045f52',1,'frc::WorBots::commands::DriveToPose']]],
-  ['iswpifield_16',['isWPIField',['../classfrc_1_1WorBots_1_1FieldConstants.html#a904a94485c0b8af110d8d0b3b4764560',1,'frc::WorBots::FieldConstants']]]
+  ['isatsetpoint_14',['isAtSetpoint',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a9dbd2db7c5b751394ba1bf6f4d17d307',1,'frc::WorBots::subsystems::shooter::Shooter']]],
+  ['isfinished_15',['isFinished',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#adfbf8f476c95cdd9214500ac8b2d8e58',1,'frc.WorBots.commands.DriveToPose.isFinished()'],['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory.html#a4762802db7d6cac9c3f5ed6938a0fa33',1,'frc.WorBots.commands.DriveTrajectory.isFinished()']]],
+  ['isrunning_16',['isRunning',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a68768e154a39cc5bd4062ee668045f52',1,'frc::WorBots::commands::DriveToPose']]],
+  ['iswpifield_17',['isWPIField',['../classfrc_1_1WorBots_1_1FieldConstants.html#a904a94485c0b8af110d8d0b3b4764560',1,'frc::WorBots::FieldConstants']]]
 ];
