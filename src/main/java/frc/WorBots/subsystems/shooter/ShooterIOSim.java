@@ -44,5 +44,6 @@ public class ShooterIOSim implements ShooterIO {
     inputs.isConnected = true;
     inputs.velocityRPMBottom = bottomFlywheelSim.getAngularVelocityRPM();
     inputs.velocityRPMTop = topFlywheelSim.getAngularVelocityRPM();
+    inputs.feederWheelPositionRads = 0.0;
   }
 }
