@@ -31,10 +31,12 @@ public class AutoCommands extends Command {
   private final Shooter shooter;
   private Supplier<List<AutoQuestionResponse>> responses;
 
-  // Poses
+  // Constants
   private final Pose2d[] startingLocations;
   private final Pose2d[] wingGamePieceLocations;
   private final Pose2d[] centerGamePieceLocations;
+  private final Pose2d[] shootingPositions;
+  private final double shootingLineX = Units.inchesToMeters(110);
 
   /**
    * This command houses all of the auto commands that are selected by the auto chooser.
@@ -109,6 +111,12 @@ public class AutoCommands extends Command {
                   new Translation2d(-Units.inchesToMeters(12), 0)),
               new Rotation2d()),
         };
+    shootingPositions =
+        new Pose2d[] {
+          new Pose2d(new Translation2d(3.68, 5.80), new Rotation2d()),
+          new Pose2d(new Translation2d(2.88, 5.54), new Rotation2d()),
+          new Pose2d(new Translation2d(2.50, 3.49), new Rotation2d())
+        };
     SmartDashboard.putNumberArray("Starting", Logger.pose2dToArray(startingLocations[0]));
   }
 
@@ -169,8 +177,12 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndShoot() {
-    return Commands.none();
+  private Command driveAndShoot(Pose2d startingPose, int startingLocation) {
+    List<Waypoint> waypoints = new ArrayList<>();
+    Pose2d shootingPose = shootingPositions[startingLocation];
+    waypoints.add(Waypoint.fromHolonomicPose(startingPose));
+    waypoints.add(Waypoint.fromHolonomicPose(shootingPose));
+    return Commands.sequence(path(waypoints));
   }
 
   /**
@@ -179,15 +191,21 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
+  private Command onePiece(int startingLocation) {
+    Pose2d startingPose = startingLocations[startingLocation];
+    return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
+  }
+
   public Command onePiece() {
-    Pose2d startingPose = startingLocations[0];
-    return Commands.sequence(
-        reset(startingPose),
-        path(
-            Waypoint.fromHolonomicPose(startingPose),
-            Waypoint.fromHolonomicPose(wingGamePieceLocations[0]),
-            Waypoint.fromHolonomicPose(startingPose),
-            Waypoint.fromHolonomicPose(centerGamePieceLocations[1])));
+    return Commands.select(
+        Map.of(
+            AutoQuestionResponse.AMP_SIDE,
+            onePiece(0),
+            AutoQuestionResponse.CENTER,
+            onePiece(1),
+            AutoQuestionResponse.WALL_SIDE,
+            onePiece(2)),
+        () -> responses.get().get(0));
   }
 
   private Command mobility(int startingPosition) {

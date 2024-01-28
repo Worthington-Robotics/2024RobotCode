@@ -78,6 +78,17 @@ public class RobotContainer {
                     AutoQuestionResponse.WALL_SIDE))),
         autoCommands.mobility());
 
+    selector.addRoutine(
+        "One Piece",
+        List.of(
+            new AutoQuestion(
+                "Starting Location?",
+                List.of(
+                    AutoQuestionResponse.AMP_SIDE,
+                    AutoQuestionResponse.CENTER,
+                    AutoQuestionResponse.WALL_SIDE))),
+        autoCommands.onePiece());
+
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
   }
