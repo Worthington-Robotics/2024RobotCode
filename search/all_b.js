@@ -7,13 +7,14 @@ var searchData=
   ['maxquestions_4',['maxQuestions',['../classfrc_1_1WorBots_1_1AutoSelector.html#a38f8c14b67151a26e585d4bc4cc13d20',1,'frc::WorBots::AutoSelector']]],
   ['midlinex_5',['midLineX',['../classfrc_1_1WorBots_1_1FieldConstants.html#a184cc8bee57c49acb3f60742c0d3d06f',1,'frc::WorBots::FieldConstants']]],
   ['midliney_6',['midLineY',['../classfrc_1_1WorBots_1_1FieldConstants.html#a14b9554dfecf859ce4406b032db01b0f',1,'frc::WorBots::FieldConstants']]],
-  ['module_7',['Module',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html',1,'frc.WorBots.subsystems.drive.Module'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ad502654c3231860760123317dc45f9f3',1,'frc.WorBots.subsystems.drive.Module.Module()']]],
-  ['module_2ejava_8',['Module.java',['../Module_8java.html',1,'']]],
-  ['moduleio_9',['ModuleIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIO.html',1,'frc::WorBots::subsystems::drive']]],
-  ['moduleio_2ejava_10',['ModuleIO.java',['../ModuleIO_8java.html',1,'']]],
-  ['moduleiokraken_11',['ModuleIOKraken',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html',1,'frc.WorBots.subsystems.drive.ModuleIOKraken'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html#a900d5ce81dfa0d6e1baddb172674244f',1,'frc.WorBots.subsystems.drive.ModuleIOKraken.ModuleIOKraken()']]],
-  ['moduleiokraken_2ejava_12',['ModuleIOKraken.java',['../ModuleIOKraken_8java.html',1,'']]],
-  ['moduleiosim_13',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc::WorBots::subsystems::drive']]],
-  ['moduleiosim_2ejava_14',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
-  ['multiplytwist_15',['multiplyTwist',['../classfrc_1_1WorBots_1_1util_1_1GeomUtil.html#af330d7626091c9353677424f3b1ef7a5',1,'frc::WorBots::util::GeomUtil']]]
+  ['mobility_7',['mobility',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a96c5f637e4575951f0ce3fea6cc76b0d',1,'frc::WorBots::commands::AutoCommands']]],
+  ['module_8',['Module',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html',1,'frc.WorBots.subsystems.drive.Module'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ad502654c3231860760123317dc45f9f3',1,'frc.WorBots.subsystems.drive.Module.Module()']]],
+  ['module_2ejava_9',['Module.java',['../Module_8java.html',1,'']]],
+  ['moduleio_10',['ModuleIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIO.html',1,'frc::WorBots::subsystems::drive']]],
+  ['moduleio_2ejava_11',['ModuleIO.java',['../ModuleIO_8java.html',1,'']]],
+  ['moduleiokraken_12',['ModuleIOKraken',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html',1,'frc.WorBots.subsystems.drive.ModuleIOKraken'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html#a900d5ce81dfa0d6e1baddb172674244f',1,'frc.WorBots.subsystems.drive.ModuleIOKraken.ModuleIOKraken()']]],
+  ['moduleiokraken_2ejava_13',['ModuleIOKraken.java',['../ModuleIOKraken_8java.html',1,'']]],
+  ['moduleiosim_14',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc::WorBots::subsystems::drive']]],
+  ['moduleiosim_2ejava_15',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
+  ['multiplytwist_16',['multiplyTwist',['../classfrc_1_1WorBots_1_1util_1_1GeomUtil.html#af330d7626091c9353677424f3b1ef7a5',1,'frc::WorBots::util::GeomUtil']]]
 ];
