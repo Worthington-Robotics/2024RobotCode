@@ -36,6 +36,7 @@ public class FieldConstants {
   public static final double midLineY = fieldWidth / 2.0;
   public static final double midLineX = fieldLength / 2.0;
 
+  /** Logs the current poses of field pieces that are defined in code */
   public static void testField() {
     Logger.getInstance()
         .logTranslation2d("Field", "Starting note wing 1", GamePieces.wingPieces[0]);
@@ -75,6 +76,7 @@ public class FieldConstants {
     }
   }
 
+  /** The wing of the game field. */
   public static final class Wing {
     public static final double startX = 0;
     public static final double endX = Units.inchesToMeters(231.2);
@@ -90,6 +92,7 @@ public class FieldConstants {
         };
   }
 
+  /** The region in which robots start, also houses the amp and speaker. */
   public static final class StartingZone {
     public static final double startX = 0;
     public static final double endX = Units.inchesToMeters(76.1);
@@ -97,6 +100,7 @@ public class FieldConstants {
     public static final double midY = startY - Units.inchesToMeters((12.0 * 23.0) + 8.125);
     public static final double endY = 0;
 
+    /** The corners of the starting zone. */
     public static final Translation2d[] regionCorners =
         new Translation2d[] {
           new Translation2d(startX, startY),
@@ -106,6 +110,7 @@ public class FieldConstants {
         };
   }
 
+  /** The constants of the Amp */
   public static final class Amp {
     public static final double openingBottomZ = Units.inchesToMeters(26);
     public static final double openingTopZ = openingBottomZ + Units.inchesToMeters(18);

@@ -189,4 +189,32 @@ public class AutoCommands extends Command {
             Waypoint.fromHolonomicPose(startingPose),
             Waypoint.fromHolonomicPose(centerGamePieceLocations[1])));
   }
+
+  private Command mobility(int startingPosition) {
+    Pose2d startingPose = startingLocations[startingPosition];
+    return Commands.sequence(
+        reset(startingPose),
+        path(
+            Waypoint.fromHolonomicPose(startingPose),
+            Waypoint.fromDifferentialPose(
+                startingPose.plus(new Transform2d(1.5, 0, new Rotation2d())))));
+  }
+
+  /**
+   * Returns the mobility auto, where the robot starts in one of the predefined positions, and then
+   * drives forwards 1.5 meters.
+   *
+   * @return The command.
+   */
+  public Command mobility() {
+    return Commands.select(
+        Map.of(
+            AutoQuestionResponse.AMP_SIDE,
+            mobility(0),
+            AutoQuestionResponse.CENTER,
+            mobility(1),
+            AutoQuestionResponse.WALL_SIDE,
+            mobility(2)),
+        () -> responses.get().get(0));
+  }
 }

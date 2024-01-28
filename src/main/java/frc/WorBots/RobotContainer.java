@@ -9,6 +9,8 @@ package frc.WorBots;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.WorBots.AutoSelector.AutoQuestion;
+import frc.WorBots.AutoSelector.AutoQuestionResponse;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
@@ -65,7 +67,16 @@ public class RobotContainer {
     var autoCommands =
         new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
 
-    selector.addRoutine("TESTING", List.of(), autoCommands.onePiece());
+    selector.addRoutine(
+        "Mobility",
+        List.of(
+            new AutoQuestion(
+                "Starting Location?",
+                List.of(
+                    AutoQuestionResponse.AMP_SIDE,
+                    AutoQuestionResponse.CENTER,
+                    AutoQuestionResponse.WALL_SIDE))),
+        autoCommands.mobility());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
