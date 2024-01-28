@@ -22,7 +22,7 @@ public class SuperstructureVisualizer {
   private MechanismLigament2d pivot;
 
   private static final double zeroPositionToGroundMeters = Units.inchesToMeters(5.250);
-  private static final double elevatorAngleDegrees = (100);
+  private static final double elevatorAngleDegrees = (105);
   private static final double elevatorPositionX =
       Units.inchesToMeters(13.293); // From center of elevator to edge of front frame - not intake;
   private static final double elevatorFrameLengthAngledMeters = Units.inchesToMeters(18.750);
@@ -40,7 +40,7 @@ public class SuperstructureVisualizer {
     base =
         fromGround.append(
             new MechanismLigament2d(name, zeroPositionToGroundMeters, elevatorAngleDegrees));
-    pivot = base.append(new MechanismLigament2d("Pivot", pivotLengthMeters, (80)));
+    pivot = base.append(new MechanismLigament2d("Pivot", pivotLengthMeters, (75)));
     SmartDashboard.putData(name, superstructure);
   }
 
@@ -51,7 +51,7 @@ public class SuperstructureVisualizer {
    */
   public void update(Vector<N2> angles) {
     base.setLength(angles.get(0, 0));
-    pivot.setAngle(Units.radiansToDegrees(-angles.get(1, 0)) + 80);
+    pivot.setAngle(Units.radiansToDegrees(-angles.get(1, 0)) + 75);
 
     // 3D logging
     var stageOnePose = new Pose3d(0.0, 0.0, 0.25, new Rotation3d(0.0, 0.0, 0.0));

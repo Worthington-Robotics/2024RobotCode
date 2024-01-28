@@ -55,10 +55,10 @@ public class ModuleIOKraken implements ModuleIO {
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePositionRad =
         Units.rotationsToRadians(
-            driveMotor.getPosition().getValue() * ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)));
+            driveMotor.getPosition().getValue() * ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)));
     inputs.driveVelocityRadPerSec =
         Units.rotationsToRadians(
-            driveMotor.getVelocity().getValue() * ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)));
+            driveMotor.getVelocity().getValue() * ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)));
     inputs.driveAppliedVolts = driveMotor.get() * driveMotor.getSupplyVoltage().getValue();
     inputs.driveCurrentAmps = new double[] {driveMotor.getStatorCurrent().getValue()};
     inputs.driveTempCelcius = new double[] {driveMotor.getDeviceTemp().getValue()};
