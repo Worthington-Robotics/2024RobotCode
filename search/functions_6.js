@@ -35,7 +35,6 @@ var searchData=
   ['getvelocitymeterspersec_32',['getVelocityMetersPerSec',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a05e60ab1f022884be61daecc45647e5d',1,'frc::WorBots::subsystems::drive::Module']]],
   ['getyaw_33',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getyawvelocity_34',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['gyroiopigeon_35',['GyroIOPigeon',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon.html#a757e25e0b855a379364719dc015052a3',1,'frc::WorBots::subsystems::drive::GyroIOPigeon']]],
-  ['gyroiopigeon2_36',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
-  ['gyroiosim_37',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
+  ['gyroiopigeon2_35',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
+  ['gyroiosim_36',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
 ];
