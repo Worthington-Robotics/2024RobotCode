@@ -8,6 +8,8 @@
 package frc.WorBots.subsystems.superstructure;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 
@@ -30,10 +32,12 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
+    MathUtil.clamp(volts, -10.5, 10.5);
     elevator.setVoltage(volts);
   }
 
   public void setPivotVoltage(double volts) {
+    MathUtil.clamp(volts, -10.5, 10.5);
     pivot.setVoltage(volts);
   }
 

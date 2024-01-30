@@ -41,7 +41,7 @@ public class RobotContainer {
     if (!Constants.getSim()) { // Real Robot
       drive =
           new Drive(
-              new GyroIOPigeon(),
+              new GyroIOPigeon2(),
               new ModuleIOKraken(0),
               new ModuleIOKraken(1),
               new ModuleIOKraken(2),

@@ -22,28 +22,28 @@ public class ModuleIOKraken implements ModuleIO {
   public ModuleIOKraken(int index) {
     switch (index) {
       case 0:
-        driveMotor = new TalonFX(8);
-        turnMotor = new TalonFX(7);
+        driveMotor = new TalonFX(0);
+        turnMotor = new TalonFX(1);
         absoluteEncoder = new CANcoder(2);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(76.1));
+        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 1:
-        driveMotor = new TalonFX(6);
-        turnMotor = new TalonFX(5);
-        absoluteEncoder = new CANcoder(1);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(292.236));
+        driveMotor = new TalonFX(3);
+        turnMotor = new TalonFX(4);
+        absoluteEncoder = new CANcoder(5);
+        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 2:
-        driveMotor = new TalonFX(12);
-        turnMotor = new TalonFX(11);
-        absoluteEncoder = new CANcoder(4);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(219.7));
+        driveMotor = new TalonFX(6);
+        turnMotor = new TalonFX(7);
+        absoluteEncoder = new CANcoder(8);
+        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 3:
-        driveMotor = new TalonFX(10);
-        turnMotor = new TalonFX(9);
-        absoluteEncoder = new CANcoder(3);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(33.8));
+        driveMotor = new TalonFX(9);
+        turnMotor = new TalonFX(10);
+        absoluteEncoder = new CANcoder(11);
+        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       default:
         throw new RuntimeException("Invalid swerve module index");

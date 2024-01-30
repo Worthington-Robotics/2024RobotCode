@@ -10,6 +10,8 @@ package frc.WorBots.subsystems.shooter;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 
 public class ShooterIOTalon implements ShooterIO {
@@ -36,5 +38,23 @@ public class ShooterIOTalon implements ShooterIO {
         Units.rotationsToRadians(feederWheel.getVelocity().getValue());
     inputs.feederWheelCurrentAmps = feederWheel.getStatorCurrent().getValue();
     inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000.0;
+  }
+
+  @Override
+  public void setBottomFlywheelVolts(double volts) {
+    MathUtil.clamp(volts, -12, 12);
+    bottomFlywheel.setVoltage(volts);
+  }
+
+  @Override
+  public void setTopFlywheelVolts(double volts) {
+    MathUtil.clamp(volts, -12, 12);
+    topFlywheel.setVoltage(volts);
+  }
+  
+  @Override
+  public void setFeederWheelVoltage(double volts) {
+    MathUtil.clamp(volts, -10, 10);
+    feederWheel.setVoltage(volts);
   }
 }
