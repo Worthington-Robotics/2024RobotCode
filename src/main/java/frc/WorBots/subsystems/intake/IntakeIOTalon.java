@@ -10,7 +10,6 @@ package frc.WorBots.subsystems.intake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 

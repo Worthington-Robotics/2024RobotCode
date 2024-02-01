@@ -53,6 +53,12 @@ public class SuperstructureVisualizer {
     base.setLength(angles.get(0, 0));
     pivot.setAngle(Units.radiansToDegrees(-angles.get(1, 0)) + 75);
 
+    /**
+     * Some notes: The elevator in use is a contunuous elevator, meaning the parts rise in a linear
+     * fashion. Basically you can take the % extended of the whole, and just change it to the range
+     * of the first or second carriage. Need the numbers first.
+     */
+
     // 3D logging
     var stageOnePose = new Pose3d(0.0, 0.0, 0.25, new Rotation3d(0.0, 0.0, 0.0));
     var stageTwoPose =

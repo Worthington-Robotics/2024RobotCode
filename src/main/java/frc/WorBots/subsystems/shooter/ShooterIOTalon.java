@@ -10,7 +10,6 @@ package frc.WorBots.subsystems.shooter;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 
@@ -51,7 +50,7 @@ public class ShooterIOTalon implements ShooterIO {
     MathUtil.clamp(volts, -12, 12);
     topFlywheel.setVoltage(volts);
   }
-  
+
   @Override
   public void setFeederWheelVoltage(double volts) {
     MathUtil.clamp(volts, -10, 10);
