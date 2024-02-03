@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vision_5fsubsystem_0',['VISION_SUBSYSTEM',['../classfrc_1_1WorBots_1_1util_1_1StatusPage.html#ac67b359d21245492c28969b5c2e655bc',1,'frc::WorBots::util::StatusPage']]]
+  ['tapewidth_0',['tapeWidth',['../classfrc_1_1WorBots_1_1FieldConstants.html#a8f7be37658b798f35500bd6a93e591b8',1,'frc::WorBots::FieldConstants']]]
 ];
