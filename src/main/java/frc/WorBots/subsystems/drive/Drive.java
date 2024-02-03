@@ -39,7 +39,7 @@ public class Drive extends SubsystemBase {
   private NetworkTableInstance instance = NetworkTableInstance.getDefault();
   private Twist2d fieldVelocity = new Twist2d();
   private Translation2d centerOfRotation = new Translation2d();
-  
+
   private NetworkTable driveTable = instance.getTable("Drive");
   private DoubleArrayPublisher setpointPublisher =
       driveTable.getDoubleArrayTopic("Setpoint").publish();

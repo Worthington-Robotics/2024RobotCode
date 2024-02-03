@@ -15,7 +15,8 @@ import edu.wpi.first.math.util.Units;
 
 public class ModuleIOKraken implements ModuleIO {
   private static final String CAN_BUS = "Swerve";
-  private static final double DRIVE_ROTATIONS_TO_RADIANS = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
+  private static final double DRIVE_ROTATIONS_TO_RADIANS =
+      (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
 
   private TalonFX driveMotor;
   private TalonFX turnMotor;
@@ -57,11 +58,9 @@ public class ModuleIOKraken implements ModuleIO {
 
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePositionRad =
-        Units.rotationsToRadians(
-            driveMotor.getPosition().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
+        Units.rotationsToRadians(driveMotor.getPosition().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
     inputs.driveVelocityRadPerSec =
-        Units.rotationsToRadians(
-            driveMotor.getVelocity().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
+        Units.rotationsToRadians(driveMotor.getVelocity().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
     inputs.driveAppliedVolts = driveMotor.get() * driveMotor.getSupplyVoltage().getValue();
     inputs.driveCurrentAmps = new double[] {driveMotor.getStatorCurrent().getValue()};
     inputs.driveTempCelcius = new double[] {driveMotor.getDeviceTemp().getValue()};
