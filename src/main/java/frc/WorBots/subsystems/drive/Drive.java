@@ -41,7 +41,8 @@ public class Drive extends SubsystemBase {
   private Translation2d centerOfRotation = new Translation2d();
 
   private NetworkTable driveTable = instance.getTable("Drive");
-  private DoubleArrayPublisher speedSetpointPublisher = driveTable.getDoubleArrayTopic("Speed Setpoint").publish();
+  private DoubleArrayPublisher speedSetpointPublisher =
+      driveTable.getDoubleArrayTopic("Speed Setpoint").publish();
   private DoubleArrayPublisher setpointPublisher =
       driveTable.getDoubleArrayTopic("Setpoint").publish();
   private DoubleArrayPublisher optimizedPublisher =
@@ -94,7 +95,7 @@ public class Drive extends SubsystemBase {
           new ChassisSpeeds(
               setpointTwist.dx / 0.02, setpointTwist.dy / 0.02, setpointTwist.dtheta / 0.02);
       speedSetpointPublisher.set(Logger.chassisSpeedsToArray(adjustedSpeeds));
-      
+
       SwerveModuleState[] setpointStates =
           kinematics.toSwerveModuleStates(adjustedSpeeds, centerOfRotation);
       // Desaturate speeds to ensure we don't go faster than is possible

@@ -42,8 +42,8 @@ public class Module {
 
     if (Constants.getSim()) {
       driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
-      driveFeedbackGains.setGains(0.9, 0.0, 0.0);
-      turnFeedbackGains.setGains(23.0, 0.0, 0.0);
+      driveFeedbackGains.setGains(0.08, 0.0, 0.0);
+      turnFeedbackGains.setGains(4.0, 0.0, 0.0);
     } else {
       driveFeedforward = new SimpleMotorFeedforward(0.18868, 0.12825);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);
@@ -60,9 +60,8 @@ public class Module {
   }
 
   /**
-   * Calculates and sets the current motors to the provided state.
-   * It is recommended to first call optimizeState() on the setpoint
-   * in order to have optimal control
+   * Calculates and sets the current motors to the provided state. It is recommended to first call
+   * optimizeState() on the setpoint in order to have optimal control
    *
    * @param state The desired state.
    */
@@ -78,7 +77,7 @@ public class Module {
 
   /**
    * Calculates the optimized version of a setpoint state
-   * 
+   *
    * @param state The setpoint state to optimize
    * @return The optimized state
    */

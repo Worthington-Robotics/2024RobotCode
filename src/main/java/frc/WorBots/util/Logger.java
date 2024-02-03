@@ -213,7 +213,9 @@ public class Logger {
   }
 
   public static double[] chassisSpeedsToArray(ChassisSpeeds speeds) {
-    return new double[] {speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond};
+    return new double[] {
+      speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond
+    };
   }
 
   public void setRobotPoses(Pose2d... value) {
