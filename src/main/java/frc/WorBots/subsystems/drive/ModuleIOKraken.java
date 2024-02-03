@@ -14,6 +14,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 public class ModuleIOKraken implements ModuleIO {
+  private static final String CAN_BUS = "Swerve";
+  private static final double DRIVE_ROTATIONS_TO_RADIANS = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
+
   private TalonFX driveMotor;
   private TalonFX turnMotor;
   private CANcoder absoluteEncoder;
@@ -22,27 +25,27 @@ public class ModuleIOKraken implements ModuleIO {
   public ModuleIOKraken(int index) {
     switch (index) {
       case 0:
-        driveMotor = new TalonFX(0, "Swerve");
-        turnMotor = new TalonFX(1, "Swerve");
-        absoluteEncoder = new CANcoder(2, "Swerve");
+        driveMotor = new TalonFX(0, CAN_BUS);
+        turnMotor = new TalonFX(1, CAN_BUS);
+        absoluteEncoder = new CANcoder(2, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 1:
-        driveMotor = new TalonFX(3, "Swerve");
-        turnMotor = new TalonFX(4, "Swerve");
-        absoluteEncoder = new CANcoder(5, "Swerve");
+        driveMotor = new TalonFX(3, CAN_BUS);
+        turnMotor = new TalonFX(4, CAN_BUS);
+        absoluteEncoder = new CANcoder(5, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 2:
-        driveMotor = new TalonFX(6, "Swerve");
-        turnMotor = new TalonFX(7, "Swerve");
-        absoluteEncoder = new CANcoder(8, "Swerve");
+        driveMotor = new TalonFX(6, CAN_BUS);
+        turnMotor = new TalonFX(7, CAN_BUS);
+        absoluteEncoder = new CANcoder(8, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 3:
-        driveMotor = new TalonFX(9, "Swerve");
-        turnMotor = new TalonFX(10, "Swerve");
-        absoluteEncoder = new CANcoder(11, "Swerve");
+        driveMotor = new TalonFX(9, CAN_BUS);
+        turnMotor = new TalonFX(10, CAN_BUS);
+        absoluteEncoder = new CANcoder(11, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       default:
@@ -55,10 +58,10 @@ public class ModuleIOKraken implements ModuleIO {
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePositionRad =
         Units.rotationsToRadians(
-            driveMotor.getPosition().getValue() * ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)));
+            driveMotor.getPosition().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
     inputs.driveVelocityRadPerSec =
         Units.rotationsToRadians(
-            driveMotor.getVelocity().getValue() * ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)));
+            driveMotor.getVelocity().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
     inputs.driveAppliedVolts = driveMotor.get() * driveMotor.getSupplyVoltage().getValue();
     inputs.driveCurrentAmps = new double[] {driveMotor.getStatorCurrent().getValue()};
     inputs.driveTempCelcius = new double[] {driveMotor.getDeviceTemp().getValue()};
