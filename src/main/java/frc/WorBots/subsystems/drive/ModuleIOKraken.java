@@ -7,8 +7,11 @@
 
 package frc.WorBots.subsystems.drive;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -52,6 +55,11 @@ public class ModuleIOKraken implements ModuleIO {
       default:
         throw new RuntimeException("Invalid swerve module index");
     }
+    // Configure devices
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    turnMotor.getConfigurator().apply(config);
+
     driveMotor.setInverted(true);
     turnMotor.setInverted(true);
   }
@@ -76,12 +84,7 @@ public class ModuleIOKraken implements ModuleIO {
     inputs.turnCurrentAmps = new double[] {turnMotor.getStatorCurrent().getValue()};
     inputs.turnTempCelcius = new double[] {turnMotor.getDeviceTemp().getValue()};
 
-    inputs.isConnected = true;
-    if (!turnMotor.isAlive()) {
-      inputs.isConnected = false;
-    } else if (!driveMotor.isAlive()) {
-      inputs.isConnected = false;
-    }
+    inputs.isConnected = turnMotor.isAlive() && driveMotor.isAlive();
   }
 
   public void setDriveVoltage(double volts) {
