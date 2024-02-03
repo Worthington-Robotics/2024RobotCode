@@ -66,7 +66,7 @@ public class Vision extends SubsystemBase {
               new Rotation3d(0, 0.24, 0.0))
         };
     xyStdDevCoefficient = 0.01;
-    thetaStdDevCoefficient = 0.01;
+    thetaStdDevCoefficient = 0.015;
     StatusPage.reportStatus(StatusPage.VISION_SUBSYSTEM, true);
   }
 
