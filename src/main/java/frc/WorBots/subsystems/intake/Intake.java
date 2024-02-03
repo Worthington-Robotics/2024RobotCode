@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
       hasGamepiece = true;
     }
 
-    if (inputs.temperatureCelsius > 75) {
+    if (inputs.temperatureCelsius > 80) {
       setpointVolts = 0.0;
     }
 

@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.superstructure;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
@@ -26,8 +27,8 @@ public class Superstructure extends SubsystemBase {
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
-  private static final double firstCarriageRangeMeters[] = {0.0, 0.0};
-  private static final double secondCarriageRangeMeters[] = {0.0, 0.0};
+  private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
+  private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
 
@@ -79,9 +80,11 @@ public class Superstructure extends SubsystemBase {
                 * inputs.elevatorPercentageRaised)
             + firstCarriageRangeMeters[0];
     secondCarriagePositionMeters =
-        ((secondCarriageRangeMeters[0] - secondCarriageRangeMeters[1])
-                * inputs.elevatorPercentageRaised)
-            + secondCarriageRangeMeters[0];
+        (((secondCarriageRangeMeters[0] - secondCarriageRangeMeters[1])
+                    * inputs.elevatorPercentageRaised)
+                + secondCarriageRangeMeters[0])
+            + firstCarriagePositionMeters
+            + Units.inchesToMeters(1.0);
 
     switch (state) {
       case POSE:
@@ -124,7 +127,7 @@ public class Superstructure extends SubsystemBase {
     }
     visualizer.update(
         VecBuilder.fill(
-            inputs.elevatorPositionMeters, inputs.pivotPositionRelRad + pivotAbsAngleRad));
+            inputs.pivotPositionRelRad + pivotAbsAngleRad, firstCarriagePositionMeters, secondCarriagePositionMeters, inputs.elevatorPositionMeters));
   }
 
   /**

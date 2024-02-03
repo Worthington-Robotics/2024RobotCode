@@ -26,7 +26,7 @@ public class SuperstructureVisualizer {
   private static final double elevatorPositionX =
       Units.inchesToMeters(13.293); // From center of elevator to edge of front frame - not intake;
   private static final double elevatorFrameLengthAngledMeters = Units.inchesToMeters(18.750);
-  private static final double pivotLengthMeters = 0.25;
+  private static final double pivotLengthMeters = Units.inchesToMeters(13.5);
 
   /**
    * Constructs a new instance of the visualizer.
@@ -49,14 +49,16 @@ public class SuperstructureVisualizer {
    *
    * @param angles The current position of the superstructure.
    */
-  public void update(Vector<N2> angles) {
-    base.setLength(angles.get(0, 0));
-    pivot.setAngle(Units.radiansToDegrees(-angles.get(1, 0)) + 75);
+  public void update(Vector<N4> angles) {
+    base.setLength(angles.get(3, 0));
+    pivot.setAngle(Units.radiansToDegrees(-angles.get(0, 0)) + 75);
 
     /**
      * Some notes: The elevator in use is a contunuous elevator, meaning the parts rise in a linear
      * fashion. Basically you can take the % extended of the whole, and just change it to the range
      * of the first or second carriage. Need the numbers first.
+     * 
+     * The first value is the pivot angle in rads, second one is the first carriage position, the third value is the second carriage position, fourth is the total calculated elevator height
      */
 
     // 3D logging
