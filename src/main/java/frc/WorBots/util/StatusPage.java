@@ -40,6 +40,8 @@ public class StatusPage {
   public static final String VISION_SUBSYSTEM = "Vision Subsystem";
   public static final String SHOOTER_SUBSYSTEM = "Shooter Subsystem";
   public static final String SHOOTER_CONNECTED = "Shooter Connected";
+  public static final String PIVOT_CONNECTED = "Pivot Connected";
+  public static final String ELEVATOR_CONNECTED = "Elevator Connected";
   public static final String GYROSCOPE = "Gyroscope";
   public static final String SMODULE_PREFIX = "SModule";
   public static final String NODE_SELECTOR = "Node Selector";
@@ -73,6 +75,8 @@ public class StatusPage {
     VISION_SUBSYSTEM,
     SHOOTER_SUBSYSTEM,
     SHOOTER_CONNECTED,
+    PIVOT_CONNECTED,
+    ELEVATOR_CONNECTED,
     GYROSCOPE,
     SMODULE_PREFIX + "0",
     SMODULE_PREFIX + "1",

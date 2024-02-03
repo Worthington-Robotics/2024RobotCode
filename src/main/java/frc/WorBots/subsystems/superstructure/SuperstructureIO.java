@@ -14,12 +14,14 @@ public interface SuperstructureIO {
     public double elevatorVelocityMetersPerSec = 0.0;
     public double elevatorTemp = 0.0;
     public double elevatorVoltage = 0.0;
+    public boolean elevatorConnected = true;
 
     public double pivotPositionAbsRad = 0.0;
     public double pivotPositionRelRad = 0.0;
     public double pivotVelocityRadPerSec = 0.0;
     public double pivotVoltageApplied = 0.0;
     public double pivotTemp = 0.0;
+    public boolean pivotConnected = true;
   }
 
   /**

@@ -67,6 +67,9 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
+    StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivotConnected);
+    StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevatorConnected);
+
     switch (state) {
       case POSE:
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(setpoint.getVecPose().get(0, 0));
@@ -166,7 +169,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Sets the desired mode of the superstrucutre subsystem, not a command.
+   * Sets the desired mode of the superstructure subsystem, not a command.
    *
    * @param state The state to be set.
    */
