@@ -41,19 +41,19 @@ public class ShooterIOKraken implements ShooterIO {
 
   @Override
   public void setBottomFlywheelVolts(double volts) {
-    MathUtil.clamp(volts, -12, 12);
+    volts = MathUtil.clamp(volts, -12, 12);
     bottomFlywheel.setVoltage(volts);
   }
 
   @Override
   public void setTopFlywheelVolts(double volts) {
-    MathUtil.clamp(volts, -12, 12);
+    volts = MathUtil.clamp(volts, -12, 12);
     topFlywheel.setVoltage(volts);
   }
 
   @Override
   public void setFeederWheelVoltage(double volts) {
-    MathUtil.clamp(volts, -10, 10);
+    volts = MathUtil.clamp(volts, -10, 10);
     feederWheel.setVoltage(volts);
   }
 }

@@ -32,12 +32,12 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    MathUtil.clamp(volts, -10.5, 10.5);
+    volts = MathUtil.clamp(volts, -10.5, 10.5);
     elevator.setVoltage(volts);
   }
 
   public void setPivotVoltage(double volts) {
-    MathUtil.clamp(volts, -10.5, 10.5);
+    volts = MathUtil.clamp(volts, -10.5, 10.5);
     pivot.setVoltage(volts);
   }
 
