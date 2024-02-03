@@ -28,6 +28,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     pivot = new TalonFX(0);
     pivotAbsEncoder = new DutyCycleEncoder(0);
     pivotRelEncoder = new Encoder(0, 0);
+    elevator.setPosition(0.0);
   }
 
   public void setElevatorVoltage(double volts) {

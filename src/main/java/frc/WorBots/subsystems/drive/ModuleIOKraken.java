@@ -22,27 +22,27 @@ public class ModuleIOKraken implements ModuleIO {
   public ModuleIOKraken(int index) {
     switch (index) {
       case 0:
-        driveMotor = new TalonFX(0);
-        turnMotor = new TalonFX(1);
-        absoluteEncoder = new CANcoder(2);
+        driveMotor = new TalonFX(0, "Swerve");
+        turnMotor = new TalonFX(1, "Swerve");
+        absoluteEncoder = new CANcoder(2, "Swerve");
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 1:
-        driveMotor = new TalonFX(3);
-        turnMotor = new TalonFX(4);
-        absoluteEncoder = new CANcoder(5);
+        driveMotor = new TalonFX(3, "Swerve");
+        turnMotor = new TalonFX(4, "Swerve");
+        absoluteEncoder = new CANcoder(5, "Swerve");
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 2:
-        driveMotor = new TalonFX(6);
-        turnMotor = new TalonFX(7);
-        absoluteEncoder = new CANcoder(8);
+        driveMotor = new TalonFX(6, "Swerve");
+        turnMotor = new TalonFX(7, "Swerve");
+        absoluteEncoder = new CANcoder(8, "Swerve");
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       case 3:
-        driveMotor = new TalonFX(9);
-        turnMotor = new TalonFX(10);
-        absoluteEncoder = new CANcoder(11);
+        driveMotor = new TalonFX(9, "Swerve");
+        turnMotor = new TalonFX(10, "Swerve");
+        absoluteEncoder = new CANcoder(11, "Swerve");
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       default:
