@@ -19,10 +19,10 @@ public class SuperstructureIOSim implements SuperstructureIO {
   public SuperstructureIOSim() {
     elevator =
         new ElevatorSim(
-            DCMotor.getKrakenX60(1),
-            10.0,
-            Units.lbsToKilograms(5),
-            0.02,
+            DCMotor.getKrakenX60(2),
+            81.0,
+            Units.lbsToKilograms(12),
+            Units.inchesToMeters(1.75/2),
             0,
             Units.inchesToMeters(33 - 5.74),
             true,

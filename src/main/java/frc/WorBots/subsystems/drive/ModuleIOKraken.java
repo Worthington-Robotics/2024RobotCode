@@ -91,7 +91,7 @@ public class ModuleIOKraken implements ModuleIO {
 
   public void setTurnVoltage(double volts) {
     volts = MathUtil.clamp(volts, -12, 12);
-    turnMotor.setVoltage(-volts);
+    turnMotor.setVoltage(volts);
   }
 
   public void setDriveBrakeMode(boolean enable) {}

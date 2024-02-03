@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Encoder;
 
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;
+  private final TalonFX elevatorFollower;
   private final boolean isElevatorInverted = false;
 
   private final TalonFX pivot;
@@ -25,15 +26,19 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(0);
+    elevatorFollower = new TalonFX(0);
     pivot = new TalonFX(0);
     pivotAbsEncoder = new DutyCycleEncoder(0);
     pivotRelEncoder = new Encoder(0, 0);
     elevator.setPosition(0.0);
+    elevator.setInverted(isElevatorInverted);
+    elevatorFollower.setInverted(!isElevatorInverted);
   }
 
   public void setElevatorVoltage(double volts) {
     volts = MathUtil.clamp(volts, -10.5, 10.5);
     elevator.setVoltage(volts);
+    elevatorFollower.setVoltage(volts);
   }
 
   public void setPivotVoltage(double volts) {
@@ -42,11 +47,10 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {
-    final double elevatorSign = (isElevatorInverted ? 1.0 : -1.0);
     inputs.elevatorPositionMeters =
-        (elevator.getPosition().getValue() / elevatorGearing) * elevatorSign;
+        (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
     inputs.elevatorVelocityMetersPerSec =
-        (elevator.getVelocity().getValue() / elevatorGearing) * elevatorSign;
+        (elevator.getVelocity().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
     inputs.elevatorVoltage = elevator.getMotorVoltage().getValue();
     inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
     inputs.elevatorConnected = elevator.isAlive();
