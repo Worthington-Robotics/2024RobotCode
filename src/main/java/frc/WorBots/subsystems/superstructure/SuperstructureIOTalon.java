@@ -19,6 +19,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   private final TalonFX pivot;
   private final boolean isPivotInverted = false;
+  private final double maxElevationMeters = 0.5;
   private final DutyCycleEncoder pivotAbsEncoder;
   private final Encoder pivotRelEncoder;
 
@@ -36,7 +37,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -10.5, 10.5);
+    // volts = MathUtil.clamp(volts, -10.5, 10.5);
+    volts = MathUtil.clamp(volts, -1.5, 1.5);
     elevator.setVoltage(volts);
     elevatorFollower.setVoltage(volts);
   }
@@ -51,6 +53,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
         (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
     inputs.elevatorVelocityMetersPerSec =
         (elevator.getVelocity().getValue() / elevatorGearing) * (isElevatorInverted ? 1.0 : -1.0);
+    inputs.elevatorPercentageRaised = inputs.elevatorPositionMeters / maxElevationMeters;
     inputs.elevatorVoltage = elevator.getMotorVoltage().getValue();
     inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
     inputs.elevatorConnected = elevator.isAlive();

@@ -22,7 +22,7 @@ public class SuperstructureIOSim implements SuperstructureIO {
             DCMotor.getKrakenX60(2),
             81.0,
             Units.lbsToKilograms(12),
-            Units.inchesToMeters(1.75/2),
+            Units.inchesToMeters(1.75 / 2),
             0,
             Units.inchesToMeters(33 - 5.74),
             true,
@@ -50,5 +50,7 @@ public class SuperstructureIOSim implements SuperstructureIO {
     inputs.pivotPositionAbsRad = 0.0;
     inputs.pivotPositionRelRad = pivot.getAngleRads();
     inputs.elevatorVelocityMetersPerSec = pivot.getVelocityRadPerSec();
+    inputs.elevatorPercentageRaised =
+        inputs.elevatorPositionMeters / Units.inchesToMeters(33 - 5.74);
   }
 }
