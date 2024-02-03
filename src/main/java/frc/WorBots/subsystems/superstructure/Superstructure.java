@@ -26,6 +26,10 @@ public class Superstructure extends SubsystemBase {
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
+  private static final double firstCarriageRangeMeters[] = {};
+  private static final double secondCarriageRangeMeters[] = {};
+  private double firstCarriagePositionMeters;
+  private double secondCarriagePositionMeters;
 
   private ProfiledPIDController pivotController;
   private ProfiledPIDController elevatorController;
@@ -69,6 +73,15 @@ public class Superstructure extends SubsystemBase {
     Logger.getInstance().setSuperstructureMode(state.name());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivotConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevatorConnected);
+
+    firstCarriagePositionMeters =
+        ((firstCarriageRangeMeters[0] - firstCarriageRangeMeters[1])
+                * inputs.elevatorPercentageRaised)
+            + firstCarriageRangeMeters[0];
+    secondCarriagePositionMeters =
+        ((secondCarriageRangeMeters[0] - secondCarriageRangeMeters[1])
+                * inputs.elevatorPercentageRaised)
+            + secondCarriageRangeMeters[0];
 
     switch (state) {
       case POSE:
@@ -175,5 +188,14 @@ public class Superstructure extends SubsystemBase {
    */
   public void setModeVoid(SuperstructureState state) {
     this.state = state;
+  }
+
+  /**
+   * Gets the first and 2nd carriage positions based on where the percent the elevator is extended.
+   *
+   * @return The two values for each of the carriages.
+   */
+  public double[] getElevatorPositions() {
+    return new double[] {firstCarriagePositionMeters, secondCarriagePositionMeters};
   }
 }

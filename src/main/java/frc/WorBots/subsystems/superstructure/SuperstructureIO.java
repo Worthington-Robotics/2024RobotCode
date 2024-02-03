@@ -15,6 +15,7 @@ public interface SuperstructureIO {
     public double elevatorTemp = 0.0;
     public double elevatorVoltage = 0.0;
     public boolean elevatorConnected = true;
+    public double elevatorPercentageRaised = 0.0;
 
     public double pivotPositionAbsRad = 0.0;
     public double pivotPositionRelRad = 0.0;
