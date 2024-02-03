@@ -60,7 +60,9 @@ public class Vision extends SubsystemBase {
           new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)),
           new Pose3d(
               new Translation3d(
-                  Units.inchesToMeters(-13), Units.inchesToMeters(13), Units.inchesToMeters(-11.4)),
+                  Units.inchesToMeters(-13),
+                  Units.inchesToMeters(-13),
+                  Units.inchesToMeters(-11.4)),
               new Rotation3d(0, 0.24, 0.0))
         };
     xyStdDevCoefficient = 0.01;

@@ -82,11 +82,7 @@ public class Lights extends SubsystemBase {
         wave(100, Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
         break;
     }
-    // for (int i =0; i<LIGHT_COUNT; i++) {
-    // Color color = io.getLED(i);
-    // Color reverseColor = new Color(color.red, color.green, color.blue);
-    // io.setLED(i, reverseColor);
-    // }
+
     leds.setData(io);
     SmartDashboard.putString("Lights/Mode", mode.toString());
   }
@@ -95,20 +91,6 @@ public class Lights extends SubsystemBase {
     for (int i = 0; i < LIGHT_COUNT; i++) {
       io.setLED(i, color);
     }
-  }
-
-  private void strobe(double percent, Color color, double duration) {
-    boolean on = ((Timer.getFPGATimestamp() % duration) / duration) > 0.5;
-    solid(percent, on ? color : Color.kBlack);
-  }
-
-  private void breath(double percent, Color c1, Color c2, double duration, double timestamp) {
-    double x = ((timestamp % duration) / duration) * 2.0 * Math.PI;
-    double ratio = (Math.sin(x) + 1.0) / 2.0;
-    double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-    double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-    double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-    solid(percent, new Color(red, green, blue));
   }
 
   private void rainbow(double percent, double cycleLength, double duration) {
@@ -287,18 +269,6 @@ public class Lights extends SubsystemBase {
       } else {
         io.setHSV(i, 0, 0, 0);
       }
-    }
-  }
-
-  private void setAll(int h, int s, int v) {
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      io.setHSV(i, h, s, v);
-    }
-  }
-
-  private void setAll(Color color) {
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      io.setLED(i, color);
     }
   }
 

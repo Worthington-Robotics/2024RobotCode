@@ -19,7 +19,6 @@ public class VisionIOCustom implements VisionIO {
   private NetworkTable subTable;
   private DoubleArraySubscriber data;
   private DoubleSubscriber subFps;
-  private int index;
 
   public VisionIOCustom(int index) {
     table = defaultInstance.getTable("module" + index);
@@ -33,7 +32,6 @@ public class VisionIOCustom implements VisionIO {
         subTable
             .getDoubleTopic("fps")
             .subscribe(0.0, PubSubOption.keepDuplicates(true), PubSubOption.sendAll(true));
-    this.index = index;
   }
 
   public void updateInputs(VisionIOInputs inputs) {
