@@ -41,8 +41,11 @@ public class Drive extends SubsystemBase {
   private Translation2d centerOfRotation = new Translation2d();
 
   private NetworkTable driveTable = instance.getTable("Drive");
+  private DoubleArrayPublisher speedSetpointPublisher = driveTable.getDoubleArrayTopic("Speed Setpoint").publish();
   private DoubleArrayPublisher setpointPublisher =
       driveTable.getDoubleArrayTopic("Setpoint").publish();
+  private DoubleArrayPublisher optimizedPublisher =
+      driveTable.getDoubleArrayTopic("Optimized").publish();
   private DoubleArrayPublisher measuredPublisher =
       driveTable.getDoubleArrayTopic("Measured").publish();
   private DoubleArrayPublisher posePublisher =
@@ -90,8 +93,11 @@ public class Drive extends SubsystemBase {
       var adjustedSpeeds =
           new ChassisSpeeds(
               setpointTwist.dx / 0.02, setpointTwist.dy / 0.02, setpointTwist.dtheta / 0.02);
+      speedSetpointPublisher.set(Logger.chassisSpeedsToArray(adjustedSpeeds));
+      
       SwerveModuleState[] setpointStates =
           kinematics.toSwerveModuleStates(adjustedSpeeds, centerOfRotation);
+      // Desaturate speeds to ensure we don't go faster than is possible
       SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, getMaxLinearSpeedMetersPerSec());
 
       lastSetpointStates = setpointStates;
@@ -100,7 +106,16 @@ public class Drive extends SubsystemBase {
 
       SwerveModuleState[] optimizedStates = new SwerveModuleState[4];
       for (int i = 0; i < 4; i++) {
-        optimizedStates[i] = modules[i].runState(setpointStates[i]);
+        optimizedStates[i] = modules[i].optimizeState(setpointStates[i]);
+      }
+
+      // Desaturate the states again
+      SwerveDriveKinematics.desaturateWheelSpeeds(optimizedStates, getMaxLinearSpeedMetersPerSec());
+      optimizedPublisher.set(Logger.statesToArray(optimizedStates));
+
+      // Run the states on the modules
+      for (int i = 0; i < 4; i++) {
+        modules[i].runState(optimizedStates[i]);
       }
     }
 

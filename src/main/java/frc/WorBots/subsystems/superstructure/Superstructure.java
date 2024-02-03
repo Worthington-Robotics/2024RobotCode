@@ -26,8 +26,8 @@ public class Superstructure extends SubsystemBase {
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
-  private static final double firstCarriageRangeMeters[] = {};
-  private static final double secondCarriageRangeMeters[] = {};
+  private static final double firstCarriageRangeMeters[] = {0.0, 0.0};
+  private static final double secondCarriageRangeMeters[] = {0.0, 0.0};
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
 

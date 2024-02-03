@@ -34,8 +34,7 @@ public class ModuleIOSim implements ModuleIO {
       turnAbsolutePositionRad -= 2.0 * Math.PI;
     }
 
-    inputs.drivePositionRad =
-        inputs.drivePositionRad + (driveSim.getAngularVelocityRadPerSec() * 0.02);
+    inputs.drivePositionRad += (driveSim.getAngularVelocityRadPerSec() * 0.02);
     inputs.driveVelocityRadPerSec = driveSim.getAngularVelocityRadPerSec();
     inputs.driveAppliedVolts = driveAppliedVolts;
     inputs.driveCurrentAmps = new double[] {Math.abs(driveSim.getCurrentDrawAmps())};

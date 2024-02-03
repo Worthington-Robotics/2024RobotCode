@@ -61,22 +61,32 @@ public class Module {
 
   /**
    * Calculates and sets the current motors to the provided state.
+   * It is recommended to first call optimizeState() on the setpoint
+   * in order to have optimal control
    *
    * @param state The desired state.
-   * @return The actual state, measured.
    */
-  public SwerveModuleState runState(SwerveModuleState state) {
-    var optimizedState = SwerveModuleState.optimize(state, getAngle());
-
+  public void runState(SwerveModuleState state) {
     io.setTurnVoltage(
-        turnFeedback.pid.calculate(getAngle().getRadians(), optimizedState.angle.getRadians()));
+        turnFeedback.pid.calculate(getAngle().getRadians(), state.angle.getRadians()));
 
-    optimizedState.speedMetersPerSecond *= Math.cos(turnFeedback.pid.getPositionError());
-
-    double velocityRadPerSec = optimizedState.speedMetersPerSecond / Units.inchesToMeters(2.0);
+    double velocityRadPerSec = state.speedMetersPerSecond / Units.inchesToMeters(2.0);
     io.setDriveVoltage(
         driveFeedforward.calculate(velocityRadPerSec)
             + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+  }
+
+  /**
+   * Calculates the optimized version of a setpoint state
+   * 
+   * @param state The setpoint state to optimize
+   * @return The optimized state
+   */
+  public SwerveModuleState optimizeState(SwerveModuleState state) {
+    var optimizedState = SwerveModuleState.optimize(state, getAngle());
+
+    // Stray module correction
+    optimizedState.speedMetersPerSecond *= Math.cos(turnFeedback.pid.getPositionError());
 
     return optimizedState;
   }
