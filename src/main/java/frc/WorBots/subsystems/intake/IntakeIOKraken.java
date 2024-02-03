@@ -13,11 +13,11 @@ import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 
-public class IntakeIOTalon implements IntakeIO {
+public class IntakeIOKraken implements IntakeIO {
   private TalonFX intakeMotor;
   private TimeOfFlight timeOfFlight;
 
-  public IntakeIOTalon() {
+  public IntakeIOKraken() {
     intakeMotor = new TalonFX(0);
     timeOfFlight = new TimeOfFlight(0);
     timeOfFlight.setRangingMode(RangingMode.Short, 24);

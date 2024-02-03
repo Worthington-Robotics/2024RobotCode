@@ -48,8 +48,8 @@ public class RobotContainer {
               new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       superstructure = new Superstructure(new SuperstructureIOTalon());
-      intake = new Intake(new IntakeIOTalon());
-      shooter = new Shooter(new ShooterIOTalon());
+      intake = new Intake(new IntakeIOKraken());
+      shooter = new Shooter(new ShooterIOKraken());
     } else { // Sim
       drive =
           new Drive(
