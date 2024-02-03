@@ -50,8 +50,8 @@ public class DriveWithJoysticks extends Command {
     Rotation2d linearDirection = new Rotation2d(leftX, leftY);
 
     // Apply deadband
-    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.05);
-    rightY = MathUtil.applyDeadband(rightY, 0.05);
+    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.065);
+    rightY = MathUtil.applyDeadband(rightY, 0.065);
 
     // Apply squaring
     linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
