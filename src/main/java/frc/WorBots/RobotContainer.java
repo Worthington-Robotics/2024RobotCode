@@ -9,8 +9,7 @@ package frc.WorBots;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import frc.WorBots.AutoSelector.AutoQuestion;
-import frc.WorBots.AutoSelector.AutoQuestionResponse;
+import frc.WorBots.AutoSelector.*;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
@@ -24,9 +23,9 @@ public class RobotContainer {
   // Subsystems
   private Drive drive;
   private Vision vision;
-  private Superstructure superstructure;
-  private Intake intake;
-  private Shooter shooter;
+  // private Superstructure superstructure;
+  // private Intake intake;
+  // private Shooter shooter;
   private AutoSelector selector;
 
   // Joysticks
@@ -47,9 +46,9 @@ public class RobotContainer {
               new ModuleIOKraken(2),
               new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
-      superstructure = new Superstructure(new SuperstructureIOTalon());
-      intake = new Intake(new IntakeIOKraken());
-      shooter = new Shooter(new ShooterIOKraken());
+      // superstructure = new Superstructure(new SuperstructureIOTalon());
+      // intake = new Intake(new IntakeIOKraken());
+      // shooter = new Shooter(new ShooterIOKraken());
     } else { // Sim
       drive =
           new Drive(
@@ -59,35 +58,35 @@ public class RobotContainer {
               new ModuleIOSim(),
               new ModuleIOSim());
       vision = new Vision(new VisionIOCustom(0));
-      superstructure = new Superstructure(new SuperstructureIOSim());
-      intake = new Intake(new IntakeIOSim());
-      shooter = new Shooter(new ShooterIOSim());
+      // superstructure = new Superstructure(new SuperstructureIOSim());
+      // intake = new Intake(new IntakeIOSim());
+      // shooter = new Shooter(new ShooterIOSim());
     }
     selector = new AutoSelector("Auto Selector");
-    var autoCommands =
-        new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
+    // var autoCommands =
+    //     new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
 
-    selector.addRoutine(
-        "Mobility",
-        List.of(
-            new AutoQuestion(
-                "Starting Location?",
-                List.of(
-                    AutoQuestionResponse.AMP_SIDE,
-                    AutoQuestionResponse.CENTER,
-                    AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.mobility());
+    // selector.addRoutine(
+    //     "Mobility",
+    //     List.of(
+    //         new AutoQuestion(
+    //             "Starting Location?",
+    //             List.of(
+    //                 AutoQuestionResponse.AMP_SIDE,
+    //                 AutoQuestionResponse.CENTER,
+    //                 AutoQuestionResponse.WALL_SIDE))),
+    //     autoCommands.mobility());
 
-    selector.addRoutine(
-        "One Piece",
-        List.of(
-            new AutoQuestion(
-                "Starting Location?",
-                List.of(
-                    AutoQuestionResponse.AMP_SIDE,
-                    AutoQuestionResponse.CENTER,
-                    AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.onePiece());
+    // selector.addRoutine(
+    //     "One Piece",
+    //     List.of(
+    //         new AutoQuestion(
+    //             "Starting Location?",
+    //             List.of(
+    //                 AutoQuestionResponse.AMP_SIDE,
+    //                 AutoQuestionResponse.CENTER,
+    //                 AutoQuestionResponse.WALL_SIDE))),
+    //     autoCommands.onePiece());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
@@ -99,17 +98,17 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-    driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
-    operator
-        .a()
-        .toggleOnTrue(
-            new DriverShoot(
-                drive,
-                superstructure,
-                () -> -driver.getLeftY(),
-                () -> -driver.getLeftX(),
-                () -> -operator.getLeftY(),
-                () -> -operator.getLeftX()));
+    // driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
+    // operator
+    //     .a()
+    //     .toggleOnTrue(
+    //         new DriverShoot(
+    //             drive,
+    //             superstructure,
+    //             () -> -driver.getLeftY(),
+    //             () -> -driver.getLeftX(),
+    //             () -> -operator.getLeftY(),
+    //             () -> -operator.getLeftX()));
   }
 
   public Command getAutonomousCommand() {
