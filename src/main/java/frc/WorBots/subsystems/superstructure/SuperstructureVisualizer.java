@@ -57,8 +57,9 @@ public class SuperstructureVisualizer {
      * Some notes: The elevator in use is a contunuous elevator, meaning the parts rise in a linear
      * fashion. Basically you can take the % extended of the whole, and just change it to the range
      * of the first or second carriage. Need the numbers first.
-     * 
-     * The first value is the pivot angle in rads, second one is the first carriage position, the third value is the second carriage position, fourth is the total calculated elevator height
+     *
+     * <p>The first value is the pivot angle in rads, second one is the first carriage position, the
+     * third value is the second carriage position, fourth is the total calculated elevator height
      */
 
     // 3D logging

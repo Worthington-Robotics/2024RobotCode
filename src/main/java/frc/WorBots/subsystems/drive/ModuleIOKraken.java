@@ -16,7 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 public class ModuleIOKraken implements ModuleIO {
-  private static final String CAN_BUS = "Swerve";
+  private static final String CAN_BUS = "rio";
   private static final double DRIVE_ROTATIONS_TO_RADIANS =
       (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
 
@@ -27,28 +27,28 @@ public class ModuleIOKraken implements ModuleIO {
 
   public ModuleIOKraken(int index) {
     switch (index) {
-      case 0:
-        driveMotor = new TalonFX(0, CAN_BUS);
-        turnMotor = new TalonFX(1, CAN_BUS);
-        absoluteEncoder = new CANcoder(2, CAN_BUS);
+      case 0: // Front Left
+        driveMotor = new TalonFX(1, CAN_BUS);
+        turnMotor = new TalonFX(2, CAN_BUS);
+        absoluteEncoder = new CANcoder(3, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
-      case 1:
-        driveMotor = new TalonFX(3, CAN_BUS);
-        turnMotor = new TalonFX(4, CAN_BUS);
-        absoluteEncoder = new CANcoder(5, CAN_BUS);
+      case 1: // Front Right
+        driveMotor = new TalonFX(4, CAN_BUS);
+        turnMotor = new TalonFX(5, CAN_BUS);
+        absoluteEncoder = new CANcoder(6, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
-      case 2:
-        driveMotor = new TalonFX(6, CAN_BUS);
-        turnMotor = new TalonFX(7, CAN_BUS);
-        absoluteEncoder = new CANcoder(8, CAN_BUS);
+      case 2: // Back Left
+        driveMotor = new TalonFX(7, CAN_BUS);
+        turnMotor = new TalonFX(8, CAN_BUS);
+        absoluteEncoder = new CANcoder(9, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
-      case 3:
-        driveMotor = new TalonFX(9, CAN_BUS);
-        turnMotor = new TalonFX(10, CAN_BUS);
-        absoluteEncoder = new CANcoder(11, CAN_BUS);
+      case 3: // Back Right
+        driveMotor = new TalonFX(10, CAN_BUS);
+        turnMotor = new TalonFX(11, CAN_BUS);
+        absoluteEncoder = new CANcoder(12, CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
         break;
       default:

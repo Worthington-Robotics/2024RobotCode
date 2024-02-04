@@ -16,7 +16,7 @@ public class GyroIOPigeon2 implements GyroIO {
   private final Pigeon2 pigeon;
 
   public GyroIOPigeon2() {
-    pigeon = new Pigeon2(0, "Swerve");
+    pigeon = new Pigeon2(0, "rio");
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
     pigeon.getYaw().setUpdateFrequency(100);
     pigeon.optimizeBusUtilization();

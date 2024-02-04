@@ -29,7 +29,14 @@ public class SuperstructureIOSim implements SuperstructureIO {
             Units.inchesToMeters(12));
     pivot =
         new SingleJointedArmSim(
-            DCMotor.getKrakenX60(1), 2.25, 0.05, Units.inchesToMeters(13.5), -Math.PI / 6, Math.PI, true, 0);
+            DCMotor.getKrakenX60(1),
+            2.25,
+            0.05,
+            Units.inchesToMeters(13.5),
+            -Math.PI / 6,
+            Math.PI,
+            true,
+            0);
   }
 
   public void setElevatorVoltage(double volts) {

@@ -127,7 +127,10 @@ public class Superstructure extends SubsystemBase {
     }
     visualizer.update(
         VecBuilder.fill(
-            inputs.pivotPositionRelRad + pivotAbsAngleRad, firstCarriagePositionMeters, secondCarriagePositionMeters, inputs.elevatorPositionMeters));
+            inputs.pivotPositionRelRad + pivotAbsAngleRad,
+            firstCarriagePositionMeters,
+            secondCarriagePositionMeters,
+            inputs.elevatorPositionMeters));
   }
 
   /**
