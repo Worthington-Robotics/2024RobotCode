@@ -147,9 +147,7 @@ public class FieldConstants {
 
     public static final double openingHeightLower = Units.inchesToMeters(78);
     public static final double openingHeightHigher = Units.inchesToMeters(82.875);
-    public static final double openingHeightCenter =
-        (openingHeightHigher - openingHeightLower)
-            / 2;
+    public static final double openingHeightCenter = (openingHeightHigher - openingHeightLower) / 2;
     public static final double openingWidth = Units.inchesToMeters(41.375);
     // Distance from the wall to the end of the opening. Acts as the base of the
     // right triangle formed by the opening. Game manual is wrong and says 1'16"
