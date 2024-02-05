@@ -18,9 +18,9 @@ public class IntakeIOKraken implements IntakeIO {
   private TimeOfFlight timeOfFlight;
 
   public IntakeIOKraken() {
-    intakeMotor = new TalonFX(0);
-    timeOfFlight = new TimeOfFlight(0);
-    timeOfFlight.setRangingMode(RangingMode.Short, 24);
+    intakeMotor = new TalonFX(1);
+    // timeOfFlight = new TimeOfFlight(0);
+    // timeOfFlight.setRangingMode(RangingMode.Short, 24);
   }
 
   @Override
@@ -29,7 +29,7 @@ public class IntakeIOKraken implements IntakeIO {
     inputs.currentDrawAmps = intakeMotor.getStatorCurrent().getValue();
     inputs.temperatureCelsius = intakeMotor.getDeviceTemp().getValue();
     inputs.velocityRadsPerSec = Units.rotationsToRadians(intakeMotor.getVelocity().getValue());
-    inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
+    // inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
     inputs.isConnected = inputs.temperatureCelsius != 0.0 ? true : false;
   }
 

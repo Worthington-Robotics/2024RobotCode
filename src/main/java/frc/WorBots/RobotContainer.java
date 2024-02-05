@@ -24,7 +24,7 @@ public class RobotContainer {
   private Drive drive;
   private Vision vision;
   // private Superstructure superstructure;
-  // private Intake intake;
+  private Intake intake;
   // private Shooter shooter;
   private AutoSelector selector;
 
@@ -47,7 +47,7 @@ public class RobotContainer {
               new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       // superstructure = new Superstructure(new SuperstructureIOTalon());
-      // intake = new Intake(new IntakeIOKraken());
+      intake = new Intake(new IntakeIOKraken());
       // shooter = new Shooter(new ShooterIOKraken());
     } else { // Sim
       drive =
@@ -59,7 +59,7 @@ public class RobotContainer {
               new ModuleIOSim());
       vision = new Vision(new VisionIOCustom(0));
       // superstructure = new Superstructure(new SuperstructureIOSim());
-      // intake = new Intake(new IntakeIOSim());
+      intake = new Intake(new IntakeIOSim());
       // shooter = new Shooter(new ShooterIOSim());
     }
     selector = new AutoSelector("Auto Selector");
@@ -98,6 +98,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
+    driver.a().whileTrue(intake.intakeRaw());
+    driver.b().whileTrue(intake.outtakeRaw());
     // driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
     // operator
     //     .a()

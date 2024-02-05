@@ -19,7 +19,8 @@ public class Intake extends SubsystemBase {
   public static final double distanceThreshold = 0.25;
 
   /**
-   * The intake subsystem, responsible for intaking game pieces from the ground and passing them to
+   * The intake subsystem, responsible for intaking game pieces from the ground
+   * and passing them to
    * the shooter.
    *
    * @param io
@@ -37,6 +38,7 @@ public class Intake extends SubsystemBase {
     } else {
       hasGamepiece = true;
     }
+    hasGamepiece = false;
 
     if (inputs.temperatureCelsius > 80) {
       setpointVolts = 0.0;
@@ -54,18 +56,34 @@ public class Intake extends SubsystemBase {
    */
   public Command intake() {
     return this.runOnce(
-            () -> {
-              if (hasGamepiece == true) {
-                setpointVolts = 0.5;
-              } else {
-                setpointVolts = 8.0;
-              }
-            })
+        () -> {
+          if (hasGamepiece == true) {
+            setpointVolts = 0.5;
+          } else {
+            setpointVolts = 8.0;
+          }
+        })
         .andThen(Commands.waitUntil(this::hasGamePiece))
         .finallyDo(
             () -> {
               setpointVolts = 0.5;
             });
+  }
+
+  public Command intakeRaw() {
+    return this.runOnce(() -> {
+      setpointVolts = 5.0;
+    }).finallyDo(() -> {
+      setpointVolts = 0.0;
+    });
+  }
+
+  public Command outtakeRaw() {
+    return this.runOnce(() -> {
+      setpointVolts = -5.0;
+    }).finallyDo(() -> {
+      setpointVolts = 0.0;
+    });
   }
 
   /**
@@ -75,9 +93,9 @@ public class Intake extends SubsystemBase {
    */
   public Command handoff() {
     return this.runOnce(
-            () -> {
-              setpointVolts = 8.0;
-            })
+        () -> {
+          setpointVolts = 8.0;
+        })
         .finallyDo(
             () -> {
               setpointVolts = 0.5;
