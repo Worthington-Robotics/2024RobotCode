@@ -44,7 +44,6 @@ public class StatusPage {
   public static final String ELEVATOR_CONNECTED = "Elevator Connected";
   public static final String GYROSCOPE = "Gyroscope";
   public static final String SMODULE_PREFIX = "SModule";
-  public static final String NODE_SELECTOR = "Node Selector";
   public static final String NETWORK_TABLES = "Network Tables";
   public static final String DRIVER_STATION = "Driver Station";
   public static final String FMS = "FMS";
@@ -82,7 +81,6 @@ public class StatusPage {
     SMODULE_PREFIX + "1",
     SMODULE_PREFIX + "2",
     SMODULE_PREFIX + "3",
-    NODE_SELECTOR,
     NETWORK_TABLES,
     DRIVER_STATION,
     FMS,
