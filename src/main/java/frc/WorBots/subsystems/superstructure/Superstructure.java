@@ -9,13 +9,15 @@ package frc.WorBots.subsystems.superstructure;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.*;
+import frc.WorBots.util.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.TunablePIDController.TunableProfiledPIDController;
+import frc.WorBots.util.TunablePIDController.TunableTrapezoidConstraints;
 import java.util.function.Supplier;
 
 /** The elevator and pivot of the robot, responsible for shooting and climbing. */
@@ -33,10 +35,19 @@ public class Superstructure extends SubsystemBase {
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
 
-  private ProfiledPIDController pivotController;
-  private ProfiledPIDController elevatorController;
+  private TunableProfiledPIDController pivotController =
+      new TunableProfiledPIDController(
+          new TunablePIDGains(tableName, "Pivot Gains"),
+          new TunableTrapezoidConstraints(tableName, "Pivot Constraints"));
+  private TunableProfiledPIDController elevatorController =
+      new TunableProfiledPIDController(
+          new TunablePIDGains(tableName, "Elevator Gains"),
+          new TunableTrapezoidConstraints(tableName, "Elevator Constraints"));
   private ElevatorFeedforward elevatorFeedForward;
   private ArmFeedforward pivotFeedForward;
+
+  // Constants
+  private static final String tableName = "Superstructure";
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -55,13 +66,17 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
     pivotAbsAngleRad = inputs.pivotPositionAbsRad;
     if (!Constants.getSim()) { // Real
-      pivotController = new ProfiledPIDController(50.0, 0, 0, new Constraints(1.0, 1.0));
-      elevatorController = new ProfiledPIDController(8.0, 0, 0, new Constraints(1.0, 1.0));
+      pivotController.setGains(50.0, 0, 0);
+      pivotController.setConstraints(1.0, 1.0);
+      elevatorController.setGains(8.0, 0, 0);
+      elevatorController.setConstraints(1.0, 1.0);
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     } else { // Sim
-      pivotController = new ProfiledPIDController(100, 0, 0, new Constraints(5.0, 5.0));
-      elevatorController = new ProfiledPIDController(50.0, 0, 0, new Constraints(1.0, 1.0));
+      pivotController.setGains(100, 0, 0);
+      pivotController.setConstraints(5.0, 5.0);
+      elevatorController.setGains(50.0, 0, 0);
+      elevatorController.setConstraints(1.0, 1.0);
       elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(1.0, 1.0, 0.0);
     }
@@ -72,10 +87,16 @@ public class Superstructure extends SubsystemBase {
   /** The function that runs once per cycle. */
   public void periodic() {
     io.updateInputs(inputs);
+
+    // Log info
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivotConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevatorConnected);
+
+    // Update tunables
+    pivotController.update();
+    elevatorController.update();
 
     firstCarriagePositionMeters =
         ((firstCarriageRangeMeters[1] - firstCarriageRangeMeters[0])
@@ -93,11 +114,11 @@ public class Superstructure extends SubsystemBase {
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(setpoint.getVecPose().get(0, 0));
         Logger.getInstance().setSuperstructurePivotPosSetpoint(setpoint.getVecPose().get(1, 0));
         double elevatorVoltage =
-            elevatorController.calculate(
+            elevatorController.pid.calculate(
                     inputs.elevatorPositionMeters, setpoint.getVecPose().get(0, 0))
                 + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
         double pivotVoltage =
-            pivotController.calculate(
+            pivotController.pid.calculate(
                     inputs.pivotPositionRelRad + pivotAbsAngleRad, setpoint.getVecPose().get(1, 0))
                 + pivotFeedForward.calculate(
                     inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
@@ -110,10 +131,10 @@ public class Superstructure extends SubsystemBase {
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
         Logger.getInstance().setSuperstructurePivotPosSetpoint(shootingAngleRad.get());
         double elevatorVoltageShooting =
-            elevatorController.calculate(inputs.elevatorPositionMeters, 0.0)
+            elevatorController.pid.calculate(inputs.elevatorPositionMeters, 0.0)
                 + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
         double pivotVoltageShooting =
-            pivotController.calculate(
+            pivotController.pid.calculate(
                     inputs.pivotPositionRelRad + pivotAbsAngleRad, shootingAngleRad.get())
                 + pivotFeedForward.calculate(
                     inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
@@ -182,7 +203,7 @@ public class Superstructure extends SubsystemBase {
    * @return True if in position, false if not.
    */
   public boolean isAtSetpoint() {
-    return elevatorController.atSetpoint() && pivotController.atSetpoint();
+    return elevatorController.pid.atSetpoint() && pivotController.pid.atSetpoint();
   }
 
   /**

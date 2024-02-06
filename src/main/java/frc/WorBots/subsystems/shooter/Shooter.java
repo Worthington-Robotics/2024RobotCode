@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.WorBots.util.StatusPage;
+import frc.WorBots.util.TunablePIDController;
+import frc.WorBots.util.TunablePIDController.TunablePIDGains;
 
 public class Shooter extends SubsystemBase { // 532 rpm/v
   private ShooterIO io;
@@ -25,10 +27,14 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
   private static final double distanceThreshold = 0.25;
+  private static final String tableName = "Shooter";
 
-  private PIDController topFlywheelController;
-  private PIDController bottomFlywheelController;
-  private PIDController feederWheelController;
+  private TunablePIDController topFlywheelController =
+      new TunablePIDController(new TunablePIDGains(tableName, "Top Flywheel Gains"));
+  private TunablePIDController bottomFlywheelController =
+      new TunablePIDController(new TunablePIDGains(tableName, "Bottom Flywheel Gains"));
+  private TunablePIDController feederWheelController =
+      new TunablePIDController(new TunablePIDGains(tableName, "Feeder Wheel Gains"));
   private SimpleMotorFeedforward topFlywheelFeedForward;
   private SimpleMotorFeedforward bottomFlywheelFeedforward;
 
@@ -41,17 +47,17 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     this.io = io;
 
     if (!Constants.getSim()) {
-      topFlywheelController = new PIDController(1, 0, 0);
-      bottomFlywheelController = new PIDController(1, 0, 0);
+      topFlywheelController.setGains(1, 0, 0);
+      bottomFlywheelController.setGains(1, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-      feederWheelController = new PIDController(1.0, 0.0, 0.0);
+      feederWheelController.setGains(1.0, 0.0, 0.0);
     } else {
-      topFlywheelController = new PIDController(1, 0, 0);
-      bottomFlywheelController = new PIDController(1, 0, 0);
+      topFlywheelController.setGains(1, 0, 0);
+      bottomFlywheelController.setGains(1, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-      feederWheelController = new PIDController(1.0, 0.0, 0.0);
+      feederWheelController.setGains(1.0, 0.0, 0.0);
     }
 
     StatusPage.reportStatus(StatusPage.SHOOTER_SUBSYSTEM, true);
@@ -60,27 +66,35 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+
+    // Update tunables
+    topFlywheelController.update();
+    bottomFlywheelController.update();
+    feederWheelController.update();
+
     // Check if we have gamepiece
     if (inputs.timeOfFlightDistanceMeters < distanceThreshold) {
       hasGamePiece = true;
     } else {
       hasGamePiece = false;
     }
+
     // Calculate the desired voltages based on the setpoints
     io.setTopFlywheelVolts(
-        topFlywheelController.calculate(inputs.velocityRPMTop, topFlywheelRPM)
+        topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
             + topFlywheelFeedForward.calculate(topFlywheelRPM));
     io.setBottomFlywheelVolts(
-        bottomFlywheelController.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
+        bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
             + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
     // If we want to move the feeder wheel.
     if (shouldIncrement) {
       io.setFeederWheelVoltage(
-          feederWheelController.calculate(
+          feederWheelController.pid.calculate(
               inputs.feederWheelPositionRads,
               inputs.feederWheelPositionRads + increasePositionRads));
     } else if (shouldIncrement
-        && feederWheelController.atSetpoint()) { // if we want to move it, and its at the setpoint.
+        && feederWheelController.pid
+            .atSetpoint()) { // if we want to move it, and its at the setpoint.
       io.setFeederWheelVoltage(0.0);
       shouldIncrement = false;
     }
@@ -140,7 +154,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return true if is at setpoint, false otherwise.
    */
   public boolean isAtSetpoint() {
-    return topFlywheelController.atSetpoint() && bottomFlywheelController.atSetpoint();
+    return topFlywheelController.pid.atSetpoint() && bottomFlywheelController.pid.atSetpoint();
   }
 
   /**

@@ -69,6 +69,18 @@ public class TunablePIDController {
     this.update();
   }
 
+  /**
+   * Change the gains that are used. Will modify shared gains
+   *
+   * @param kP The P constant
+   * @param kD The D constant
+   * @param kI The I constant
+   */
+  public void setGains(double kP, double kD, double kI) {
+    this.gains.setGains(kP, kD, kI);
+    this.update();
+  }
+
   /** Tunable PID gains that can be set by NetworkTables */
   public static class TunablePIDGains {
     public TunableDouble kP;
@@ -202,12 +214,35 @@ public class TunablePIDController {
     }
 
     /**
+     * Change the gains that are used. Will modify shared gains
+     *
+     * @param kP The P constant
+     * @param kD The D constant
+     * @param kI The I constant
+     */
+    public void setGains(double kP, double kD, double kI) {
+      this.gains.setGains(kP, kD, kI);
+      this.update();
+    }
+
+    /**
      * Change constraints
      *
      * @param constraints The tunable trapezoid constraints to set
      */
     public void setConstraints(TunableTrapezoidConstraints constraints) {
       this.constraints = constraints;
+      this.update();
+    }
+
+    /**
+     * Change constraints. Will modify shared constraints
+     *
+     * @param maxVelocity The max velocity for the trapezoid constraints
+     * @param maxAcceleration The max acceleration for the trapezoid constraints
+     */
+    public void setConstraints(double maxVelocity, double maxAcceleration) {
+      this.constraints.setConstraints(maxVelocity, maxAcceleration);
       this.update();
     }
   }
