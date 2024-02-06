@@ -12,10 +12,9 @@ var searchData=
   ['intake_9',['intake',['../namespacefrc_1_1WorBots_1_1subsystems_1_1intake.html',1,'frc::WorBots::subsystems']]],
   ['lights_10',['lights',['../namespacefrc_1_1WorBots_1_1subsystems_1_1lights.html',1,'frc::WorBots::subsystems']]],
   ['shooter_11',['shooter',['../namespacefrc_1_1WorBots_1_1subsystems_1_1shooter.html',1,'frc::WorBots::subsystems']]],
-  ['subsystems_12',['subsystems',['../namespacefrc_1_1WorBots_1_1subsystems.html',1,'frc::WorBots']]],
-  ['superstructure_13',['superstructure',['../namespacefrc_1_1WorBots_1_1subsystems_1_1superstructure.html',1,'frc::WorBots::subsystems']]],
-  ['trajectory_14',['trajectory',['../namespacefrc_1_1WorBots_1_1util_1_1trajectory.html',1,'frc::WorBots::util']]],
-  ['util_15',['util',['../namespacefrc_1_1WorBots_1_1util.html',1,'frc::WorBots']]],
-  ['vision_16',['vision',['../namespacefrc_1_1WorBots_1_1subsystems_1_1vision.html',1,'frc::WorBots::subsystems']]],
-  ['worbots_17',['WorBots',['../namespacefrc_1_1WorBots.html',1,'frc']]]
+  ['superstructure_12',['superstructure',['../namespacefrc_1_1WorBots_1_1subsystems_1_1superstructure.html',1,'frc::WorBots::subsystems']]],
+  ['trajectory_13',['trajectory',['../namespacefrc_1_1WorBots_1_1util_1_1trajectory.html',1,'frc::WorBots::util']]],
+  ['util_14',['util',['../namespacefrc_1_1WorBots_1_1util.html',1,'frc::WorBots']]],
+  ['vision_15',['vision',['../namespacefrc_1_1WorBots_1_1subsystems_1_1vision.html',1,'frc::WorBots::subsystems']]],
+  ['worbots_16',['WorBots',['../namespacefrc_1_1WorBots.html',1,'frc']]]
 ];
