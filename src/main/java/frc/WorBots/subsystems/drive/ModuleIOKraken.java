@@ -85,12 +85,12 @@ public class ModuleIOKraken implements ModuleIO {
   }
 
   public void setDriveVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -12, 12);
+    volts = MathUtil.clamp(volts, -11.5, 11.5);
     driveMotor.setVoltage(volts);
   }
 
   public void setTurnVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -12, 12);
+    volts = MathUtil.clamp(volts, -11, 11);
     turnMotor.setVoltage(volts);
   }
 
