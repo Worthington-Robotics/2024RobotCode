@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['main_0',['Main',['../classfrc_1_1WorBots_1_1Main.html',1,'frc::WorBots']]],
-  ['module_1',['Module',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html',1,'frc::WorBots::subsystems::drive']]],
-  ['moduleio_2',['ModuleIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIO.html',1,'frc::WorBots::subsystems::drive']]],
-  ['moduleiokraken_3',['ModuleIOKraken',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html',1,'frc::WorBots::subsystems::drive']]],
-  ['moduleiosim_4',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc::WorBots::subsystems::drive']]]
+  ['lights_0',['Lights',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html',1,'frc::WorBots::subsystems::lights']]],
+  ['lightsmode_1',['LightsMode',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html',1,'frc::WorBots::subsystems::lights::Lights']]],
+  ['logger_2',['Logger',['../classfrc_1_1WorBots_1_1util_1_1Logger.html',1,'frc::WorBots::util']]]
 ];
