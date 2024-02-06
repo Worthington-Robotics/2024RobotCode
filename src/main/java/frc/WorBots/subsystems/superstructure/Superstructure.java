@@ -111,35 +111,16 @@ public class Superstructure extends SubsystemBase {
 
     switch (state) {
       case POSE:
-        {
-          final double elevatorPose = setpoint.getElevator();
-          final double pivotPose = setpoint.getPivot();
-          Logger.getInstance().setSuperstructureElevatorPosSetpoint(elevatorPose);
-          Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotPose);
-          final double elevatorVoltage = calculateElevator(elevatorPose);
-          final double pivotVoltage = calculatePivot(pivotPose);
-          setElevatorVoltage(elevatorVoltage);
-          setPivotVoltage(pivotVoltage);
-          break;
-        }
+        runPose(setpoint.getElevator(), setpoint.getPivot());
+        break;
       case SHOOTING:
-        {
-          final double pivotAngle = shootingAngleRad.get();
-          Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
-          Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotAngle);
-          final double elevatorVoltage = calculateElevator(inputs.elevatorPositionMeters);
-          final double pivotVoltage = calculatePivot(pivotAngle);
-          setElevatorVoltage(elevatorVoltage);
-          setPivotVoltage(pivotVoltage);
-          break;
-        }
+        runPose(shootingAngleRad.get(), inputs.elevatorPositionMeters);
+        break;
       case CLIMBING:
-        {
-          final double volts = climbingVolts.get();
-          setElevatorVoltage(volts);
-          setPivotVoltage(0.0);
-          break;
-        }
+        final double volts = climbingVolts.get();
+        setElevatorVoltage(volts);
+        setPivotVoltage(0.0);
+        break;
     }
     if (DriverStation.isDisabled()) {
       setElevatorVoltage(0.0);
@@ -180,6 +161,21 @@ public class Superstructure extends SubsystemBase {
                 inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
 
     return pivotVoltage;
+  }
+
+  /**
+   * Runs a pose on the superstructure with full logging
+   *
+   * @param elevatorPose The desired elevator position
+   * @param pivotPose The desired pivot angle
+   */
+  private void runPose(double elevatorPose, double pivotPose) {
+    Logger.getInstance().setSuperstructureElevatorPosSetpoint(elevatorPose);
+    Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotPose);
+    final double elevatorVoltage = calculateElevator(elevatorPose);
+    final double pivotVoltage = calculatePivot(pivotPose);
+    setElevatorVoltage(elevatorVoltage);
+    setPivotVoltage(pivotVoltage);
   }
 
   /**
