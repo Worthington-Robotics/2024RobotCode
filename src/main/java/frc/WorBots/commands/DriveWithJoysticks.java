@@ -16,25 +16,33 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.WorBots.subsystems.Elevator;
 import frc.WorBots.subsystems.drive.Drive;
 import java.util.function.Supplier;
 
 /** Command for teleop that drives the robot using controllers */
 public class DriveWithJoysticks extends Command {
   private Drive drive;
+  private Elevator elevator;
   private Supplier<Double> leftXSupplier;
   private Supplier<Double> leftYSupplier;
+  private Supplier<Double> rightXSupplier;
   private Supplier<Double> rightYSupplier;
 
   public DriveWithJoysticks(
       Drive drive,
+      Elevator elevator,
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier,
+      Supplier<Double> rightXSupplier,
       Supplier<Double> rightYSupplier) {
     addRequirements(drive);
+    addRequirements(elevator);
     this.drive = drive;
+    this.elevator = elevator;
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
+    this.rightXSupplier = rightXSupplier;
     this.rightYSupplier = rightYSupplier;
   }
 
@@ -43,6 +51,7 @@ public class DriveWithJoysticks extends Command {
     // Get values from double suppliers
     double leftX = leftXSupplier.get();
     double leftY = leftYSupplier.get();
+    double rightX = rightXSupplier.get();
     double rightY = rightYSupplier.get();
 
     // Get direction and magnitude of linear axes
@@ -94,8 +103,14 @@ public class DriveWithJoysticks extends Command {
     } else {
       drive.runVelocity(speeds);
     }
+
+    double elevatorDemand = rightX * 5.0;
+    elevatorDemand = MathUtil.applyDeadband(rightX, 0.08);
+    elevator.setDemand(elevatorDemand);
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    elevator.setDemand(0);
+  }
 }

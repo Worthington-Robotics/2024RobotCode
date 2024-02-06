@@ -16,7 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 public class ModuleIOKraken implements ModuleIO {
-  private static final String CAN_BUS = "rio";
+  private static final String CAN_BUS = "Swerve";
   private static final double DRIVE_ROTATIONS_TO_RADIANS =
       (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
 
