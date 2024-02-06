@@ -24,12 +24,40 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
       this.pose = pose;
     }
 
+    /**
+     * Get the pose of the preset
+     *
+     * @return The pose of the preset
+     */
     public SuperstructurePose getPose() {
       return pose;
     }
 
+    /**
+     * Get the vector pose of the preset
+     *
+     * @return The vector for the preset's pose
+     */
     public Vector<N2> getVecPose() {
       return pose.vectorPose();
+    }
+
+    /**
+     * Get the elevator component of the pose
+     *
+     * @return The elevator component
+     */
+    public double getElevator() {
+      return getVecPose().get(0, 0);
+    }
+
+    /**
+     * Get the pivot component of the pose
+     *
+     * @return The pivot component
+     */
+    public double getPivot() {
+      return getVecPose().get(1, 0);
     }
   }
 }

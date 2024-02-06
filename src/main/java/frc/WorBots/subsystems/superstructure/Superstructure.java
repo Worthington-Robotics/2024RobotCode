@@ -111,47 +111,39 @@ public class Superstructure extends SubsystemBase {
 
     switch (state) {
       case POSE:
-        Logger.getInstance().setSuperstructureElevatorPosSetpoint(setpoint.getVecPose().get(0, 0));
-        Logger.getInstance().setSuperstructurePivotPosSetpoint(setpoint.getVecPose().get(1, 0));
-        double elevatorVoltage =
-            elevatorController.pid.calculate(
-                    inputs.elevatorPositionMeters, setpoint.getVecPose().get(0, 0))
-                + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
-        double pivotVoltage =
-            pivotController.pid.calculate(
-                    inputs.pivotPositionRelRad + pivotAbsAngleRad, setpoint.getVecPose().get(1, 0))
-                + pivotFeedForward.calculate(
-                    inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
-        Logger.getInstance().setSuperstructurePivotVoltageSetpoint(pivotVoltage);
-        Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(elevatorVoltage);
-        io.setElevatorVoltage(elevatorVoltage);
-        // io.setPivotVoltage(pivotVoltage);
-        break;
+        {
+          final double elevatorPose = setpoint.getElevator();
+          final double pivotPose = setpoint.getPivot();
+          Logger.getInstance().setSuperstructureElevatorPosSetpoint(elevatorPose);
+          Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotPose);
+          final double elevatorVoltage = calculateElevator(elevatorPose);
+          final double pivotVoltage = calculatePivot(pivotPose);
+          setElevatorVoltage(elevatorVoltage);
+          setPivotVoltage(pivotVoltage);
+          break;
+        }
       case SHOOTING:
-        Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
-        Logger.getInstance().setSuperstructurePivotPosSetpoint(shootingAngleRad.get());
-        double elevatorVoltageShooting =
-            elevatorController.pid.calculate(inputs.elevatorPositionMeters, 0.0)
-                + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
-        double pivotVoltageShooting =
-            pivotController.pid.calculate(
-                    inputs.pivotPositionRelRad + pivotAbsAngleRad, shootingAngleRad.get())
-                + pivotFeedForward.calculate(
-                    inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
-        Logger.getInstance().setSuperstructurePivotVoltageSetpoint(pivotVoltageShooting);
-        Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(elevatorVoltageShooting);
-        io.setElevatorVoltage(elevatorVoltageShooting);
-        // io.setPivotVoltage(pivotVoltageShooting);
-        break;
+        {
+          final double pivotAngle = shootingAngleRad.get();
+          Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
+          Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotAngle);
+          final double elevatorVoltage = calculateElevator(inputs.elevatorPositionMeters);
+          final double pivotVoltage = calculatePivot(pivotAngle);
+          setElevatorVoltage(elevatorVoltage);
+          setPivotVoltage(pivotVoltage);
+          break;
+        }
       case CLIMBING:
-        Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(climbingVolts.get());
-        io.setElevatorVoltage(climbingVolts.get());
-        io.setPivotVoltage(0.0);
-        break;
+        {
+          final double volts = climbingVolts.get();
+          setElevatorVoltage(volts);
+          setPivotVoltage(0.0);
+          break;
+        }
     }
     if (DriverStation.isDisabled()) {
-      io.setElevatorVoltage(0.0);
-      io.setPivotVoltage(0.0);
+      setElevatorVoltage(0.0);
+      setPivotVoltage(0.0);
     }
     visualizer.update(
         VecBuilder.fill(
@@ -159,6 +151,56 @@ public class Superstructure extends SubsystemBase {
             firstCarriagePositionMeters,
             secondCarriagePositionMeters,
             inputs.elevatorPositionMeters));
+  }
+
+  /**
+   * Calculates elevator voltage from setpoint
+   *
+   * @param setpoint The elevator setpoint
+   * @return The voltage for the elevator
+   */
+  private double calculateElevator(double setpoint) {
+    final double elevatorVoltage =
+        elevatorController.pid.calculate(inputs.elevatorPositionMeters, setpoint)
+            + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
+
+    return elevatorVoltage;
+  }
+
+  /**
+   * Calculates pivot voltage from setpoint
+   *
+   * @param setpoint The pivot setpoint
+   * @return The voltage for the pivot
+   */
+  private double calculatePivot(double setpoint) {
+    final double pivotVoltage =
+        pivotController.pid.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad, setpoint)
+            + pivotFeedForward.calculate(
+                inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
+
+    return pivotVoltage;
+  }
+
+  /**
+   * Sets the elevator voltage in the IO and also logs it
+   *
+   * @param volts The elevator voltage
+   */
+  private void setElevatorVoltage(double volts) {
+    io.setElevatorVoltage(volts);
+    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
+  }
+
+  /**
+   * Sets the pivot voltage in the IO and also logs it
+   *
+   * @param volts The pivot voltage
+   */
+  private void setPivotVoltage(double volts) {
+    // Pivot disabled for now
+    // io.setPivotVoltage(volts);
+    Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
   }
 
   /**
