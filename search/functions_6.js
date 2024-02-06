@@ -29,13 +29,14 @@ var searchData=
   ['getrollvelocity_26',['getRollVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a09c31d981f45cbf1071b070582e6eba6',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getrotation_27',['getRotation',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7e6306dd3bc6078a7801345af6bc1147',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getroutinefromname_28',['getRoutineFromName',['../classfrc_1_1WorBots_1_1AutoSelector.html#ac6264f067a70b7109683947134320869',1,'frc::WorBots::AutoSelector']]],
-  ['getsim_29',['getSim',['../classfrc_1_1WorBots_1_1Constants.html#ac7d684555593db395ebd15da570fbebd',1,'frc::WorBots::Constants']]],
-  ['getstate_30',['getState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ac578de08a992418400a863be10274327',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['getstatus_31',['getStatus',['../classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a11e1107a66f7a1350d35124299d567a4',1,'frc::WorBots::util::StatusPage']]],
-  ['gettranslation_32',['getTranslation',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a8e02e6da27a5aab06043fe7f10301e96',1,'frc::WorBots::util::trajectory::Waypoint']]],
-  ['getvelocitymeterspersec_33',['getVelocityMetersPerSec',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a05e60ab1f022884be61daecc45647e5d',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['getyaw_34',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['getyawvelocity_35',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['gyroiopigeon2_36',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
-  ['gyroiosim_37',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
+  ['getshooterheightmeters_29',['getShooterHeightMeters',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a97e9d0733202527ed8178b37cd269a8c',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
+  ['getsim_30',['getSim',['../classfrc_1_1WorBots_1_1Constants.html#ac7d684555593db395ebd15da570fbebd',1,'frc::WorBots::Constants']]],
+  ['getstate_31',['getState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ac578de08a992418400a863be10274327',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['getstatus_32',['getStatus',['../classfrc_1_1WorBots_1_1util_1_1StatusPage.html#a11e1107a66f7a1350d35124299d567a4',1,'frc::WorBots::util::StatusPage']]],
+  ['gettranslation_33',['getTranslation',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a8e02e6da27a5aab06043fe7f10301e96',1,'frc::WorBots::util::trajectory::Waypoint']]],
+  ['getvelocitymeterspersec_34',['getVelocityMetersPerSec',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a05e60ab1f022884be61daecc45647e5d',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['getyaw_35',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
+  ['getyawvelocity_36',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
+  ['gyroiopigeon2_37',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
+  ['gyroiosim_38',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
 ];
