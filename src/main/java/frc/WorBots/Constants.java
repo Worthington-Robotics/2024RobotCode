@@ -19,4 +19,7 @@ public class Constants {
   public static final boolean getSim() {
     return RobotBase.isSimulation();
   }
+
+  /** The CAN bus name used for swerve devices and pigeon */
+  public static final String SWERVE_CAN_BUS = "Swerve";
 }

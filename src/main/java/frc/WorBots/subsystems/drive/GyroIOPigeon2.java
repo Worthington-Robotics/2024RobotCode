@@ -10,13 +10,14 @@ package frc.WorBots.subsystems.drive;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.util.Units;
+import frc.WorBots.Constants;
 
 /** IO implementation for Pigeon2 */
 public class GyroIOPigeon2 implements GyroIO {
   private final Pigeon2 pigeon;
 
   public GyroIOPigeon2() {
-    pigeon = new Pigeon2(0, "Swerve");
+    pigeon = new Pigeon2(0, Constants.SWERVE_CAN_BUS);
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
     pigeon.getYaw().setUpdateFrequency(100);
     pigeon.optimizeBusUtilization();
