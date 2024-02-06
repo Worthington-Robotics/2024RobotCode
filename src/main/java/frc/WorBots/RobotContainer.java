@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
 import frc.WorBots.commands.*;
-import frc.WorBots.subsystems.Elevator;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
@@ -28,7 +27,6 @@ public class RobotContainer {
   // private Superstructure superstructure;
   private Intake intake;
   // private Shooter shooter;
-  private Elevator elevator;
   private AutoSelector selector;
 
   // Joysticks
@@ -65,7 +63,6 @@ public class RobotContainer {
       intake = new Intake(new IntakeIOSim());
       // shooter = new Shooter(new ShooterIOSim());
     }
-    elevator = new Elevator();
     selector = new AutoSelector("Auto Selector");
     // var autoCommands =
     // new AutoCommands(drive, superstructure, intake, shooter,
@@ -103,7 +100,6 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive,
-            elevator,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
             () -> -operator.getRightY(),
