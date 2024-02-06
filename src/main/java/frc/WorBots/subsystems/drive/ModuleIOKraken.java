@@ -57,7 +57,7 @@ public class ModuleIOKraken implements ModuleIO {
     driveMotor.setNeutralMode(NeutralModeValue.Brake);
     turnMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    driveMotor.setInverted(true);
+    driveMotor.setInverted(false);
     turnMotor.setInverted(true);
   }
 
