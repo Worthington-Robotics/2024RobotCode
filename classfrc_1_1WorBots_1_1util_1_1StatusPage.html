@@ -186,7 +186,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Get the singleton instance of the <a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html">StatusPage</a> </p>
+<p >Get the singleton instance of the <a class="el" href="classfrc_1_1WorBots_1_1util_1_1StatusPage.html">StatusPage</a>. This shouldn't be necessary as most methods work on the singleton anyways </p>
 
 </div>
 </div>
@@ -213,7 +213,14 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Get the current status of a system from NetworkTables </p>
+<p >Get the current status of a system from NetworkTables</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">system</td><td>The system to check. Should be one of the system constants </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the system is up or down </dd></dl>
 
 </div>
 </div>
