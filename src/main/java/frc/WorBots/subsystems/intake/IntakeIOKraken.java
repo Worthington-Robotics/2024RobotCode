@@ -34,7 +34,7 @@ public class IntakeIOKraken implements IntakeIO {
 
   @Override
   public void setIntakeVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -11, 11);
+    volts = MathUtil.clamp(volts, -10, 10);
     intakeMotor.setVoltage(volts);
   }
 }

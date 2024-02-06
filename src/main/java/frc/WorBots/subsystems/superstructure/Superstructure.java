@@ -27,6 +27,7 @@ public class Superstructure extends SubsystemBase {
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
+  private Supplier<Double> climbingVolts = () -> 0.0;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
   private double firstCarriagePositionMeters;
@@ -121,6 +122,11 @@ public class Superstructure extends SubsystemBase {
         io.setElevatorVoltage(elevatorVoltageShooting);
         // io.setPivotVoltage(pivotVoltageShooting);
         break;
+      case CLIMBING:
+        Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(climbingVolts.get());
+        io.setElevatorVoltage(climbingVolts.get());
+        io.setPivotVoltage(0.0);
+        break;
     }
     if (DriverStation.isDisabled()) {
       io.setElevatorVoltage(0.0);
@@ -150,6 +156,24 @@ public class Superstructure extends SubsystemBase {
    */
   public void setShootingAngleRad(Supplier<Double> supplier) {
     shootingAngleRad = supplier;
+  }
+
+  /**
+   * Sets the desired voltage for manual climbing.
+   *
+   * @param volts The desired voltage.
+   */
+  public void setClimbingVolts(double volts) {
+    climbingVolts = () -> volts;
+  }
+
+  /**
+   * Sets the desired voltage for manual climbing.
+   *
+   * @param volts The desired voltage.
+   */
+  public void setClimbingVolts(Supplier<Double> supplier) {
+    climbingVolts = supplier;
   }
 
   /**

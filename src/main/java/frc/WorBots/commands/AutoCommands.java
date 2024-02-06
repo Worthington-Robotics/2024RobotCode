@@ -177,9 +177,9 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndShoot(Pose2d startingPose, int startingLocation) {
+  private Command driveAndShoot(Pose2d startingPose, int position) {
     List<Waypoint> waypoints = new ArrayList<>();
-    Pose2d shootingPose = shootingPositions[startingLocation];
+    Pose2d shootingPose = shootingPositions[position];
     waypoints.add(Waypoint.fromHolonomicPose(startingPose));
     waypoints.add(Waypoint.fromHolonomicPose(shootingPose));
     return Commands.sequence(path(waypoints));
