@@ -73,6 +73,7 @@ var searchData=
   ['superstructurestate_70',['SuperstructureState',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
   ['superstructurevisualizer_71',['SuperstructureVisualizer',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureVisualizer.html',1,'frc.WorBots.subsystems.superstructure.SuperstructureVisualizer'],['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureVisualizer.html#a45a18492ecaa01e45bfd6e0d09de6433',1,'frc.WorBots.subsystems.superstructure.SuperstructureVisualizer.SuperstructureVisualizer()']]],
   ['superstructurevisualizer_2ejava_72',['SuperstructureVisualizer.java',['../SuperstructureVisualizer_8java.html',1,'']]],
-  ['switchablechooser_73',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1SwitchableChooser.html',1,'frc.WorBots.util.SwitchableChooser'],['../classfrc_1_1WorBots_1_1util_1_1SwitchableChooser.html#ad75109908d26d734ade77614ccc97428',1,'frc.WorBots.util.SwitchableChooser.SwitchableChooser()']]],
-  ['switchablechooser_2ejava_74',['SwitchableChooser.java',['../SwitchableChooser_8java.html',1,'']]]
+  ['swerve_5fcan_5fbus_73',['SWERVE_CAN_BUS',['../classfrc_1_1WorBots_1_1Constants.html#a0eaf004be7d9a5dc937f4f4a1dd8c367',1,'frc::WorBots::Constants']]],
+  ['switchablechooser_74',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1SwitchableChooser.html',1,'frc.WorBots.util.SwitchableChooser'],['../classfrc_1_1WorBots_1_1util_1_1SwitchableChooser.html#ad75109908d26d734ade77614ccc97428',1,'frc.WorBots.util.SwitchableChooser.SwitchableChooser()']]],
+  ['switchablechooser_2ejava_75',['SwitchableChooser.java',['../SwitchableChooser_8java.html',1,'']]]
 ];
