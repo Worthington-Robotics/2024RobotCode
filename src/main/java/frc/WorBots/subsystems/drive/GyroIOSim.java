@@ -46,6 +46,10 @@ public class GyroIOSim implements GyroIO {
     yawAxis.velocity = vYaw;
   }
 
+  public void resetHeading() {
+    yawAxis.angle = new Rotation2d();
+  }
+
   /**
    * Simulation for one axis of the gyroscope. It basically just applies a rotational velocity to a
    * stored rotation every update, with compensation for time difference

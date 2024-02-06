@@ -36,4 +36,8 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.yawVelocityRadPerSec =
         Units.degreesToRadians(pigeon.getAngularVelocityZDevice().getValue());
   }
+
+  public void resetHeading() {
+    pigeon.reset();
+  }
 }

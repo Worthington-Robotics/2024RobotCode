@@ -43,4 +43,7 @@ public interface GyroIO {
    * the simulated gyro can work
    */
   public default void setExpectedYawVelocity(double vYaw) {}
+
+  /** Resets the gyroscope to a heading (yaw) of zero */
+  public default void resetHeading() {}
 }

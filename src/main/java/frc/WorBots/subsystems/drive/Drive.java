@@ -279,6 +279,11 @@ public class Drive extends SubsystemBase {
     poseEstimator.resetPose(pose);
   }
 
+  /** Resets the robot heading */
+  public void resetHeading() {
+    gyroIO.resetHeading();
+  }
+
   /**
    * Sets the center of rotation to orbit around.
    *

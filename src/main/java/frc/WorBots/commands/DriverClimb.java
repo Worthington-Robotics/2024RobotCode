@@ -30,7 +30,7 @@ public class DriverClimb extends Command {
   @Override
   public void execute() {
     double joystick = MathUtil.applyDeadband(joystickValue.get(), 0.09);
-    double volts = joystick * 10.0;
+    double volts = joystick * 5.0;
     superstructure.setClimbingVolts(volts);
   }
 

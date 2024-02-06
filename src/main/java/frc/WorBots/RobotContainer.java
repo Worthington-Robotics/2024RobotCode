@@ -7,7 +7,6 @@
 
 package frc.WorBots;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
@@ -102,11 +101,12 @@ public class RobotContainer {
             drive,
             () -> -driver.getLeftY(),
             () -> -driver.getLeftX(),
-            () -> -operator.getRightY(),
+            () -> -driver.getRightY(),
             () -> -driver.getRightX()));
     driver.a().whileTrue(intake.intakeRaw());
     driver.b().whileTrue(intake.outtakeRaw());
-    driver.y().onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d()), drive));
+    driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
+    driver.start().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
     // driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
