@@ -109,7 +109,9 @@ public class FieldConstants {
 
   /** The constants of the Amp */
   public static final class Amp {
+    /** Source: Game Manual */
     public static final double openingBottomZ = Units.inchesToMeters(26);
+
     public static final double openingTopZ = openingBottomZ + Units.inchesToMeters(18);
     public static final double faceStartX = Units.inchesToMeters(49.5);
     public static final double openingStartX = faceStartX + Units.inchesToMeters(11);

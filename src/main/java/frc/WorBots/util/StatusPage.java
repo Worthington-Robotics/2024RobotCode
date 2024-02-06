@@ -108,7 +108,10 @@ public class StatusPage {
 
   private static StatusPage instance = new StatusPage();
 
-  /** Get the singleton instance of the StatusPage */
+  /**
+   * Get the singleton instance of the StatusPage. This shouldn't be necessary as most methods work
+   * on the singleton anyways
+   */
   public static StatusPage getInstance() {
     return instance;
   }
@@ -126,7 +129,12 @@ public class StatusPage {
     entry.setBoolean(status);
   }
 
-  /** Get the current status of a system from NetworkTables */
+  /**
+   * Get the current status of a system from NetworkTables
+   *
+   * @param system The system to check. Should be one of the system constants
+   * @return Whether the system is up or down
+   */
   public static boolean getStatus(String system) {
     StatusPage instance = getInstance();
     GenericEntry entry = instance.getEntry(system);

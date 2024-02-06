@@ -28,6 +28,11 @@ public class SwitchableChooser {
   private final StringPublisher selectedPublisher;
   private final StringSubscriber selectedInput;
 
+  /**
+   * Create a new SwitchableChooser
+   *
+   * @param name The name of the chooser on NetworkTables
+   */
   public SwitchableChooser(String name) {
     var table = NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable(name);
     namePublisher = table.getStringTopic(".name").publish();
@@ -46,7 +51,11 @@ public class SwitchableChooser {
     selectedPublisher.set(this.options[0]);
   }
 
-  /** Updates the set of available options. */
+  /**
+   * Updates the set of available options.
+   *
+   * @param options The options to set
+   */
   public void setOptions(String[] options) {
     if (Arrays.equals(options, this.options)) {
       return;
@@ -61,6 +70,7 @@ public class SwitchableChooser {
     return active == placeholder ? null : active;
   }
 
+  /** Method to run on the chooser periodically */
   public void periodic() {
     String selected = selectedInput.get();
     active = null;

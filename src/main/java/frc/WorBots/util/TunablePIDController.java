@@ -76,14 +76,39 @@ public class TunablePIDController {
     public TunableDouble kI;
     public double period;
 
+    /**
+     * Initialize gains with default values of zero
+     *
+     * @param table The NT table to use
+     * @param name The NT name to use
+     */
     public TunablePIDGains(String table, String name) {
       this(table, name, 0.0, 0.0, 0.0);
     }
 
+    /**
+     * Initialize gains to custom values
+     *
+     * @param table The NT table to use
+     * @param name The NT name to use
+     * @param kP The P constant
+     * @param kD The D constant
+     * @param kI The I constant
+     */
     public TunablePIDGains(String table, String name, double kP, double kD, double kI) {
       this(table, name, kP, kD, kI, 0.02);
     }
 
+    /**
+     * Initialize gains and update period to custom values
+     *
+     * @param table The NT table to use
+     * @param name The NT name to use
+     * @param kP The P constant
+     * @param kD The D constant
+     * @param kI The I constant
+     * @param period The update period for the PID controller, not the tunable gains
+     */
     public TunablePIDGains(
         String table, String name, double kP, double kD, double kI, double period) {
       this.kP = new TunableDouble(table, name, "kP", kP);
@@ -92,7 +117,13 @@ public class TunablePIDController {
       this.period = period;
     }
 
-    /** Set the gains */
+    /**
+     * Set the gains
+     *
+     * @param kP The P constant
+     * @param kD The D constant
+     * @param kI The I constant
+     */
     public void setGains(double kP, double kD, double kI) {
       this.kP.set(kP);
       this.kD.set(kD);
@@ -105,6 +136,17 @@ public class TunablePIDController {
     private TunableTrapezoidConstraints constraints;
     public ProfiledPIDController pid;
 
+    /**
+     * Initialize controller with gains
+     *
+     * @param table The NT table to use
+     * @param name The NT name to use
+     * @param kP The P constant
+     * @param kD The D constant
+     * @param kI The I constant
+     * @param maxVelocity The max velocity for the trapezoid constraints
+     * @param maxAcceleration The max acceleration for the trapezoid constraints
+     */
     public TunableProfiledPIDController(
         String table,
         String name,
@@ -118,6 +160,12 @@ public class TunablePIDController {
           new TunableTrapezoidConstraints(table, name, maxVelocity, maxAcceleration));
     }
 
+    /**
+     * Initialize the controller with existing gains and constraints
+     *
+     * @param gains The tunable PID gains to use
+     * @param constraints The tunable trapezoid constraints to use
+     */
     public TunableProfiledPIDController(
         TunablePIDGains gains, TunableTrapezoidConstraints constraints) {
       this.gains = gains;
@@ -133,7 +181,7 @@ public class TunablePIDController {
               this.gains.period);
     }
 
-    /** Update gains to the latest tuned value */
+    /** Update gains and constraints to the latest tuned value */
     public void update() {
       final double kP = this.gains.kP.get();
       final double kD = this.gains.kD.get();
@@ -143,39 +191,72 @@ public class TunablePIDController {
       pid.setConstraints(constraints);
     }
 
-    /** Change gains */
+    /**
+     * Change gains
+     *
+     * @param gains The gains to set
+     */
     public void setGains(TunablePIDGains gains) {
       this.gains = gains;
       this.update();
     }
 
-    /** Change constraints */
+    /**
+     * Change constraints
+     *
+     * @param constraints The tunable trapezoid constraints to set
+     */
     public void setConstraints(TunableTrapezoidConstraints constraints) {
       this.constraints = constraints;
       this.update();
     }
   }
 
+  /** A tunable version of TrapezoidConstraints */
   public static class TunableTrapezoidConstraints {
     public TunableDouble maxVelocity;
     public TunableDouble maxAcceleration;
 
+    /**
+     * Initialize constraints with default values of zero
+     *
+     * @param table The NT table to use
+     * @param name The NT name to use
+     */
     public TunableTrapezoidConstraints(String table, String name) {
       this(table, name, 0.0, 0.0);
     }
 
+    /**
+     * Initialize gains to custom values
+     *
+     * @param table The NT table to use
+     * @param name The NT name to use
+     * @param maxVelocity The max velocity for the trapezoid constraints
+     * @param maxAcceleration The max acceleration for the trapezoid constraints
+     */
     public TunableTrapezoidConstraints(
         String table, String name, double maxVelocity, double maxAcceleration) {
       this.maxVelocity = new TunableDouble(table, name, "Max Velocity", maxVelocity);
       this.maxAcceleration = new TunableDouble(table, name, "Max Acceleration", maxAcceleration);
     }
 
-    /** Set the constraints */
+    /**
+     * Set the constraints
+     *
+     * @param maxVelocity The max velocity for the trapezoid constraints
+     * @param maxAcceleration The max acceleration for the trapezoid constraints
+     */
     public void setConstraints(double maxVelocity, double maxAcceleration) {
       this.maxVelocity.set(maxVelocity);
       this.maxAcceleration.set(maxAcceleration);
     }
 
+    /**
+     * Create static constraints from these tunable constraints
+     *
+     * @return The normal constraints object from the current tuned values
+     */
     public Constraints makeConstraints() {
       return new Constraints(maxVelocity.get(), maxAcceleration.get());
     }

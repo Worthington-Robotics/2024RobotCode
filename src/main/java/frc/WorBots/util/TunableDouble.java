@@ -71,6 +71,15 @@ public class TunableDouble {
   }
 
   /**
+   * Get the current value without updating
+   *
+   * @return The value from the last update
+   */
+  public double getCurrent() {
+    return value;
+  }
+
+  /**
    * Set the value and default value
    *
    * @param value The value to set

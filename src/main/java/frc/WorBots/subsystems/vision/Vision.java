@@ -41,7 +41,9 @@ public class Vision extends SubsystemBase {
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
   private Supplier<Pose2d> poseSupplier = () -> new Pose2d();
   private final Pose3d[] cameraPoses;
+  // How much influence XY data has on the robot pose
   private final double xyStdDevCoefficient;
+  // How much influence theta data has on the robot pose
   private final double thetaStdDevCoefficient;
   private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
   private static final double ambiguityThreshold = 0.3;
