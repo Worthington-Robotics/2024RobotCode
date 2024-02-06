@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.superstructure;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -26,21 +27,20 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private static final double elevatorGearing = 1.0; // in meters per revolution
 
   public SuperstructureIOTalon() {
-    elevator = new TalonFX(0);
-    elevatorFollower = new TalonFX(0);
+    elevator = new TalonFX(2);
+    elevatorFollower = new TalonFX(3);
     pivot = new TalonFX(0);
     pivotAbsEncoder = new DutyCycleEncoder(0);
     pivotRelEncoder = new Encoder(0, 0);
     elevator.setPosition(0.0);
     elevator.setInverted(isElevatorInverted);
-    elevatorFollower.setInverted(!isElevatorInverted);
+    elevatorFollower.setInverted(isElevatorInverted);
+    elevatorFollower.setControl(new Follower(elevator.getDeviceID(), true));
   }
 
   public void setElevatorVoltage(double volts) {
-    // volts = MathUtil.clamp(volts, -10.5, 10.5);
-    volts = MathUtil.clamp(volts, -1.5, 1.5);
+    volts = MathUtil.clamp(volts, -5.0, 5.0);
     elevator.setVoltage(volts);
-    elevatorFollower.setVoltage(volts);
   }
 
   public void setPivotVoltage(double volts) {
