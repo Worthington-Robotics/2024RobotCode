@@ -24,7 +24,7 @@ public class RobotContainer {
   // Subsystems
   private Drive drive;
   private Vision vision;
-  // private Superstructure superstructure;
+  private Superstructure superstructure;
   private Intake intake;
   // private Shooter shooter;
   private AutoSelector selector;
@@ -47,7 +47,7 @@ public class RobotContainer {
               new ModuleIOKraken(2),
               new ModuleIOKraken(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
-      // superstructure = new Superstructure(new SuperstructureIOTalon());
+      superstructure = new Superstructure(new SuperstructureIOTalon());
       intake = new Intake(new IntakeIOKraken());
       // shooter = new Shooter(new ShooterIOKraken());
     } else { // Sim
@@ -59,7 +59,7 @@ public class RobotContainer {
               new ModuleIOSim(),
               new ModuleIOSim());
       vision = new Vision(new VisionIOCustom(0));
-      // superstructure = new Superstructure(new SuperstructureIOSim());
+      superstructure = new Superstructure(new SuperstructureIOSim());
       intake = new Intake(new IntakeIOSim());
       // shooter = new Shooter(new ShooterIOSim());
     }

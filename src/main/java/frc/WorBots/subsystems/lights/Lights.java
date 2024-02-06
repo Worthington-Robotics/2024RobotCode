@@ -29,7 +29,7 @@ public class Lights extends SubsystemBase {
   public static final int LIGHT_COUNT = 56;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
-  private LightsMode mode = LightsMode.CLAIRE;
+  private LightsMode mode = LightsMode.Claire;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
   private final int lightsID = 8;
@@ -40,7 +40,7 @@ public class Lights extends SubsystemBase {
     Alliance,
     MatchTime,
     Disabled,
-    CLAIRE
+    Claire
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -78,7 +78,7 @@ public class Lights extends SubsystemBase {
       case Disabled:
         wave(100, Color.kBlack, Color.kBlue, 25.0, 2.0, 0.4);
         break;
-      case CLAIRE:
+      case Claire:
         wave(100, Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
         break;
     }

@@ -40,7 +40,8 @@ public class Superstructure extends SubsystemBase {
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
     POSE,
-    SHOOTING
+    SHOOTING,
+    CLIMBING
   }
 
   /**
@@ -76,11 +77,11 @@ public class Superstructure extends SubsystemBase {
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevatorConnected);
 
     firstCarriagePositionMeters =
-        ((firstCarriageRangeMeters[0] - firstCarriageRangeMeters[1])
+        ((firstCarriageRangeMeters[1] - firstCarriageRangeMeters[0])
                 * inputs.elevatorPercentageRaised)
             + firstCarriageRangeMeters[0];
     secondCarriagePositionMeters =
-        (((secondCarriageRangeMeters[0] - secondCarriageRangeMeters[1])
+        (((secondCarriageRangeMeters[1] - secondCarriageRangeMeters[0])
                     * inputs.elevatorPercentageRaised)
                 + secondCarriageRangeMeters[0])
             + firstCarriagePositionMeters
@@ -102,7 +103,7 @@ public class Superstructure extends SubsystemBase {
         Logger.getInstance().setSuperstructurePivotVoltageSetpoint(pivotVoltage);
         Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(elevatorVoltage);
         io.setElevatorVoltage(elevatorVoltage);
-        io.setPivotVoltage(pivotVoltage);
+        // io.setPivotVoltage(pivotVoltage);
         break;
       case SHOOTING:
         Logger.getInstance().setSuperstructureElevatorPosSetpoint(0.0);
@@ -118,7 +119,7 @@ public class Superstructure extends SubsystemBase {
         Logger.getInstance().setSuperstructurePivotVoltageSetpoint(pivotVoltageShooting);
         Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(elevatorVoltageShooting);
         io.setElevatorVoltage(elevatorVoltageShooting);
-        io.setPivotVoltage(pivotVoltageShooting);
+        // io.setPivotVoltage(pivotVoltageShooting);
         break;
     }
     if (DriverStation.isDisabled()) {
@@ -203,5 +204,9 @@ public class Superstructure extends SubsystemBase {
    */
   public double[] getElevatorPositions() {
     return new double[] {firstCarriagePositionMeters, secondCarriagePositionMeters};
+  }
+
+  public double getShooterHeightMeters() {
+    return firstCarriagePositionMeters + Units.inchesToMeters(20);
   }
 }

@@ -45,8 +45,8 @@ public class AutoShoot extends SequentialCommandGroup {
 
           // Calculates the shooting angle
           double opposite =
-              FieldConstants.Speaker.openingHeightLower
-                  + speakerOpeningHeightZ; // TODO: factor in elevator height
+              (FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ)
+                  - superstructure.getShooterHeightMeters();
           superstructure.setShootingAngleRad(() -> Math.atan2(opposite, flippedRobotPose.getX()));
 
           // Calculates the robot shooting rotation
