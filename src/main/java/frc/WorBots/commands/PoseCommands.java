@@ -21,10 +21,10 @@ public class PoseCommands {
   public static Command amp(Drive drive, Superstructure superstructure) {
     return Commands.runEnd(
             () -> {
-              Rotation2d angle = new Rotation2d();
+              Rotation2d angle = Rotation2d.fromDegrees(180);
               if (DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red) {
-                angle = Rotation2d.fromDegrees(180);
+                angle = new Rotation2d();
               }
               drive.setSingleThetaSetpoint(angle);
             },

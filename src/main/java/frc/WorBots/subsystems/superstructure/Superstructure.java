@@ -190,7 +190,7 @@ public class Superstructure extends SubsystemBase {
     // Do soft limiting
     volts =
         GeneralMath.softLimitVelocity(
-            volts, inputs.elevatorPercentageRaised, 10, 1.0, limitDistance);
+            volts, inputs.elevatorPercentageRaised, 12.0, 1.0, limitDistance);
 
     // Do hard limiting based on limit switches
     if (inputs.bottomLimitReached && volts < 0.0) {

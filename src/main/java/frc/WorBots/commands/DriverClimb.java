@@ -8,7 +8,6 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
@@ -32,9 +31,8 @@ public class DriverClimb extends Command {
   @Override
   public void execute() {
     double joystick = MathUtil.applyDeadband(joystickValue.get(), 0.09);
-    double volts = joystick * 8.0;
+    double volts = joystick * 9.0;
     superstructure.setClimbingVolts(volts);
-    SmartDashboard.putNumber("Intake/Voltage", volts);
   }
 
   @Override
