@@ -115,22 +115,19 @@ public class Drive extends SubsystemBase {
         module.stop();
       }
     } else {
+      double setpointRadsPerSec = setpoint.omegaRadiansPerSecond;
+
       // Apply additional rotation to get to theta setpoint
-      double additionalRotationalVelocity = 0.0;
       SmartDashboard.putBoolean("Drive/Theta Setpoint Exists", thetaSetpoint != null);
       if (thetaSetpoint != null) {
-        SmartDashboard.putNumber("Drive/Theta Setpoint", thetaSetpoint.getDegrees());
+        SmartDashboard.putNumber("Drive/Theta Setpoint", thetaSetpoint.getRadians());
         if (autoRemoveThetaSetpoint && thetaController.pid.atGoal()) {
-          System.out.println("Remove");
           removeThetaSetpoint();
         } else {
-          additionalRotationalVelocity =
+          setpointRadsPerSec +=
               thetaController.pid.calculate(getRotation().getRadians(), thetaSetpoint.getRadians());
         }
       }
-
-      final double setpointRadsPerSec =
-          setpoint.omegaRadiansPerSecond + additionalRotationalVelocity;
 
       var setpointTwist =
           new Pose2d()
@@ -389,6 +386,7 @@ public class Drive extends SubsystemBase {
    * @param setpoint The setpoint
    */
   public void setContinuousThetaSetpoint(Rotation2d setpoint) {
+    removeThetaSetpoint();
     this.thetaSetpoint = setpoint;
     autoRemoveThetaSetpoint = false;
   }
@@ -399,6 +397,7 @@ public class Drive extends SubsystemBase {
    * @param setpoint The setpoint
    */
   public void setSingleThetaSetpoint(Rotation2d setpoint) {
+    removeThetaSetpoint();
     this.thetaSetpoint = setpoint;
     autoRemoveThetaSetpoint = true;
   }
