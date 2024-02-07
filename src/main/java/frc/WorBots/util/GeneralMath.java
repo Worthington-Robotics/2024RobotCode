@@ -91,4 +91,27 @@ public class GeneralMath {
     }
     return value;
   }
+
+  /**
+   * Checks if an error value is within a margin
+   *
+   * @param measurement The measured value
+   * @param goal The setpoint margin
+   * @param margin The absolute margin to check
+   * @return Whether the error is in the margin
+   */
+  public static boolean checkError(double measurement, double goal, double margin) {
+    return checkError(goal - measurement, margin);
+  }
+
+  /**
+   * Checks if an error value is within a margin
+   *
+   * @param error The error value
+   * @param margin The absolute margin to check
+   * @return Whether the error is in the margin
+   */
+  public static boolean checkError(double error, double margin) {
+    return Math.abs(error) <= margin;
+  }
 }

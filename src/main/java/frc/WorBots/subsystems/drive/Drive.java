@@ -14,9 +14,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.WorBots.util.*;
 import frc.WorBots.util.PoseEstimator.*;
+import frc.WorBots.util.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.TunablePIDController.TunableProfiledPIDController;
+import frc.WorBots.util.TunablePIDController.TunableTrapezoidConstraints;
 import java.util.List;
 
 public class Drive extends SubsystemBase {
@@ -40,7 +44,20 @@ public class Drive extends SubsystemBase {
   private Twist2d fieldVelocity = new Twist2d();
   private Translation2d centerOfRotation = new Translation2d();
 
-  private NetworkTable driveTable = instance.getTable("Drive");
+  /** Theta setpoint. Can be null */
+  private Rotation2d thetaSetpoint = null;
+
+  /** PID controller for the theta setpoint */
+  private TunableProfiledPIDController thetaController =
+      new TunableProfiledPIDController(
+          new TunablePIDGains(driveTableName, "Theta Gains"),
+          new TunableTrapezoidConstraints(driveTableName, "Theta Constraints"));
+
+  /** Whether or not to automatically remove the theta setpoint when it is reached */
+  private boolean autoRemoveThetaSetpoint;
+
+  private static final String driveTableName = "Drive";
+  private NetworkTable driveTable = instance.getTable(driveTableName);
   private DoubleArrayPublisher speedSetpointPublisher =
       driveTable.getDoubleArrayTopic("Speed Setpoint").publish();
   private DoubleArrayPublisher setpointPublisher =
@@ -68,12 +85,23 @@ public class Drive extends SubsystemBase {
     modules[1] = new Module(frModule, 1);
     modules[2] = new Module(blModule, 2);
     modules[3] = new Module(brModule, 3);
+
+    if (!Constants.getSim()) {
+      thetaController.setGains(1.0, 0.0, 0.0);
+      thetaController.setConstraints(1.0, 1.0);
+    } else {
+      thetaController.setGains(1.0, 0.0, 0.0);
+      thetaController.setConstraints(1.0, 1.0);
+    }
+
     StatusPage.reportStatus(StatusPage.DRIVE_SUBSYSTEM, true);
   }
 
   public void periodic() {
     gyroIO.updateInputs(gyroInputs);
     StatusPage.reportStatus(StatusPage.GYROSCOPE, gyroInputs.connected);
+
+    thetaController.update();
 
     for (Module module : modules) {
       module.periodic();
@@ -84,13 +112,28 @@ public class Drive extends SubsystemBase {
         module.stop();
       }
     } else {
+      // Apply additional rotation to get to theta setpoint
+      double additionalRotationalVelocity = 0.0;
+      if (thetaSetpoint != null) {
+        if (autoRemoveThetaSetpoint && thetaController.pid.atGoal()) {
+          thetaSetpoint = null;
+          autoRemoveThetaSetpoint = false;
+        } else {
+          additionalRotationalVelocity =
+              thetaController.pid.calculate(getRotation().getRadians(), thetaSetpoint.getRadians());
+        }
+      }
+
+      final double setpointRadsPerSec =
+          setpoint.omegaRadiansPerSecond + additionalRotationalVelocity;
+
       var setpointTwist =
           new Pose2d()
               .log(
                   new Pose2d(
                       new Translation2d(
                           setpoint.vxMetersPerSecond * 0.02, setpoint.vyMetersPerSecond * 0.02),
-                      new Rotation2d(setpoint.omegaRadiansPerSecond * 0.02)));
+                      new Rotation2d(setpointRadsPerSec * 0.02)));
       var adjustedSpeeds =
           new ChassisSpeeds(
               setpointTwist.dx / 0.02, setpointTwist.dy / 0.02, setpointTwist.dtheta / 0.02);
@@ -333,6 +376,32 @@ public class Drive extends SubsystemBase {
           new SwerveModuleState(
               lastSetpointStates[i].speedMetersPerSecond, getModuleTranslations()[i].getAngle());
     }
+  }
+
+  /**
+   * Sets a continuous theta setpoint that will not clear automatically
+   *
+   * @param setpoint The setpoint
+   */
+  public void setContinuousThetaSetpoint(Rotation2d setpoint) {
+    this.thetaSetpoint = setpoint;
+    autoRemoveThetaSetpoint = false;
+  }
+
+  /**
+   * Sets a continuous theta setpoint that will automatically clear when it is reached
+   *
+   * @param setpoint The setpoint
+   */
+  public void setSingleThetaSetpoint(Rotation2d setpoint) {
+    this.thetaSetpoint = setpoint;
+    autoRemoveThetaSetpoint = true;
+  }
+
+  /** Removes the existing theta setpoint */
+  public void removeThetaSetpoint() {
+    this.thetaSetpoint = null;
+    autoRemoveThetaSetpoint = false;
   }
 
   /**
