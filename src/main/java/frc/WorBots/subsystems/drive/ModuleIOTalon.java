@@ -16,7 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
 
-public class ModuleIOKraken implements ModuleIO {
+public class ModuleIOTalon implements ModuleIO {
   private static final double DRIVE_ROTATIONS_TO_RADIANS =
       (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
 
@@ -38,7 +38,7 @@ public class ModuleIOKraken implements ModuleIO {
   private final StatusSignal<Double> turnCurrentSignal;
   private final StatusSignal<Double> turnTempSignal;
 
-  public ModuleIOKraken(int index) {
+  public ModuleIOTalon(int index) {
     switch (index) {
       case 0: // Front Left
         driveMotor = new TalonFX(1, Constants.SWERVE_CAN_BUS);

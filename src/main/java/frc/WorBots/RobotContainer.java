@@ -42,13 +42,13 @@ public class RobotContainer {
       drive =
           new Drive(
               new GyroIOPigeon2(),
-              new ModuleIOKraken(0),
-              new ModuleIOKraken(1),
-              new ModuleIOKraken(2),
-              new ModuleIOKraken(3));
+              new ModuleIOTalon(0),
+              new ModuleIOTalon(1),
+              new ModuleIOTalon(2),
+              new ModuleIOTalon(3));
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       superstructure = new Superstructure(new SuperstructureIOTalon());
-      intake = new Intake(new IntakeIOKraken());
+      intake = new Intake(new IntakeIOTalon());
       // shooter = new Shooter(new ShooterIOKraken());
     } else { // Sim
       drive =
