@@ -109,7 +109,7 @@ public class RobotContainer {
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.x().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
     driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
-    driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
+    driver.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
     driver.povUp().onTrue(superstructure.autoZero());
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
