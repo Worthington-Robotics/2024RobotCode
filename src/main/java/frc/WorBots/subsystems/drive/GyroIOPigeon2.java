@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.drive;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.util.Units;
@@ -16,27 +17,53 @@ import frc.WorBots.Constants;
 public class GyroIOPigeon2 implements GyroIO {
   private final Pigeon2 pigeon;
 
+  private final StatusSignal<Double> tempSignal;
+  private final StatusSignal<Double> pitchSignal;
+  private final StatusSignal<Double> rollSignal;
+  private final StatusSignal<Double> yawSignal;
+  private final StatusSignal<Double> pitchVelSignal;
+  private final StatusSignal<Double> rollVelSignal;
+  private final StatusSignal<Double> yawVelSignal;
+
   public GyroIOPigeon2() {
     pigeon = new Pigeon2(0, Constants.SWERVE_CAN_BUS);
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
-    pigeon.getPitch().setUpdateFrequency(50);
-    pigeon.getRoll().setUpdateFrequency(50);
-    pigeon.getYaw().setUpdateFrequency(100);
+    tempSignal = pigeon.getTemperature();
+    pitchSignal = pigeon.getPitch();
+    rollSignal = pigeon.getRoll();
+    yawSignal = pigeon.getYaw();
+    pitchVelSignal = pigeon.getAngularVelocityYDevice();
+    rollVelSignal = pigeon.getAngularVelocityXWorld();
+    yawVelSignal = pigeon.getAngularVelocityZDevice();
+    StatusSignal.setUpdateFrequencyForAll(
+        100,
+        tempSignal,
+        pitchSignal,
+        rollSignal,
+        yawSignal,
+        pitchVelSignal,
+        rollVelSignal,
+        yawVelSignal);
     pigeon.optimizeBusUtilization();
     pigeon.reset();
   }
 
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.connected = pigeon.getTemperature().getValue() != 0.0;
-    inputs.rollPositionRad = Units.degreesToRadians(pigeon.getRoll().getValue());
-    inputs.pitchPositionRad = Units.degreesToRadians(pigeon.getPitch().getValue());
-    inputs.yawPositionRad = Units.degreesToRadians(pigeon.getYaw().getValue());
-    inputs.rollVelocityRadPerSec =
-        Units.degreesToRadians(pigeon.getAngularVelocityXWorld().getValue());
-    inputs.pitchVelocityRadPerSec =
-        Units.degreesToRadians(pigeon.getAngularVelocityYDevice().getValue());
-    inputs.yawVelocityRadPerSec =
-        Units.degreesToRadians(pigeon.getAngularVelocityZDevice().getValue());
+    tempSignal.refresh();
+    pitchSignal.refresh();
+    rollSignal.refresh();
+    yawSignal.refresh();
+    pitchVelSignal.refresh();
+    rollVelSignal.refresh();
+    yawVelSignal.refresh();
+
+    inputs.connected = tempSignal.getValue() != 0.0;
+    inputs.rollPositionRad = Units.degreesToRadians(rollSignal.getValue());
+    inputs.pitchPositionRad = Units.degreesToRadians(pitchSignal.getValue());
+    inputs.yawPositionRad = Units.degreesToRadians(yawSignal.getValue());
+    inputs.pitchVelocityRadPerSec = Units.degreesToRadians(pitchVelSignal.getValue());
+    inputs.rollVelocityRadPerSec = Units.degreesToRadians(rollVelSignal.getValue());
+    inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelSignal.getValue());
   }
 
   public void resetHeading() {
