@@ -200,6 +200,15 @@ public class Superstructure extends SubsystemBase {
       volts = 0.0;
     }
 
+    setElevatorVoltageRaw(volts);
+  }
+
+  /**
+   * Sets and logs the elevator voltage while bypassing software limits
+   *
+   * @param volts The elevator voltage
+   */
+  private void setElevatorVoltageRaw(double volts) {
     io.setElevatorVoltage(volts);
     Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
   }
@@ -305,7 +314,28 @@ public class Superstructure extends SubsystemBase {
     return new double[] {firstCarriagePositionMeters, secondCarriagePositionMeters};
   }
 
+  /**
+   * Gets the height of the shooter in meters
+   *
+   * @return The shooter height
+   */
   public double getShooterHeightMeters() {
     return firstCarriagePositionMeters + Units.inchesToMeters(20);
+  }
+
+  /**
+   * Returns a command that will automatically find the elevator zero by moving it into the bottom
+   * limit switch
+   *
+   * @return The command that will auto zero
+   */
+  public Command autoZero() {
+    return this.runEnd(
+            () -> {
+              setElevatorVoltage(-4.0);
+            },
+            () -> setElevatorVoltage(0.0))
+        .onlyWhile(() -> !inputs.bottomLimitReached)
+        .andThen(this.runOnce(() -> io.resetElevator()));
   }
 }

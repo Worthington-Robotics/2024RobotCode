@@ -59,7 +59,11 @@ public class SuperstructureIOSim implements SuperstructureIO {
     inputs.elevatorVelocityMetersPerSec = pivot.getVelocityRadPerSec();
     inputs.elevatorPercentageRaised =
         inputs.elevatorPositionMeters / Units.inchesToMeters(33 - 5.74);
-    inputs.bottomLimitReached = inputs.elevatorPercentageRaised <= 0.0;
-    inputs.topLimitReached = inputs.elevatorPercentageRaised >= 1.0;
+    inputs.bottomLimitReached = elevator.hasHitLowerLimit();
+    inputs.topLimitReached = elevator.hasHitUpperLimit();
+  }
+
+  public void resetElevator() {
+    elevator.setState(0.0, elevator.getVelocityMetersPerSecond());
   }
 }

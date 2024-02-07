@@ -47,4 +47,7 @@ public interface SuperstructureIO {
    * @param inputs The inputs to be updated.
    */
   public default void updateInputs(SuperstructureIOInputs inputs) {}
+
+  /** Resets the elevator zero to the current position */
+  public default void resetElevator() {}
 }

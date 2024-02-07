@@ -74,4 +74,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     // inputs.pivotVoltageApplied = pivot.getMotorVoltage().getValue();
     // inputs.pivotConnected = pivot.isAlive() && pivotAbsEncoder.isConnected();
   }
+
+  public void resetElevator() {
+    elevator.setPosition(0.0);
+  }
 }
