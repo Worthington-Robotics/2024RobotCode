@@ -10,12 +10,15 @@ package frc.WorBots.subsystems.superstructure;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;
   private final TalonFX elevatorFollower;
   private final boolean isElevatorInverted = false;
+  private final DigitalInput bottomLimitSwitch = new DigitalInput(7);
+  private final DigitalInput topLimitSwitch = new DigitalInput(8);
 
   // private final TalonFX pivot;
   private final boolean isPivotInverted = false;
@@ -59,6 +62,9 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     inputs.elevatorVoltage = elevator.getMotorVoltage().getValue();
     inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
     inputs.elevatorConnected = elevator.isAlive();
+    // Enable when limit switches are added
+    // inputs.bottomLimitReached = bottomLimitSwitch.get();
+    // inputs.topLimitReached = topLimitSwitch.get();
 
     // final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
     // inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * pivotSign;

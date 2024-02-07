@@ -185,12 +185,23 @@ public class Superstructure extends SubsystemBase {
    * @param volts The elevator voltage
    */
   private void setElevatorVoltage(double volts) {
-    final double limit =
+    SmartDashboard.putNumber("Superstructure/Raw Elevator Setpoint", volts);
+
+    // Do soft limiting
+    volts =
         GeneralMath.softLimitVelocity(
             volts, inputs.elevatorPercentageRaised, 10, 1.0, limitDistance);
-    io.setElevatorVoltage(limit);
-    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(limit);
-    SmartDashboard.putNumber("Superstructure/Raw Elevator Setpoint", volts);
+
+    // Do hard limiting based on limit switches
+    if (inputs.bottomLimitReached && volts < 0.0) {
+      volts = 0.0;
+    }
+    if (inputs.topLimitReached && volts > 0.0) {
+      volts = 0.0;
+    }
+
+    io.setElevatorVoltage(volts);
+    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
   }
 
   /**
