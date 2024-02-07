@@ -13,13 +13,13 @@ import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 
-public class ShooterIOKraken implements ShooterIO {
+public class ShooterIOTalon implements ShooterIO {
   private TalonFX topFlywheel;
   private TalonFX bottomFlywheel;
   private TalonFX feederWheel;
   private TimeOfFlight timeOfFlight;
 
-  public ShooterIOKraken() {
+  public ShooterIOTalon() {
     topFlywheel = new TalonFX(0);
     bottomFlywheel = new TalonFX(0);
     feederWheel = new TalonFX(0);
