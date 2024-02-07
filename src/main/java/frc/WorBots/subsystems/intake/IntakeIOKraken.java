@@ -29,7 +29,8 @@ public class IntakeIOKraken implements IntakeIO {
     inputs.temperatureCelsius = intakeMotor.getDeviceTemp().getValue();
     inputs.velocityRadsPerSec = Units.rotationsToRadians(intakeMotor.getVelocity().getValue());
     // inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
-    inputs.isConnected = inputs.temperatureCelsius != 0.0 ? true : false;
+    inputs.isConnected = inputs.temperatureCelsius != 0.0;
+    // inputs.isConnected &= DeviceUtils.getTimeOfFlightStatus(timeOfFlight);
   }
 
   @Override

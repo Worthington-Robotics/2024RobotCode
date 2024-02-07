@@ -105,7 +105,10 @@ public class RobotContainer {
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
     driver.a().whileTrue(intake.intakeRaw());
-    driver.b().whileTrue(intake.outtakeRaw());
+    // driver.b().whileTrue(intake.spitRaw().alongWith(Commands.run(() -> {
+    // drive.runVelocity(new ChassisSpeeds(0.0, -0.2, 0.0));
+    // }, drive)));
+    driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.x().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
     driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));

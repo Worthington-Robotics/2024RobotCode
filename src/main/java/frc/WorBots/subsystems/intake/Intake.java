@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.intake;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
 import frc.WorBots.util.StatusPage;
@@ -16,7 +17,12 @@ public class Intake extends SubsystemBase {
   private IntakeIOInputs inputs = new IntakeIOInputs();
   private double setpointVolts = 0.0;
   private boolean hasGamepiece = false;
+
+  // Constants
   public static final double distanceThreshold = 0.25;
+  private static final double intakeVolts = 5.0;
+  private static final double constantForce = 0.0;
+  private static final double maxTemperature = 80.0;
 
   /**
    * The intake subsystem, responsible for intaking game pieces from the ground and passing them to
@@ -37,13 +43,14 @@ public class Intake extends SubsystemBase {
     } else {
       hasGamepiece = true;
     }
-    hasGamepiece = false;
 
-    if (inputs.temperatureCelsius > 80) {
+    if (inputs.temperatureCelsius > maxTemperature || DriverStation.isDisabled()) {
       setpointVolts = 0.0;
     }
 
-    StatusPage.reportStatus(StatusPage.INTAKE_CONNECTED, inputs.isConnected);
+    StatusPage.reportStatus(
+        StatusPage.INTAKE_CONNECTED,
+        inputs.isConnected && inputs.temperatureCelsius <= maxTemperature);
 
     io.setIntakeVoltage(setpointVolts);
   }
@@ -57,22 +64,22 @@ public class Intake extends SubsystemBase {
     return this.runOnce(
             () -> {
               if (hasGamepiece == true) {
-                setpointVolts = 0.5;
+                setpointVolts = constantForce;
               } else {
-                setpointVolts = 8.0;
+                setpointVolts = intakeVolts;
               }
             })
         .andThen(Commands.waitUntil(this::hasGamePiece))
         .finallyDo(
             () -> {
-              setpointVolts = 0.5;
+              setpointVolts = constantForce;
             });
   }
 
   public Command intakeRaw() {
     return this.run(
             () -> {
-              setpointVolts = -5.0;
+              setpointVolts = -intakeVolts;
             })
         .finallyDo(
             () -> {
@@ -80,10 +87,10 @@ public class Intake extends SubsystemBase {
             });
   }
 
-  public Command outtakeRaw() {
+  public Command spitRaw() {
     return this.run(
             () -> {
-              setpointVolts = 5.0;
+              setpointVolts = intakeVolts;
             })
         .finallyDo(
             () -> {
