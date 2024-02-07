@@ -12,9 +12,9 @@ var searchData=
   ['module_2ejava_9',['Module.java',['../Module_8java.html',1,'']]],
   ['moduleio_10',['ModuleIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIO.html',1,'frc::WorBots::subsystems::drive']]],
   ['moduleio_2ejava_11',['ModuleIO.java',['../ModuleIO_8java.html',1,'']]],
-  ['moduleiokraken_12',['ModuleIOKraken',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html',1,'frc.WorBots.subsystems.drive.ModuleIOKraken'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOKraken.html#a900d5ce81dfa0d6e1baddb172674244f',1,'frc.WorBots.subsystems.drive.ModuleIOKraken.ModuleIOKraken()']]],
-  ['moduleiokraken_2ejava_13',['ModuleIOKraken.java',['../ModuleIOKraken_8java.html',1,'']]],
-  ['moduleiosim_14',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc::WorBots::subsystems::drive']]],
-  ['moduleiosim_2ejava_15',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
+  ['moduleiosim_12',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc::WorBots::subsystems::drive']]],
+  ['moduleiosim_2ejava_13',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
+  ['moduleiotalon_14',['ModuleIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html',1,'frc.WorBots.subsystems.drive.ModuleIOTalon'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html#a33b1af7147a15b90489b088fe2996320',1,'frc.WorBots.subsystems.drive.ModuleIOTalon.ModuleIOTalon()']]],
+  ['moduleiotalon_2ejava_15',['ModuleIOTalon.java',['../ModuleIOTalon_8java.html',1,'']]],
   ['multiplytwist_16',['multiplyTwist',['../classfrc_1_1WorBots_1_1util_1_1GeomUtil.html#af330d7626091c9353677424f3b1ef7a5',1,'frc::WorBots::util::GeomUtil']]]
 ];
