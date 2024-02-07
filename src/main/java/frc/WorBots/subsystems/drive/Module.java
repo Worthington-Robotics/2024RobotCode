@@ -79,7 +79,7 @@ public class Module {
             + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec);
 
     // Perform anti-jitter to prevent module rotations for very small motions
-    if (driveVolts < 12.0 * antiJitterThreshold) {
+    if (Math.abs(driveVolts) < 12.0 * antiJitterThreshold) {
       state.angle = lastSetpoint.angle;
     }
 

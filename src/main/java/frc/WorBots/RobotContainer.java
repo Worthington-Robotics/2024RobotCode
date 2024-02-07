@@ -7,6 +7,7 @@
 
 package frc.WorBots;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
@@ -105,14 +106,23 @@ public class RobotContainer {
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
     driver.a().whileTrue(intake.intakeRaw());
-    // driver.b().whileTrue(intake.spitRaw().alongWith(Commands.run(() -> {
-    // drive.runVelocity(new ChassisSpeeds(0.0, -0.2, 0.0));
-    // }, drive)));
-    driver.b().whileTrue(intake.spitRaw());
+    driver
+        .b()
+        .whileTrue(
+            intake
+                .spitRaw()
+                .alongWith(
+                    Commands.run(
+                        () -> {
+                          drive.runVelocity(new ChassisSpeeds(-0.5, 0.0, 0.0));
+                        },
+                        drive)));
+    // driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.x().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
     driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
     driver.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
+    // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     driver.povUp().onTrue(superstructure.autoZero());
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));

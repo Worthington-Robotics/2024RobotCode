@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
@@ -87,12 +88,14 @@ public class Drive extends SubsystemBase {
     modules[3] = new Module(brModule, 3);
 
     if (!Constants.getSim()) {
-      thetaController.setGains(1.0, 0.0, 0.0);
-      thetaController.setConstraints(1.0, 1.0);
+      thetaController.setGains(3.5, 0.01, 0.0);
+      thetaController.setConstraints(1.35, 1.2);
     } else {
       thetaController.setGains(1.0, 0.0, 0.0);
       thetaController.setConstraints(1.0, 1.0);
     }
+    thetaController.pid.enableContinuousInput(0, 2 * Math.PI);
+    thetaController.pid.setTolerance(Units.degreesToRadians(4.5));
 
     StatusPage.reportStatus(StatusPage.DRIVE_SUBSYSTEM, true);
   }
@@ -114,10 +117,12 @@ public class Drive extends SubsystemBase {
     } else {
       // Apply additional rotation to get to theta setpoint
       double additionalRotationalVelocity = 0.0;
+      SmartDashboard.putBoolean("Drive/Theta Setpoint Exists", thetaSetpoint != null);
       if (thetaSetpoint != null) {
+        SmartDashboard.putNumber("Drive/Theta Setpoint", thetaSetpoint.getDegrees());
         if (autoRemoveThetaSetpoint && thetaController.pid.atGoal()) {
-          thetaSetpoint = null;
-          autoRemoveThetaSetpoint = false;
+          System.out.println("Remove");
+          removeThetaSetpoint();
         } else {
           additionalRotationalVelocity =
               thetaController.pid.calculate(getRotation().getRadians(), thetaSetpoint.getRadians());
@@ -402,6 +407,7 @@ public class Drive extends SubsystemBase {
   public void removeThetaSetpoint() {
     this.thetaSetpoint = null;
     autoRemoveThetaSetpoint = false;
+    thetaController.pid.reset(getRotation().getRadians());
   }
 
   /**

@@ -101,6 +101,10 @@ public class ModuleIOTalon implements ModuleIO {
         turnVoltsSignal,
         turnCurrentSignal,
         turnTempSignal);
+
+    driveMotor.optimizeBusUtilization();
+    turnMotor.optimizeBusUtilization();
+    absoluteEncoder.optimizeBusUtilization();
   }
 
   public void updateInputs(ModuleIOInputs inputs) {
@@ -138,12 +142,12 @@ public class ModuleIOTalon implements ModuleIO {
   }
 
   public void setDriveVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -11.5, 11.5);
+    volts = MathUtil.clamp(volts, -9, 9);
     driveMotor.setVoltage(volts);
   }
 
   public void setTurnVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -10.5, 10.5);
+    volts = MathUtil.clamp(volts, -6, 6);
     turnMotor.setVoltage(volts);
   }
 

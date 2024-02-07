@@ -72,8 +72,8 @@ public class DriveWithJoysticks extends Command {
     // Convert to meters per second
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-            linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+            linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * 0.75,
+            linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * 0.75,
             rightY * 10.0);
 
     // Convert from field relative

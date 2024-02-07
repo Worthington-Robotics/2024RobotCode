@@ -19,19 +19,24 @@ import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 public class PoseCommands {
   /** Turns to the alliance amp and moves the superstructure to amp pose */
   public static Command amp(Drive drive, Superstructure superstructure) {
-    return Commands.runEnd(
+    return Commands.runOnce(
             () -> {
-              Rotation2d angle = Rotation2d.fromDegrees(180);
+              Rotation2d angle = Rotation2d.fromDegrees(90);
               if (DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red) {
-                angle = new Rotation2d();
+                  && DriverStation.getAlliance().get() == Alliance.Blue) {
+                angle = Rotation2d.fromDegrees(270);
               }
               drive.setSingleThetaSetpoint(angle);
-            },
+            })
+        .alongWith(superstructure.setPose(Preset.AMP))
+        .andThen(Commands.waitSeconds(2.0))
+        .andThen(
             () -> {
               drive.removeThetaSetpoint();
-            },
-            drive)
-        .andThen(superstructure.setPose(Preset.AMP));
+            })
+        .handleInterrupt(
+            () -> {
+              drive.removeThetaSetpoint();
+            });
   }
 }

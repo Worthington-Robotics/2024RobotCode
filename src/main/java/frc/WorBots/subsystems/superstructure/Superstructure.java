@@ -70,7 +70,7 @@ public class Superstructure extends SubsystemBase {
     if (!Constants.getSim()) { // Real
       pivotController.setGains(50.0, 0, 0);
       pivotController.setConstraints(1.0, 1.0);
-      elevatorController.setGains(185, 0.075, 0);
+      elevatorController.setGains(185, 0.095, 0);
       elevatorController.setConstraints(2.0, 1.2);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
@@ -335,9 +335,9 @@ public class Superstructure extends SubsystemBase {
   public Command autoZero() {
     return this.runEnd(
             () -> {
-              setElevatorVoltage(-4.0);
+              setElevatorVoltageRaw(-4.0);
             },
-            () -> setElevatorVoltage(0.0))
+            () -> setElevatorVoltageRaw(0.0))
         .onlyWhile(() -> !inputs.bottomLimitReached)
         .andThen(this.runOnce(() -> io.resetElevator()));
   }
