@@ -21,6 +21,7 @@ public class Module {
   private final int index;
   private final ModuleIO io;
   private final ModuleIOInputs inputs = new ModuleIOInputs();
+  private SwerveModuleState lastSetpoint = new SwerveModuleState();
 
   private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
   private static TunablePIDGains driveFeedbackGains =
@@ -29,6 +30,12 @@ public class Module {
   private static TunablePIDGains turnFeedbackGains =
       new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
   private TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
+
+  // Constants
+  /**
+   * The minimum speed percentage of the maximum that can be set before angle changes are ignored
+   */
+  private static final double antiJitterThreshold = 0.01;
 
   /**
    * This module represents one swerve module, which includes a turn motor, and drive motor.
@@ -66,13 +73,22 @@ public class Module {
    * @param state The desired state.
    */
   public void runState(SwerveModuleState state) {
+    final double velocityRadPerSec = state.speedMetersPerSecond / Units.inchesToMeters(2.0);
+    final double driveVolts =
+        driveFeedforward.calculate(velocityRadPerSec)
+            + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec);
+
+    // Perform anti-jitter to prevent module rotations for very small motions
+    if (driveVolts < 12.0 * antiJitterThreshold) {
+      state.angle = lastSetpoint.angle;
+    }
+
     io.setTurnVoltage(
         turnFeedback.pid.calculate(getAngle().getRadians(), state.angle.getRadians()));
 
-    double velocityRadPerSec = state.speedMetersPerSecond / Units.inchesToMeters(2.0);
-    io.setDriveVoltage(
-        driveFeedforward.calculate(velocityRadPerSec)
-            + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+    io.setDriveVoltage(driveVolts);
+
+    lastSetpoint = state;
   }
 
   /**
