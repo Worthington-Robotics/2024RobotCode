@@ -60,7 +60,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
     inputs.elevatorConnected = elevator.isAlive();
 
-    final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
+    // final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
     // inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * pivotSign;
     // inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
     // inputs.pivotVelocityRadPerSec = pivotRelEncoder.getRate() * pivotSign;

@@ -54,7 +54,7 @@ public class Module {
     } else { // Real constants
       driveFeedforward = new SimpleMotorFeedforward(0.18868, 0.12825);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-      turnFeedbackGains.setGains(9.0, 0.01, 0.0);
+      turnFeedbackGains.setGains(8.5, 0.015, 0.0);
     }
     turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
   }

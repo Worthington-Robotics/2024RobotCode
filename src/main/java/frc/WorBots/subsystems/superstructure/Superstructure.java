@@ -49,6 +49,7 @@ public class Superstructure extends SubsystemBase {
 
   // Constants
   private static final String tableName = "Superstructure";
+  private static final double limitDistance = 0.25;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -185,10 +186,11 @@ public class Superstructure extends SubsystemBase {
    */
   private void setElevatorVoltage(double volts) {
     final double limit =
-        GeneralMath.softLimitVelocity(volts, inputs.elevatorPercentageRaised, 10, 1.0, 0.3);
+        GeneralMath.softLimitVelocity(
+            volts, inputs.elevatorPercentageRaised, 10, 1.0, limitDistance);
     io.setElevatorVoltage(limit);
     Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(limit);
-    SmartDashboard.putNumber("Superstructure/Raw", volts);
+    SmartDashboard.putNumber("Superstructure/Raw Elevator Setpoint", volts);
   }
 
   /**
