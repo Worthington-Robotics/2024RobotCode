@@ -27,7 +27,11 @@ public class GeneralMath {
       double maxVelocity,
       double maxPosition,
       double limitDistance) {
-    if (position <= 0 || position >= maxPosition) {
+    // Hard limits
+    if (position < 0 && Math.signum(velocity) == -1) {
+      return 0;
+    }
+    if (position > maxPosition && Math.signum(velocity) == 1) {
       return 0;
     }
 
@@ -50,7 +54,7 @@ public class GeneralMath {
       final double rightBound = maxPosition - limitDistance;
       if (position > rightBound) {
         // Get the reciprocal because we want the slope to go the other way
-        final double scalar = 1 / getScalarPosition(position, rightBound, maxPosition);
+        final double scalar = 1 - getScalarPosition(position, rightBound, maxPosition);
         final double clamp = clampMagnitude(velocity, maxVelocity * scalar);
         return clamp;
       }

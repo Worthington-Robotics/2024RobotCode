@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.superstructure;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;
@@ -18,11 +19,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   // private final TalonFX pivot;
   private final boolean isPivotInverted = false;
-  private final double maxElevationRotations = 0.5;
+  private final double maxElevationRotations = 158.1;
   // private final DutyCycleEncoder pivotAbsEncoder;
   // private final Encoder pivotRelEncoder;
 
-  private static final double elevatorGearing = 81.0; // in meters per revolution
+  private static final double elevatorGearing = 591.156; // in meter per revolution of 1st carriage
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(2);
@@ -37,8 +38,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -0.5, 0.5);
-    elevator.setVoltage(0);
+    volts = MathUtil.clamp(volts, -12, 12);
+    elevator.setVoltage(volts);
   }
 
   public void setPivotVoltage(double volts) {
@@ -49,6 +50,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   public void updateInputs(SuperstructureIOInputs inputs) {
     inputs.elevatorPositionMeters =
         (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? -1.0 : 1.0);
+    SmartDashboard.putNumber("RawEnc", elevator.getPosition().getValue());
     inputs.elevatorVelocityMetersPerSec =
         (elevator.getVelocity().getValue() / elevatorGearing) * (isElevatorInverted ? -1.0 : 1.0);
     inputs.elevatorPercentageRaised =

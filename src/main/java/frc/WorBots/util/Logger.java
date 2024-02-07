@@ -77,6 +77,8 @@ public class Logger {
       elevatorTable.getDoubleTopic("Velocity Meters Per Sec").publish();
   DoublePublisher elevatorVoltage = elevatorTable.getDoubleTopic("Voltage Applied").publish();
   DoublePublisher elevatorTemp = elevatorTable.getDoubleTopic("Temp Celsius").publish();
+  DoublePublisher elevatorPercentageRaised =
+      elevatorTable.getDoubleTopic("Percentage Raised").publish();
 
   public void logPose3d(String tableName, String topicName, Pose3d pose) {
     NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
@@ -287,6 +289,7 @@ public class Logger {
     elevatorVelocity.set(inputs.elevatorVelocityMetersPerSec);
     elevatorVoltage.set(inputs.elevatorVoltage);
     elevatorTemp.set(inputs.elevatorTemp);
+    elevatorPercentageRaised.set(inputs.elevatorPercentageRaised);
   }
 
   public void setSuperstructureSetpoints(

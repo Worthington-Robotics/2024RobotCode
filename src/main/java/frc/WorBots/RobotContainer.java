@@ -15,6 +15,7 @@ import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
+import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.*;
 import java.util.*;
@@ -106,7 +107,9 @@ public class RobotContainer {
     driver.a().whileTrue(intake.intakeRaw());
     driver.b().whileTrue(intake.outtakeRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
-    driver.start().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
+    driver.x().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
+    driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
+    driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
     // driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));

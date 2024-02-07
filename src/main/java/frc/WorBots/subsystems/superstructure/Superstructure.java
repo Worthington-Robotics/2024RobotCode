@@ -11,6 +11,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
@@ -68,9 +69,9 @@ public class Superstructure extends SubsystemBase {
     if (!Constants.getSim()) { // Real
       pivotController.setGains(50.0, 0, 0);
       pivotController.setConstraints(1.0, 1.0);
-      elevatorController.setGains(8.0, 0, 0);
-      elevatorController.setConstraints(1.0, 1.0);
-      elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
+      elevatorController.setGains(185, 0.075, 0);
+      elevatorController.setConstraints(2.0, 1.2);
+      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     } else { // Sim
       pivotController.setGains(100, 0, 0);
@@ -108,13 +109,12 @@ public class Superstructure extends SubsystemBase {
                 + secondCarriageRangeMeters[0])
             + firstCarriagePositionMeters
             + Units.inchesToMeters(1.0);
-
     switch (state) {
       case POSE:
         runPose(setpoint.getElevator(), setpoint.getPivot());
         break;
       case SHOOTING:
-        runPose(shootingAngleRad.get(), inputs.elevatorPositionMeters);
+        runPose(shootingAngleRad.get(), 0.0);
         break;
       case CLIMBING:
         final double volts = climbingVolts.get();
@@ -184,8 +184,11 @@ public class Superstructure extends SubsystemBase {
    * @param volts The elevator voltage
    */
   private void setElevatorVoltage(double volts) {
-    io.setElevatorVoltage(volts);
-    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
+    final double limit =
+        GeneralMath.softLimitVelocity(volts, inputs.elevatorPercentageRaised, 10, 1.0, 0.3);
+    io.setElevatorVoltage(limit);
+    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(limit);
+    SmartDashboard.putNumber("Superstructure/Raw", volts);
   }
 
   /**

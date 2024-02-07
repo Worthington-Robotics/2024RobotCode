@@ -8,6 +8,7 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
@@ -19,23 +20,30 @@ public class DriverClimb extends Command {
 
   public DriverClimb(Superstructure superstructure, Supplier<Double> joystickValue) {
     this.joystickValue = joystickValue;
+    this.superstructure = superstructure;
     addRequirements(superstructure);
   }
 
   @Override
   public void initialize() {
-    superstructure.setMode(SuperstructureState.CLIMBING);
+    superstructure.setModeVoid(SuperstructureState.CLIMBING);
   }
 
   @Override
   public void execute() {
     double joystick = MathUtil.applyDeadband(joystickValue.get(), 0.09);
-    double volts = joystick * 5.0;
+    double volts = joystick * 8.0;
     superstructure.setClimbingVolts(volts);
+    SmartDashboard.putNumber("Intake/Voltage", volts);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 
   @Override
   public void end(boolean interrupted) {
-    superstructure.setMode(SuperstructureState.POSE);
+    superstructure.setModeVoid(SuperstructureState.POSE);
   }
 }
