@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.drive;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -19,10 +20,23 @@ public class ModuleIOKraken implements ModuleIO {
   private static final double DRIVE_ROTATIONS_TO_RADIANS =
       (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
 
-  private TalonFX driveMotor;
-  private TalonFX turnMotor;
-  private CANcoder absoluteEncoder;
-  private Rotation2d encoderOffset;
+  private final TalonFX driveMotor;
+  private final TalonFX turnMotor;
+  private final CANcoder absoluteEncoder;
+  private final Rotation2d encoderOffset;
+
+  private final StatusSignal<Double> drivePosSignal;
+  private final StatusSignal<Double> driveVelSignal;
+  private final StatusSignal<Double> driveVoltsSignal;
+  private final StatusSignal<Double> driveCurrentSignal;
+  private final StatusSignal<Double> driveTempSignal;
+
+  private final StatusSignal<Double> turnAbsPosSignal;
+  private final StatusSignal<Double> turnPosSignal;
+  private final StatusSignal<Double> turnVelSignal;
+  private final StatusSignal<Double> turnVoltsSignal;
+  private final StatusSignal<Double> turnCurrentSignal;
+  private final StatusSignal<Double> turnTempSignal;
 
   public ModuleIOKraken(int index) {
     switch (index) {
@@ -59,27 +73,66 @@ public class ModuleIOKraken implements ModuleIO {
 
     driveMotor.setInverted(false);
     turnMotor.setInverted(true);
+
+    // Signals
+    drivePosSignal = driveMotor.getPosition();
+    driveVelSignal = driveMotor.getVelocity();
+    driveVoltsSignal = driveMotor.getSupplyVoltage();
+    driveCurrentSignal = driveMotor.getSupplyCurrent();
+    driveTempSignal = driveMotor.getDeviceTemp();
+
+    turnAbsPosSignal = absoluteEncoder.getAbsolutePosition();
+    turnPosSignal = turnMotor.getPosition();
+    turnVelSignal = turnMotor.getVelocity();
+    turnVoltsSignal = turnMotor.getSupplyVoltage();
+    turnCurrentSignal = turnMotor.getSupplyCurrent();
+    turnTempSignal = turnMotor.getDeviceTemp();
+
+    StatusSignal.setUpdateFrequencyForAll(
+        100,
+        drivePosSignal,
+        driveVelSignal,
+        driveVoltsSignal,
+        driveCurrentSignal,
+        driveTempSignal,
+        turnAbsPosSignal,
+        turnPosSignal,
+        turnVelSignal,
+        turnVoltsSignal,
+        turnCurrentSignal,
+        turnTempSignal);
   }
 
   public void updateInputs(ModuleIOInputs inputs) {
+    StatusSignal.refreshAll(
+        drivePosSignal,
+        driveVelSignal,
+        driveVoltsSignal,
+        driveCurrentSignal,
+        driveTempSignal,
+        turnAbsPosSignal,
+        turnPosSignal,
+        turnVelSignal,
+        turnVoltsSignal,
+        turnCurrentSignal,
+        turnTempSignal);
+
     inputs.drivePositionRad =
-        Units.rotationsToRadians(driveMotor.getPosition().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
+        Units.rotationsToRadians(drivePosSignal.getValue() * DRIVE_ROTATIONS_TO_RADIANS);
     inputs.driveVelocityRadPerSec =
-        Units.rotationsToRadians(driveMotor.getVelocity().getValue() * DRIVE_ROTATIONS_TO_RADIANS);
-    inputs.driveAppliedVolts = driveMotor.get() * driveMotor.getSupplyVoltage().getValue();
-    inputs.driveCurrentAmps = new double[] {driveMotor.getStatorCurrent().getValue()};
-    inputs.driveTempCelcius = new double[] {driveMotor.getDeviceTemp().getValue()};
+        Units.rotationsToRadians(driveVelSignal.getValue() * DRIVE_ROTATIONS_TO_RADIANS);
+    inputs.driveAppliedVolts = driveMotor.get() * driveVoltsSignal.getValue();
+    inputs.driveCurrentAmps = new double[] {driveCurrentSignal.getValue()};
+    inputs.driveTempCelcius = new double[] {driveTempSignal.getValue()};
 
     inputs.turnAbsolutePositionRad =
         MathUtil.angleModulus(
-            Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValue())
-                - encoderOffset.getRadians());
-    inputs.turnVelocityRadPerSec =
-        Units.rotationsToRadians(absoluteEncoder.getVelocity().getValue());
-    inputs.turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getPosition().getValue());
-    inputs.turnAppliedVolts = turnMotor.get() * turnMotor.getSupplyVoltage().getValue();
-    inputs.turnCurrentAmps = new double[] {turnMotor.getStatorCurrent().getValue()};
-    inputs.turnTempCelcius = new double[] {turnMotor.getDeviceTemp().getValue()};
+            Units.rotationsToRadians(turnAbsPosSignal.getValue()) - encoderOffset.getRadians());
+    inputs.turnPositionRad = Units.rotationsToRadians(turnPosSignal.getValue());
+    inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnVelSignal.getValue());
+    inputs.turnAppliedVolts = turnMotor.get() * turnVoltsSignal.getValue();
+    inputs.turnCurrentAmps = new double[] {turnCurrentSignal.getValue()};
+    inputs.turnTempCelcius = new double[] {turnTempSignal.getValue()};
 
     inputs.isConnected = turnMotor.isAlive() && driveMotor.isAlive();
   }
@@ -90,7 +143,7 @@ public class ModuleIOKraken implements ModuleIO {
   }
 
   public void setTurnVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -11, 11);
+    volts = MathUtil.clamp(volts, -10.5, 10.5);
     turnMotor.setVoltage(volts);
   }
 
