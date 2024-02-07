@@ -88,10 +88,111 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:abd7f24452b990ea4e1ef914a00262cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e76c46433c40463e75f85d2894753e6"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1GeneralMath.html#a3e76c46433c40463e75f85d2894753e6">clampMagnitude</a> (double value, double max)</td></tr>
 <tr class="separator:a3e76c46433c40463e75f85d2894753e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec63e7bf5de279c1bc5e05449fc71bf7"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1GeneralMath.html#aec63e7bf5de279c1bc5e05449fc71bf7">checkError</a> (double measurement, double goal, double margin)</td></tr>
+<tr class="separator:aec63e7bf5de279c1bc5e05449fc71bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56b2542512f1e592b7b5ca97b8e8efe9"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1GeneralMath.html#a56b2542512f1e592b7b5ca97b8e8efe9">checkError</a> (double error, double margin)</td></tr>
+<tr class="separator:a56b2542512f1e592b7b5ca97b8e8efe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >General math utilities </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a56b2542512f1e592b7b5ca97b8e8efe9" name="a56b2542512f1e592b7b5ca97b8e8efe9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56b2542512f1e592b7b5ca97b8e8efe9">&#9670;&#160;</a></span>checkError() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static boolean frc.WorBots.util.GeneralMath.checkError </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>error</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>margin</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Checks if an error value is within a margin</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">error</td><td>The error value </td></tr>
+    <tr><td class="paramname">margin</td><td>The absolute margin to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the error is in the margin </dd></dl>
+
+</div>
+</div>
+<a id="aec63e7bf5de279c1bc5e05449fc71bf7" name="aec63e7bf5de279c1bc5e05449fc71bf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec63e7bf5de279c1bc5e05449fc71bf7">&#9670;&#160;</a></span>checkError() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static boolean frc.WorBots.util.GeneralMath.checkError </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>measurement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>goal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>margin</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Checks if an error value is within a margin</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measurement</td><td>The measured value </td></tr>
+    <tr><td class="paramname">goal</td><td>The setpoint margin </td></tr>
+    <tr><td class="paramname">margin</td><td>The absolute margin to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the error is in the margin </dd></dl>
+
+</div>
+</div>
 <a id="a3e76c46433c40463e75f85d2894753e6" name="a3e76c46433c40463e75f85d2894753e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3e76c46433c40463e75f85d2894753e6">&#9670;&#160;</a></span>clampMagnitude()</h2>
 

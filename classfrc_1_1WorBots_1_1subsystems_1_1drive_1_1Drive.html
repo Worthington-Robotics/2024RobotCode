@@ -130,6 +130,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4a1a85ec516c2d359da98b2e6b025c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3940d9f4a7ba7b26750c42bc3b981f6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a3940d9f4a7ba7b26750c42bc3b981f6d">stopWithLock</a> ()</td></tr>
 <tr class="separator:a3940d9f4a7ba7b26750c42bc3b981f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b7fcf4ceabdd5ca55dfd92f90ff006c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a2b7fcf4ceabdd5ca55dfd92f90ff006c">setContinuousThetaSetpoint</a> (Rotation2d setpoint)</td></tr>
+<tr class="separator:a2b7fcf4ceabdd5ca55dfd92f90ff006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaabd91097ef62772386e3cf262d0d2bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#aaabd91097ef62772386e3cf262d0d2bd">setSingleThetaSetpoint</a> (Rotation2d setpoint)</td></tr>
+<tr class="separator:aaabd91097ef62772386e3cf262d0d2bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5193bd3175f092f3071ba3de814b166"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#aa5193bd3175f092f3071ba3de814b166">removeThetaSetpoint</a> ()</td></tr>
+<tr class="separator:aa5193bd3175f092f3071ba3de814b166"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aa66277fb1d314de13ed8a7355ef370"><td class="memItemLeft" align="right" valign="top">Translation2d[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a8aa66277fb1d314de13ed8a7355ef370">getModuleTranslations</a> ()</td></tr>
 <tr class="separator:a8aa66277fb1d314de13ed8a7355ef370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -609,6 +615,32 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa5193bd3175f092f3071ba3de814b166" name="aa5193bd3175f092f3071ba3de814b166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5193bd3175f092f3071ba3de814b166">&#9670;&#160;</a></span>removeThetaSetpoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void frc.WorBots.subsystems.drive.Drive.removeThetaSetpoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Removes the existing theta setpoint </p>
+
+</div>
+</div>
 <a id="a22f0480915fd39d7bdfc9fc2672bd433" name="a22f0480915fd39d7bdfc9fc2672bd433"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a22f0480915fd39d7bdfc9fc2672bd433">&#9670;&#160;</a></span>resetHeading()</h2>
 
@@ -701,6 +733,39 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a2b7fcf4ceabdd5ca55dfd92f90ff006c" name="a2b7fcf4ceabdd5ca55dfd92f90ff006c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b7fcf4ceabdd5ca55dfd92f90ff006c">&#9670;&#160;</a></span>setContinuousThetaSetpoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void frc.WorBots.subsystems.drive.Drive.setContinuousThetaSetpoint </td>
+          <td>(</td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>setpoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Sets a continuous theta setpoint that will not clear automatically</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">setpoint</td><td>The setpoint </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a2842c444ba946d2e5ed2c496f0eced27" name="a2842c444ba946d2e5ed2c496f0eced27"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2842c444ba946d2e5ed2c496f0eced27">&#9670;&#160;</a></span>setPose()</h2>
 
@@ -728,6 +793,39 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pose</td><td>The pose to be set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaabd91097ef62772386e3cf262d0d2bd" name="aaabd91097ef62772386e3cf262d0d2bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabd91097ef62772386e3cf262d0d2bd">&#9670;&#160;</a></span>setSingleThetaSetpoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void frc.WorBots.subsystems.drive.Drive.setSingleThetaSetpoint </td>
+          <td>(</td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>setpoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Sets a continuous theta setpoint that will automatically clear when it is reached</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">setpoint</td><td>The setpoint </td></tr>
   </table>
   </dd>
 </dl>
