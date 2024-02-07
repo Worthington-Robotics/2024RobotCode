@@ -79,31 +79,32 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       hasGamePiece = false;
     }
 
-    // Calculate the desired voltages based on the setpoints
-    io.setTopFlywheelVolts(
-        topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
-            + topFlywheelFeedForward.calculate(topFlywheelRPM));
-    io.setBottomFlywheelVolts(
-        bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
-            + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
-    // If we want to move the feeder wheel.
-    if (shouldIncrement) {
-      io.setFeederWheelVoltage(
-          feederWheelController.pid.calculate(
-              inputs.feederWheelPositionRads,
-              inputs.feederWheelPositionRads + increasePositionRads));
-    } else if (shouldIncrement
-        && feederWheelController.pid
-            .atSetpoint()) { // if we want to move it, and its at the setpoint.
-      io.setFeederWheelVoltage(0.0);
-      shouldIncrement = false;
-    }
-
     if (DriverStation.isDisabled()) { // Set voltages to 0 if we are disabled.
       io.setTopFlywheelVolts(0.0);
       io.setBottomFlywheelVolts(0.0);
       io.setFeederWheelVoltage(0.0);
+    } else {
+      // Calculate the desired voltages based on the setpoints
+      io.setTopFlywheelVolts(
+          topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
+              + topFlywheelFeedForward.calculate(topFlywheelRPM));
+      io.setBottomFlywheelVolts(
+          bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
+              + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+      // If we want to move the feeder wheel.
+      if (shouldIncrement) {
+        io.setFeederWheelVoltage(
+            feederWheelController.pid.calculate(
+                inputs.feederWheelPositionRads,
+                inputs.feederWheelPositionRads + increasePositionRads));
+      } else if (shouldIncrement
+          && feederWheelController.pid
+              .atSetpoint()) { // if we want to move it, and its at the setpoint.
+        io.setFeederWheelVoltage(0.0);
+        shouldIncrement = false;
+      }
     }
+
     StatusPage.reportStatus(StatusPage.SHOOTER_CONNECTED, inputs.isConnected);
   }
 

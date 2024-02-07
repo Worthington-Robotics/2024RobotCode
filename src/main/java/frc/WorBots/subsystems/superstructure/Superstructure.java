@@ -110,23 +110,26 @@ public class Superstructure extends SubsystemBase {
                 + secondCarriageRangeMeters[0])
             + firstCarriagePositionMeters
             + Units.inchesToMeters(1.0);
-    switch (state) {
-      case POSE:
-        runPose(setpoint.getElevator(), setpoint.getPivot());
-        break;
-      case SHOOTING:
-        runPose(shootingAngleRad.get(), 0.0);
-        break;
-      case CLIMBING:
-        final double volts = climbingVolts.get();
-        setElevatorVoltage(volts);
-        setPivotVoltage(0.0);
-        break;
-    }
+
     if (DriverStation.isDisabled()) {
       setElevatorVoltage(0.0);
       setPivotVoltage(0.0);
+    } else {
+      switch (state) {
+        case POSE:
+          runPose(setpoint.getElevator(), setpoint.getPivot());
+          break;
+        case SHOOTING:
+          runPose(shootingAngleRad.get(), 0.0);
+          break;
+        case CLIMBING:
+          final double volts = climbingVolts.get();
+          setElevatorVoltage(volts);
+          setPivotVoltage(0.0);
+          break;
+      }
     }
+
     visualizer.update(
         VecBuilder.fill(
             inputs.pivotPositionRelRad + pivotAbsAngleRad,
