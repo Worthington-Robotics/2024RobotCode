@@ -7,7 +7,7 @@ var searchData=
   ['maxquestions_4',['maxQuestions',['../classfrc_1_1WorBots_1_1AutoSelector.html#a38f8c14b67151a26e585d4bc4cc13d20',1,'frc::WorBots::AutoSelector']]],
   ['midlinex_5',['midLineX',['../classfrc_1_1WorBots_1_1FieldConstants.html#a184cc8bee57c49acb3f60742c0d3d06f',1,'frc::WorBots::FieldConstants']]],
   ['midliney_6',['midLineY',['../classfrc_1_1WorBots_1_1FieldConstants.html#a14b9554dfecf859ce4406b032db01b0f',1,'frc::WorBots::FieldConstants']]],
-  ['minimumspeed_7',['minimumSpeed',['../classfrc_1_1WorBots_1_1DriveController.html#afdb892b5940a346244c03115a5e7e07c',1,'frc::WorBots::DriveController']]],
+  ['minimumspeed_7',['minimumSpeed',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a1679a719278983efbb9d08cf2fffb240',1,'frc::WorBots::util::control::DriveController']]],
   ['mobility_8',['mobility',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a96c5f637e4575951f0ce3fea6cc76b0d',1,'frc::WorBots::commands::AutoCommands']]],
   ['module_9',['Module',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html',1,'frc.WorBots.subsystems.drive.Module'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ad502654c3231860760123317dc45f9f3',1,'frc.WorBots.subsystems.drive.Module.Module()']]],
   ['module_2ejava_10',['Module.java',['../Module_8java.html',1,'']]],
@@ -17,5 +17,5 @@ var searchData=
   ['moduleiosim_2ejava_14',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
   ['moduleiotalon_15',['ModuleIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html',1,'frc.WorBots.subsystems.drive.ModuleIOTalon'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html#a33b1af7147a15b90489b088fe2996320',1,'frc.WorBots.subsystems.drive.ModuleIOTalon.ModuleIOTalon()']]],
   ['moduleiotalon_2ejava_16',['ModuleIOTalon.java',['../ModuleIOTalon_8java.html',1,'']]],
-  ['multiplytwist_17',['multiplyTwist',['../classfrc_1_1WorBots_1_1util_1_1GeomUtil.html#af330d7626091c9353677424f3b1ef7a5',1,'frc::WorBots::util::GeomUtil']]]
+  ['multiplytwist_17',['multiplyTwist',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a48d44e3aa04122f769fc88a6a661e8c3',1,'frc::WorBots::util::math::GeomUtil']]]
 ];
