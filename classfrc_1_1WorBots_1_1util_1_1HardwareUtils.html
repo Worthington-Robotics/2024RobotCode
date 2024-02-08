@@ -76,6 +76,7 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classfrc_1_1WorBots_1_1util_1_1HardwareUtils-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">frc.WorBots.util.HardwareUtils Class Reference</div></div>
 </div><!--header-->
@@ -96,6 +97,13 @@ Classes</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:adcd8bff2609f3829b45bea2c859c46af"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#adcd8bff2609f3829b45bea2c859c46af">getTimeOfFlightStatus</a> (TimeOfFlight tof)</td></tr>
 <tr class="separator:adcd8bff2609f3829b45bea2c859c46af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a250eac07aadf86b43c86d84a1feca5d5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#a250eac07aadf86b43c86d84a1feca5d5">setTalonVoltage</a> (TalonFX talon, double volts, double maxVolts, double temp)</td></tr>
+<tr class="separator:a250eac07aadf86b43c86d84a1feca5d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a658baa9eae400813a113ae868ca19799"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#a658baa9eae400813a113ae868ca19799">maxMotorTemperature</a> = 80.0</td></tr>
+<tr class="separator:a658baa9eae400813a113ae868ca19799"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Utility functions for working with hardware devices </p>
@@ -131,6 +139,88 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the device is working properly, false if it is not </dd></dl>
+
+</div>
+</div>
+<a id="a250eac07aadf86b43c86d84a1feca5d5" name="a250eac07aadf86b43c86d84a1feca5d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a250eac07aadf86b43c86d84a1feca5d5">&#9670;&#160;</a></span>setTalonVoltage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void frc.WorBots.util.HardwareUtils.setTalonVoltage </td>
+          <td>(</td>
+          <td class="paramtype">TalonFX&#160;</td>
+          <td class="paramname"><em>talon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>volts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxVolts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>temp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Safely sets a motor voltage with voltage limiting and temperature checks</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">talon</td><td>The motor </td></tr>
+    <tr><td class="paramname">volts</td><td>The voltage to set </td></tr>
+    <tr><td class="paramname">maxVolts</td><td>The maximum magnitude for the voltage </td></tr>
+    <tr><td class="paramname">temp</td><td>The temperature of the motor in celsius </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a658baa9eae400813a113ae868ca19799" name="a658baa9eae400813a113ae868ca19799"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a658baa9eae400813a113ae868ca19799">&#9670;&#160;</a></span>maxMotorTemperature</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.HardwareUtils.maxMotorTemperature = 80.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The maximum temperature in celsius that we want to run our motors at </p>
 
 </div>
 </div>
