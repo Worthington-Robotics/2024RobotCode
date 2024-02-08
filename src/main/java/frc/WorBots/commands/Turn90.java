@@ -24,7 +24,7 @@ public class Turn90 extends Command {
    * consistently go in the right direction and prevents snapping to the wrong angle when you are
    * not quite straight
    */
-  private static final Rotation2d threshold = Rotation2d.fromDegrees(4);
+  private static final Rotation2d threshold = Rotation2d.fromDegrees(8);
 
   /**
    * Constructs a 90 turn command

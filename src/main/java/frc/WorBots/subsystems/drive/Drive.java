@@ -93,11 +93,11 @@ public class Drive extends SubsystemBase {
       thetaController.setGains(3.5, 0.01, 0.0);
       thetaController.setConstraints(1.35, 1.2);
     } else {
-      thetaController.setGains(1.0, 0.0, 0.0);
-      thetaController.setConstraints(1.0, 1.0);
+      thetaController.setGains(20.0, 0.08, 0.0);
+      thetaController.setConstraints(3.0, 2.0);
     }
     thetaController.pid.enableContinuousInput(0, 2 * Math.PI);
-    thetaController.pid.setTolerance(Units.degreesToRadians(4.5));
+    thetaController.pid.setTolerance(Units.degreesToRadians(2.5));
 
     StatusPage.reportStatus(StatusPage.DRIVE_SUBSYSTEM, true);
   }
@@ -126,8 +126,10 @@ public class Drive extends SubsystemBase {
         if (autoRemoveThetaSetpoint && thetaController.pid.atGoal()) {
           removeThetaSetpoint();
         } else {
-          setpointRadsPerSec +=
+          final double additional =
               thetaController.pid.calculate(getRotation().getRadians(), thetaSetpoint.getRadians());
+          SmartDashboard.putNumber("Drive/Theta Additional Demand", additional);
+          setpointRadsPerSec += additional;
         }
       }
 
