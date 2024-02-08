@@ -92,6 +92,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aec63e7bf5de279c1bc5e05449fc71bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56b2542512f1e592b7b5ca97b8e8efe9"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1GeneralMath.html#a56b2542512f1e592b7b5ca97b8e8efe9">checkError</a> (double error, double margin)</td></tr>
 <tr class="separator:a56b2542512f1e592b7b5ca97b8e8efe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0517a4ca0d6dedc97ecfa6caa7d8fe77"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1GeneralMath.html#a0517a4ca0d6dedc97ecfa6caa7d8fe77">curve</a> (double value, double magnitude)</td></tr>
+<tr class="separator:a0517a4ca0d6dedc97ecfa6caa7d8fe77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >General math utilities </p>
@@ -235,6 +237,51 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The clamped value </dd></dl>
+
+</div>
+</div>
+<a id="a0517a4ca0d6dedc97ecfa6caa7d8fe77" name="a0517a4ca0d6dedc97ecfa6caa7d8fe77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0517a4ca0d6dedc97ecfa6caa7d8fe77">&#9670;&#160;</a></span>curve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.GeneralMath.curve </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>magnitude</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Curves a value by raising it to a power, but retaining the original sign</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to curve </td></tr>
+    <tr><td class="paramname">magnitude</td><td>The amount to curve the value by. Must be greater than 0. Values greater than 1 will create a curve stronger than linear, and values less than one will create a curve that is weaker than linear </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The curved value </dd></dl>
 
 </div>
 </div>

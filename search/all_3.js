@@ -11,8 +11,9 @@ var searchData=
   ['climbing_8',['CLIMBING',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a8c0007bbd7a6768e36431bbc65c3cbda',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
   ['constants_9',['Constants',['../classfrc_1_1WorBots_1_1Constants.html',1,'frc::WorBots']]],
   ['constants_2ejava_10',['Constants.java',['../Constants_8java.html',1,'']]],
-  ['customholonomicdrivecontroller_11',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.CustomHolonomicDriveController()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController']]],
-  ['customholonomicdrivecontroller_2ejava_12',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
-  ['customtrajectorygenerator_13',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]],
-  ['customtrajectorygenerator_2ejava_14',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
+  ['curve_11',['curve',['../classfrc_1_1WorBots_1_1util_1_1GeneralMath.html#a0517a4ca0d6dedc97ecfa6caa7d8fe77',1,'frc::WorBots::util::GeneralMath']]],
+  ['customholonomicdrivecontroller_12',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.CustomHolonomicDriveController()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController']]],
+  ['customholonomicdrivecontroller_2ejava_13',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
+  ['customtrajectorygenerator_14',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]],
+  ['customtrajectorygenerator_2ejava_15',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
 ];
