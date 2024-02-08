@@ -127,9 +127,9 @@ public class RobotContainer {
             Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
                 .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
     operator.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
-    driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
     operator.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
-    driver.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
+    driver.leftBumper().onTrue(new Turn90(drive, false));
+    driver.rightBumper().onTrue(new Turn90(drive, true));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     driver.povLeft().whileTrue(superstructure.autoZero());
     operator

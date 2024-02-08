@@ -302,7 +302,7 @@ public class Drive extends SubsystemBase {
   /**
    * Gets the current yaw.
    *
-   * @return The pitch as a rotation.
+   * @return The yaw as a rotation.
    */
   public Rotation2d getYaw() {
     return new Rotation2d(gyroInputs.yawPositionRad);

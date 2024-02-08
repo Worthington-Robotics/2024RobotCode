@@ -7,6 +7,8 @@
 
 package frc.WorBots.util.math;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 /** General math utilities */
 public class GeneralMath {
   /**
@@ -126,5 +128,38 @@ public class GeneralMath {
    */
   public static double curve(double value, double magnitude) {
     return Math.copySign(Math.abs(Math.pow(value, magnitude)), value);
+  }
+
+  /**
+   * Snaps a rotation to intervals
+   *
+   * @param rotation The input rotation. Should not be negative and should be wrapped.
+   * @param interval The interval to snap to. Should not be negative and should be wrapped.
+   * @param snapDirection Which direction to snap in
+   * @return The snapped rotation
+   */
+  public static Rotation2d snapRotation(
+      Rotation2d rotation, Rotation2d interval, SnapDirection snapDirection) {
+    double val = rotation.getRadians() / interval.getRadians();
+    switch (snapDirection) {
+      case Positive:
+        val = Math.ceil(val);
+        break;
+      case Negative:
+        val = Math.floor(val);
+        break;
+      case Balanced:
+        val = Math.round(val);
+        break;
+    }
+    val *= interval.getRadians();
+    return Rotation2d.fromRadians(val);
+  }
+
+  /** Different directions for snapping */
+  public enum SnapDirection {
+    Positive,
+    Negative,
+    Balanced,
   }
 }
