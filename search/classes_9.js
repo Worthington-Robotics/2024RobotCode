@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['robot_0',['Robot',['../classfrc_1_1WorBots_1_1Robot.html',1,'frc::WorBots']]],
-  ['robotcontainer_1',['RobotContainer',['../classfrc_1_1WorBots_1_1RobotContainer.html',1,'frc::WorBots']]],
-  ['rotationsequence_2',['RotationSequence',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1RotationSequence.html',1,'frc::WorBots::util::trajectory']]]
+  ['posecommands_0',['PoseCommands',['../classfrc_1_1WorBots_1_1commands_1_1PoseCommands.html',1,'frc::WorBots::commands']]],
+  ['poseestimator_1',['PoseEstimator',['../classfrc_1_1WorBots_1_1util_1_1PoseEstimator.html',1,'frc::WorBots::util']]]
 ];

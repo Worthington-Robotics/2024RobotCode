@@ -19,6 +19,7 @@ var searchData=
   ['rotationsequence_2ejava_16',['RotationSequence.java',['../RotationSequence_8java.html',1,'']]],
   ['rotationtopose_17',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1GeomUtil.html#a9d802bc2a2ab17895c23ba1768478632',1,'frc::WorBots::util::GeomUtil']]],
   ['rotationtotransform_18',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1GeomUtil.html#a1d4ac7f0ed85d561ee64175bb1514011',1,'frc::WorBots::util::GeomUtil']]],
-  ['runstate_19',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['runvelocity_20',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
+  ['runfeederwheel_19',['runFeederWheel',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ac6a54e5185a07ba6637d6dd61ecd4f85',1,'frc::WorBots::subsystems::shooter::Shooter']]],
+  ['runstate_20',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['runvelocity_21',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
 ];
