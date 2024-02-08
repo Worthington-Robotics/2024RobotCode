@@ -15,9 +15,13 @@ import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.WorBots.util.math.GeneralMath;
 
 /** Utility functions for working with hardware devices */
 public class HardwareUtils {
+  /** The maximum temperature in celsius that we want to run our motors at */
+  public static final double maxMotorTemperature = 80.0;
+
   /**
    * Checks if a time of flight device is connected
    *
@@ -27,6 +31,21 @@ public class HardwareUtils {
   public static boolean getTimeOfFlightStatus(TimeOfFlight tof) {
     final TimeOfFlight.Status status = tof.getStatus();
     return status == TimeOfFlight.Status.Valid;
+  }
+
+  /**
+   * Safely sets a motor voltage with voltage limiting and temperature checks
+   *
+   * @param talon The motor
+   * @param volts The voltage to set
+   * @param maxVolts The maximum magnitude for the voltage
+   * @param temp The temperature of the motor in celsius
+   */
+  public static void setTalonVoltage(TalonFX talon, double volts, double maxVolts, double temp) {
+    if (temp < maxMotorTemperature) {
+      volts = GeneralMath.clampMagnitude(volts, maxVolts);
+      talon.setVoltage(volts);
+    }
   }
 
   /** Base inputs for a TalonFX */
@@ -104,6 +123,17 @@ public class HardwareUtils {
       inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
       inputs.currentDrawAmps = currentSignal.getValue();
       inputs.isConnected = motor.isAlive();
+    }
+
+    /**
+     * Safely sets a motor voltage with voltage limiting and temperature checks
+     *
+     * @param talon The motor
+     * @param volts The voltage to set
+     * @param maxVolts The maximum magnitude for the voltage
+     */
+    public void setTalonVoltage(TalonFX talon, double volts, double maxVolts) {
+      HardwareUtils.setTalonVoltage(talon, volts, maxVolts, this.tempSignal.getValue());
     }
   }
 

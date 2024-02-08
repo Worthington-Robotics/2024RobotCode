@@ -9,7 +9,6 @@ package frc.WorBots.subsystems.superstructure;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
@@ -48,13 +47,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -10, 10);
-    elevator.setVoltage(volts);
+    elevatorSignals.setTalonVoltage(elevator, volts, 10);
   }
 
   public void setPivotVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -10.5, 10.5);
-    // pivot.setVoltage(volts);
+    // pivotSignals.setTalonVoltage(pivot, volts, 10.5);
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {

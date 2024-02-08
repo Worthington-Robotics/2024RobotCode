@@ -95,13 +95,11 @@ public class ModuleIOTalon implements ModuleIO {
   }
 
   public void setDriveVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -9, 9);
-    driveMotor.setVoltage(volts);
+    driveSignals.setTalonVoltage(driveMotor, volts, 9);
   }
 
   public void setTurnVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -6, 6);
-    turnMotor.setVoltage(volts);
+    turnSignals.setTalonVoltage(turnMotor, volts, 6);
   }
 
   public void setDriveBrakeMode(boolean enable) {}

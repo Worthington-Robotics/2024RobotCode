@@ -9,7 +9,6 @@ package frc.WorBots.subsystems.intake;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
-import edu.wpi.first.math.MathUtil;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class IntakeIOTalon implements IntakeIO {
@@ -38,7 +37,6 @@ public class IntakeIOTalon implements IntakeIO {
 
   @Override
   public void setIntakeVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -10, 10);
-    intakeMotor.setVoltage(volts);
+    motorSignals.setTalonVoltage(intakeMotor, volts, 10);
   }
 }

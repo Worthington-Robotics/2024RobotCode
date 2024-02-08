@@ -13,7 +13,11 @@ public interface ShooterIO {
   /** The shooter inputs that need to be updated every cycle. */
   public static class ShooterIOInputs {
     boolean isConnected = false;
+
+    public TalonInputsPositional top = new TalonInputsPositional("Shooter", "Top Motor");
     public double velocityRPMTop = 0;
+
+    public TalonInputsPositional bottom = new TalonInputsPositional("Shooter", "Bottom Motor");
     public double velocityRPMBottom = 0;
 
     public TalonInputsPositional feederWheel = new TalonInputsPositional("Shooter", "Feeder Motor");
