@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.util.math.GeneralMath;
 
@@ -40,13 +41,19 @@ public class DriveController {
   /** The amount of curving to apply to the turn input */
   public static final double turnCurveAmount = 2.0;
 
+  /** The amount of time in seconds after which to apply stop locking */
+  public static final double stopLockTime = 0.5;
+
   private final LinearFilter driveFilter;
   private final LinearFilter turnFilter;
+
+  private Timer stopLockTimer = new Timer();
 
   /** Construct a new DriveController */
   public DriveController() {
     driveFilter = LinearFilter.movingAverage(1);
     turnFilter = LinearFilter.movingAverage(2);
+    stopLockTimer.restart();
   }
 
   /**
@@ -65,8 +72,13 @@ public class DriveController {
     if (Math.abs(speeds.vxMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.vyMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.omegaRadiansPerSecond) < minimumSpeed) {
-      drive.stop();
+      if (stopLockTimer.hasElapsed(stopLockTime)) {
+        drive.stopWithLock();
+      } else {
+        drive.stop();
+      }
     } else {
+      stopLockTimer.restart();
       drive.runVelocity(speeds);
     }
   }
