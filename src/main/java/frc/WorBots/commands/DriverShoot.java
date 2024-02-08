@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.superstructure.Superstructure;
@@ -136,8 +135,6 @@ public class DriverShoot extends Command {
     }
 
     superstructure.setShootingAngleRad(currentAngle);
-
-    SmartDashboard.putNumber("ManualRads", currentAngle);
   }
 
   @Override

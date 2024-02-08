@@ -125,7 +125,7 @@ public class RobotContainer {
     driver.povUp().onTrue(superstructure.autoZero());
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
-    // driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
+    driver.povDown().toggleOnTrue(new AutoShoot(superstructure, drive));
     // operator
     // .a()
     // .toggleOnTrue(

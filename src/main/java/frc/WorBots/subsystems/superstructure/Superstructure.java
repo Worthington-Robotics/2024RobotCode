@@ -120,7 +120,7 @@ public class Superstructure extends SubsystemBase {
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
-          runPose(shootingAngleRad.get(), 0.0);
+          runPose(0.0, shootingAngleRad.get());
           break;
         case CLIMBING:
           final double volts = climbingVolts.get();
