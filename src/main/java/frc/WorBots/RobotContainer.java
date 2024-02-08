@@ -104,7 +104,7 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
-    driver.a().whileTrue(intake.intakeRaw());
+    // driver.a().whileTrue(intake.intakeRaw());
     driver
         .b()
         .whileTrue(
@@ -125,7 +125,7 @@ public class RobotContainer {
     driver.povUp().onTrue(superstructure.autoZero());
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
-    driver.povDown().toggleOnTrue(new AutoShoot(superstructure, drive));
+    driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
     // operator
     // .a()
     // .toggleOnTrue(

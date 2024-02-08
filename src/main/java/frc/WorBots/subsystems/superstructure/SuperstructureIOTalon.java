@@ -46,7 +46,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -12, 12);
+    volts = MathUtil.clamp(volts, -10, 10);
     elevator.setVoltage(volts);
   }
 
@@ -58,8 +58,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   public void updateInputs(SuperstructureIOInputs inputs) {
     elevatorSignals.update(inputs.elevator, elevator);
     inputs.elevatorPositionMeters =
-        (inputs.elevator.positionRads / elevatorGearing / (2 * Math.PI));
-    SmartDashboard.putNumber("RawEnc", elevator.getPosition().getValue());
+        (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? -1.0 : 1.0);
     inputs.elevatorVelocityMetersPerSec =
         (inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI));
     inputs.elevatorPercentageRaised =

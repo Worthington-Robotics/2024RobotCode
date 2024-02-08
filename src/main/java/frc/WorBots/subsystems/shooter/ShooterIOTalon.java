@@ -22,10 +22,10 @@ public class ShooterIOTalon implements ShooterIO {
   private final TalonSignalsPositional feederWheelSignals;
 
   public ShooterIOTalon() {
-    topFlywheel = new TalonFX(0);
-    bottomFlywheel = new TalonFX(0);
-    feederWheel = new TalonFX(0);
-    timeOfFlight = new TimeOfFlight(0);
+    topFlywheel = new TalonFX(15);
+    bottomFlywheel = new TalonFX(16);
+    feederWheel = new TalonFX(17);
+    timeOfFlight = new TimeOfFlight(18);
     timeOfFlight.setRangingMode(RangingMode.Short, 24);
 
     feederWheelSignals = new TalonSignalsPositional(feederWheel);
