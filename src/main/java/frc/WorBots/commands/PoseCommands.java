@@ -8,16 +8,18 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 
 public class PoseCommands {
-  /** Turns to the alliance amp and moves the superstructure to amp pose */
+  /** Turns to the alliance amp wall and moves the superstructure to amp pose */
   public static Command amp(Drive drive, Superstructure superstructure) {
     return Commands.runOnce(
             () -> {
@@ -38,5 +40,28 @@ public class PoseCommands {
             () -> {
               drive.removeThetaSetpoint();
             });
+  }
+
+  /** Automatically climbs the chain when under it */
+  public static Command autoClimb(Drive drive, Superstructure superstructure) {
+    return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(-0.5, 0.0, 0.0)), drive)
+        .withTimeout(0.25)
+        .alongWith(superstructure.setPose(Preset.START_CLIMB))
+        .andThen(
+            Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.5, 0.0, 0.0)), drive)
+                .withTimeout(0.25)
+                .alongWith(superstructure.setPose(Preset.CLIMB)));
+  }
+
+  /** Automatically gets down from the chain and drives out */
+  public static Command climbDown(Drive drive, Superstructure superstructure) {
+    return superstructure
+        .setPose(Preset.START_CLIMB)
+        .andThen(
+            new ParallelCommandGroup(superstructure.setPose(Preset.HOME)),
+            Commands.waitSeconds(1.25)
+                .andThen(
+                    Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.5, 0.0, 0.0)), drive)
+                        .withTimeout(1.0)));
   }
 }

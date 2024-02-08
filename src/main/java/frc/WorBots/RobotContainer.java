@@ -122,7 +122,9 @@ public class RobotContainer {
     driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
     driver.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
-    driver.povUp().onTrue(superstructure.autoZero());
+    driver.povLeft().onTrue(superstructure.autoZero());
+    driver.povUp().whileTrue(PoseCommands.autoClimb(drive, superstructure));
+    driver.povDown().whileTrue(PoseCommands.climbDown(drive, superstructure));
     // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
     // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
     driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
