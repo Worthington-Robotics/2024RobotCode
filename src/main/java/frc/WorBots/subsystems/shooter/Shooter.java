@@ -152,15 +152,17 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    */
   public Command incrementGamePiece() {
     return this.runOnce(
-        () -> {
-          shouldIncrement = true;
-        });
+            () -> {
+              shouldIncrement = true;
+            })
+        .alongWith(Commands.waitUntil(this::hasGamePiece));
   }
 
   public Command runFeederWheel(double volts) {
-    return this.runOnce(() -> {
-      feederWheelVolts = volts;
-    });
+    return this.runOnce(
+        () -> {
+          feederWheelVolts = volts;
+        });
   }
 
   /**
