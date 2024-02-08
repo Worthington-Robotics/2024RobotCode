@@ -7,21 +7,15 @@
 
 package frc.WorBots.commands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.WorBots.DriveController;
 import frc.WorBots.subsystems.drive.Drive;
 import java.util.function.Supplier;
 
 /** Command for teleop that drives the robot using controllers */
 public class DriveWithJoysticks extends Command {
   private Drive drive;
+  private final DriveController driveController = new DriveController();
   private Supplier<Double> leftXSupplier;
   private Supplier<Double> leftYSupplier;
   private Supplier<Double> rightXSupplier;
@@ -49,54 +43,6 @@ public class DriveWithJoysticks extends Command {
     double rightX = rightXSupplier.get();
     double rightY = rightYSupplier.get();
 
-    // Get direction and magnitude of linear axes
-    double linearMagnitude = Math.hypot(leftX, leftY);
-    Rotation2d linearDirection = new Rotation2d(leftX, leftY);
-
-    // Apply deadband
-    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, 0.065);
-    rightY = MathUtil.applyDeadband(rightY, 0.065);
-
-    // Apply squaring
-    linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
-    rightY = Math.copySign(rightY * rightY, rightY);
-
-    // Calcaulate new linear components
-    Translation2d linearVelocity =
-        new Pose2d(new Translation2d(), linearDirection)
-            .transformBy(
-                new Transform2d(
-                    new Translation2d(linearMagnitude, new Rotation2d()), new Rotation2d()))
-            .getTranslation();
-
-    // Convert to meters per second
-    ChassisSpeeds speeds =
-        new ChassisSpeeds(
-            linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * 0.75,
-            linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * 0.75,
-            rightY * 10.0);
-
-    // Convert from field relative
-    var driveRotation = drive.getRotation();
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Red) {
-      driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
-    }
-    speeds =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            speeds.vxMetersPerSecond,
-            speeds.vyMetersPerSecond,
-            speeds.omegaRadiansPerSecond,
-            driveRotation);
-
-    // Send to drive
-    // var driveTranslation = FlipFieldUtil.apply(drive.getPose().getTranslation());
-    if (Math.abs(speeds.vxMetersPerSecond) < 1e-3
-        && Math.abs(speeds.vyMetersPerSecond) < 1e-3
-        && Math.abs(speeds.omegaRadiansPerSecond) < 1e-3) {
-      drive.stop();
-    } else {
-      drive.runVelocity(speeds);
-    }
+    driveController.drive(drive, leftX, leftY, rightY);
   }
 }

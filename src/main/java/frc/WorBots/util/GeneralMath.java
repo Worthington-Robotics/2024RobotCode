@@ -114,4 +114,17 @@ public class GeneralMath {
   public static boolean checkError(double error, double margin) {
     return Math.abs(error) <= margin;
   }
+
+  /**
+   * Curves a value by raising it to a power, but retaining the original sign
+   *
+   * @param value The value to curve
+   * @param magnitude The amount to curve the value by. Must be greater than 0. Values greater than
+   *     1 will create a curve stronger than linear, and values less than one will create a curve
+   *     that is weaker than linear
+   * @return The curved value
+   */
+  public static double curve(double value, double magnitude) {
+    return Math.copySign(Math.abs(Math.pow(value, magnitude)), value);
+  }
 }
