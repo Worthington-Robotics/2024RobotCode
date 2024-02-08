@@ -91,7 +91,7 @@ public class ModuleIOTalon implements ModuleIO {
         MathUtil.angleModulus(
             Units.rotationsToRadians(turnAbsPosSignal.getValue()) - encoderOffset.getRadians());
 
-    inputs.isConnected = turnMotor.isAlive() && driveMotor.isAlive();
+    inputs.isConnected = inputs.turn.isConnected && inputs.drive.isConnected;
   }
 
   public void setDriveVoltage(double volts) {
