@@ -18,7 +18,7 @@ import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
-import frc.WorBots.util.*;
+import frc.WorBots.util.debug.StatusPage;
 import java.util.*;
 
 public class RobotContainer {

@@ -11,7 +11,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
+import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;

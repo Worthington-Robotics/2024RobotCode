@@ -17,7 +17,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /** Utility functions for working with hardware devices */
-public class DeviceUtils {
+public class HardwareUtils {
   /**
    * Checks if a time of flight device is connected
    *

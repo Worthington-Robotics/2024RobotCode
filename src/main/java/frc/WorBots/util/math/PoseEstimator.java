@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.WorBots.util;
+package frc.WorBots.util.math;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;

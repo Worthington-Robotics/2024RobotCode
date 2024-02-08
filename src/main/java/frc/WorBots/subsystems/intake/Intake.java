@@ -10,7 +10,7 @@ package frc.WorBots.subsystems.intake;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
-import frc.WorBots.util.StatusPage;
+import frc.WorBots.util.debug.StatusPage;
 
 public class Intake extends SubsystemBase {
   private IntakeIO io;

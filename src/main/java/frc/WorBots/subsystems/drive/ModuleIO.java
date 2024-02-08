@@ -7,7 +7,7 @@
 
 package frc.WorBots.subsystems.drive;
 
-import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+import frc.WorBots.util.HardwareUtils.TalonInputsPositional;
 
 public interface ModuleIO {
   /** The module inputs that need to be updated once per cycle */

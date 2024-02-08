@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.WorBots.util;
+package frc.WorBots.util.debug;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.networktables.GenericEntry;
@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.WorBots.util.BuildConstants;
 import java.util.HashMap;
 
 /** A utility class which shows the status of systems on the robot to NetworkTables */

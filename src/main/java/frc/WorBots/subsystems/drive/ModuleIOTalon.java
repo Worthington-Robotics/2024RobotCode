@@ -15,7 +15,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
-import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
+import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class ModuleIOTalon implements ModuleIO {
   private static final double DRIVE_ROTATIONS_TO_RADIANS =

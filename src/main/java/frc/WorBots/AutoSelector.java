@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.WorBots.util.StatusPage;
-import frc.WorBots.util.SwitchableChooser;
+import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.SwitchableChooser;
 import java.util.ArrayList;
 import java.util.List;
 

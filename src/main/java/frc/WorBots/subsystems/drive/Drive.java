@@ -17,11 +17,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
-import frc.WorBots.util.*;
-import frc.WorBots.util.PoseEstimator.*;
-import frc.WorBots.util.TunablePIDController.TunablePIDGains;
-import frc.WorBots.util.TunablePIDController.TunableProfiledPIDController;
-import frc.WorBots.util.TunablePIDController.TunableTrapezoidConstraints;
+import frc.WorBots.util.debug.Logger;
+import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.debug.TunablePIDController.TunableProfiledPIDController;
+import frc.WorBots.util.debug.TunablePIDController.TunableTrapezoidConstraints;
+import frc.WorBots.util.math.PoseEstimator;
+import frc.WorBots.util.math.PoseEstimator.*;
 import java.util.List;
 
 public class Drive extends SubsystemBase {

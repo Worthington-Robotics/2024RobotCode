@@ -7,7 +7,7 @@
 
 package frc.WorBots.subsystems.shooter;
 
-import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+import frc.WorBots.util.HardwareUtils.TalonInputsPositional;
 
 public interface ShooterIO {
   /** The shooter inputs that need to be updated every cycle. */

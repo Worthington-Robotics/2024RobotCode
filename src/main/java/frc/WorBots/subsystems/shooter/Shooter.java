@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
-import frc.WorBots.util.StatusPage;
-import frc.WorBots.util.TunablePIDController;
-import frc.WorBots.util.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.TunablePIDController;
+import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 
 public class Shooter extends SubsystemBase { // 532 rpm/v
   private ShooterIO io;

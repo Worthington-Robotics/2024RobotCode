@@ -7,7 +7,7 @@
 
 package frc.WorBots.subsystems.superstructure;
 
-import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+import frc.WorBots.util.HardwareUtils.TalonInputsPositional;
 
 public interface SuperstructureIO {
   /** The superstructure inputs. */

@@ -11,7 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.math.MathUtil;
-import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
+import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class ShooterIOTalon implements ShooterIO {
   private TalonFX topFlywheel;

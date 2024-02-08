@@ -10,7 +10,7 @@ package frc.WorBots.subsystems.intake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
-import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
+import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class IntakeIOTalon implements IntakeIO {
   private final TalonFX intakeMotor;

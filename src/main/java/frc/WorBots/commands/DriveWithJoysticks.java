@@ -8,8 +8,8 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.WorBots.DriveController;
 import frc.WorBots.subsystems.drive.Drive;
+import frc.WorBots.util.control.DriveController;
 import java.util.function.Supplier;
 
 /** Command for teleop that drives the robot using controllers */

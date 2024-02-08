@@ -13,9 +13,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.ModuleIO.ModuleIOInputs;
-import frc.WorBots.util.StatusPage;
-import frc.WorBots.util.TunablePIDController;
-import frc.WorBots.util.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.TunablePIDController;
+import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 
 public class Module {
   private final int index;

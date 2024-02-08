@@ -17,8 +17,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.drive.Drive;
-import frc.WorBots.util.GeomUtil;
-import frc.WorBots.util.Logger;
+import frc.WorBots.util.debug.Logger;
+import frc.WorBots.util.math.GeomUtil;
 import java.util.function.Supplier;
 
 public class DriveToPose extends Command {

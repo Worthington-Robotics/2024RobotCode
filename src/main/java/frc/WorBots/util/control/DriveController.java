@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.WorBots;
+package frc.WorBots.util.control;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.WorBots.subsystems.drive.Drive;
-import frc.WorBots.util.GeneralMath;
+import frc.WorBots.util.math.GeneralMath;
 
 /** Controller for teleoperated driving */
 public class DriveController {

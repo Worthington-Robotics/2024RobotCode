@@ -15,7 +15,7 @@ import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
-import frc.WorBots.util.*;
+import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.function.*;
 
 public class AutoShoot extends SequentialCommandGroup {

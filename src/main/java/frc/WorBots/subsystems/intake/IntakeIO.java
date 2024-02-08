@@ -7,7 +7,7 @@
 
 package frc.WorBots.subsystems.intake;
 
-import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+import frc.WorBots.util.HardwareUtils.TalonInputsPositional;
 
 public interface IntakeIO {
   /** The inputs to the intake. */

@@ -12,7 +12,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.*;
-import frc.WorBots.util.*;
+import frc.WorBots.util.debug.Logger;
 
 /** The visualizer class of the superstrucutre, logs a Mechanism2d, as well as Pose3d's. */
 public class SuperstructureVisualizer {

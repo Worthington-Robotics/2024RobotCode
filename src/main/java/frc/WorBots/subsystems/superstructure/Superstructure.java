@@ -15,10 +15,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
-import frc.WorBots.util.*;
-import frc.WorBots.util.TunablePIDController.TunablePIDGains;
-import frc.WorBots.util.TunablePIDController.TunableProfiledPIDController;
-import frc.WorBots.util.TunablePIDController.TunableTrapezoidConstraints;
+import frc.WorBots.util.debug.Logger;
+import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.debug.TunablePIDController.TunableProfiledPIDController;
+import frc.WorBots.util.debug.TunablePIDController.TunableTrapezoidConstraints;
+import frc.WorBots.util.math.GeneralMath;
 import java.util.function.Supplier;
 
 /** The elevator and pivot of the robot, responsible for shooting and climbing. */

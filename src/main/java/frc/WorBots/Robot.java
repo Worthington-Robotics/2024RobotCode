@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
-import frc.WorBots.util.StatusPage;
+import frc.WorBots.util.debug.StatusPage;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
