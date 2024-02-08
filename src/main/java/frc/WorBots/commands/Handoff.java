@@ -13,7 +13,6 @@ public class Handoff extends Command {
   private Superstructure superstructure;
   private Intake intake;
   private Shooter shooter;
-  private boolean isComplete = false;
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -32,17 +31,18 @@ public class Handoff extends Command {
   public void execute() {
     if(intake.hasGamePiece() && superstructure.isAtSetpoint()) {
       intake.handoff().execute();
-      // shooter.
+      shooter.runFeederWheel(1.0);
     }
   }
 
   @Override
   public boolean isFinished() {
-    return isComplete;
+    return shooter.hasGamePiece();
   }
 
   @Override
   public void end(boolean interrupted) {
+    shooter.runFeederWheel(0.0);
     superstructure.setPose(Preset.HOME);
     superstructure.setModeVoid(SuperstructureState.POSE);
   }
