@@ -34,18 +34,18 @@ public class ModuleIOSim implements ModuleIO {
       turnAbsolutePositionRad -= 2.0 * Math.PI;
     }
 
-    inputs.drivePositionRad += (driveSim.getAngularVelocityRadPerSec() * 0.02);
-    inputs.driveVelocityRadPerSec = driveSim.getAngularVelocityRadPerSec();
-    inputs.driveAppliedVolts = driveAppliedVolts;
-    inputs.driveCurrentAmps = new double[] {Math.abs(driveSim.getCurrentDrawAmps())};
-    inputs.driveTempCelcius = new double[] {};
+    inputs.drive.positionRads += (driveSim.getAngularVelocityRadPerSec() * 0.02);
+    inputs.drive.velocityRadsPerSec = driveSim.getAngularVelocityRadPerSec();
+    inputs.drive.appliedPowerVolts = driveAppliedVolts;
+    inputs.drive.currentDrawAmps = Math.abs(driveSim.getCurrentDrawAmps());
+    inputs.drive.temperatureCelsius = 30.0;
 
     inputs.turnAbsolutePositionRad = turnAbsolutePositionRad;
-    inputs.turnPositionRad = turnRelativePositionRad;
-    inputs.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
-    inputs.turnAppliedVolts = turnAppliedVolts;
-    inputs.turnCurrentAmps = new double[] {Math.abs(turnSim.getCurrentDrawAmps())};
-    inputs.turnTempCelcius = new double[] {};
+    inputs.turn.positionRads = turnRelativePositionRad;
+    inputs.turn.velocityRadsPerSec = turnSim.getAngularVelocityRadPerSec();
+    inputs.turn.appliedPowerVolts = turnAppliedVolts;
+    inputs.turn.currentDrawAmps = Math.abs(turnSim.getCurrentDrawAmps());
+    inputs.turn.temperatureCelsius = 30.0;
     inputs.isConnected = true;
   }
 

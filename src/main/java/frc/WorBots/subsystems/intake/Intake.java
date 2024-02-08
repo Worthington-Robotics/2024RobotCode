@@ -44,13 +44,15 @@ public class Intake extends SubsystemBase {
       hasGamepiece = true;
     }
 
-    if (inputs.temperatureCelsius > maxTemperature || DriverStation.isDisabled()) {
+    if (inputs.motor.temperatureCelsius > maxTemperature || DriverStation.isDisabled()) {
       setpointVolts = 0.0;
     }
 
     StatusPage.reportStatus(
         StatusPage.INTAKE_CONNECTED,
-        inputs.isConnected && inputs.temperatureCelsius <= maxTemperature);
+        inputs.isConnected && inputs.motor.temperatureCelsius <= maxTemperature);
+
+    inputs.motor.publish();
 
     io.setIntakeVoltage(setpointVolts);
   }

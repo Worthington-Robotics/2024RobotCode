@@ -11,7 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
+import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
 
 public class ShooterIOTalon implements ShooterIO {
   private TalonFX topFlywheel;
@@ -19,23 +19,26 @@ public class ShooterIOTalon implements ShooterIO {
   private TalonFX feederWheel;
   private TimeOfFlight timeOfFlight;
 
+  private final TalonSignalsPositional feederWheelSignals;
+
   public ShooterIOTalon() {
     topFlywheel = new TalonFX(0);
     bottomFlywheel = new TalonFX(0);
     feederWheel = new TalonFX(0);
     timeOfFlight = new TimeOfFlight(0);
     timeOfFlight.setRangingMode(RangingMode.Short, 24);
+
+    feederWheelSignals = new TalonSignalsPositional(feederWheel);
+    feederWheel.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
+    feederWheelSignals.update(inputs.feederWheel, feederWheel);
+
     inputs.velocityRPMBottom = bottomFlywheel.getVelocity().getValue() * 60;
     inputs.velocityRPMTop = topFlywheel.getVelocity().getValue() * 60;
 
-    inputs.feederWheelPositionRads = Units.rotationsToRadians(feederWheel.getPosition().getValue());
-    inputs.feederWheelVelocityRadPerSec =
-        Units.rotationsToRadians(feederWheel.getVelocity().getValue());
-    inputs.feederWheelCurrentAmps = feederWheel.getStatorCurrent().getValue();
     inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000.0;
   }
 

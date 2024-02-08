@@ -95,8 +95,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       if (shouldIncrement) {
         io.setFeederWheelVoltage(
             feederWheelController.pid.calculate(
-                inputs.feederWheelPositionRads,
-                inputs.feederWheelPositionRads + increasePositionRads));
+                inputs.feederWheel.positionRads,
+                inputs.feederWheel.positionRads + increasePositionRads));
       } else if (shouldIncrement
           && feederWheelController.pid
               .atSetpoint()) { // if we want to move it, and its at the setpoint.
@@ -104,6 +104,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         shouldIncrement = false;
       }
     }
+
+    inputs.feederWheel.publish();
 
     StatusPage.reportStatus(StatusPage.SHOOTER_CONNECTED, inputs.isConnected);
   }

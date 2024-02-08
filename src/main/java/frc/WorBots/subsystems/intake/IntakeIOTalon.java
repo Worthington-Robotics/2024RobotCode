@@ -10,26 +10,29 @@ package frc.WorBots.subsystems.intake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
+import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
 
 public class IntakeIOTalon implements IntakeIO {
-  private TalonFX intakeMotor;
+  private final TalonFX intakeMotor;
   private TimeOfFlight timeOfFlight;
+
+  private final TalonSignalsPositional motorSignals;
 
   public IntakeIOTalon() {
     intakeMotor = new TalonFX(1);
     // timeOfFlight = new TimeOfFlight(0);
     // timeOfFlight.setRangingMode(RangingMode.Short, 24);
+
+    motorSignals = new TalonSignalsPositional(intakeMotor);
+    intakeMotor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.appliedPowerVolts = intakeMotor.getMotorVoltage().getValue();
-    inputs.currentDrawAmps = intakeMotor.getStatorCurrent().getValue();
-    inputs.temperatureCelsius = intakeMotor.getDeviceTemp().getValue();
-    inputs.velocityRadsPerSec = Units.rotationsToRadians(intakeMotor.getVelocity().getValue());
+    motorSignals.update(inputs.motor, intakeMotor);
+    inputs.isConnected = inputs.motor.isConnected;
+
     // inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
-    inputs.isConnected = inputs.temperatureCelsius != 0.0;
     // inputs.isConnected &= DeviceUtils.getTimeOfFlightStatus(timeOfFlight);
   }
 

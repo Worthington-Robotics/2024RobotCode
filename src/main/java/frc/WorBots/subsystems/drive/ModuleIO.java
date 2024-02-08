@@ -7,23 +7,22 @@
 
 package frc.WorBots.subsystems.drive;
 
+import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+
 public interface ModuleIO {
   /** The module inputs that need to be updated once per cycle */
   public static class ModuleIOInputs {
-    public double drivePositionRad = 0.0;
-    public double driveVelocityRadPerSec = 0.0;
-    public double driveAppliedVolts = 0.0;
-    public double[] driveCurrentAmps = new double[] {};
-    public double[] driveTempCelcius = new double[] {};
+    public TalonInputsPositional drive;
 
+    public TalonInputsPositional turn;
     public double turnAbsolutePositionRad = 0.0;
-    public double turnPositionRad = 0.0;
-    public double turnVelocityRadPerSec = 0.0;
-    public double turnAppliedVolts = 0.0;
-    public double[] turnCurrentAmps = new double[] {};
-    public double[] turnTempCelcius = new double[] {};
 
     public boolean isConnected = false;
+
+    public ModuleIOInputs(int index) {
+      drive = new TalonInputsPositional("Drive", "Module " + index + " Drive Motor");
+      turn = new TalonInputsPositional("Drive", "Module " + index + " Turn Motor");
+    }
   }
 
   /** Updates the set of loggable inputs. */

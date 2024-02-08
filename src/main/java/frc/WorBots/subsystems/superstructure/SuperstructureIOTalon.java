@@ -12,11 +12,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
 
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;
   private final TalonFX elevatorFollower;
-  private final boolean isElevatorInverted = false;
   private final DigitalInput bottomLimitSwitch = new DigitalInput(7);
   private final DigitalInput topLimitSwitch = new DigitalInput(8);
 
@@ -26,7 +26,9 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   // private final DutyCycleEncoder pivotAbsEncoder;
   // private final Encoder pivotRelEncoder;
 
-  private static final double elevatorGearing = 591.156; // in meter per revolution of 1st carriage
+  private final TalonSignalsPositional elevatorSignals;
+
+  private static final double elevatorGearing = 591.156; // in meter per rotation of 1st carriage
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(2);
@@ -35,9 +37,12 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     // pivotAbsEncoder = new DutyCycleEncoder(0);
     // pivotRelEncoder = new Encoder(0, 0);
     elevator.setPosition(0.0);
-    elevator.setInverted(isElevatorInverted);
-    elevatorFollower.setInverted(isElevatorInverted);
+    elevator.setInverted(false);
+    elevatorFollower.setInverted(false);
     elevatorFollower.setControl(new Follower(elevator.getDeviceID(), true));
+
+    elevatorSignals = new TalonSignalsPositional(elevator);
+    elevator.optimizeBusUtilization();
   }
 
   public void setElevatorVoltage(double volts) {
@@ -51,17 +56,15 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {
+    elevatorSignals.update(inputs.elevator, elevator);
     inputs.elevatorPositionMeters =
-        (elevator.getPosition().getValue() / elevatorGearing) * (isElevatorInverted ? -1.0 : 1.0);
+        (inputs.elevator.positionRads / elevatorGearing / (2 * Math.PI));
     SmartDashboard.putNumber("RawEnc", elevator.getPosition().getValue());
     inputs.elevatorVelocityMetersPerSec =
-        (elevator.getVelocity().getValue() / elevatorGearing) * (isElevatorInverted ? -1.0 : 1.0);
+        (inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI));
     inputs.elevatorPercentageRaised =
-        (elevator.getPosition().getValue() * (isElevatorInverted ? -1.0 : 1.0))
-            / maxElevationRotations;
-    inputs.elevatorVoltage = elevator.getMotorVoltage().getValue();
-    inputs.elevatorTemp = elevator.getDeviceTemp().getValue();
-    inputs.elevatorConnected = elevator.isAlive();
+        inputs.elevator.positionRads / maxElevationRotations / (2 * Math.PI);
+
     // Enable when limit switches are added
     // inputs.bottomLimitReached = bottomLimitSwitch.get();
     // inputs.topLimitReached = topLimitSwitch.get();

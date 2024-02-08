@@ -7,6 +7,8 @@
 
 package frc.WorBots.subsystems.shooter;
 
+import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+
 public interface ShooterIO {
   /** The shooter inputs that need to be updated every cycle. */
   public static class ShooterIOInputs {
@@ -14,9 +16,8 @@ public interface ShooterIO {
     public double velocityRPMTop = 0;
     public double velocityRPMBottom = 0;
 
-    public double feederWheelPositionRads = 0.0;
-    public double feederWheelVelocityRadPerSec = 0.0;
-    public double feederWheelCurrentAmps = 0.0;
+    public TalonInputsPositional feederWheel = new TalonInputsPositional("Shooter", "Feeder Motor");
+
     public double timeOfFlightDistanceMeters = 0.0;
   }
 

@@ -49,13 +49,14 @@ public class GyroIOPigeon2 implements GyroIO {
   }
 
   public void updateInputs(GyroIOInputs inputs) {
-    tempSignal.refresh();
-    pitchSignal.refresh();
-    rollSignal.refresh();
-    yawSignal.refresh();
-    pitchVelSignal.refresh();
-    rollVelSignal.refresh();
-    yawVelSignal.refresh();
+    StatusSignal.refreshAll(
+        tempSignal,
+        pitchSignal,
+        rollSignal,
+        yawSignal,
+        pitchVelSignal,
+        rollVelSignal,
+        yawVelSignal);
 
     inputs.connected = tempSignal.getValue() != 0.0;
     inputs.rollPositionRad = Units.degreesToRadians(rollSignal.getValue());

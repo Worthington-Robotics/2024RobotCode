@@ -20,7 +20,7 @@ import frc.WorBots.util.TunablePIDController.TunablePIDGains;
 public class Module {
   private final int index;
   private final ModuleIO io;
-  private final ModuleIOInputs inputs = new ModuleIOInputs();
+  private final ModuleIOInputs inputs;
   private SwerveModuleState lastSetpoint = new SwerveModuleState();
 
   private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
@@ -46,6 +46,7 @@ public class Module {
   public Module(ModuleIO io, int index) {
     this.io = io;
     this.index = index;
+    this.inputs = new ModuleIOInputs(index);
 
     if (Constants.getSim()) { // Sim constants
       driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
@@ -63,6 +64,8 @@ public class Module {
     driveFeedback.update();
     turnFeedback.update();
     io.updateInputs(inputs);
+    inputs.drive.publish();
+    inputs.turn.publish();
     StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, inputs.isConnected);
   }
 
@@ -76,7 +79,7 @@ public class Module {
     final double velocityRadPerSec = state.speedMetersPerSecond / Units.inchesToMeters(2.0);
     final double driveVolts =
         driveFeedforward.calculate(velocityRadPerSec)
-            + driveFeedback.pid.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec);
+            + driveFeedback.pid.calculate(inputs.drive.velocityRadsPerSec, velocityRadPerSec);
 
     // Perform anti-jitter to prevent module rotations for very small motions
     if (Math.abs(driveVolts) < 12.0 * antiJitterThreshold) {
@@ -127,7 +130,7 @@ public class Module {
    * @return The position in meters.
    */
   public double getPositionMeters() {
-    return inputs.drivePositionRad * Units.inchesToMeters(2.0);
+    return inputs.drive.positionRads * Units.inchesToMeters(2.0);
   }
 
   /**
@@ -136,7 +139,7 @@ public class Module {
    * @return The velocity in meters per second.
    */
   public double getVelocityMetersPerSec() {
-    return inputs.driveVelocityRadPerSec * Units.inchesToMeters(2.0);
+    return inputs.drive.velocityRadsPerSec * Units.inchesToMeters(2.0);
   }
 
   /**

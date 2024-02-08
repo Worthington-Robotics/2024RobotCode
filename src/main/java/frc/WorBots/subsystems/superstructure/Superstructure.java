@@ -94,7 +94,7 @@ public class Superstructure extends SubsystemBase {
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivotConnected);
-    StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevatorConnected);
+    StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
     // Update tunables
     pivotController.update();
@@ -129,6 +129,9 @@ public class Superstructure extends SubsystemBase {
           break;
       }
     }
+
+    inputs.elevator.publish();
+    inputs.pivot.publish();
 
     visualizer.update(
         VecBuilder.fill(

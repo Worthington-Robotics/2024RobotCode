@@ -7,18 +7,20 @@
 
 package frc.WorBots.subsystems.superstructure;
 
+import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+
 public interface SuperstructureIO {
   /** The superstructure inputs. */
   public static class SuperstructureIOInputs {
+    public TalonInputsPositional elevator =
+        new TalonInputsPositional("Superstructure", "Elevator Motor");
     public double elevatorPositionMeters = 0.0;
     public double elevatorVelocityMetersPerSec = 0.0;
-    public double elevatorTemp = 0.0;
-    public double elevatorVoltage = 0.0;
-    public boolean elevatorConnected = true;
     public double elevatorPercentageRaised = 0.0;
     public boolean bottomLimitReached = false;
     public boolean topLimitReached = false;
 
+    public TalonInputsPositional pivot = new TalonInputsPositional("Superstructure", "Pivot Motor");
     public double pivotPositionAbsRad = 0.0;
     public double pivotPositionRelRad = 0.0;
     public double pivotVelocityRadPerSec = 0.0;

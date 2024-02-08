@@ -7,13 +7,12 @@
 
 package frc.WorBots.subsystems.intake;
 
+import frc.WorBots.util.DeviceUtils.TalonInputsPositional;
+
 public interface IntakeIO {
   /** The inputs to the intake. */
   public static class IntakeIOInputs {
-    double temperatureCelsius = 0.0;
-    double velocityRadsPerSec = 0.0;
-    double appliedPowerVolts = 0.0;
-    double currentDrawAmps = 0.0;
+    TalonInputsPositional motor = new TalonInputsPositional("Intake", "Motor");
     double timeOfFlightDistanceMeters = 0.0;
     boolean isConnected = false;
   }

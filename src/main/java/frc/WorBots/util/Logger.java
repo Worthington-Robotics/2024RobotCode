@@ -287,8 +287,8 @@ public class Logger {
     elevatorPositionRel.set(inputs.elevatorPositionMeters);
     elevatorPositionAbs.set(0.0);
     elevatorVelocity.set(inputs.elevatorVelocityMetersPerSec);
-    elevatorVoltage.set(inputs.elevatorVoltage);
-    elevatorTemp.set(inputs.elevatorTemp);
+    elevatorVoltage.set(inputs.elevator.appliedPowerVolts);
+    elevatorTemp.set(inputs.elevator.temperatureCelsius);
     elevatorPercentageRaised.set(inputs.elevatorPercentageRaised);
   }
 
