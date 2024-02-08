@@ -36,19 +36,28 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     // pivot = new TalonFX(0);
     // pivotAbsEncoder = new DutyCycleEncoder(0);
     // pivotRelEncoder = new Encoder(0, 0);
+
     elevator.setPosition(0.0);
     elevator.setInverted(false);
     elevatorFollower.setInverted(false);
     elevatorFollower.setControl(new Follower(elevator.getDeviceID(), true));
 
     elevatorSignals = new TalonSignalsPositional(elevator);
+    // We have to set these frequencies otherwise the follower won't work
+    elevator.getTorqueCurrent().setUpdateFrequency(100);
+    elevator.getDutyCycle().setUpdateFrequency(100);
+
     elevator.optimizeBusUtilization();
+    elevatorFollower.optimizeBusUtilization();
+
     // pivotSignals = new TalonSignalsPositional(pivot);
     // pivot.optimizeBusUtilization();
   }
 
   public void setElevatorVoltage(double volts) {
     elevatorSignals.setTalonVoltage(elevator, volts, 10);
+    // elevatorSignals.setTalonVoltage(elevatorFollower, volts, 10);
+    // elevatorFollower.setControl(new Follower(elevator.getDeviceID(), true));
   }
 
   public void setPivotVoltage(double volts) {

@@ -121,7 +121,7 @@ public class RobotContainer {
                         drive)));
     // driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
-    driver
+    operator
         .x()
         .toggleOnTrue(
             Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)

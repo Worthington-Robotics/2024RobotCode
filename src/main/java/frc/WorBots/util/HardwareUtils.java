@@ -21,7 +21,7 @@ import frc.WorBots.util.math.GeneralMath;
 public class HardwareUtils {
   // Constants
   /** The maximum temperature in celsius that we want to run our motors at */
-  public static final double maxMotorTemperature = 80.0;
+  public static final double maxMotorTemperature = 8000.0;
 
   public static final double idealBatteryVoltage = 11.9;
 
@@ -101,6 +101,7 @@ public class HardwareUtils {
     }
 
     public void publish() {
+      super.publish();
       posPub.set(positionRads);
       velPub.set(velocityRadsPerSec);
     }
@@ -117,12 +118,15 @@ public class HardwareUtils {
       voltsSignal = motor.getSupplyVoltage();
       currentSignal = motor.getSupplyCurrent();
 
-      tempSignal.setUpdateFrequency(4);
+      tempSignal.setUpdateFrequency(8);
       voltsSignal.setUpdateFrequency(100);
       currentSignal.setUpdateFrequency(80);
+
+      // For .get calls we need the duty cycle
+      motor.getDutyCycle().setUpdateFrequency(100);
     }
 
-    public void refresh() {
+    protected void refresh() {
       StatusSignal.refreshAll(tempSignal, voltsSignal, currentSignal);
     }
 
@@ -170,13 +174,13 @@ public class HardwareUtils {
     }
 
     @Override
-    public void refresh() {
-      super.refresh();
+    protected void refresh() {
       StatusSignal.refreshAll(posSignal, velSignal);
     }
 
     public void update(TalonInputsPositional inputs, TalonFX motor) {
-      update(inputs, motor);
+      super.update(inputs, motor);
+      this.refresh();
       inputs.positionRads = Units.rotationsToRadians(posSignal.getValue());
       inputs.velocityRadsPerSec = Units.rotationsToRadians(velSignal.getValue());
     }
