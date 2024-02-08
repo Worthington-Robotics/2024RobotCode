@@ -33,8 +33,6 @@ public class Superstructure extends SubsystemBase {
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
   private Supplier<Double> climbingVolts = () -> 0.0;
-  private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
-  private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
 
@@ -51,7 +49,13 @@ public class Superstructure extends SubsystemBase {
 
   // Constants
   private static final String tableName = "Superstructure";
-  private static final double limitDistance = 0.25;
+  private static final double elevatorLimitDistance = 0.25;
+  private static final double pivotLimitDistance = 0.25;
+  private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
+  private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
+
+  /** The max angle the pivot can go to, in radians */
+  private static final double pivotMaxAngle = Units.degreesToRadians(150);
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -198,7 +202,7 @@ public class Superstructure extends SubsystemBase {
     // Do soft limiting
     volts =
         GeneralMath.softLimitVelocity(
-            volts, inputs.elevatorPercentageRaised, 12.0, 1.0, limitDistance);
+            volts, inputs.elevatorPercentageRaised, 12.0, 1.0, elevatorLimitDistance);
 
     // Do hard limiting based on limit switches
     if (inputs.bottomLimitReached && volts < 0.0) {
@@ -227,6 +231,12 @@ public class Superstructure extends SubsystemBase {
    * @param volts The pivot voltage
    */
   private void setPivotVoltage(double volts) {
+    SmartDashboard.putNumber("Superstructure/Raw Pivot Setpoint", volts);
+
+    // Do soft limiting
+    volts =
+        GeneralMath.softLimitVelocity(
+            volts, inputs.pivotPositionRelRad, 12.0, pivotMaxAngle, pivotLimitDistance);
     io.setPivotVoltage(volts);
     Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
   }

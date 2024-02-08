@@ -20,13 +20,14 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   // private final TalonFX pivot;
   private final boolean isPivotInverted = false;
-  private final double maxElevationRotations = 158.1;
   // private final DutyCycleEncoder pivotAbsEncoder;
   // private final Encoder pivotRelEncoder;
 
   private final TalonSignalsPositional elevatorSignals;
   // private final TalonSignalsPositional pivotSignals;
 
+  // Constants
+  private static final double maxElevationRotations = 158.1;
   private static final double elevatorGearing = 591.156; // in meter per rotation of 1st carriage
 
   public SuperstructureIOTalon() {
