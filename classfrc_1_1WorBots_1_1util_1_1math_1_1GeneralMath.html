@@ -74,12 +74,18 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">frc.WorBots.util.math.GeneralMath Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html">SnapDirection</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e7152b5cf8949a7b0a4bbbd5e735eba"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a0e7152b5cf8949a7b0a4bbbd5e735eba">softLimitVelocity</a> (double velocity, double position, double maxVelocity, double maxPosition, double limitDistance)</td></tr>
@@ -94,6 +100,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a6ce3a805d7348460655f4ee9a0078b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a658396a3bcd5212e7b2db356e1ca12a3"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3">curve</a> (double value, double magnitude)</td></tr>
 <tr class="separator:a658396a3bcd5212e7b2db356e1ca12a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84fd9490fe1831e97e4ecad9635d266e"><td class="memItemLeft" align="right" valign="top">static Rotation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a84fd9490fe1831e97e4ecad9635d266e">snapRotation</a> (Rotation2d rotation, Rotation2d interval, <a class="el" href="enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html">SnapDirection</a> snapDirection)</td></tr>
+<tr class="separator:a84fd9490fe1831e97e4ecad9635d266e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >General math utilities </p>
@@ -334,6 +342,58 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The position of the value within the range. If the input is outside of the range, will return extraneous results </dd></dl>
+
+</div>
+</div>
+<a id="a84fd9490fe1831e97e4ecad9635d266e" name="a84fd9490fe1831e97e4ecad9635d266e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84fd9490fe1831e97e4ecad9635d266e">&#9670;&#160;</a></span>snapRotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Rotation2d frc.WorBots.util.math.GeneralMath.snapRotation </td>
+          <td>(</td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>rotation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>interval</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html">SnapDirection</a>&#160;</td>
+          <td class="paramname"><em>snapDirection</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Snaps a rotation to intervals</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rotation</td><td>The input rotation. Should not be negative and should be wrapped. </td></tr>
+    <tr><td class="paramname">interval</td><td>The interval to snap to. Should not be negative and should be wrapped. </td></tr>
+    <tr><td class="paramname">snapDirection</td><td>Which direction to snap in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The snapped rotation </dd></dl>
 
 </div>
 </div>
