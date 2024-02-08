@@ -89,9 +89,9 @@ public class HardwareUtils {
       voltsSignal = motor.getSupplyVoltage();
       currentSignal = motor.getSupplyCurrent();
 
-      tempSignal.setUpdateFrequency(10);
+      tempSignal.setUpdateFrequency(4);
       voltsSignal.setUpdateFrequency(100);
-      currentSignal.setUpdateFrequency(100);
+      currentSignal.setUpdateFrequency(80);
     }
 
     public void refresh() {
