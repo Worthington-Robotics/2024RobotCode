@@ -159,7 +159,7 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndIntakeWing() {
+  private Command driveAndIntakeWing(int wingPosition) {
     return Commands.none();
   }
 
@@ -168,7 +168,7 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndIntakeCenter() {
+  private Command driveAndIntakeCenter(int centerPosition) {
     return Commands.none();
   }
 
@@ -193,7 +193,13 @@ public class AutoCommands extends Command {
    */
   private Command onePiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
-    return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
+    // return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
+    return Commands.sequence(
+        reset(startingPose),
+        shooter
+            .spinToSpeed(5000, 5000)
+            .andThen(shooter.incrementGamePiece())
+            .andThen(shooter.spinToSpeed(0.0, 0.0)));
   }
 
   public Command onePiece() {
@@ -215,7 +221,7 @@ public class AutoCommands extends Command {
         path(
             Waypoint.fromHolonomicPose(startingPose),
             Waypoint.fromDifferentialPose(
-                startingPose.plus(new Transform2d(1.5, 0, new Rotation2d())))));
+                startingPose.plus(new Transform2d(0.9, 0, new Rotation2d())))));
   }
 
   /**

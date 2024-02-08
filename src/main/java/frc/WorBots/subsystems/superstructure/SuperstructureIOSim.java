@@ -24,13 +24,13 @@ public class SuperstructureIOSim implements SuperstructureIO {
             Units.lbsToKilograms(12),
             Units.inchesToMeters(1.75 / 2),
             0,
-            Units.inchesToMeters(33 - 5.74),
+            0.26,
             true,
-            Units.inchesToMeters(12));
+            0.0);
     pivot =
         new SingleJointedArmSim(
             DCMotor.getKrakenX60(1),
-            2.25,
+            10,
             0.05,
             Units.inchesToMeters(13.5),
             -Math.PI / 6,

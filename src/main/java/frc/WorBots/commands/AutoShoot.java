@@ -22,7 +22,6 @@ public class AutoShoot extends SequentialCommandGroup {
   // Locations
   private double speakerOpeningHeightZ;
   private double speakerOpeningCenterY;
-  private static final double shootingLineX = 3.0;
 
   /**
    * This command automatically drives to a known safe shooting location and shoots a game piece.

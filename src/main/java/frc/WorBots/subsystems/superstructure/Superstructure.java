@@ -75,12 +75,12 @@ public class Superstructure extends SubsystemBase {
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     } else { // Sim
-      pivotController.setGains(100, 0, 0);
-      pivotController.setConstraints(5.0, 5.0);
-      elevatorController.setGains(50.0, 0, 0);
-      elevatorController.setConstraints(1.0, 1.0);
-      elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
-      pivotFeedForward = new ArmFeedforward(1.0, 1.0, 0.0);
+      pivotController.setGains(50.0, 0, 0);
+      pivotController.setConstraints(1.0, 1.0);
+      elevatorController.setGains(185, 0.095, 0);
+      elevatorController.setConstraints(2.0, 1.2);
+      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
+      pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     }
     visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
@@ -120,7 +120,7 @@ public class Superstructure extends SubsystemBase {
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
-          runPose(shootingAngleRad.get(), 0.0);
+          runPose(0.0, shootingAngleRad.get());
           break;
         case CLIMBING:
           final double volts = climbingVolts.get();
@@ -326,7 +326,7 @@ public class Superstructure extends SubsystemBase {
    * @return The shooter height
    */
   public double getShooterHeightMeters() {
-    return firstCarriagePositionMeters + Units.inchesToMeters(20);
+    return inputs.elevatorPositionMeters + 0.6;
   }
 
   /**

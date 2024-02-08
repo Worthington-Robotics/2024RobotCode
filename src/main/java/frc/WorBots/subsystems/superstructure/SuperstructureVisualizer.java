@@ -63,19 +63,23 @@ public class SuperstructureVisualizer {
      */
 
     // 3D logging
-    var stageOnePose = new Pose3d(0.0, 0.0, 0.25, new Rotation3d(0.0, 0.0, 0.0));
+    var zeroPose = new Pose3d();
+    var baseRotatedPose =
+        new Pose3d(
+            new Translation3d(0.0, 0.0, 0.0),
+            new Rotation3d(0.0, Units.degreesToRadians(-15), 0.0));
+    var stageOnePose =
+        baseRotatedPose.plus(
+            new Transform3d(0.0, 0.0, (0.117 + angles.get(3, 0)), new Rotation3d()));
+    // var stageOnePose = new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
     var stageTwoPose =
-        new Pose3d(
-            Units.inchesToMeters(13) - elevatorPositionX,
-            0.0,
-            zeroPositionToGroundMeters,
-            new Rotation3d());
+        stageOnePose.plus(
+            new Transform3d(
+                new Translation3d(0.0, 0.0, Units.inchesToMeters(1)), new Rotation3d()));
     var pivotpose =
-        new Pose3d(
-            stageTwoPose.getX(),
-            stageTwoPose.getY(),
-            stageTwoPose.getZ(),
-            new Rotation3d(angles.get(1, 0), 0.0, 0.0));
+        stageOnePose.plus(
+            new Transform3d(0.0, 0.0, 0.51, new Rotation3d(0.0, angles.get(0, 0), 0.0)));
     Logger.getInstance().setSuperstructurePoses3d(stageOnePose, stageTwoPose, pivotpose);
+    // Logger.getInstance().setSuperstructurePoses3d(zeroPose);
   }
 }

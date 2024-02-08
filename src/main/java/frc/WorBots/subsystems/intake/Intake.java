@@ -112,7 +112,7 @@ public class Intake extends SubsystemBase {
             })
         .finallyDo(
             () -> {
-              setpointVolts = 0.5;
+              setpointVolts = 0.0;
             });
   }
 

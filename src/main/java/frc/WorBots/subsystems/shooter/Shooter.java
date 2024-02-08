@@ -8,6 +8,9 @@
 package frc.WorBots.subsystems.shooter;
 
 import edu.wpi.first.math.controller.*;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
@@ -23,6 +26,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   private boolean shouldIncrement = false;
   private double topFlywheelRPM = 0.0;
   private double bottomFlywheelRPM = 0.0;
+  private double feederWheelVolts = 0.0;
+
+  // Logging classes
+  private static final String shooterTableName = "Shooter";
+  private NetworkTableInstance instance = NetworkTableInstance.getDefault();
+  private NetworkTable shooterTable = instance.getTable(shooterTableName);
+  private DoublePublisher topFlywheelSpeedPub =
+      shooterTable.getDoubleTopic("Top Flywheel RPM").publish();
+  private DoublePublisher bottomFlywheelSpeedPub =
+      shooterTable.getDoubleTopic("Bottom Flywheel RPM").publish();
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
@@ -52,12 +65,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
       feederWheelController.setGains(1.0, 0.0, 0.0);
+      topFlywheelController.pid.setTolerance(50);
+      bottomFlywheelController.pid.setTolerance(50);
     } else {
       topFlywheelController.setGains(1, 0, 0);
       bottomFlywheelController.setGains(1, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
       feederWheelController.setGains(1.0, 0.0, 0.0);
+      topFlywheelController.pid.setTolerance(50);
+      bottomFlywheelController.pid.setTolerance(50);
     }
 
     StatusPage.reportStatus(StatusPage.SHOOTER_SUBSYSTEM, true);
@@ -66,6 +83,10 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+
+    // Update logging
+    topFlywheelSpeedPub.set(inputs.velocityRPMTop);
+    bottomFlywheelSpeedPub.set(inputs.velocityRPMBottom);
 
     // Update tunables
     topFlywheelController.update();
@@ -92,6 +113,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
           bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
               + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
       // If we want to move the feeder wheel.
+      io.setFeederWheelVoltage(feederWheelVolts);
       if (shouldIncrement) {
         io.setFeederWheelVoltage(
             feederWheelController.pid.calculate(
@@ -100,7 +122,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       } else if (shouldIncrement
           && feederWheelController.pid
               .atSetpoint()) { // if we want to move it, and its at the setpoint.
-        io.setFeederWheelVoltage(0.0);
         shouldIncrement = false;
       }
     }
@@ -133,8 +154,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    */
   public Command incrementGamePiece() {
     return this.runOnce(
+            () -> {
+              shouldIncrement = true;
+            })
+        .alongWith(Commands.waitUntil(this::hasGamePiece));
+  }
+
+  public Command runFeederWheel(double volts) {
+    return this.runOnce(
         () -> {
-          shouldIncrement = true;
+          feederWheelVolts = volts;
         });
   }
 
