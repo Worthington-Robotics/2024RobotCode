@@ -226,7 +226,7 @@ public class AutoCommands extends Command {
 
   /**
    * Returns the mobility auto, where the robot starts in one of the predefined positions, and then
-   * drives forwards 1.5 meters.
+   * drives forwards 0.9 meters.
    *
    * @return The command.
    */

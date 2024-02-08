@@ -11,7 +11,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.util.DeviceUtils.TalonSignalsPositional;
 
 public class SuperstructureIOTalon implements SuperstructureIO {
@@ -46,7 +45,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    volts = MathUtil.clamp(volts, -12, 12);
+    volts = MathUtil.clamp(volts, -10, 10);
     elevator.setVoltage(volts);
   }
 
@@ -57,9 +56,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   public void updateInputs(SuperstructureIOInputs inputs) {
     elevatorSignals.update(inputs.elevator, elevator);
-    inputs.elevatorPositionMeters =
-        (inputs.elevator.positionRads / elevatorGearing / (2 * Math.PI));
-    SmartDashboard.putNumber("RawEnc", elevator.getPosition().getValue());
+    inputs.elevatorPositionMeters = (elevator.getPosition().getValue() / elevatorGearing);
     inputs.elevatorVelocityMetersPerSec =
         (inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI));
     inputs.elevatorPercentageRaised =
