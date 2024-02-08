@@ -8,6 +8,7 @@
 package frc.WorBots.util.control;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -39,8 +40,14 @@ public class DriveController {
   /** The amount of curving to apply to the turn input */
   public static final double turnCurveAmount = 2.0;
 
+  private final LinearFilter driveFilter;
+  private final LinearFilter turnFilter;
+
   /** Construct a new DriveController */
-  public DriveController() {}
+  public DriveController() {
+    driveFilter = LinearFilter.movingAverage(1);
+    turnFilter = LinearFilter.movingAverage(2);
+  }
 
   /**
    * Drive the drivetrain using controller inputs
@@ -74,7 +81,7 @@ public class DriveController {
    * @param maxSpeed The maximum speed in m/s that the robot can drive at
    * @return The calculated drive speeds, relative to the field
    */
-  private static ChassisSpeeds getSpeeds(
+  private ChassisSpeeds getSpeeds(
       double x, double y, double theta, Rotation2d robotRotation, double maxSpeed) {
     // Get direction and magnitude of linear axes
     double linearMagnitude = Math.hypot(x, y);
@@ -87,6 +94,10 @@ public class DriveController {
     // Apply squaring
     linearMagnitude = GeneralMath.curve(linearMagnitude, driveCurveAmount);
     theta = GeneralMath.curve(theta, turnCurveAmount);
+
+    // Apply filtering
+    linearMagnitude = driveFilter.calculate(linearMagnitude);
+    theta = turnFilter.calculate(theta);
 
     // Calcaulate new linear components
     Translation2d linearVelocity =
