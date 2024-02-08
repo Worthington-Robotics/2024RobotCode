@@ -31,7 +31,7 @@ public class Handoff extends Command {
   public void execute() {
     if(intake.hasGamePiece() && superstructure.isAtSetpoint()) {
       intake.handoff().execute();
-      shooter.runFeederWheel(1.0);
+      shooter.runFeederWheel(3.0);
     }
   }
 
