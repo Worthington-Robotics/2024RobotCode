@@ -131,7 +131,8 @@ public class RobotContainer {
     driver.leftBumper().onTrue(new Turn90(drive, false));
     driver.rightBumper().onTrue(new Turn90(drive, true));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
-    driver.povLeft().whileTrue(superstructure.autoZero());
+    // driver.povLeft().whileTrue(superstructure.autoZero());
+    driver.povRight().onTrue(PoseCommands.fullZero(drive, superstructure));
     operator
         .povUp()
         .whileTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> inClimbingMode));

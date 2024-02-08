@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
@@ -396,7 +397,7 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Sets a continuous theta setpoint that will automatically clear when it is reached
+   * Sets a single theta setpoint that will automatically clear when it is reached
    *
    * @param setpoint The setpoint
    */
@@ -411,6 +412,25 @@ public class Drive extends SubsystemBase {
     this.thetaSetpoint = null;
     autoRemoveThetaSetpoint = false;
     thetaController.pid.reset(getRotation().getRadians());
+  }
+
+  /**
+   * Returns a command that will set a single theta setpoint
+   *
+   * @param setpoint The setpoint
+   * @return The command
+   */
+  public Command setSingleThetaSetpointCommand(Rotation2d setpoint) {
+    return this.runOnce(() -> setSingleThetaSetpoint(setpoint));
+  }
+
+  /**
+   * Returns a command that will remove the theta setpoint
+   *
+   * @return The command
+   */
+  public Command removeThetaSetpointCommand() {
+    return this.runOnce(() -> removeThetaSetpoint());
   }
 
   /**

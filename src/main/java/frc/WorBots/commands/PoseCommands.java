@@ -64,4 +64,12 @@ public class PoseCommands {
                     Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.5, 0.0, 0.0)), drive)
                         .withTimeout(1.0)));
   }
+
+  /** Return the drive base and superstructure back to their zero positions */
+  public static Command fullZero(Drive drive, Superstructure superstructure) {
+    return superstructure
+        .setPose(Preset.HOME)
+        .alongWith(drive.setSingleThetaSetpointCommand(new Rotation2d()))
+        .andThen(Commands.waitSeconds(1.0).andThen(drive.removeThetaSetpointCommand()));
+  }
 }
