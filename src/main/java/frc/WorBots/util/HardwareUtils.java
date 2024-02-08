@@ -45,6 +45,8 @@ public class HardwareUtils {
     if (temp < maxMotorTemperature) {
       volts = GeneralMath.clampMagnitude(volts, maxVolts);
       talon.setVoltage(volts);
+    } else {
+      talon.stopMotor();
     }
   }
 
@@ -146,8 +148,8 @@ public class HardwareUtils {
       super(motor);
       posSignal = motor.getPosition();
       velSignal = motor.getVelocity();
-      posSignal.setUpdateFrequency(100);
-      velSignal.setUpdateFrequency(100);
+      posSignal.setUpdateFrequency(150);
+      velSignal.setUpdateFrequency(150);
     }
 
     @Override
