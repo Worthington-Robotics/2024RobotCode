@@ -27,7 +27,7 @@ public class RobotContainer {
   private Vision vision;
   private Superstructure superstructure;
   private Intake intake;
-  // private Shooter shooter;
+  private Shooter shooter;
   private AutoSelector selector;
 
   // Joysticks
@@ -50,7 +50,7 @@ public class RobotContainer {
       vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
       superstructure = new Superstructure(new SuperstructureIOTalon());
       intake = new Intake(new IntakeIOTalon());
-      // shooter = new Shooter(new ShooterIOKraken());
+      shooter = new Shooter(new ShooterIOTalon());
     } else { // Sim
       drive =
           new Drive(
@@ -62,34 +62,33 @@ public class RobotContainer {
       vision = new Vision(new VisionIOCustom(0));
       superstructure = new Superstructure(new SuperstructureIOSim());
       intake = new Intake(new IntakeIOSim());
-      // shooter = new Shooter(new ShooterIOSim());
+      shooter = new Shooter(new ShooterIOSim());
     }
     selector = new AutoSelector("Auto Selector");
-    // var autoCommands =
-    // new AutoCommands(drive, superstructure, intake, shooter,
-    // selector::getResponses);
+    var autoCommands =
+        new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
 
-    // selector.addRoutine(
-    // "Mobility",
-    // List.of(
-    // new AutoQuestion(
-    // "Starting Location?",
-    // List.of(
-    // AutoQuestionResponse.AMP_SIDE,
-    // AutoQuestionResponse.CENTER,
-    // AutoQuestionResponse.WALL_SIDE))),
-    // autoCommands.mobility());
+    selector.addRoutine(
+        "Mobility",
+        List.of(
+            new AutoQuestion(
+                "Starting Location?",
+                List.of(
+                    AutoQuestionResponse.AMP_SIDE,
+                    AutoQuestionResponse.CENTER,
+                    AutoQuestionResponse.WALL_SIDE))),
+        autoCommands.mobility());
 
-    // selector.addRoutine(
-    // "One Piece",
-    // List.of(
-    // new AutoQuestion(
-    // "Starting Location?",
-    // List.of(
-    // AutoQuestionResponse.AMP_SIDE,
-    // AutoQuestionResponse.CENTER,
-    // AutoQuestionResponse.WALL_SIDE))),
-    // autoCommands.onePiece());
+    selector.addRoutine(
+        "One Piece",
+        List.of(
+            new AutoQuestion(
+                "Starting Location?",
+                List.of(
+                    AutoQuestionResponse.AMP_SIDE,
+                    AutoQuestionResponse.CENTER,
+                    AutoQuestionResponse.WALL_SIDE))),
+        autoCommands.onePiece());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();
