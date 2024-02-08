@@ -136,6 +136,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaabd91097ef62772386e3cf262d0d2bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5193bd3175f092f3071ba3de814b166"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#aa5193bd3175f092f3071ba3de814b166">removeThetaSetpoint</a> ()</td></tr>
 <tr class="separator:aa5193bd3175f092f3071ba3de814b166"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a960f410a193beaac1281950d97ff38b6"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a960f410a193beaac1281950d97ff38b6">setSingleThetaSetpointCommand</a> (Rotation2d setpoint)</td></tr>
+<tr class="separator:a960f410a193beaac1281950d97ff38b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3ceaa9afaa890329f5e1abcae25eda5"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#af3ceaa9afaa890329f5e1abcae25eda5">removeThetaSetpointCommand</a> ()</td></tr>
+<tr class="separator:af3ceaa9afaa890329f5e1abcae25eda5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aa66277fb1d314de13ed8a7355ef370"><td class="memItemLeft" align="right" valign="top">Translation2d[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a8aa66277fb1d314de13ed8a7355ef370">getModuleTranslations</a> ()</td></tr>
 <tr class="separator:a8aa66277fb1d314de13ed8a7355ef370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -641,6 +645,33 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="af3ceaa9afaa890329f5e1abcae25eda5" name="af3ceaa9afaa890329f5e1abcae25eda5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3ceaa9afaa890329f5e1abcae25eda5">&#9670;&#160;</a></span>removeThetaSetpointCommand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.drive.Drive.removeThetaSetpointCommand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a command that will remove the theta setpoint</p>
+<dl class="section return"><dt>Returns</dt><dd>The command </dd></dl>
+
+</div>
+</div>
 <a id="a22f0480915fd39d7bdfc9fc2672bd433" name="a22f0480915fd39d7bdfc9fc2672bd433"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a22f0480915fd39d7bdfc9fc2672bd433">&#9670;&#160;</a></span>resetHeading()</h2>
 
@@ -822,13 +853,47 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Sets a continuous theta setpoint that will automatically clear when it is reached</p>
+<p >Sets a single theta setpoint that will automatically clear when it is reached</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">setpoint</td><td>The setpoint </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a960f410a193beaac1281950d97ff38b6" name="a960f410a193beaac1281950d97ff38b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a960f410a193beaac1281950d97ff38b6">&#9670;&#160;</a></span>setSingleThetaSetpointCommand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.drive.Drive.setSingleThetaSetpointCommand </td>
+          <td>(</td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>setpoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a command that will set a single theta setpoint</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">setpoint</td><td>The setpoint </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The command </dd></dl>
 
 </div>
 </div>
