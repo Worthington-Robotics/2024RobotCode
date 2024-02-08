@@ -8,12 +8,13 @@ var searchData=
   ['applyagnostic_5',['applyAgnostic',['../classfrc_1_1WorBots_1_1util_1_1math_1_1AllianceFlipUtil.html#a7b41366c3eae94080007787a0be31375',1,'frc::WorBots::util::math::AllianceFlipUtil']]],
   ['atgoal_6',['atGoal',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#aad4c1deba286cf9c8fa133ba9304f30c',1,'frc::WorBots::commands::DriveToPose']]],
   ['atreference_7',['atReference',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a13aa1bf6030440849b4e50c86a90b05c',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]],
-  ['autocommands_8',['AutoCommands',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a19900e71583e8d9376c368670bdc025b',1,'frc::WorBots::commands::AutoCommands']]],
-  ['autonomousexit_9',['autonomousExit',['../classfrc_1_1WorBots_1_1Robot.html#a4f19dd8f8cc0e6043358596bc7c8ae05',1,'frc::WorBots::Robot']]],
-  ['autonomousinit_10',['autonomousInit',['../classfrc_1_1WorBots_1_1Robot.html#ab6ef326c60ffe7140c843e16963fe6ab',1,'frc::WorBots::Robot']]],
-  ['autonomousperiodic_11',['autonomousPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#af32a66b935d22c1cd1b1c7532630f7f9',1,'frc::WorBots::Robot']]],
-  ['autoquestion_12',['AutoQuestion',['../classfrc_1_1WorBots_1_1AutoSelector.html#a08022ea935002a3fadbe89e1fff38c21',1,'frc::WorBots::AutoSelector']]],
-  ['autoselector_13',['AutoSelector',['../classfrc_1_1WorBots_1_1AutoSelector.html#a1d0889254586fab3549795ddf984dd6d',1,'frc::WorBots::AutoSelector']]],
-  ['autoshoot_14',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#a2c81763f88e7a37e522537ef30816e97',1,'frc::WorBots::commands::AutoShoot']]],
-  ['autozero_15',['autoZero',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a4be7bd0ff560a1d42083d2fc774cf672',1,'frc::WorBots::subsystems::superstructure::Superstructure']]]
+  ['autoclimb_8',['autoClimb',['../classfrc_1_1WorBots_1_1commands_1_1PoseCommands.html#a883d814043669d09474eb6b5c730e8b1',1,'frc::WorBots::commands::PoseCommands']]],
+  ['autocommands_9',['AutoCommands',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a19900e71583e8d9376c368670bdc025b',1,'frc::WorBots::commands::AutoCommands']]],
+  ['autonomousexit_10',['autonomousExit',['../classfrc_1_1WorBots_1_1Robot.html#a4f19dd8f8cc0e6043358596bc7c8ae05',1,'frc::WorBots::Robot']]],
+  ['autonomousinit_11',['autonomousInit',['../classfrc_1_1WorBots_1_1Robot.html#ab6ef326c60ffe7140c843e16963fe6ab',1,'frc::WorBots::Robot']]],
+  ['autonomousperiodic_12',['autonomousPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#af32a66b935d22c1cd1b1c7532630f7f9',1,'frc::WorBots::Robot']]],
+  ['autoquestion_13',['AutoQuestion',['../classfrc_1_1WorBots_1_1AutoSelector.html#a08022ea935002a3fadbe89e1fff38c21',1,'frc::WorBots::AutoSelector']]],
+  ['autoselector_14',['AutoSelector',['../classfrc_1_1WorBots_1_1AutoSelector.html#a1d0889254586fab3549795ddf984dd6d',1,'frc::WorBots::AutoSelector']]],
+  ['autoshoot_15',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#a2c81763f88e7a37e522537ef30816e97',1,'frc::WorBots::commands::AutoShoot']]],
+  ['autozero_16',['autoZero',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a4be7bd0ff560a1d42083d2fc774cf672',1,'frc::WorBots::subsystems::superstructure::Superstructure']]]
 ];

@@ -8,12 +8,13 @@ var searchData=
   ['checkerror_5',['checkError',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a5f6433f94444df9fe20a9772d5ae51d4',1,'frc.WorBots.util.math.GeneralMath.checkError(double measurement, double goal, double margin)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a6ce3a805d7348460655f4ee9a0078b8f',1,'frc.WorBots.util.math.GeneralMath.checkError(double error, double margin)']]],
   ['claire_6',['Claire',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a96c6a5b8c6ea860a5a891f6abfb6da50',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['clampmagnitude_7',['clampMagnitude',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['climbing_8',['CLIMBING',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a8c0007bbd7a6768e36431bbc65c3cbda',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
-  ['constants_9',['Constants',['../classfrc_1_1WorBots_1_1Constants.html',1,'frc::WorBots']]],
-  ['constants_2ejava_10',['Constants.java',['../Constants_8java.html',1,'']]],
-  ['curve_11',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['customholonomicdrivecontroller_12',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.CustomHolonomicDriveController()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController']]],
-  ['customholonomicdrivecontroller_2ejava_13',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
-  ['customtrajectorygenerator_14',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]],
-  ['customtrajectorygenerator_2ejava_15',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
+  ['climbdown_8',['climbDown',['../classfrc_1_1WorBots_1_1commands_1_1PoseCommands.html#a649d3a0c0018c9a155326f4a31ceb8be',1,'frc::WorBots::commands::PoseCommands']]],
+  ['climbing_9',['CLIMBING',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a8c0007bbd7a6768e36431bbc65c3cbda',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
+  ['constants_10',['Constants',['../classfrc_1_1WorBots_1_1Constants.html',1,'frc::WorBots']]],
+  ['constants_2ejava_11',['Constants.java',['../Constants_8java.html',1,'']]],
+  ['curve_12',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['customholonomicdrivecontroller_13',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.CustomHolonomicDriveController()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController']]],
+  ['customholonomicdrivecontroller_2ejava_14',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
+  ['customtrajectorygenerator_15',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]],
+  ['customtrajectorygenerator_2ejava_16',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
 ];
