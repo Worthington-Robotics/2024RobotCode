@@ -281,9 +281,9 @@ public class Logger {
   public void setSuperstructureInputs(SuperstructureIOInputs inputs) {
     pivotPositionRel.set(inputs.pivotPositionRelRad);
     pivotPositionAbs.set(inputs.pivotPositionAbsRad);
-    pivotVelocity.set(inputs.pivotVelocityRadPerSec);
-    pivotVoltage.set(inputs.pivotVoltageApplied);
-    pivotTemp.set(inputs.pivotTemp);
+    pivotVelocity.set(inputs.pivot.velocityRadsPerSec);
+    pivotVoltage.set(inputs.pivot.appliedPowerVolts);
+    pivotTemp.set(inputs.pivot.temperatureCelsius);
     elevatorPositionRel.set(inputs.elevatorPositionMeters);
     elevatorPositionAbs.set(0.0);
     elevatorVelocity.set(inputs.elevatorVelocityMetersPerSec);
