@@ -193,7 +193,13 @@ public class AutoCommands extends Command {
    */
   private Command onePiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
-    return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
+    // return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
+    return Commands.sequence(
+        reset(startingPose),
+        shooter
+            .spinToSpeed(5000, 5000)
+            .andThen(shooter.incrementGamePiece())
+            .andThen(shooter.spinToSpeed(0.0, 0.0)));
   }
 
   public Command onePiece() {

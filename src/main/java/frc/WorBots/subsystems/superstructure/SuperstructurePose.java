@@ -17,6 +17,7 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     HOME(new SuperstructurePose(VecBuilder.fill(0, 0))),
     AMP(new SuperstructurePose(VecBuilder.fill(0.25, 0.0))),
     CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
+    HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, -0.5))),
     CLIMB(new SuperstructurePose(VecBuilder.fill(0.4, 0.0)));
 
     public SuperstructurePose pose;
