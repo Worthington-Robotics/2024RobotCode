@@ -106,10 +106,11 @@ public class Intake extends SubsystemBase {
    * @return The command.
    */
   public Command handoff() {
-    return this.runOnce(
+    return this.run(
             () -> {
               setpointVolts = 8.0;
             })
+        .withTimeout(1.0)
         .finallyDo(
             () -> {
               setpointVolts = 0.0;

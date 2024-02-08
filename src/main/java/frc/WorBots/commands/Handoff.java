@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
-import frc.WorBots.subsystems.superstructure.Superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.*;
 
 /**
@@ -19,9 +18,12 @@ import frc.WorBots.subsystems.superstructure.SuperstructurePose.*;
  * it for shooting.
  */
 public class Handoff extends Command {
-  private Superstructure superstructure;
-  private Intake intake;
-  private Shooter shooter;
+  private final Superstructure superstructure;
+  private final Intake intake;
+  private final Shooter shooter;
+
+  /** Whether the pose is in place and the handoff has begun */
+  private boolean hasBegun = false;
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -32,15 +34,18 @@ public class Handoff extends Command {
 
   @Override
   public void initialize() {
-    superstructure.setModeVoid(SuperstructureState.POSE);
-    superstructure.setPose(Preset.HANDOFF);
+    superstructure.setPose(Preset.HANDOFF).schedule();
   }
 
   @Override
   public void execute() {
-    if (intake.hasGamePiece() && superstructure.isAtSetpoint()) {
-      intake.handoff().schedule();
-      shooter.runFeederWheel(3.0);
+    // This check is here so we don't schedule the handoff every execution
+    if (!hasBegun) {
+      if (intake.hasGamePiece() && superstructure.isAtSetpoint()) {
+        intake.handoff().schedule();
+        shooter.runFeederWheel(3.0);
+        hasBegun = true;
+      }
     }
   }
 
@@ -53,6 +58,5 @@ public class Handoff extends Command {
   public void end(boolean interrupted) {
     shooter.runFeederWheel(0.0);
     superstructure.setPose(Preset.HOME);
-    superstructure.setModeVoid(SuperstructureState.POSE);
   }
 }
