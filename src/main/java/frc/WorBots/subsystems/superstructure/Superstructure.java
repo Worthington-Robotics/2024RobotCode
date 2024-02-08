@@ -277,7 +277,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Sets the desired pose of the subsystem.
+   * Sets the desired pose of the subsystem. Also sets the superstructure to pose mode.
    *
    * @param pose The desired pose.
    * @return The command.
@@ -285,6 +285,7 @@ public class Superstructure extends SubsystemBase {
   public Command setPose(SuperstructurePose.Preset pose) {
     return this.runOnce(
             () -> {
+              this.setMode(SuperstructureState.POSE);
               this.setpoint = pose;
             })
         .alongWith(Commands.waitUntil(this::isAtSetpoint));
