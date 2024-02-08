@@ -19,8 +19,11 @@ import frc.WorBots.util.math.GeneralMath;
 
 /** Utility functions for working with hardware devices */
 public class HardwareUtils {
+  // Constants
   /** The maximum temperature in celsius that we want to run our motors at */
   public static final double maxMotorTemperature = 80.0;
+
+  public static final double idealBatteryVoltage = 11.9;
 
   /**
    * Checks if a time of flight device is connected
@@ -54,11 +57,13 @@ public class HardwareUtils {
   public static class TalonInputs {
     protected final NetworkTable table;
     private final DoublePublisher voltsPub;
+    private final DoublePublisher supplyVoltsPub;
     private final DoublePublisher currentPub;
     private final DoublePublisher tempPub;
     private final BooleanPublisher connectedPub;
 
     public double appliedPowerVolts = 0.0;
+    public double supplyVoltage = 0.0;
     public double currentDrawAmps = 0.0;
     public double temperatureCelsius = 0.0;
     public boolean isConnected = false;
@@ -66,6 +71,7 @@ public class HardwareUtils {
     public TalonInputs(String table, String subtable) {
       this.table = NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable);
       voltsPub = this.table.getDoubleTopic("Applied Voltage").publish();
+      supplyVoltsPub = this.table.getDoubleTopic("Supply Voltage").publish();
       currentPub = this.table.getDoubleTopic("Current Draw").publish();
       tempPub = this.table.getDoubleTopic("Temp Celsius").publish();
       connectedPub = this.table.getBooleanTopic("Connected").publish();
@@ -73,6 +79,7 @@ public class HardwareUtils {
 
     public void publish() {
       voltsPub.set(appliedPowerVolts);
+      supplyVoltsPub.set(supplyVoltage);
       currentPub.set(currentDrawAmps);
       tempPub.set(temperatureCelsius);
       connectedPub.set(isConnected);
@@ -123,8 +130,18 @@ public class HardwareUtils {
       refresh();
       inputs.temperatureCelsius = tempSignal.getValue();
       inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
+      inputs.supplyVoltage = voltsSignal.getValue();
       inputs.currentDrawAmps = currentSignal.getValue();
       inputs.isConnected = motor.isAlive();
+    }
+
+    /**
+     * Gets the motor supply voltage
+     *
+     * @return The supply voltage
+     */
+    public double getSupplyVoltage() {
+      return voltsSignal.getValue();
     }
 
     /**
