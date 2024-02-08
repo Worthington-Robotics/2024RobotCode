@@ -323,7 +323,7 @@ public class Superstructure extends SubsystemBase {
    * @return The shooter height
    */
   public double getShooterHeightMeters() {
-    return firstCarriagePositionMeters + Units.inchesToMeters(20);
+    return inputs.elevatorPositionMeters + 0.6;
   }
 
   /**

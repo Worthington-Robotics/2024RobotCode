@@ -159,7 +159,7 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndIntakeWing() {
+  private Command driveAndIntakeWing(int wingPosition) {
     return Commands.none();
   }
 
@@ -168,7 +168,7 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndIntakeCenter() {
+  private Command driveAndIntakeCenter(int centerPosition) {
     return Commands.none();
   }
 
