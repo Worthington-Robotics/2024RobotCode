@@ -26,6 +26,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   // private final Encoder pivotRelEncoder;
 
   private final TalonSignalsPositional elevatorSignals;
+  // private final TalonSignalsPositional pivotSignals;
 
   private static final double elevatorGearing = 591.156; // in meter per rotation of 1st carriage
 
@@ -42,6 +43,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
     elevatorSignals = new TalonSignalsPositional(elevator);
     elevator.optimizeBusUtilization();
+    // pivotSignals = new TalonSignalsPositional(pivot);
+    // pivot.optimizeBusUtilization();
   }
 
   public void setElevatorVoltage(double volts) {
@@ -56,9 +59,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   public void updateInputs(SuperstructureIOInputs inputs) {
     elevatorSignals.update(inputs.elevator, elevator);
-    inputs.elevatorPositionMeters = (elevator.getPosition().getValue() / elevatorGearing);
+    // pivotSignals.update(inputs.pivot, pivot);
+
+    inputs.elevatorPositionMeters = elevator.getPosition().getValue() / elevatorGearing;
     inputs.elevatorVelocityMetersPerSec =
-        (inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI));
+        inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI);
     inputs.elevatorPercentageRaised =
         inputs.elevator.positionRads / maxElevationRotations / (2 * Math.PI);
 
@@ -69,10 +74,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     // final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
     // inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * pivotSign;
     // inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
-    // inputs.pivotVelocityRadPerSec = pivotRelEncoder.getRate() * pivotSign;
-    // inputs.pivotTemp = pivot.getDeviceTemp().getValue();
-    // inputs.pivotVoltageApplied = pivot.getMotorVoltage().getValue();
-    // inputs.pivotConnected = pivot.isAlive() && pivotAbsEncoder.isConnected();
+    // inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
+    // inputs.pivot.isConnected &= pivotAbsEncoder.isConnected();
   }
 
   public void resetElevator() {

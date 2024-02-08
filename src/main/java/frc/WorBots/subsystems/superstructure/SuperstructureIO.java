@@ -23,10 +23,6 @@ public interface SuperstructureIO {
     public TalonInputsPositional pivot = new TalonInputsPositional("Superstructure", "Pivot Motor");
     public double pivotPositionAbsRad = 0.0;
     public double pivotPositionRelRad = 0.0;
-    public double pivotVelocityRadPerSec = 0.0;
-    public double pivotVoltageApplied = 0.0;
-    public double pivotTemp = 0.0;
-    public boolean pivotConnected = true;
   }
 
   /**

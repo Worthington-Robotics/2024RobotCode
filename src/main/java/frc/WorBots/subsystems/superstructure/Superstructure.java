@@ -95,7 +95,7 @@ public class Superstructure extends SubsystemBase {
     // Log info
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
-    StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivotConnected);
+    StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
     // Update tunables
@@ -167,7 +167,7 @@ public class Superstructure extends SubsystemBase {
     final double pivotVoltage =
         pivotController.pid.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad, setpoint)
             + pivotFeedForward.calculate(
-                inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivotVelocityRadPerSec);
+                inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivot.velocityRadsPerSec);
 
     return pivotVoltage;
   }
