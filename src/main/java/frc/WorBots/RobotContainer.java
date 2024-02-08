@@ -34,6 +34,8 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
+  private boolean inClimbingMode = false;
+
   /**
    * The robot container houses the joystics, and subsystems of the robot, as well as getting the
    * autonomous command.
@@ -104,29 +106,38 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
-    // driver.a().whileTrue(intake.intakeRaw());
+
+    driver.leftTrigger().whileTrue(intake.intakeRaw());
     driver
-        .b()
+        .rightTrigger()
         .whileTrue(
             intake
                 .spitRaw()
                 .alongWith(
                     Commands.run(
                         () -> {
-                          drive.runVelocity(new ChassisSpeeds(-0.5, 0.0, 0.0));
+                          drive.runVelocity(new ChassisSpeeds(-0.65, 0.0, 0.0));
                         },
                         drive)));
     // driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
-    driver.x().toggleOnTrue(new DriverClimb(superstructure, () -> -driver.getRightY()));
+    driver
+        .x()
+        .toggleOnTrue(
+            Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
+                .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
+    operator.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
     driver.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
+    operator.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
     driver.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
-    driver.povLeft().onTrue(superstructure.autoZero());
-    driver.povUp().whileTrue(PoseCommands.autoClimb(drive, superstructure));
-    driver.povDown().whileTrue(PoseCommands.climbDown(drive, superstructure));
-    // driver.leftBumper().whileTrue(elevator.setDemandCommand(-0.5));
-    // driver.rightBumper().whileTrue(elevator.setDemandCommand(0.5));
+    driver.povLeft().whileTrue(superstructure.autoZero());
+    operator
+        .povUp()
+        .whileTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> inClimbingMode));
+    operator
+        .povDown()
+        .whileTrue(PoseCommands.climbDown(drive, superstructure).onlyIf(() -> inClimbingMode));
     driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
     // operator
     // .a()
