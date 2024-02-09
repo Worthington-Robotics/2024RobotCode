@@ -71,7 +71,7 @@ var searchData=
   ['statuspage_2ejava_68',['StatusPage.java',['../StatusPage_8java.html',1,'']]],
   ['stop_69',['stop',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a381996397d0dde96ba90e1fd3e10d87e',1,'frc.WorBots.subsystems.drive.Module.stop()'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a4a1a85ec516c2d359da98b2e6b025c46',1,'frc.WorBots.subsystems.drive.Drive.stop()']]],
   ['stopflywheels_70',['stopFlywheels',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a684deb2026d519badb19658583f74391',1,'frc::WorBots::subsystems::shooter::Shooter']]],
-  ['stoplocktime_71',['stopLockTime',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a48b4afe8e313eb3c95299a284b28f630',1,'frc::WorBots::util::control::DriveController']]],
+  ['stoplockdelay_71',['stopLockDelay',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#aa4703f1a0faf98b60025d7a7d25e47cf',1,'frc::WorBots::util::control::DriveController']]],
   ['stopwithlock_72',['stopWithLock',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a3940d9f4a7ba7b26750c42bc3b981f6d',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['superstructure_73',['Superstructure',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html',1,'frc.WorBots.subsystems.superstructure.Superstructure'],['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a6752756c2556847ebc3b6709d1bba148',1,'frc.WorBots.subsystems.superstructure.Superstructure.Superstructure()']]],
   ['superstructure_2ejava_74',['Superstructure.java',['../Superstructure_8java.html',1,'']]],
