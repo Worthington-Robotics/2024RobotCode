@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['manual_0',['MANUAL',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a9cc76cdc23a822efd62ef453a161ddc9',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
-  ['matchtime_1',['MatchTime',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a9c0b0a2baf4ad23da27d9dc9e38a81ca',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['maxmotortemperature_2',['maxMotorTemperature',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#a658baa9eae400813a113ae868ca19799',1,'frc::WorBots::util::HardwareUtils']]],
-  ['maxquestions_3',['maxQuestions',['../classfrc_1_1WorBots_1_1AutoSelector.html#a38f8c14b67151a26e585d4bc4cc13d20',1,'frc::WorBots::AutoSelector']]],
-  ['midlinex_4',['midLineX',['../classfrc_1_1WorBots_1_1FieldConstants.html#a184cc8bee57c49acb3f60742c0d3d06f',1,'frc::WorBots::FieldConstants']]],
-  ['midliney_5',['midLineY',['../classfrc_1_1WorBots_1_1FieldConstants.html#a14b9554dfecf859ce4406b032db01b0f',1,'frc::WorBots::FieldConstants']]],
-  ['minimumspeed_6',['minimumSpeed',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a1679a719278983efbb9d08cf2fffb240',1,'frc::WorBots::util::control::DriveController']]]
+  ['launchpad_0',['LAUNCHPAD',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a6cf927664b47cb3638015e8a867ca6df',1,'frc::WorBots::util::debug::StatusPage']]],
+  ['light_5fcount_1',['LIGHT_COUNT',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#ac693f9da041fc6fd02e179f9a018eb1f',1,'frc::WorBots::subsystems::lights::Lights']]],
+  ['lights_5fsubsystem_2',['LIGHTS_SUBSYSTEM',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a275f98d179f72ebf714cea0c17056378',1,'frc::WorBots::util::debug::StatusPage']]],
+  ['low_3',['LOW',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath_1_1ShotConfidence.html#a1ff3bdd30b99550c6d49f5447c89bc76',1,'frc::WorBots::util::math::ShooterMath::ShotConfidence']]]
 ];

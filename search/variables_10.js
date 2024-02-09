@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vision_5fsubsystem_0',['VISION_SUBSYSTEM',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#aedb21dc8d461491dac3e11a6722e5b9b',1,'frc::WorBots::util::debug::StatusPage']]]
+  ['tapewidth_0',['tapeWidth',['../classfrc_1_1WorBots_1_1FieldConstants.html#a8f7be37658b798f35500bd6a93e591b8',1,'frc::WorBots::FieldConstants']]],
+  ['turncurveamount_1',['turnCurveAmount',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#ab4a3f5f0bb21e25f4405465b6bf99136',1,'frc::WorBots::util::control::DriveController']]]
 ];

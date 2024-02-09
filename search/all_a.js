@@ -14,5 +14,6 @@ var searchData=
   ['logswervemodulestates_11',['logSwerveModuleStates',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a2f0f9a53fb70784a50f19e6310d9e1f6',1,'frc::WorBots::util::debug::Logger']]],
   ['logtrajectory_12',['logTrajectory',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a45631f76f50321f3619488eaddb81a8e',1,'frc::WorBots::util::debug::Logger']]],
   ['logtranslation2d_13',['logTranslation2d',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#ac3f10ee6706bfa53cd09c7af7584e2da',1,'frc::WorBots::util::debug::Logger']]],
-  ['logtranslation3d_14',['logTranslation3d',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a3eb86a2e5e96b7b74e1e163b140a41b8',1,'frc::WorBots::util::debug::Logger']]]
+  ['logtranslation3d_14',['logTranslation3d',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a3eb86a2e5e96b7b74e1e163b140a41b8',1,'frc::WorBots::util::debug::Logger']]],
+  ['low_15',['LOW',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath_1_1ShotConfidence.html#a1ff3bdd30b99550c6d49f5447c89bc76',1,'frc::WorBots::util::math::ShooterMath::ShotConfidence']]]
 ];
