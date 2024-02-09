@@ -13,26 +13,32 @@ import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
 
-public class DriverClimb extends Command {
-  private Supplier<Double> joystickValue;
+public class SuperstructureManual extends Command {
+  private Supplier<Double> elevatorValue;
+  private Supplier<Double> pivotValue;
   private Superstructure superstructure;
 
-  public DriverClimb(Superstructure superstructure, Supplier<Double> joystickValue) {
-    this.joystickValue = joystickValue;
+  public SuperstructureManual(
+      Superstructure superstructure, Supplier<Double> elevatorValue, Supplier<Double> pivotValue) {
+    this.elevatorValue = elevatorValue;
+    this.pivotValue = pivotValue;
     this.superstructure = superstructure;
     addRequirements(superstructure);
   }
 
   @Override
   public void initialize() {
-    superstructure.setModeVoid(SuperstructureState.CLIMBING);
+    superstructure.setModeVoid(SuperstructureState.MANUAL);
   }
 
   @Override
   public void execute() {
-    double joystick = MathUtil.applyDeadband(joystickValue.get(), 0.09);
+    double joystick = MathUtil.applyDeadband(elevatorValue.get(), 0.09);
     double volts = joystick * 9.0;
     superstructure.setClimbingVolts(volts);
+    joystick = MathUtil.applyDeadband(pivotValue.get(), 0.09);
+    volts = joystick * 2.0;
+    superstructure.setManualPivotVolts(volts);
   }
 
   @Override
@@ -43,5 +49,7 @@ public class DriverClimb extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.setModeVoid(SuperstructureState.POSE);
+    superstructure.setClimbingVolts(0.0);
+    superstructure.setManualPivotVolts(0.0);
   }
 }

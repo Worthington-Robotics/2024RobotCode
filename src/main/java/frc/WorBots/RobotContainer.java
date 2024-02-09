@@ -104,7 +104,9 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
-    superstructure.setDefaultCommand(new DriverClimb(superstructure, () -> -operator.getLeftY()));
+    superstructure.setDefaultCommand(
+        new SuperstructureManual(
+            superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver.leftBumper().onTrue(new Turn90(drive, false));
     driver.rightBumper().onTrue(new Turn90(drive, true));
@@ -122,7 +124,7 @@ public class RobotContainer {
                         drive)));
     driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
-    driver.povRight().onTrue(PoseCommands.fullZero(drive, superstructure));
+    driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
     // operator
     // .y()
     // .toggleOnTrue(
@@ -141,16 +143,18 @@ public class RobotContainer {
     operator.b().onTrue(PoseCommands.amp(drive, superstructure));
     operator.x().onTrue(PoseCommands.slide(drive, superstructure));
 
+    operator
+        .leftTrigger()
+        .whileTrue(
+            new DriverShoot(
+                drive,
+                superstructure,
+                () -> -driver.getLeftX(),
+                () -> -driver.getLeftY(),
+                () -> -operator.getLeftY(),
+                () -> -operator.getRightY()));
     HashMap<String, Command> shootMap = new HashMap<String, Command>();
-    shootMap.put(
-        "shoot",
-        new DriverShoot(
-            drive,
-            superstructure,
-            () -> -driver.getLeftX(),
-            () -> -driver.getLeftY(),
-            () -> -operator.getLeftY(),
-            () -> -operator.getRightY()));
+    shootMap.put("shoot", shooter.shootCommand(2000));
     shootMap.put("amp", shooter.shootCommand(500));
     shootMap.put("slide", shooter.spinToSpeed(-300, -300));
     shootMap.put("raw", shooter.spinToSpeed(2000, 2000));
@@ -166,7 +170,7 @@ public class RobotContainer {
                   if (superstructure.isInPose(Preset.SLIDE)) {
                     return "slide";
                   }
-                  return "raw";
+                  return "shoot";
                 }));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.povLeft().whileTrue(superstructure.autoZero());

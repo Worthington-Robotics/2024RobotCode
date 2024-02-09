@@ -62,7 +62,7 @@ public class Superstructure extends SubsystemBase {
   public enum SuperstructureState {
     POSE,
     SHOOTING,
-    CLIMBING
+    MANUAL
   }
 
   /**
@@ -132,7 +132,7 @@ public class Superstructure extends SubsystemBase {
           final double voltsPivot = manualPivotVolts.get();
           setPivotVoltage(voltsPivot);
           break;
-        case CLIMBING:
+        case MANUAL:
           final double volts = climbingVolts.get();
           setElevatorVoltage(volts);
           setPivotVoltage(0.0);
@@ -190,9 +190,9 @@ public class Superstructure extends SubsystemBase {
     Logger.getInstance().setSuperstructureElevatorPosSetpoint(elevatorPose);
     Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotPose);
     final double elevatorVoltage = calculateElevator(elevatorPose);
-    final double pivotVoltage = calculatePivot(pivotPose);
+    // final double pivotVoltage = calculatePivot(pivotPose);
     setElevatorVoltage(elevatorVoltage);
-    setPivotVoltage(pivotVoltage);
+    // setPivotVoltage(pivotVoltage);
   }
 
   /**
