@@ -91,8 +91,8 @@ public class Drive extends SubsystemBase {
     modules[3] = new Module(brModule, 3);
 
     if (!Constants.getSim()) {
-      thetaController.setGains(3.5, 0.01, 0.0);
-      thetaController.setConstraints(1.35, 1.2);
+      thetaController.setGains(5.0, 0.012, 0.0);
+      thetaController.setConstraints(3.5, 1.75);
     } else {
       thetaController.setGains(20.0, 0.08, 0.0);
       thetaController.setConstraints(3.0, 2.0);

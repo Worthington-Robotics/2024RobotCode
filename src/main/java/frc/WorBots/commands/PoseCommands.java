@@ -31,7 +31,7 @@ public class PoseCommands {
               drive.setSingleThetaSetpoint(angle);
             })
         .alongWith(superstructure.setPose(Preset.AMP))
-        .andThen(Commands.waitSeconds(2.0))
+        .andThen(Commands.waitSeconds(3.5))
         .andThen(
             () -> {
               drive.removeThetaSetpoint();
@@ -45,11 +45,12 @@ public class PoseCommands {
   /** Automatically climbs the chain when under it */
   public static Command autoClimb(Drive drive, Superstructure superstructure) {
     return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(-0.5, 0.0, 0.0)), drive)
-        .withTimeout(0.25)
+        .withTimeout(0.6)
         .alongWith(superstructure.setPose(Preset.START_CLIMB))
+        .andThen(Commands.waitSeconds(2.0))
         .andThen(
             Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.5, 0.0, 0.0)), drive)
-                .withTimeout(0.25)
+                .withTimeout(1.2)
                 .alongWith(superstructure.setPose(Preset.CLIMB)));
   }
 
@@ -57,19 +58,22 @@ public class PoseCommands {
   public static Command climbDown(Drive drive, Superstructure superstructure) {
     return superstructure
         .setPose(Preset.START_CLIMB)
+        .andThen(Commands.waitSeconds(3))
         .andThen(
-            new ParallelCommandGroup(superstructure.setPose(Preset.HOME)),
-            Commands.waitSeconds(1.25)
-                .andThen(
-                    Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.5, 0.0, 0.0)), drive)
-                        .withTimeout(1.0)));
+            new ParallelCommandGroup(
+                superstructure.setPose(Preset.HOME),
+                Commands.waitSeconds(1.25)
+                    .andThen(
+                        Commands.run(
+                                () -> drive.runVelocity(new ChassisSpeeds(0.5, 0.0, 0.0)), drive)
+                            .withTimeout(1.0))));
   }
 
   /** Return the drive base and superstructure back to their zero positions */
   public static Command fullZero(Drive drive, Superstructure superstructure) {
     return superstructure
         .setPose(Preset.HOME)
-        .alongWith(drive.setSingleThetaSetpointCommand(new Rotation2d()))
-        .andThen(Commands.waitSeconds(1.0).andThen(drive.removeThetaSetpointCommand()));
+        .alongWith(Commands.runOnce(() -> drive.setSingleThetaSetpoint(new Rotation2d())))
+        .andThen(Commands.waitSeconds(3.5).andThen(drive.removeThetaSetpointCommand()));
   }
 }

@@ -56,8 +56,6 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   public void setElevatorVoltage(double volts) {
     elevatorSignals.setTalonVoltage(elevator, volts, 10);
-    // elevatorSignals.setTalonVoltage(elevatorFollower, volts, 10);
-    // elevatorFollower.setControl(new Follower(elevator.getDeviceID(), true));
   }
 
   public void setPivotVoltage(double volts) {

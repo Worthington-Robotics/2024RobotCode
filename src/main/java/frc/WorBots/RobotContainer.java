@@ -106,6 +106,8 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
+    // superstructure.setDefaultCommand(new DriverClimb(superstructure, () ->
+    // -operator.getLeftY()));
 
     driver.leftTrigger().whileTrue(intake.intakeRaw());
     driver
@@ -119,13 +121,22 @@ public class RobotContainer {
                           drive.runVelocity(new ChassisSpeeds(-0.65, 0.0, 0.0));
                         },
                         drive)));
-    // driver.b().whileTrue(intake.spitRaw());
+    driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     operator
-        .x()
+        .y()
         .toggleOnTrue(
-            Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
-                .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
+            new DriverShootingTest(
+                superstructure,
+                shooter,
+                () -> -operator.getLeftY(),
+                () -> -operator.getRightY(),
+                () -> operator.rightTrigger().getAsBoolean()));
+    // operator
+    // .x()
+    // .toggleOnTrue(
+    // Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
+    // .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
     operator.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
     operator.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
     driver.leftBumper().onTrue(new Turn90(drive, false));
@@ -133,12 +144,8 @@ public class RobotContainer {
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.povLeft().whileTrue(superstructure.autoZero());
     driver.povRight().onTrue(PoseCommands.fullZero(drive, superstructure));
-    operator
-        .povUp()
-        .whileTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> inClimbingMode));
-    operator
-        .povDown()
-        .whileTrue(PoseCommands.climbDown(drive, superstructure).onlyIf(() -> inClimbingMode));
+    operator.povUp().onTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> true));
+    operator.povDown().onTrue(PoseCommands.climbDown(drive, superstructure).onlyIf(() -> true));
     driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
     // operator
     // .a()

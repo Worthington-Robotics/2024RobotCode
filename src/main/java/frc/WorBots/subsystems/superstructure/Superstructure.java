@@ -33,6 +33,7 @@ public class Superstructure extends SubsystemBase {
   private double pivotAbsAngleRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
   private Supplier<Double> climbingVolts = () -> 0.0;
+  private Supplier<Double> manualPivotVolts = () -> 0.0;
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
 
@@ -126,7 +127,10 @@ public class Superstructure extends SubsystemBase {
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
-          runPose(0.0, shootingAngleRad.get());
+          // runPose(0.0, shootingAngleRad.get());
+          setElevatorVoltage(calculateElevator(0.0));
+          final double voltsPivot = manualPivotVolts.get();
+          setPivotVoltage(voltsPivot);
           break;
         case CLIMBING:
           final double volts = climbingVolts.get();
@@ -275,6 +279,24 @@ public class Superstructure extends SubsystemBase {
    */
   public void setClimbingVolts(Supplier<Double> supplier) {
     climbingVolts = supplier;
+  }
+
+  /**
+   * Sets the desired voltage for manual pivoting.
+   *
+   * @param volts The desired voltage.
+   */
+  public void setManualPivotVolts(double volts) {
+    manualPivotVolts = () -> volts;
+  }
+
+  /**
+   * Sets the desired voltage for manual pivoting.
+   *
+   * @param volts The desired voltage.
+   */
+  public void setManualPivotVolts(Supplier<Double> supplier) {
+    manualPivotVolts = supplier;
   }
 
   /**

@@ -106,12 +106,14 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       io.setFeederWheelVoltage(0.0);
     } else {
       // Calculate the desired voltages based on the setpoints
-      io.setTopFlywheelVolts(
-          topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
-              + topFlywheelFeedForward.calculate(topFlywheelRPM));
-      io.setBottomFlywheelVolts(
-          bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
-              + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+      // io.setTopFlywheelVolts(
+      //     topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
+      //         + topFlywheelFeedForward.calculate(topFlywheelRPM));
+      // io.setBottomFlywheelVolts(
+      //     bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
+      //         + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+      io.setTopFlywheelVolts(topFlywheelRPM);
+      io.setBottomFlywheelVolts(bottomFlywheelRPM);
       // If we want to move the feeder wheel.
       io.setFeederWheelVoltage(feederWheelVolts);
       if (shouldIncrement) {
@@ -145,6 +147,15 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
               bottomFlywheelRPM = bottomRPM;
             })
         .alongWith(Commands.waitUntil(this::isAtSetpoint));
+  }
+
+  public void setRawFlywheelSpeed(double rpm) {
+    topFlywheelRPM = rpm;
+    bottomFlywheelRPM = rpm;
+  }
+
+  public void setRawFeederVolts(double volts) {
+    feederWheelVolts = volts;
   }
 
   /**
