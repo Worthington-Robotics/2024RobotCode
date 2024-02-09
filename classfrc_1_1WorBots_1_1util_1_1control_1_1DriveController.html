@@ -87,6 +87,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a198b132c76f8ebd4fe789a18f6c6b46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52572b0fa4ff1c94e412cead5931b94c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a52572b0fa4ff1c94e412cead5931b94c">drive</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a> drive, double x, double y, double theta)</td></tr>
 <tr class="separator:a52572b0fa4ff1c94e412cead5931b94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6d641ac928a9f2652e2830440de6949"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#ac6d641ac928a9f2652e2830440de6949">drive</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a> drive, ChassisSpeeds speeds)</td></tr>
+<tr class="separator:ac6d641ac928a9f2652e2830440de6949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a1ccd9ecdebbf7dd80856e6095f97d3"><td class="memItemLeft" align="right" valign="top">ChassisSpeeds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a9a1ccd9ecdebbf7dd80856e6095f97d3">getSpeeds</a> (double x, double y, double theta, Rotation2d robotRotation, double maxSpeed)</td></tr>
+<tr class="separator:a9a1ccd9ecdebbf7dd80856e6095f97d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -135,8 +139,52 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac6d641ac928a9f2652e2830440de6949" name="ac6d641ac928a9f2652e2830440de6949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6d641ac928a9f2652e2830440de6949">&#9670;&#160;</a></span>drive() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void frc.WorBots.util.control.DriveController.drive </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a>&#160;</td>
+          <td class="paramname"><em>drive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ChassisSpeeds&#160;</td>
+          <td class="paramname"><em>speeds</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Drive the drivetrain using existing chassisspeeds. This is useful if you run getSpeeds and want to modify them</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">drive</td><td>The drive subsystem to drive </td></tr>
+    <tr><td class="paramname">speeds</td><td>The desired chassis speeds </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a52572b0fa4ff1c94e412cead5931b94c" name="a52572b0fa4ff1c94e412cead5931b94c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52572b0fa4ff1c94e412cead5931b94c">&#9670;&#160;</a></span>drive()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a52572b0fa4ff1c94e412cead5931b94c">&#9670;&#160;</a></span>drive() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,6 +238,72 @@ Static Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9a1ccd9ecdebbf7dd80856e6095f97d3" name="a9a1ccd9ecdebbf7dd80856e6095f97d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a1ccd9ecdebbf7dd80856e6095f97d3">&#9670;&#160;</a></span>getSpeeds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ChassisSpeeds frc.WorBots.util.control.DriveController.getSpeeds </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>robotRotation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxSpeed</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Get the base chassis speeds for driving</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The desired x velocity, from -1 to 1 </td></tr>
+    <tr><td class="paramname">y</td><td>The desired y velocity, from -1 to 1 </td></tr>
+    <tr><td class="paramname">theta</td><td>The desired rotational velocity, from -1 to 1 </td></tr>
+    <tr><td class="paramname">robotRotation</td><td>The current absolute rotation of the robot </td></tr>
+    <tr><td class="paramname">maxSpeed</td><td>The maximum speed in m/s that the robot can drive at </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The calculated drive speeds, relative to the field </dd></dl>
 
 </div>
 </div>

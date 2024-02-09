@@ -33,13 +33,14 @@ var searchData=
   ['getscalarposition_30',['getScalarPosition',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a9e8eeb3c5900db783403b8a811301cab',1,'frc::WorBots::util::math::GeneralMath']]],
   ['getshooterheightmeters_31',['getShooterHeightMeters',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a97e9d0733202527ed8178b37cd269a8c',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
   ['getsim_32',['getSim',['../classfrc_1_1WorBots_1_1Constants.html#ac7d684555593db395ebd15da570fbebd',1,'frc::WorBots::Constants']]],
-  ['getstate_33',['getState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ac578de08a992418400a863be10274327',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['getstatus_34',['getStatus',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a71542f2a4684468d0d4b452d52b6edc1',1,'frc::WorBots::util::debug::StatusPage']]],
-  ['gettimeofflightstatus_35',['getTimeOfFlightStatus',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#adcd8bff2609f3829b45bea2c859c46af',1,'frc::WorBots::util::HardwareUtils']]],
-  ['gettranslation_36',['getTranslation',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a8e02e6da27a5aab06043fe7f10301e96',1,'frc::WorBots::util::trajectory::Waypoint']]],
-  ['getvelocitymeterspersec_37',['getVelocityMetersPerSec',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a05e60ab1f022884be61daecc45647e5d',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['getyaw_38',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['getyawvelocity_39',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['gyroiopigeon2_40',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
-  ['gyroiosim_41',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
+  ['getspeeds_33',['getSpeeds',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a9a1ccd9ecdebbf7dd80856e6095f97d3',1,'frc::WorBots::util::control::DriveController']]],
+  ['getstate_34',['getState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ac578de08a992418400a863be10274327',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['getstatus_35',['getStatus',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a71542f2a4684468d0d4b452d52b6edc1',1,'frc::WorBots::util::debug::StatusPage']]],
+  ['gettimeofflightstatus_36',['getTimeOfFlightStatus',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#adcd8bff2609f3829b45bea2c859c46af',1,'frc::WorBots::util::HardwareUtils']]],
+  ['gettranslation_37',['getTranslation',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a8e02e6da27a5aab06043fe7f10301e96',1,'frc::WorBots::util::trajectory::Waypoint']]],
+  ['getvelocitymeterspersec_38',['getVelocityMetersPerSec',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a05e60ab1f022884be61daecc45647e5d',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['getyaw_39',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
+  ['getyawvelocity_40',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
+  ['gyroiopigeon2_41',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
+  ['gyroiosim_42',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
 ];
