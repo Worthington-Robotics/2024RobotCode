@@ -106,14 +106,14 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       io.setFeederWheelVoltage(0.0);
     } else {
       // Calculate the desired voltages based on the setpoints
-      // io.setTopFlywheelVolts(
-      //     topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
-      //         + topFlywheelFeedForward.calculate(topFlywheelRPM));
-      // io.setBottomFlywheelVolts(
-      //     bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
-      //         + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
-      io.setTopFlywheelVolts(topFlywheelRPM);
-      io.setBottomFlywheelVolts(bottomFlywheelRPM);
+      io.setTopFlywheelVolts(
+          topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
+              + topFlywheelFeedForward.calculate(topFlywheelRPM));
+      io.setBottomFlywheelVolts(
+          bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
+              + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+      // io.setTopFlywheelVolts(topFlywheelRPM);
+      // io.setBottomFlywheelVolts(bottomFlywheelRPM);
       // If we want to move the feeder wheel.
       io.setFeederWheelVoltage(feederWheelVolts);
       if (shouldIncrement) {
@@ -147,6 +147,19 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
               bottomFlywheelRPM = bottomRPM;
             })
         .alongWith(Commands.waitUntil(this::isAtSetpoint));
+  }
+
+  /**
+   * Spins both sets of flywheels to a speed, and then increments the game piece when it is ready
+   *
+   * @param rpm The RPM to set the flywheels to
+   * @return The command
+   */
+  public Command shootCommand(double rpm) {
+    return this.runOnce(() -> shouldIncrement = false)
+        .andThen(this.spinToSpeed(rpm, rpm))
+        .andThen(this.run(() -> shouldIncrement = true))
+        .handleInterrupt(() -> setRawFlywheelSpeed(0));
   }
 
   public void setRawFlywheelSpeed(double rpm) {

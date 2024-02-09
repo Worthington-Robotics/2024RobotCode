@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
@@ -31,6 +32,29 @@ public class PoseCommands {
               drive.setSingleThetaSetpoint(angle);
             })
         .alongWith(superstructure.setPose(Preset.AMP))
+        .andThen(Commands.waitSeconds(3.5))
+        .andThen(
+            () -> {
+              drive.removeThetaSetpoint();
+            })
+        .handleInterrupt(
+            () -> {
+              drive.removeThetaSetpoint();
+            });
+  }
+
+  /** Turns to the alliance source and moves the superstructure to slide pose */
+  public static Command slide(Drive drive, Superstructure superstructure) {
+    return Commands.runOnce(
+            () -> {
+              Rotation2d angle = Rotation2d.fromRadians(FieldConstants.Source.wallAngle);
+              if (DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Blue) {
+                angle = angle.plus(Rotation2d.fromDegrees(180));
+              }
+              drive.setSingleThetaSetpoint(angle);
+            })
+        .alongWith(superstructure.setPose(Preset.SLIDE))
         .andThen(Commands.waitSeconds(3.5))
         .andThen(
             () -> {

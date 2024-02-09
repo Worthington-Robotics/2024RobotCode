@@ -34,8 +34,6 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
-  private boolean inClimbingMode = false;
-
   /**
    * The robot container houses the joystics, and subsystems of the robot, as well as getting the
    * autonomous command.
@@ -106,9 +104,10 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
-    // superstructure.setDefaultCommand(new DriverClimb(superstructure, () ->
-    // -operator.getLeftY()));
+    superstructure.setDefaultCommand(new DriverClimb(superstructure, () -> -operator.getLeftY()));
 
+    driver.leftBumper().onTrue(new Turn90(drive, false));
+    driver.rightBumper().onTrue(new Turn90(drive, true));
     driver.leftTrigger().whileTrue(intake.intakeRaw());
     driver
         .rightTrigger()
@@ -123,30 +122,57 @@ public class RobotContainer {
                         drive)));
     driver.b().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
-    operator
-        .y()
-        .toggleOnTrue(
-            new DriverShootingTest(
-                superstructure,
-                shooter,
-                () -> -operator.getLeftY(),
-                () -> -operator.getRightY(),
-                () -> operator.rightTrigger().getAsBoolean()));
+    driver.povRight().onTrue(PoseCommands.fullZero(drive, superstructure));
+    // operator
+    // .y()
+    // .toggleOnTrue(
+    // new DriverShootingTest(
+    // superstructure,
+    // shooter,
+    // () -> -operator.getLeftY(),
+    // () -> -operator.getRightY(),
+    // () -> operator.rightTrigger().getAsBoolean()));
     // operator
     // .x()
     // .toggleOnTrue(
     // Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
     // .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
-    operator.leftBumper().onTrue(superstructure.setPose(Preset.HOME));
-    operator.rightBumper().onTrue(PoseCommands.amp(drive, superstructure));
-    driver.leftBumper().onTrue(new Turn90(drive, false));
-    driver.rightBumper().onTrue(new Turn90(drive, true));
+    operator.a().onTrue(superstructure.setPose(Preset.HOME));
+    operator.b().onTrue(PoseCommands.amp(drive, superstructure));
+    operator.x().onTrue(PoseCommands.slide(drive, superstructure));
+
+    HashMap<String, Command> shootMap = new HashMap<String, Command>();
+    shootMap.put(
+        "shoot",
+        new DriverShoot(
+            drive,
+            superstructure,
+            () -> -driver.getLeftX(),
+            () -> -driver.getLeftY(),
+            () -> -operator.getLeftY(),
+            () -> -operator.getRightY()));
+    shootMap.put("amp", shooter.shootCommand(500));
+    shootMap.put("slide", shooter.spinToSpeed(-300, -300));
+    shootMap.put("raw", shooter.spinToSpeed(2000, 2000));
+    operator
+        .rightTrigger()
+        .whileTrue(
+            Commands.select(
+                shootMap,
+                () -> {
+                  if (superstructure.isInPose(Preset.AMP)) {
+                    return "shoot";
+                  }
+                  if (superstructure.isInPose(Preset.SLIDE)) {
+                    return "slide";
+                  }
+                  return "raw";
+                }));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.povLeft().whileTrue(superstructure.autoZero());
-    driver.povRight().onTrue(PoseCommands.fullZero(drive, superstructure));
     operator.povUp().onTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> true));
     operator.povDown().onTrue(PoseCommands.climbDown(drive, superstructure).onlyIf(() -> true));
-    driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
+    // driver.a().toggleOnTrue(new AutoShoot(superstructure, drive));
     // operator
     // .a()
     // .toggleOnTrue(

@@ -68,6 +68,17 @@ public class DriveController {
     final ChassisSpeeds speeds =
         getSpeeds(x, y, theta, drive.getRotation(), drive.getMaxLinearSpeedMetersPerSec());
 
+    drive(drive, speeds);
+  }
+
+  /**
+   * Drive the drivetrain using existing chassisspeeds. This is useful if you run getSpeeds and want
+   * to modify them
+   *
+   * @param drive The drive subsystem to drive
+   * @param speeds The desired chassis speeds
+   */
+  public void drive(Drive drive, ChassisSpeeds speeds) {
     // Send to drive
     if (Math.abs(speeds.vxMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.vyMetersPerSecond) < minimumSpeed
@@ -93,7 +104,7 @@ public class DriveController {
    * @param maxSpeed The maximum speed in m/s that the robot can drive at
    * @return The calculated drive speeds, relative to the field
    */
-  private ChassisSpeeds getSpeeds(
+  public ChassisSpeeds getSpeeds(
       double x, double y, double theta, Rotation2d robotRotation, double maxSpeed) {
     // Get direction and magnitude of linear axes
     double linearMagnitude = Math.hypot(x, y);

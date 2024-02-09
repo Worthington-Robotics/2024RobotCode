@@ -364,6 +364,25 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
+   * Checks if the superstructure is following a certain pose
+   *
+   * @param pose The pose to check
+   * @return If the superstructure is in pose mode and following the pose
+   */
+  public boolean isInPose(SuperstructurePose.Preset pose) {
+    return this.state == SuperstructureState.POSE && this.setpoint.equals(pose);
+  }
+
+  /**
+   * Checks if the superstructure is in shooting mode
+   *
+   * @return True if the superstructure is in shooting mode
+   */
+  public boolean isShooting() {
+    return this.state == SuperstructureState.SHOOTING;
+  }
+
+  /**
    * Returns a command that will automatically find the elevator zero by moving it into the bottom
    * limit switch
    *
