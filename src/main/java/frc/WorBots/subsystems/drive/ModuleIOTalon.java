@@ -28,7 +28,6 @@ public class ModuleIOTalon implements ModuleIO {
   private final Rotation2d encoderOffset;
 
   private final TalonSignalsPositional driveSignals;
-
   private final TalonSignalsPositional turnSignals;
   private final StatusSignal<Double> turnAbsPosSignal;
 
@@ -73,7 +72,7 @@ public class ModuleIOTalon implements ModuleIO {
     turnSignals = new TalonSignalsPositional(turnMotor);
     turnAbsPosSignal = absoluteEncoder.getAbsolutePosition();
 
-    StatusSignal.setUpdateFrequencyForAll(100, turnAbsPosSignal);
+    StatusSignal.setUpdateFrequencyForAll(120, turnAbsPosSignal);
 
     driveMotor.optimizeBusUtilization();
     turnMotor.optimizeBusUtilization();
@@ -97,7 +96,7 @@ public class ModuleIOTalon implements ModuleIO {
 
   public void setDriveVoltage(double volts) {
     final double limit =
-        (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 9 : 9;
+        (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 6.8 : 9;
     driveSignals.setTalonVoltage(driveMotor, volts, limit);
   }
 

@@ -60,8 +60,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     this.io = io;
 
     if (!Constants.getSim()) {
-      topFlywheelController.setGains(1, 0, 0);
-      bottomFlywheelController.setGains(1, 0, 0);
+      topFlywheelController.setGains(0.05, 0, 0);
+      bottomFlywheelController.setGains(0.05, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
       feederWheelController.setGains(1.0, 0.0, 0.0);
@@ -106,12 +106,20 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       io.setFeederWheelVoltage(0.0);
     } else {
       // Calculate the desired voltages based on the setpoints
-      io.setTopFlywheelVolts(
-          topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
-              + topFlywheelFeedForward.calculate(topFlywheelRPM));
-      io.setBottomFlywheelVolts(
-          bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
-              + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+      if (topFlywheelRPM != 0.0) {
+        io.setTopFlywheelVolts(
+            topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
+                + topFlywheelFeedForward.calculate(topFlywheelRPM));
+      } else {
+        io.setTopFlywheelVolts(0);
+      }
+      if (bottomFlywheelRPM != 0.0) {
+        io.setBottomFlywheelVolts(
+            bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
+                + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+      } else {
+        io.setBottomFlywheelVolts(0.0);
+      }
       // io.setTopFlywheelVolts(topFlywheelRPM);
       // io.setBottomFlywheelVolts(bottomFlywheelRPM);
       // If we want to move the feeder wheel.
@@ -129,6 +137,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     }
 
     inputs.feederWheel.publish();
+    inputs.top.publish();
+    inputs.bottom.publish();
 
     StatusPage.reportStatus(StatusPage.SHOOTER_CONNECTED, inputs.isConnected);
   }

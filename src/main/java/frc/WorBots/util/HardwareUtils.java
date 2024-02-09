@@ -21,7 +21,7 @@ import frc.WorBots.util.math.GeneralMath;
 public class HardwareUtils {
   // Constants
   /** The maximum temperature in celsius that we want to run our motors at */
-  public static final double maxMotorTemperature = 8000.0;
+  public static final double maxMotorTemperature = 80.0;
 
   public static final double idealBatteryVoltage = 11.9;
 

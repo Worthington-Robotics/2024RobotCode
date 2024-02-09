@@ -42,7 +42,7 @@ public class DriveController {
   public static final double turnCurveAmount = 2.0;
 
   /** The amount of time in seconds after which to apply stop locking */
-  public static final double stopLockTime = 0.5;
+  public static final double stopLockDelay = 0.5;
 
   private final LinearFilter driveFilter;
   private final LinearFilter turnFilter;
@@ -83,7 +83,7 @@ public class DriveController {
     if (Math.abs(speeds.vxMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.vyMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.omegaRadiansPerSecond) < minimumSpeed) {
-      if (stopLockTimer.hasElapsed(stopLockTime)) {
+      if (stopLockTimer.hasElapsed(stopLockDelay)) {
         drive.stopWithLock();
       } else {
         drive.stop();
