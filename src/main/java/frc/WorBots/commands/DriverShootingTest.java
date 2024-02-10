@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
+import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
 
 public class DriverShootingTest extends Command {
@@ -36,15 +37,15 @@ public class DriverShootingTest extends Command {
 
   @Override
   public void initialize() {
-    // superstructure.setModeVoid(SuperstructureState.SHOOTING);
+    superstructure.setModeVoid(SuperstructureState.MANUAL);
     superstructure.setManualPivotVolts(0.0);
   }
 
   @Override
   public void execute() {
     double pivot = MathUtil.applyDeadband(pivotValue.get(), 0.09);
-    double pivotVolts = pivot * 1.0;
-    shooter.setRawFeederVolts(pivotVolts);
+    double pivotVolts = pivot * 3.0;
+    superstructure.setManualPivotVolts(pivotVolts);
     double shoot = MathUtil.applyDeadband(shootValue.get(), 0.09);
     double shootVolts = shoot * 12;
     shooter.setRawFlywheelSpeed(shootVolts);

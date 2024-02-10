@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.util.BuildConstants;
 import java.util.HashMap;
 
@@ -155,8 +154,8 @@ public class StatusPage {
     StatusPage.reportStatus(StatusPage.FMS, DriverStation.isFMSAttached());
 
     // Power
-    StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
-    StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
+    // StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
+    // StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
     StatusPage.reportStatus(StatusPage.BROWNOUT, !HAL.getBrownedOut());
 
     // Controllers
@@ -169,35 +168,35 @@ public class StatusPage {
     StatusPage.reportStatus(StatusPage.NOT_ESTOPPED, !DriverStation.isEStopped());
 
     // PDP
-    var pdpFaults = pdp.getFaults();
-    boolean breakerFault =
-        pdpFaults.Channel0BreakerFault
-            || pdpFaults.Channel1BreakerFault
-            || pdpFaults.Channel2BreakerFault
-            || pdpFaults.Channel3BreakerFault
-            || pdpFaults.Channel4BreakerFault
-            || pdpFaults.Channel5BreakerFault
-            || pdpFaults.Channel6BreakerFault
-            || pdpFaults.Channel7BreakerFault
-            || pdpFaults.Channel8BreakerFault
-            || pdpFaults.Channel9BreakerFault
-            || pdpFaults.Channel10BreakerFault
-            || pdpFaults.Channel11BreakerFault
-            || pdpFaults.Channel12BreakerFault
-            || pdpFaults.Channel13BreakerFault
-            || pdpFaults.Channel14BreakerFault
-            || pdpFaults.Channel15BreakerFault
-            || pdpFaults.Channel16BreakerFault
-            || pdpFaults.Channel17BreakerFault
-            || pdpFaults.Channel18BreakerFault
-            || pdpFaults.Channel19BreakerFault
-            || pdpFaults.Channel20BreakerFault
-            || pdpFaults.Channel21BreakerFault
-            || pdpFaults.Channel22BreakerFault
-            || pdpFaults.Channel23BreakerFault;
-    StatusPage.reportStatus(StatusPage.PDP_BREAKERS, !breakerFault);
-    StatusPage.reportStatus(StatusPage.CAN_WARNING, !pdpFaults.CanWarning);
-    StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
+    // var pdpFaults = pdp.getFaults();
+    // boolean breakerFault =
+    //     pdpFaults.Channel0BreakerFault
+    //         || pdpFaults.Channel1BreakerFault
+    //         || pdpFaults.Channel2BreakerFault
+    //         || pdpFaults.Channel3BreakerFault
+    //         || pdpFaults.Channel4BreakerFault
+    //         || pdpFaults.Channel5BreakerFault
+    //         || pdpFaults.Channel6BreakerFault
+    //         || pdpFaults.Channel7BreakerFault
+    //         || pdpFaults.Channel8BreakerFault
+    //         || pdpFaults.Channel9BreakerFault
+    //         || pdpFaults.Channel10BreakerFault
+    //         || pdpFaults.Channel11BreakerFault
+    //         || pdpFaults.Channel12BreakerFault
+    //         || pdpFaults.Channel13BreakerFault
+    //         || pdpFaults.Channel14BreakerFault
+    //         || pdpFaults.Channel15BreakerFault
+    //         || pdpFaults.Channel16BreakerFault
+    //         || pdpFaults.Channel17BreakerFault
+    //         || pdpFaults.Channel18BreakerFault
+    //         || pdpFaults.Channel19BreakerFault
+    //         || pdpFaults.Channel20BreakerFault
+    //         || pdpFaults.Channel21BreakerFault
+    //         || pdpFaults.Channel22BreakerFault
+    //         || pdpFaults.Channel23BreakerFault;
+    // StatusPage.reportStatus(StatusPage.PDP_BREAKERS, !breakerFault);
+    // StatusPage.reportStatus(StatusPage.CAN_WARNING, !pdpFaults.CanWarning);
+    // StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
 
     // Statuses for different clients
     boolean cam0 = false;
@@ -219,9 +218,9 @@ public class StatusPage {
     StatusPage.reportStatus(StatusPage.LAUNCHPAD, launchpad);
 
     // Robot information
-    SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
-    SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
-    SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
+    // SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
+    // SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
+    // SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
 
     // Report metadata
     StatusPage.reportMetadata();

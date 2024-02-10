@@ -126,14 +126,14 @@ public class RobotContainer {
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
     // operator
-    // .y()
-    // .toggleOnTrue(
-    // new DriverShootingTest(
-    // superstructure,
-    // shooter,
-    // () -> -operator.getLeftY(),
-    // () -> -operator.getRightY(),
-    // () -> operator.rightTrigger().getAsBoolean()));
+    //     .y()
+    //     .toggleOnTrue(
+    //         new DriverShootingTest(
+    //             superstructure,
+    //             shooter,
+    //             () -> -operator.getLeftY(),
+    //             () -> -operator.getRightY(),
+    //             () -> operator.rightTrigger().getAsBoolean()));
     // operator
     // .x()
     // .toggleOnTrue(

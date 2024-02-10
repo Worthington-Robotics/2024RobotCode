@@ -37,7 +37,7 @@ public class SuperstructureManual extends Command {
     double volts = joystick * 9.0;
     superstructure.setClimbingVolts(volts);
     joystick = MathUtil.applyDeadband(pivotValue.get(), 0.09);
-    volts = joystick * 2.0;
+    volts = joystick * 6.0;
     superstructure.setManualPivotVolts(volts);
   }
 

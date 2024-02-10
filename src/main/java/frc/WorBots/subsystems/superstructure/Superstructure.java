@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
-  private SuperstructureState state = SuperstructureState.POSE;
+  private SuperstructureState state = SuperstructureState.MANUAL;
   private SuperstructureVisualizer visualizer;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
@@ -75,8 +75,8 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
     pivotAbsAngleRad = inputs.pivotPositionAbsRad;
     if (!Constants.getSim()) { // Real
-      pivotController.setGains(1.0, 0, 0);
-      pivotController.setConstraints(1.0, 1.0);
+      pivotController.setGains(0.0, 0, 0);
+      pivotController.setConstraints(0.0, 0.0);
       elevatorController.setGains(185, 0.095, 0);
       elevatorController.setConstraints(2.0, 1.2);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
@@ -124,18 +124,23 @@ public class Superstructure extends SubsystemBase {
     } else {
       switch (state) {
         case POSE:
-          runPose(setpoint.getElevator(), setpoint.getPivot());
+          setElevatorVoltage(0.0);
+          setPivotVoltage(0.0);
+          // runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
+          setElevatorVoltage(0.0);
+          setPivotVoltage(0.0);
           // runPose(0.0, shootingAngleRad.get());
-          setElevatorVoltage(calculateElevator(0.0));
-          final double voltsPivot = manualPivotVolts.get();
-          setPivotVoltage(voltsPivot);
+          // setElevatorVoltage(calculateElevator(0.0));
+          // final double voltsPivot = manualPivotVolts.get();
+          // setPivotVoltage(voltsPivot);
           break;
         case MANUAL:
           final double volts = climbingVolts.get();
           setElevatorVoltage(volts);
-          setPivotVoltage(0.0);
+          final double pivotVolts = manualPivotVolts.get();
+          io.setPivotVoltage(pivotVolts);
           break;
       }
     }
