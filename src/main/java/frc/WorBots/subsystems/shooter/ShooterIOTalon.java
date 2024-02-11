@@ -9,13 +9,15 @@ package frc.WorBots.subsystems.shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class ShooterIOTalon implements ShooterIO {
   private TalonFX topFlywheel;
   private TalonFX bottomFlywheel;
   private TalonFX feederWheel;
-  // private TimeOfFlight timeOfFlight;
+  private TimeOfFlight timeOfFlight;
 
   private final TalonSignalsPositional topSignals;
   private final TalonSignalsPositional bottomSignals;
@@ -25,8 +27,8 @@ public class ShooterIOTalon implements ShooterIO {
     topFlywheel = new TalonFX(7);
     bottomFlywheel = new TalonFX(6);
     feederWheel = new TalonFX(8);
-    // timeOfFlight = new TimeOfFlight(18);
-    // timeOfFlight.setRangingMode(RangingMode.Short, 24);
+    timeOfFlight = new TimeOfFlight(18);
+    timeOfFlight.setRangingMode(RangingMode.Short, 24);
 
     topFlywheel.setNeutralMode(NeutralModeValue.Coast);
     bottomFlywheel.setNeutralMode(NeutralModeValue.Coast);
@@ -47,10 +49,10 @@ public class ShooterIOTalon implements ShooterIO {
     bottomSignals.update(inputs.bottom, bottomFlywheel);
     feederWheelSignals.update(inputs.feederWheel, feederWheel);
 
-    inputs.velocityRPMBottom = bottomFlywheel.getVelocity().getValue() * 60;
-    inputs.velocityRPMTop = topFlywheel.getVelocity().getValue() * 60;
+    inputs.velocityRPMBottom = inputs.bottom.velocityRadsPerSec / (2 * Math.PI) * 60;
+    inputs.velocityRPMTop = inputs.top.velocityRadsPerSec / (2 * Math.PI) * 60;
 
-    // inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000.0;
+    inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000.0;
 
     inputs.isConnected =
         inputs.top.isConnected && inputs.bottom.isConnected && inputs.feederWheel.isConnected;

@@ -36,6 +36,12 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       shooterTable.getDoubleTopic("Top Flywheel RPM").publish();
   private DoublePublisher bottomFlywheelSpeedPub =
       shooterTable.getDoubleTopic("Bottom Flywheel RPM").publish();
+  private DoublePublisher topFlywheelSetpointPub =
+      shooterTable.getDoubleTopic("Top Flywheel Setpoint").publish();
+  private DoublePublisher bottomFlywheelSetpointPub =
+      shooterTable.getDoubleTopic("Bottom Flywheel Setpoint").publish();
+  private DoublePublisher timeOfFlightDistancePub =
+      shooterTable.getDoubleTopic("Time of Flight Distance").publish();
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
@@ -60,13 +66,13 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     this.io = io;
 
     if (!Constants.getSim()) {
-      topFlywheelController.setGains(0.05, 0, 0);
-      bottomFlywheelController.setGains(0.05, 0, 0);
-      topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
+      topFlywheelController.setGains(0.006, 0.00, 0);
+      bottomFlywheelController.setGains(0.006, 0.000, 0);
+      topFlywheelFeedForward = new SimpleMotorFeedforward(0.0, 0.0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-      feederWheelController.setGains(1.0, 0.0, 0.0);
-      topFlywheelController.pid.setTolerance(50);
-      bottomFlywheelController.pid.setTolerance(50);
+      feederWheelController.setGains(0.0, 0.0, 0.0);
+      topFlywheelController.pid.setTolerance(80);
+      bottomFlywheelController.pid.setTolerance(80);
     } else {
       topFlywheelController.setGains(1, 0, 0);
       bottomFlywheelController.setGains(1, 0, 0);
@@ -87,6 +93,9 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     // Update logging
     topFlywheelSpeedPub.set(inputs.velocityRPMTop);
     bottomFlywheelSpeedPub.set(inputs.velocityRPMBottom);
+    topFlywheelSetpointPub.set(topFlywheelRPM);
+    bottomFlywheelSetpointPub.set(bottomFlywheelRPM);
+    timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
 
     // Update tunables
     topFlywheelController.update();
@@ -166,10 +175,15 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return The command
    */
   public Command shootCommand(double rpm) {
-    return this.runOnce(() -> shouldIncrement = false)
+    return this.runOnce(() -> setRawFeederVolts(0.0))
         .andThen(this.spinToSpeed(rpm, rpm))
-        .andThen(this.run(() -> shouldIncrement = true))
-        .handleInterrupt(() -> setRawFlywheelSpeed(0));
+        .andThen(this.run(() -> setRawFeederVolts(1.0)))
+        .andThen(Commands.run(() -> {}))
+        .finallyDo(
+            () -> {
+              setRawFlywheelSpeed(0);
+              setRawFeederVolts(0);
+            });
   }
 
   public void setRawFlywheelSpeed(double rpm) {
@@ -195,9 +209,12 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   }
 
   public Command runFeederWheel(double volts) {
-    return this.runOnce(
+    return this.runEnd(
         () -> {
           feederWheelVolts = volts;
+        },
+        () -> {
+          feederWheelVolts = 0;
         });
   }
 
@@ -229,6 +246,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return True if we have a gamepiece, otherwise false.
    */
   public boolean hasGamePiece() {
-    return hasGamePiece;
+    // return hasGamePiece;
+    return false;
   }
 }

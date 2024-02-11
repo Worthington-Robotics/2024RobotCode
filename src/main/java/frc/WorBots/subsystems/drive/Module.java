@@ -51,7 +51,7 @@ public class Module {
     if (Constants.getSim()) { // Sim constants
       driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-      turnFeedbackGains.setGains(12.0, 0.0, 0.0);
+      turnFeedbackGains.setGains(9.5, 0.0, 0.0);
     } else { // Real constants
       driveFeedforward = new SimpleMotorFeedforward(0.18868, 0.12825);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);

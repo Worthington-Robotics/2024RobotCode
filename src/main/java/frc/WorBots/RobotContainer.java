@@ -7,7 +7,6 @@
 
 package frc.WorBots;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
@@ -104,74 +103,80 @@ public class RobotContainer {
             () -> -driver.getLeftX(),
             () -> -driver.getRightY(),
             () -> -driver.getRightX()));
-    superstructure.setDefaultCommand(
-        new SuperstructureManual(
-            superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    // superstructure.setDefaultCommand(
+    // new SuperstructureManual(
+    // superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver.leftBumper().onTrue(new Turn90(drive, false));
     driver.rightBumper().onTrue(new Turn90(drive, true));
-    driver.leftTrigger().whileTrue(intake.intakeRaw());
-    driver
-        .rightTrigger()
-        .whileTrue(
-            intake
-                .spitRaw()
-                .alongWith(
-                    Commands.run(
-                        () -> {
-                          drive.runVelocity(new ChassisSpeeds(-0.65, 0.0, 0.0));
-                        },
-                        drive)));
-    driver.b().whileTrue(intake.spitRaw());
+    // driver.leftTrigger().whileTrue(intake.intakeRaw());
+    driver.leftTrigger().whileTrue(new SmartIntake(intake, shooter, superstructure));
+    // driver
+    // .rightTrigger()
+    // .whileTrue(
+    // intake
+    // .spitRaw()
+    // .alongWith(
+    // Commands.run(
+    // () -> {
+    // drive.runVelocity(new ChassisSpeeds(-0.65, 0.0, 0.0));
+    // },
+    // drive)));
+    driver.rightTrigger().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
-    // operator
-    //     .y()
-    //     .toggleOnTrue(
-    //         new DriverShootingTest(
-    //             superstructure,
-    //             shooter,
-    //             () -> -operator.getLeftY(),
-    //             () -> -operator.getRightY(),
-    //             () -> operator.rightTrigger().getAsBoolean()));
+    operator
+        .y()
+        .toggleOnTrue(
+            new DriverShootingTest(
+                superstructure,
+                shooter,
+                () -> -operator.getLeftY(),
+                () -> -operator.getRightY(),
+                () -> operator.getRightTriggerAxis(),
+                // () -> 0.0,
+                () -> operator.leftBumper().getAsBoolean()));
     // operator
     // .x()
     // .toggleOnTrue(
     // Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
     // .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
-    operator.a().onTrue(superstructure.setPose(Preset.HOME));
-    operator.b().onTrue(PoseCommands.amp(drive, superstructure));
+    operator.b().onTrue(superstructure.setPose(Preset.HOME));
+    operator.a().onTrue(PoseCommands.amp(drive, superstructure));
     operator.x().onTrue(PoseCommands.slide(drive, superstructure));
 
-    operator
-        .leftTrigger()
-        .whileTrue(
-            new DriverShoot(
-                drive,
-                superstructure,
-                () -> -driver.getLeftX(),
-                () -> -driver.getLeftY(),
-                () -> -operator.getLeftY(),
-                () -> -operator.getRightY()));
+    // operator
+    // .leftTrigger()
+    // .whileTrue(
+    // new DriverShoot(
+    // drive,
+    // superstructure,
+    // () -> -driver.getLeftX(),
+    // () -> -driver.getLeftY(),
+    // () -> -operator.getLeftY(),
+    // () -> -operator.getRightY()));
     HashMap<String, Command> shootMap = new HashMap<String, Command>();
-    shootMap.put("shoot", shooter.shootCommand(2000));
+    shootMap.put("shoot", shooter.shootCommand(4000));
     shootMap.put("amp", shooter.shootCommand(500));
-    shootMap.put("slide", shooter.spinToSpeed(-300, -300));
+    shootMap.put(
+        "slide",
+        Commands.runEnd(
+            () -> shooter.setRawFeederVolts(1.0), () -> shooter.setRawFeederVolts(0), shooter));
     shootMap.put("raw", shooter.spinToSpeed(2000, 2000));
-    operator
-        .rightTrigger()
-        .whileTrue(
-            Commands.select(
-                shootMap,
-                () -> {
-                  if (superstructure.isInPose(Preset.AMP)) {
-                    return "shoot";
-                  }
-                  if (superstructure.isInPose(Preset.SLIDE)) {
-                    return "slide";
-                  }
-                  return "shoot";
-                }));
+    // operator
+    //     .rightTrigger()
+    //     .whileTrue(
+    //         Commands.select(
+    //             shootMap,
+    //             () -> {
+    //               if (superstructure.isInPose(Preset.AMP)) {
+    //                 return "amp";
+    //               }
+    //               if (superstructure.isInPose(Preset.SLIDE)) {
+    //                 return "slide";
+    //               }
+    //               return "shoot";
+    //             }));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.povLeft().whileTrue(superstructure.autoZero());
     operator.povUp().onTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> true));

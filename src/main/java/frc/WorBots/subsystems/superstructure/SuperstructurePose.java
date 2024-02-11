@@ -15,12 +15,12 @@ import edu.wpi.first.math.numbers.N2;
 public record SuperstructurePose(Vector<N2> vectorPose) {
   public static enum Preset {
     HOME(new SuperstructurePose(VecBuilder.fill(0, 0))),
-    AMP(new SuperstructurePose(VecBuilder.fill(0.26, 0.5))),
+    AMP(new SuperstructurePose(VecBuilder.fill(0.26, 1.92))),
     CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
     HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, -0.5))),
     START_CLIMB(new SuperstructurePose(VecBuilder.fill(0.26, 0.0))),
     CLIMB(new SuperstructurePose(VecBuilder.fill(0.04, 0.0))),
-    SLIDE(new SuperstructurePose(VecBuilder.fill(0.0, 0.0)));
+    SLIDE(new SuperstructurePose(VecBuilder.fill(0.0, 2.7)));
 
     public SuperstructurePose pose;
 

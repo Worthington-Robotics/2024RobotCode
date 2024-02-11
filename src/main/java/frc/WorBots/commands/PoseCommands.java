@@ -52,6 +52,7 @@ public class PoseCommands {
                   && DriverStation.getAlliance().get() == Alliance.Blue) {
                 angle = angle.plus(Rotation2d.fromDegrees(180));
               }
+              angle = angle.minus(Rotation2d.fromDegrees(90));
               drive.setSingleThetaSetpoint(angle);
             })
         .alongWith(superstructure.setPose(Preset.SLIDE))

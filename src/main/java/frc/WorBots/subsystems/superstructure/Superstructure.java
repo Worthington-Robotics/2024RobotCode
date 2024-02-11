@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
-  private SuperstructureState state = SuperstructureState.MANUAL;
+  private SuperstructureState state = SuperstructureState.POSE;
   private SuperstructureVisualizer visualizer;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
   private double pivotAbsAngleRad = 0.0;
@@ -51,12 +51,16 @@ public class Superstructure extends SubsystemBase {
   // Constants
   private static final String tableName = "Superstructure";
   private static final double elevatorLimitDistance = 0.25;
-  private static final double pivotLimitDistance = 0.25;
+  private static final double pivotLimitDistance = 1.05;
+  private static final double pivotDynamicLimitDistance = Units.degreesToRadians(18);
+  private static final double pivotDynamicLimitAvoidanceVolts = 1.6;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 
   /** The max angle the pivot can go to, in radians */
-  private static final double pivotMaxAngle = Units.degreesToRadians(150);
+  private static final double pivotMaxAngle = 2.65;
+
+  private static final double pivotHorizontalOffset = 0.5399;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -75,12 +79,12 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
     pivotAbsAngleRad = inputs.pivotPositionAbsRad;
     if (!Constants.getSim()) { // Real
-      pivotController.setGains(0.0, 0, 0);
-      pivotController.setConstraints(0.0, 0.0);
-      elevatorController.setGains(185, 0.095, 0);
-      elevatorController.setConstraints(2.0, 1.2);
+      pivotController.setGains(8.5, 0, 0);
+      pivotController.setConstraints(2.0, 1.9);
+      elevatorController.setGains(160, 0.00, 0);
+      elevatorController.setConstraints(2.0, 1.5);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
-      pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
+      pivotFeedForward = new ArmFeedforward(0.0, 0.25, 0.0);
     } else { // Sim
       pivotController.setGains(1.0, 0, 0);
       pivotController.setConstraints(1.0, 1.0);
@@ -124,9 +128,9 @@ public class Superstructure extends SubsystemBase {
     } else {
       switch (state) {
         case POSE:
-          setElevatorVoltage(0.0);
-          setPivotVoltage(0.0);
-          // runPose(setpoint.getElevator(), setpoint.getPivot());
+          // setElevatorVoltage(0.0);
+          // setPivotVoltage(0.0);
+          runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
           setElevatorVoltage(0.0);
@@ -139,8 +143,14 @@ public class Superstructure extends SubsystemBase {
         case MANUAL:
           final double volts = climbingVolts.get();
           setElevatorVoltage(volts);
-          final double pivotVolts = manualPivotVolts.get();
-          io.setPivotVoltage(pivotVolts);
+          double pivotVolts = manualPivotVolts.get();
+          pivotVolts += calculatePivotFeedforward();
+          final double bottomLimit = calculatePivotBottomLimit();
+          if (inputs.pivotPositionAbsRad < bottomLimit
+              && pivotVolts <= pivotDynamicLimitAvoidanceVolts) {
+            pivotVolts += pivotDynamicLimitAvoidanceVolts;
+          }
+          setPivotVoltage(pivotVolts);
           break;
       }
     }
@@ -177,12 +187,31 @@ public class Superstructure extends SubsystemBase {
    * @return The voltage for the pivot
    */
   private double calculatePivot(double setpoint) {
+    // If we are below the dynamic limit, automatically bring the setpoint up
+    final double bottomLimit = calculatePivotBottomLimit();
+    if (setpoint < bottomLimit) {
+      setpoint = bottomLimit;
+    }
     final double pivotVoltage =
-        pivotController.pid.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRad, setpoint)
-            + pivotFeedForward.calculate(
-                inputs.pivotPositionRelRad + pivotAbsAngleRad, inputs.pivot.velocityRadsPerSec);
+        pivotController.pid.calculate(inputs.pivotPositionAbsRad, setpoint)
+            + calculatePivotFeedforward();
 
     return pivotVoltage;
+  }
+
+  private double calculatePivotFeedforward() {
+    final double adjusted = inputs.pivotPositionAbsRad - pivotHorizontalOffset;
+    final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
+    return out;
+  }
+
+  /**
+   * Calculates where the bottom limit of the pivot should be based on elevator position
+   *
+   * @return The bottom limit for the pivot
+   */
+  private double calculatePivotBottomLimit() {
+    return pivotDynamicLimitDistance * inputs.elevatorPercentageRaised;
   }
 
   /**
@@ -195,9 +224,9 @@ public class Superstructure extends SubsystemBase {
     Logger.getInstance().setSuperstructureElevatorPosSetpoint(elevatorPose);
     Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotPose);
     final double elevatorVoltage = calculateElevator(elevatorPose);
-    // final double pivotVoltage = calculatePivot(pivotPose);
+    final double pivotVoltage = calculatePivot(pivotPose);
     setElevatorVoltage(elevatorVoltage);
-    // setPivotVoltage(pivotVoltage);
+    setPivotVoltage(pivotVoltage);
   }
 
   /**
@@ -242,11 +271,17 @@ public class Superstructure extends SubsystemBase {
   private void setPivotVoltage(double volts) {
     SmartDashboard.putNumber("Superstructure/Raw Pivot Setpoint", volts);
 
-    // Do soft limiting
+    // Do soft limiting, with the dynamic limit in mind
+    final double bottomLimit = calculatePivotBottomLimit();
     volts =
         GeneralMath.softLimitVelocity(
-            volts, inputs.pivotPositionRelRad, 12.0, pivotMaxAngle, pivotLimitDistance);
+            volts,
+            inputs.pivotPositionAbsRad - bottomLimit,
+            5.0,
+            pivotMaxAngle,
+            pivotLimitDistance);
     io.setPivotVoltage(volts);
+    // io.setPivotVoltage(0.0);
     Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
   }
 
@@ -376,6 +411,13 @@ public class Superstructure extends SubsystemBase {
    */
   public boolean isInPose(SuperstructurePose.Preset pose) {
     return this.state == SuperstructureState.POSE && this.setpoint.equals(pose);
+  }
+
+  public boolean isNearPose(
+      SuperstructurePose.Preset pose, double elevatorTolerance, double pivotTolerance) {
+    final double elevatorError = Math.abs(pose.getElevator() - inputs.elevatorPositionMeters);
+    final double pivotError = Math.abs(pose.getPivot() - inputs.pivotPositionAbsRad);
+    return (elevatorError <= elevatorTolerance) && (pivotError <= pivotTolerance);
   }
 
   /**

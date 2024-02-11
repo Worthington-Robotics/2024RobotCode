@@ -15,6 +15,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
 
 public class DriverShootingTest extends Command {
+  private Supplier<Double> elevatorValue;
   private Supplier<Double> pivotValue;
   private Supplier<Double> shootValue;
   private Supplier<Boolean> feederButton;
@@ -24,9 +25,11 @@ public class DriverShootingTest extends Command {
   public DriverShootingTest(
       Superstructure superstructure,
       Shooter shooter,
+      Supplier<Double> elevatorValue,
       Supplier<Double> pivotValue,
       Supplier<Double> shootValue,
       Supplier<Boolean> feederButton) {
+    this.elevatorValue = elevatorValue;
     this.pivotValue = pivotValue;
     this.shootValue = shootValue;
     this.feederButton = feederButton;
@@ -43,17 +46,20 @@ public class DriverShootingTest extends Command {
 
   @Override
   public void execute() {
+    double elevator = MathUtil.applyDeadband(elevatorValue.get(), 0.09);
+    double elevatorVolts = elevator * 9.0;
+    superstructure.setClimbingVolts(elevatorVolts);
     double pivot = MathUtil.applyDeadband(pivotValue.get(), 0.09);
-    double pivotVolts = pivot * 3.0;
+    double pivotVolts = pivot * 5.0;
     superstructure.setManualPivotVolts(pivotVolts);
     double shoot = MathUtil.applyDeadband(shootValue.get(), 0.09);
-    double shootVolts = shoot * 12;
-    shooter.setRawFlywheelSpeed(shootVolts);
-    // if (feederButton.get()) {
-    //   shooter.setRawFeederVolts(1.0);
-    // } else {
-    //   shooter.setRawFeederVolts(0.0);
-    // }
+    double shootRPM = shoot * 6000;
+    shooter.setRawFlywheelSpeed(shootRPM);
+    if (feederButton.get()) {
+      shooter.setRawFeederVolts(0.6);
+    } else {
+      shooter.setRawFeederVolts(0.0);
+    }
   }
 
   @Override
@@ -64,7 +70,7 @@ public class DriverShootingTest extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.setManualPivotVolts(0.0);
-    // superstructure.setModeVoid(SuperstructureState.POSE);
+    superstructure.setModeVoid(SuperstructureState.POSE);
     shooter.setRawFlywheelSpeed(0.0);
     shooter.setRawFeederVolts(0.0);
   }

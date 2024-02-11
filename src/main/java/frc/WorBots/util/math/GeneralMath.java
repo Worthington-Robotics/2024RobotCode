@@ -29,15 +29,22 @@ public class GeneralMath {
       double maxVelocity,
       double maxPosition,
       double limitDistance) {
-    // Hard limits
-    if (position < 0 && Math.signum(velocity) == -1) {
-      return 0;
-    }
-    if (position > maxPosition && Math.signum(velocity) == 1) {
-      return 0;
-    }
-
     velocity = clampMagnitude(velocity, maxVelocity);
+    // Hard limits
+    if (position <= 0) {
+      if (velocity < 0) {
+        return 0;
+      } else {
+        return velocity;
+      }
+    }
+    if (position >= maxPosition) {
+      if (velocity > 0) {
+        return 0;
+      } else {
+        return velocity;
+      }
+    }
 
     /*
      * Determine which boundary to check based on the velocity direction.

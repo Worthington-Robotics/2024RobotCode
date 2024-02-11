@@ -58,6 +58,15 @@ public class Intake extends SubsystemBase {
   }
 
   /**
+   * Set the intake voltage
+   *
+   * @param volts The voltage for the intake
+   */
+  public void setVolts(double volts) {
+    setpointVolts = volts;
+  }
+
+  /**
    * A command that runs the intake until a game piece is detected.
    *
    * @return The command.
@@ -123,6 +132,7 @@ public class Intake extends SubsystemBase {
    * @return The command.
    */
   public boolean hasGamePiece() {
-    return hasGamepiece;
+    // return hasGamepiece;
+    return false;
   }
 }
