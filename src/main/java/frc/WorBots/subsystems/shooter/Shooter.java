@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.shooter;
 
 import edu.wpi.first.math.controller.*;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -42,6 +43,10 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       shooterTable.getDoubleTopic("Bottom Flywheel Setpoint").publish();
   private DoublePublisher timeOfFlightDistancePub =
       shooterTable.getDoubleTopic("Time of Flight Distance").publish();
+  private BooleanPublisher shouldIncrementPub =
+      shooterTable.getBooleanTopic("Should Increment").publish();
+  private BooleanPublisher hasGamePiecePub =
+      shooterTable.getBooleanTopic("Has Game Piece").publish();
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
@@ -96,6 +101,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     topFlywheelSetpointPub.set(topFlywheelRPM);
     bottomFlywheelSetpointPub.set(bottomFlywheelRPM);
     timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
+    shouldIncrementPub.set(shouldIncrement);
+    hasGamePiecePub.set(hasGamePiece);
 
     // Update tunables
     topFlywheelController.update();

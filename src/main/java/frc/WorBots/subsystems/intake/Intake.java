@@ -7,6 +7,10 @@
 
 package frc.WorBots.subsystems.intake;
 
+import edu.wpi.first.networktables.BooleanPublisher;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
@@ -17,6 +21,13 @@ public class Intake extends SubsystemBase {
   private IntakeIOInputs inputs = new IntakeIOInputs();
   private double setpointVolts = 0.0;
   private boolean hasGamepiece = false;
+
+  // Publishers
+  private NetworkTableInstance instance = NetworkTableInstance.getDefault();
+  private NetworkTable intakeTable = instance.getTable("Intake");
+  private DoublePublisher setpointPub = intakeTable.getDoubleTopic("Setpoint Volts").publish();
+  private BooleanPublisher hasGamePiecePub =
+      intakeTable.getBooleanTopic("Has Game Piece").publish();
 
   // Constants
   public static final double distanceThreshold = 0.25;
@@ -55,6 +66,9 @@ public class Intake extends SubsystemBase {
     inputs.motor.publish();
 
     io.setIntakeVoltage(setpointVolts);
+
+    setpointPub.set(setpointVolts);
+    hasGamePiecePub.set(hasGamepiece);
   }
 
   /**
