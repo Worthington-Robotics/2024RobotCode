@@ -92,6 +92,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afae6429ec3674b4eedd06204b9d71872"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad96f695bd7db0d4da260959d23e98f29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ad96f695bd7db0d4da260959d23e98f29">periodic</a> ()</td></tr>
 <tr class="separator:ad96f695bd7db0d4da260959d23e98f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fc43c76483716e3e5034206ec9fb74d"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a3fc43c76483716e3e5034206ec9fb74d">spinToSpeed</a> (double rpm)</td></tr>
+<tr class="separator:a3fc43c76483716e3e5034206ec9fb74d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cfdd8e6766dbec1475aaae55592a1a1"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a8cfdd8e6766dbec1475aaae55592a1a1">spinToSpeed</a> (double topRPM, double bottomRPM)</td></tr>
 <tr class="separator:a8cfdd8e6766dbec1475aaae55592a1a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2419e96e751ca1dffe3329e052df36a"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ae2419e96e751ca1dffe3329e052df36a">shootCommand</a> (double rpm)</td></tr>
@@ -364,8 +366,42 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a3fc43c76483716e3e5034206ec9fb74d" name="a3fc43c76483716e3e5034206ec9fb74d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fc43c76483716e3e5034206ec9fb74d">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.shooter.Shooter.spinToSpeed </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>rpm</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A function that spins up the flywheels and returns when at the desired speed</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topRPM</td><td>The desired RPM for both flywheels </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The command, exits when flywheels are up to speed </dd></dl>
+
+</div>
+</div>
 <a id="a8cfdd8e6766dbec1475aaae55592a1a1" name="a8cfdd8e6766dbec1475aaae55592a1a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8cfdd8e6766dbec1475aaae55592a1a1">&#9670;&#160;</a></span>spinToSpeed()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cfdd8e6766dbec1475aaae55592a1a1">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -397,15 +433,15 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >A function that spins up the flywheels and returns when at the desired speed;</p>
+<p >A function that spins up the flywheels and returns when at the desired speed</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">topRPM</td><td>This is the desired top RPM; </td></tr>
-    <tr><td class="paramname">bottomRPM</td><td>This is desired bottom RPM; </td></tr>
+    <tr><td class="paramname">topRPM</td><td>The desired top RPM </td></tr>
+    <tr><td class="paramname">bottomRPM</td><td>The desired bottom RPM </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The command, exits when flywheels are up to speed; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The command, exits when flywheels are up to speed </dd></dl>
 
 </div>
 </div>
