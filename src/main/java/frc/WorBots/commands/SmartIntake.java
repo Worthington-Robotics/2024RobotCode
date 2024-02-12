@@ -40,7 +40,7 @@ public class SmartIntake extends Command {
     // Check if we are in handoff pose
     final boolean inHandoff =
         superstructure.isNearPose(
-            Preset.HANDOFF, Units.inchesToMeters(0.5), Units.degreesToRadians(10));
+            Preset.HANDOFF, Units.inchesToMeters(0.75), Units.degreesToRadians(12));
     // If we are ready for handoff, intake up to the shooter
     if (inHandoff) {
       intake.setVolts(intakeVolts);

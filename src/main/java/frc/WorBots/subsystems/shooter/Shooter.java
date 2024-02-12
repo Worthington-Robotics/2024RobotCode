@@ -159,11 +159,21 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   }
 
   /**
-   * A function that spins up the flywheels and returns when at the desired speed;
+   * A function that spins up the flywheels and returns when at the desired speed
    *
-   * @param topRPM This is the desired top RPM;
-   * @param bottomRPM This is desired bottom RPM;
-   * @return The command, exits when flywheels are up to speed;
+   * @param topRPM The desired RPM for both flywheels
+   * @return The command, exits when flywheels are up to speed
+   */
+  public Command spinToSpeed(double rpm) {
+    return spinToSpeed(rpm, rpm);
+  }
+
+  /**
+   * A function that spins up the flywheels and returns when at the desired speed
+   *
+   * @param topRPM The desired top RPM
+   * @param bottomRPM The desired bottom RPM
+   * @return The command, exits when flywheels are up to speed
    */
   public Command spinToSpeed(double topRPM, double bottomRPM) {
     return this.runOnce(

@@ -58,9 +58,10 @@ public class Superstructure extends SubsystemBase {
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 
   /** The max angle the pivot can go to, in radians */
-  private static final double pivotMaxAngle = 2.65;
+  public static final double pivotMaxAngle = 2.65;
 
-  private static final double pivotHorizontalOffset = 0.5399;
+  /** The offset from the zero needed for the pivot to be horizontal */
+  public static final double pivotHorizontalOffset = 0.5399;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -131,8 +132,6 @@ public class Superstructure extends SubsystemBase {
     } else {
       switch (state) {
         case POSE:
-          // setElevatorVoltage(0.0);
-          // setPivotVoltage(0.0);
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:

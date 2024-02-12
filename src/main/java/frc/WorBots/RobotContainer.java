@@ -158,13 +158,16 @@ public class RobotContainer {
         "slide",
         Commands.runEnd(
             () -> shooter.setRawFeederVolts(1.0), () -> shooter.setRawFeederVolts(0), shooter));
-    shootMap.put("raw", shooter.spinToSpeed(2000, 2000));
+    shootMap.put("raw", shooter.spinToSpeed(2000));
     operator
         .rightTrigger()
         .whileTrue(
             Commands.select(
                 shootMap,
                 () -> {
+                  if (superstructure.isShooting()) {
+                    return "shoot";
+                  }
                   if (superstructure.isInPose(Preset.AMP)) {
                     return "amp";
                   }
