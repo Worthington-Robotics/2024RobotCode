@@ -65,7 +65,7 @@ public class Superstructure extends SubsystemBase {
   public static final double elevatorMaxMeters = 0.2674420965;
 
   /** The offset from the zero needed for the pivot to be horizontal */
-  public static final double pivotHorizontalOffset = 0.5399;
+  public static final double pivotHorizontalOffset = 0.381;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
