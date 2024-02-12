@@ -90,7 +90,7 @@ public class Intake extends SubsystemBase {
   public Command intakeRaw() {
     return this.run(
             () -> {
-              setpointVolts = -intakeVolts;
+              setpointVolts = intakeVolts;
             })
         .finallyDo(
             () -> {
@@ -101,7 +101,7 @@ public class Intake extends SubsystemBase {
   public Command spitRaw() {
     return this.run(
             () -> {
-              setpointVolts = intakeVolts;
+              setpointVolts = -intakeVolts;
             })
         .finallyDo(
             () -> {

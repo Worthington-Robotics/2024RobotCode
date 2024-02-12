@@ -21,7 +21,7 @@ public class IntakeIOTalon implements IntakeIO {
     intakeMotor = new TalonFX(1);
     // timeOfFlight = new TimeOfFlight(0);
     // timeOfFlight.setRangingMode(RangingMode.Short, 24);
-    intakeMotor.setInverted(false);
+    intakeMotor.setInverted(true);
 
     motorSignals = new TalonSignalsPositional(intakeMotor);
     intakeMotor.optimizeBusUtilization();
