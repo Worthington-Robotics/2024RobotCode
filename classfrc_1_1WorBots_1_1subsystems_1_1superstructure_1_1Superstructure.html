@@ -349,6 +349,16 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Checks if the superstructure is currently near a pose position. This does not check if it is in pose mode or even has that pose set, but only if it's current position is within the given tolerances of the pose</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The pose to check </td></tr>
+    <tr><td class="paramname">elevatorTolerance</td><td>The tolerance in meters for the elevator </td></tr>
+    <tr><td class="paramname">pivotTolerance</td><td>The tolerance in radians for the pivot </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the current pose is within both tolerances </dd></dl>
 
 </div>
 </div>
