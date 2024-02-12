@@ -53,7 +53,7 @@ public class Superstructure extends SubsystemBase {
   private static final double elevatorLimitDistance = 0.25;
   private static final double pivotLimitDistance = 1.05;
   private static final double pivotDynamicLimitDistance = Units.degreesToRadians(18);
-  private static final double pivotDynamicLimitAvoidanceVolts = 1.6;
+  private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 
@@ -151,7 +151,7 @@ public class Superstructure extends SubsystemBase {
           final double bottomLimit = calculatePivotBottomLimit();
           if (inputs.pivotPositionAbsRad < bottomLimit
               && pivotVolts <= pivotDynamicLimitAvoidanceVolts) {
-            pivotVolts += pivotDynamicLimitAvoidanceVolts;
+            pivotVolts = pivotDynamicLimitAvoidanceVolts;
           }
           setPivotVoltage(pivotVolts);
           break;
@@ -209,7 +209,8 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Calculates where the bottom limit of the pivot should be based on elevator position
+   * Calculates where the bottom limit of the pivot should be based on elevator position. This is
+   * used to automatically avoid hooking the shooter with the elevator
    *
    * @return The bottom limit for the pivot
    */
