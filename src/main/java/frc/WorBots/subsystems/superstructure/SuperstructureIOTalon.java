@@ -19,8 +19,8 @@ import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;
   private final TalonFX elevatorFollower;
-  private final DigitalInput bottomLimitSwitch = new DigitalInput(7);
-  private final DigitalInput topLimitSwitch = new DigitalInput(8);
+  private final DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  private final DigitalInput topLimitSwitch = new DigitalInput(2);
   private final boolean isPivotInverted = false;
 
   private final TalonFX pivot;
@@ -39,7 +39,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     elevatorFollower = new TalonFX(3);
     pivot = new TalonFX(10);
     pivotAbsEncoder = new DutyCycleEncoder(9);
-    pivotRelEncoder = new Encoder(0, 0);
+    pivotRelEncoder = new Encoder(8, 7);
 
     pivotAbsEncoder.setDistancePerRotation(2 * Math.PI);
 
