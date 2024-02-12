@@ -30,7 +30,7 @@ public class Superstructure extends SubsystemBase {
   private SuperstructureState state = SuperstructureState.POSE;
   private SuperstructureVisualizer visualizer;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
-  private double pivotAbsAngleRad = 0.0;
+  private double pivotAbsAngleRadOffset = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
   private Supplier<Double> climbingVolts = () -> 0.0;
   private Supplier<Double> manualPivotVolts = () -> 0.0;
@@ -82,7 +82,7 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     io.updateInputs(inputs);
-    pivotAbsAngleRad = inputs.pivotPositionAbsRad;
+    pivotAbsAngleRadOffset = inputs.pivotPositionAbsRad;
     if (RobotBase.isReal()) { // Real
       pivotController.setGains(9.0, 0, 0);
       pivotController.setConstraints(2.0, 2.0);
@@ -166,7 +166,7 @@ public class Superstructure extends SubsystemBase {
 
     visualizer.update(
         VecBuilder.fill(
-            inputs.pivotPositionRelRad + pivotAbsAngleRad,
+            inputs.pivotPositionRelRad + pivotAbsAngleRadOffset,
             firstCarriagePositionMeters,
             secondCarriagePositionMeters,
             inputs.elevatorPositionMeters));
@@ -200,14 +200,14 @@ public class Superstructure extends SubsystemBase {
     // Clamp the setpoint
     setpoint = MathUtil.clamp(setpoint, bottomLimit, pivotMaxAngle);
     final double pivotVoltage =
-        pivotController.pid.calculate(inputs.pivotPositionAbsRad, setpoint)
+        pivotController.pid.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRadOffset, setpoint)
             + calculatePivotFeedforward();
 
     return pivotVoltage;
   }
 
   private double calculatePivotFeedforward() {
-    final double adjusted = inputs.pivotPositionAbsRad - pivotHorizontalOffset;
+    final double adjusted = (inputs.pivotPositionRelRad + pivotAbsAngleRadOffset )- pivotHorizontalOffset;
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
     return out;
   }
