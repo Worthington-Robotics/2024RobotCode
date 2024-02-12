@@ -12,7 +12,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
@@ -25,7 +24,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
 
   private final TalonFX pivot;
   private final DutyCycleEncoder pivotAbsEncoder;
-  private final Encoder pivotRelEncoder;
+  // private final Encoder pivotRelEncoder;
 
   private final TalonSignalsPositional elevatorSignals;
   private final TalonSignalsPositional pivotSignals;
@@ -39,7 +38,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     elevatorFollower = new TalonFX(3);
     pivot = new TalonFX(10);
     pivotAbsEncoder = new DutyCycleEncoder(9);
-    pivotRelEncoder = new Encoder(8, 7);
+    // pivotRelEncoder = new Encoder(8, 7);
 
     pivotAbsEncoder.setDistancePerRotation(2 * Math.PI);
 
@@ -47,6 +46,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     elevator.setInverted(false);
     elevatorFollower.setInverted(false);
     elevatorFollower.setControl(new Follower(elevator.getDeviceID(), true));
+    elevator.setNeutralMode(NeutralModeValue.Brake);
+    elevatorFollower.setNeutralMode(NeutralModeValue.Brake);
     pivot.setNeutralMode(NeutralModeValue.Brake);
     pivot.setInverted(true);
 
@@ -84,15 +85,24 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     // inputs.bottomLimitReached = bottomLimitSwitch.get();
     // inputs.topLimitReached = topLimitSwitch.get();
 
-    final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
-    inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * pivotSign;
-    inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
-    SmartDashboard.putNumber("AbsEncPiv", inputs.pivotPositionAbsRad);
-    SmartDashboard.putNumber("RelEncPiv", inputs.pivotPositionRelRad);
-    inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
-    inputs.pivot.temperatureCelsius = pivot.getDeviceTemp().getValue();
-    inputs.pivot.supplyVoltage = pivot.getMotorVoltage().getValue();
-    inputs.pivot.isConnected = pivot.isAlive() && pivotAbsEncoder.isConnected();
+    // final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
+    // inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * pivotSign;
+    // inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
+    // SmartDashboard.putNumber("AbsEncPiv", inputs.pivotPositionAbsRad);
+    // SmartDashboard.putNumber("RelEncPiv", inputs.pivotPositionRelRad);
+    // inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
+    // inputs.pivot.temperatureCelsius = pivot.getDeviceTemp().getValue();
+    // inputs.pivot.supplyVoltage = pivot.getMotorVoltage().getValue();
+    // inputs.pivot.isConnected = pivot.isAlive() && pivotAbsEncoder.isConnected();
+
+    // final double pivotSign = (isPivotInverted ? -1.0 : 1.0);
+    SmartDashboard.putNumber("Encoder Raw", pivotAbsEncoder.get());
+    // inputs.pivotPositionAbsRad = (pivotAbsEncoder.get() - pivotOffset) * 2 * Math.PI;
+    inputs.pivotPositionAbsRad = inputs.pivot.positionRads / 112.5;
+    // inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
+    // inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
+    inputs.pivotPositionRelRad = inputs.pivot.positionRads;
+    inputs.pivot.isConnected &= pivotAbsEncoder.isConnected();
   }
 
   public void resetElevator() {

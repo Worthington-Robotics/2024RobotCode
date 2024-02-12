@@ -200,14 +200,14 @@ public class Superstructure extends SubsystemBase {
     // Clamp the setpoint
     setpoint = MathUtil.clamp(setpoint, bottomLimit, pivotMaxAngle);
     final double pivotVoltage =
-        pivotController.pid.calculate(inputs.pivotPositionRelRad + pivotAbsAngleRadOffset, setpoint)
+        pivotController.pid.calculate(inputs.pivotPositionAbsRad, setpoint)
             + calculatePivotFeedforward();
 
     return pivotVoltage;
   }
 
   private double calculatePivotFeedforward() {
-    final double adjusted = (inputs.pivotPositionRelRad + pivotAbsAngleRadOffset )- pivotHorizontalOffset;
+    final double adjusted = (inputs.pivotPositionAbsRad) - pivotHorizontalOffset;
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
     return out;
   }
