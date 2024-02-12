@@ -50,7 +50,7 @@ public class PoseCommands {
               Rotation2d angle = Rotation2d.fromRadians(FieldConstants.Source.wallAngle);
               if (DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Blue) {
-                angle = angle.plus(Rotation2d.fromDegrees(180));
+                angle = Rotation2d.fromDegrees(360).minus(angle);
               }
               angle = angle.minus(Rotation2d.fromDegrees(90));
               drive.setSingleThetaSetpoint(angle);
