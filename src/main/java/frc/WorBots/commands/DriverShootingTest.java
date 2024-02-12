@@ -8,6 +8,7 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
@@ -55,6 +56,7 @@ public class DriverShootingTest extends Command {
     double shoot = MathUtil.applyDeadband(shootValue.get(), 0.09);
     double shootRPM = shoot * 6000;
     shooter.setRawFlywheelSpeed(shootRPM);
+    SmartDashboard.putNumber("Manual Shoot RPM", shootRPM);
     if (feederButton.get()) {
       shooter.setRawFeederVolts(0.6);
     } else {

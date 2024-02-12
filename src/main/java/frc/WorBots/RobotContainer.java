@@ -120,17 +120,17 @@ public class RobotContainer {
     // drive)));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
-    // operator
-    //     .y()
-    //     .toggleOnTrue(
-    //         new DriverShootingTest(
-    //             superstructure,
-    //             shooter,
-    //             () -> -operator.getLeftY(),
-    //             () -> -operator.getRightY(),
-    //             () -> operator.getRightTriggerAxis(),
-    //             // () -> 0.0,
-    //             () -> operator.leftBumper().getAsBoolean()));
+    operator
+        .y()
+        .toggleOnTrue(
+            new DriverShootingTest(
+                superstructure,
+                shooter,
+                () -> -operator.getLeftY(),
+                () -> -operator.getRightY(),
+                () -> operator.getRightTriggerAxis(),
+                // () -> 0.0,
+                () -> operator.leftBumper().getAsBoolean()));
 
     operator.a().onTrue(PoseCommands.amp(drive, superstructure));
     operator.b().onTrue(superstructure.setPose(Preset.HOME));
