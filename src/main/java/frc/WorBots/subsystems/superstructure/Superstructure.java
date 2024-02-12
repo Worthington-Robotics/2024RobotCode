@@ -14,7 +14,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
@@ -84,7 +83,7 @@ public class Superstructure extends SubsystemBase {
     this.io = io;
     io.updateInputs(inputs);
     pivotAbsAngleRad = inputs.pivotPositionAbsRad;
-    if (!Constants.getSim()) { // Real
+    if (RobotBase.isReal()) { // Real
       pivotController.setGains(9.0, 0, 0);
       pivotController.setConstraints(2.0, 2.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.25, 0.0);

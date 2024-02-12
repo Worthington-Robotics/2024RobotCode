@@ -11,7 +11,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import frc.WorBots.Constants;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.WorBots.subsystems.drive.ModuleIO.ModuleIOInputs;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.debug.TunablePIDController;
@@ -48,14 +48,14 @@ public class Module {
     this.index = index;
     this.inputs = new ModuleIOInputs(index);
 
-    if (Constants.getSim()) { // Sim constants
-      driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
-      driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-      turnFeedbackGains.setGains(9.5, 0.0, 0.0);
-    } else { // Real constants
+    if (RobotBase.isReal()) { // Real constants
       driveFeedforward = new SimpleMotorFeedforward(0.18868, 0.12825);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);
       turnFeedbackGains.setGains(8.5, 0.015, 0.0);
+    } else { // Sim constants
+      driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
+      driveFeedbackGains.setGains(0.08, 0.0, 0.0);
+      turnFeedbackGains.setGains(9.5, 0.0, 0.0);
     }
     turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
   }

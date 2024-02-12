@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
@@ -90,7 +89,7 @@ public class Drive extends SubsystemBase {
     modules[2] = new Module(blModule, 2);
     modules[3] = new Module(brModule, 3);
 
-    if (!Constants.getSim()) {
+    if (RobotBase.isReal()) {
       thetaController.setGains(3.9, 0.000, 0.0);
       thetaController.setConstraints(9.5, 3.6);
     } else {

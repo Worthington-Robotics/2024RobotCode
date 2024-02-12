@@ -14,7 +14,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.WorBots.Constants;
 import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.debug.TunablePIDController;
@@ -70,7 +69,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   public Shooter(ShooterIO io) {
     this.io = io;
 
-    if (!Constants.getSim()) {
+    if (RobotBase.isReal()) {
       topFlywheelController.setGains(0.006, 0.00, 0);
       bottomFlywheelController.setGains(0.006, 0.000, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0.0, 0.0);
