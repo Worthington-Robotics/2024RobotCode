@@ -28,6 +28,8 @@ public class Intake extends SubsystemBase {
   private DoublePublisher setpointPub = intakeTable.getDoubleTopic("Setpoint Volts").publish();
   private BooleanPublisher hasGamePiecePub =
       intakeTable.getBooleanTopic("Has Game Piece").publish();
+  private DoublePublisher timeOfFlightDistancePub =
+      intakeTable.getDoubleTopic("Time of Flight Distance").publish();
 
   // Constants
   public static final double distanceThreshold = 0.25;
@@ -69,6 +71,7 @@ public class Intake extends SubsystemBase {
 
     setpointPub.set(setpointVolts);
     hasGamePiecePub.set(hasGamepiece);
+    timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
   }
 
   /**

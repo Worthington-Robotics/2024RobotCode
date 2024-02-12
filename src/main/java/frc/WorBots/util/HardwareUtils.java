@@ -136,7 +136,7 @@ public class HardwareUtils {
       inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
       inputs.supplyVoltage = voltsSignal.getValue();
       inputs.currentDrawAmps = currentSignal.getValue();
-      inputs.isConnected = motor.isAlive();
+      inputs.isConnected = motor.isAlive() && inputs.temperatureCelsius < maxMotorTemperature;
     }
 
     /**

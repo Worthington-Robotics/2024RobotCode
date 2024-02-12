@@ -98,11 +98,7 @@ public class RobotContainer {
     StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER, driver.getHID().isConnected());
     drive.setDefaultCommand(
         new DriveWithJoysticks(
-            drive,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> -driver.getRightY(),
-            () -> -driver.getRightX()));
+            drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
     // superstructure.setDefaultCommand(
     // new SuperstructureManual(
     // superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
@@ -157,26 +153,26 @@ public class RobotContainer {
     // () -> -operator.getRightY()));
     HashMap<String, Command> shootMap = new HashMap<String, Command>();
     shootMap.put("shoot", shooter.shootCommand(4000));
-    shootMap.put("amp", shooter.shootCommand(500));
+    shootMap.put("amp", shooter.shootCommand(600));
     shootMap.put(
         "slide",
         Commands.runEnd(
             () -> shooter.setRawFeederVolts(1.0), () -> shooter.setRawFeederVolts(0), shooter));
     shootMap.put("raw", shooter.spinToSpeed(2000, 2000));
-    // operator
-    //     .rightTrigger()
-    //     .whileTrue(
-    //         Commands.select(
-    //             shootMap,
-    //             () -> {
-    //               if (superstructure.isInPose(Preset.AMP)) {
-    //                 return "amp";
-    //               }
-    //               if (superstructure.isInPose(Preset.SLIDE)) {
-    //                 return "slide";
-    //               }
-    //               return "shoot";
-    //             }));
+    operator
+        .rightTrigger()
+        .whileTrue(
+            Commands.select(
+                shootMap,
+                () -> {
+                  if (superstructure.isInPose(Preset.AMP)) {
+                    return "amp";
+                  }
+                  if (superstructure.isInPose(Preset.SLIDE)) {
+                    return "slide";
+                  }
+                  return "shoot";
+                }));
     // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.povLeft().whileTrue(superstructure.autoZero());
     operator.povUp().onTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> true));

@@ -110,16 +110,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     feederWheelController.update();
 
     // Check if we have gamepiece
-    if (inputs.timeOfFlightDistanceMeters < distanceThreshold) {
-      hasGamePiece = true;
-    } else {
-      hasGamePiece = false;
-    }
+    hasGamePiece = inputs.timeOfFlightDistanceMeters < distanceThreshold;
 
     if (DriverStation.isDisabled()) { // Set voltages to 0 if we are disabled.
       io.setTopFlywheelVolts(0.0);
       io.setBottomFlywheelVolts(0.0);
       io.setFeederWheelVoltage(0.0);
+      // Clear setpoints
+      topFlywheelRPM = 0.0;
+      bottomFlywheelRPM = 0.0;
+      feederWheelVolts = 0.0;
     } else {
       // Calculate the desired voltages based on the setpoints
       if (topFlywheelRPM != 0.0) {
@@ -136,8 +136,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       } else {
         io.setBottomFlywheelVolts(0.0);
       }
-      // io.setTopFlywheelVolts(topFlywheelRPM);
-      // io.setBottomFlywheelVolts(bottomFlywheelRPM);
+
       // If we want to move the feeder wheel.
       io.setFeederWheelVoltage(feederWheelVolts);
       if (shouldIncrement) {

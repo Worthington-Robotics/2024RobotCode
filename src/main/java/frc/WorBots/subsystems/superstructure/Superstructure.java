@@ -79,19 +79,21 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
     pivotAbsAngleRad = inputs.pivotPositionAbsRad;
     if (!Constants.getSim()) { // Real
-      pivotController.setGains(8.5, 0, 0);
-      pivotController.setConstraints(2.0, 1.9);
-      elevatorController.setGains(160, 0.00, 0);
-      elevatorController.setConstraints(2.0, 1.5);
-      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
+      pivotController.setGains(9.0, 0, 0);
+      pivotController.setConstraints(2.0, 2.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.25, 0.0);
+
+      elevatorController.setGains(160, 0.00, 0);
+      elevatorController.setConstraints(2.0, 1.65);
+      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
     } else { // Sim
       pivotController.setGains(1.0, 0, 0);
       pivotController.setConstraints(1.0, 1.0);
+      pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
+
       elevatorController.setGains(185, 0.095, 0);
       elevatorController.setConstraints(2.0, 1.2);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
-      pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
     }
     visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
@@ -123,8 +125,9 @@ public class Superstructure extends SubsystemBase {
             + Units.inchesToMeters(1.0);
 
     if (DriverStation.isDisabled()) {
-      setElevatorVoltage(0.0);
-      setPivotVoltage(0.0);
+      // Set it raw in the io, no fancy functions
+      io.setElevatorVoltage(0.0);
+      io.setPivotVoltage(0.0);
     } else {
       switch (state) {
         case POSE:
@@ -281,7 +284,6 @@ public class Superstructure extends SubsystemBase {
             pivotMaxAngle,
             pivotLimitDistance);
     io.setPivotVoltage(volts);
-    // io.setPivotVoltage(0.0);
     Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
   }
 
@@ -413,11 +415,21 @@ public class Superstructure extends SubsystemBase {
     return this.state == SuperstructureState.POSE && this.setpoint.equals(pose);
   }
 
+  /**
+   * Checks if the superstructure is currently near a pose position. This does not check if it is in
+   * pose mode or even has that pose set, but only if it's current position is within the given
+   * tolerances of the pose
+   *
+   * @param pose The pose to check
+   * @param elevatorTolerance The tolerance in meters for the elevator
+   * @param pivotTolerance The tolerance in radians for the pivot
+   * @return Whether the current pose is within both tolerances
+   */
   public boolean isNearPose(
       SuperstructurePose.Preset pose, double elevatorTolerance, double pivotTolerance) {
-    final double elevatorError = Math.abs(pose.getElevator() - inputs.elevatorPositionMeters);
-    final double pivotError = Math.abs(pose.getPivot() - inputs.pivotPositionAbsRad);
-    return (elevatorError <= elevatorTolerance) && (pivotError <= pivotTolerance);
+    return GeneralMath.checkError(
+            pose.getElevator(), inputs.elevatorPositionMeters, elevatorTolerance)
+        && GeneralMath.checkError(pose.getPivot(), inputs.pivotPositionAbsRad, pivotTolerance);
   }
 
   /**

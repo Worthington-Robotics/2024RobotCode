@@ -22,7 +22,6 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final DigitalInput topLimitSwitch = new DigitalInput(8);
 
   private final TalonFX pivot;
-  private final boolean isPivotInverted = true;
   private final DutyCycleEncoder pivotAbsEncoder;
   // private final Encoder pivotRelEncoder;
 
@@ -32,7 +31,6 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   // Constants
   private static final double maxElevationRotations = 158.1;
   private static final double elevatorGearing = 591.156; // in meter per rotation of 1st carriage
-  private static final double pivotOffset = 0.7822;
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(2);

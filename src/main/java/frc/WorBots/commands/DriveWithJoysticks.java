@@ -18,30 +18,26 @@ public class DriveWithJoysticks extends Command {
   private final DriveController driveController = new DriveController();
   private Supplier<Double> leftXSupplier;
   private Supplier<Double> leftYSupplier;
-  private Supplier<Double> rightXSupplier;
   private Supplier<Double> rightYSupplier;
 
   public DriveWithJoysticks(
       Drive drive,
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier,
-      Supplier<Double> rightXSupplier,
       Supplier<Double> rightYSupplier) {
     addRequirements(drive);
     this.drive = drive;
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
-    this.rightXSupplier = rightXSupplier;
     this.rightYSupplier = rightYSupplier;
   }
 
   @Override
   public void execute() {
     // Get values from double suppliers
-    double leftX = leftXSupplier.get();
-    double leftY = leftYSupplier.get();
-    double rightX = rightXSupplier.get();
-    double rightY = rightYSupplier.get();
+    final double leftX = leftXSupplier.get();
+    final double leftY = leftYSupplier.get();
+    final double rightY = rightYSupplier.get();
 
     driveController.drive(drive, leftX, leftY, rightY);
   }
