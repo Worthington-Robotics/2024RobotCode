@@ -40,11 +40,18 @@ public class SmartIntake extends Command {
     // Check if we are in handoff pose
     final boolean inHandoff =
         superstructure.isNearPose(
-            Preset.HANDOFF, Units.inchesToMeters(0.75), Units.degreesToRadians(12));
+            Preset.HANDOFF, Units.inchesToMeters(1.0), Units.degreesToRadians(12));
     // If we are ready for handoff, intake up to the shooter
     if (inHandoff) {
       intake.setVolts(intakeVolts);
       if (!shooter.hasGamePiece()) {
+        // If we are not at the intake, apply backforce to the shooter flywheels
+        // to make sure that we don't overshoot
+        if (!intake.hasGamePiece()) {
+          shooter.setRawFlywheelSpeed(-300.0);
+        } else {
+          shooter.setRawFlywheelSpeed(0.0);
+        }
         shooter.setRawFeederVolts(feederVolts);
       } else {
         finished = true;
@@ -66,5 +73,6 @@ public class SmartIntake extends Command {
   public void end(boolean interrupted) {
     intake.setVolts(0);
     shooter.setRawFeederVolts(0);
+    shooter.setRawFlywheelSpeed(0);
   }
 }

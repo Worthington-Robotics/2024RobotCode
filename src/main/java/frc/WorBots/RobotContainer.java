@@ -99,14 +99,14 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-    // superstructure.setDefaultCommand(
-    // new SuperstructureManual(
-    // superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    superstructure.setDefaultCommand(
+        new SuperstructureManual(
+            superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver.leftBumper().onTrue(new Turn90(drive, false));
     driver.rightBumper().onTrue(new Turn90(drive, true));
-    // driver.leftTrigger().whileTrue(intake.intakeRaw());
-    driver.leftTrigger().whileTrue(new SmartIntake(intake, shooter, superstructure));
+    driver.leftTrigger().whileTrue(intake.spitRaw());
+    driver.rightTrigger().whileTrue(new SmartIntake(intake, shooter, superstructure));
     // driver
     // .rightTrigger()
     // .whileTrue(
@@ -118,28 +118,24 @@ public class RobotContainer {
     // drive.runVelocity(new ChassisSpeeds(-0.65, 0.0, 0.0));
     // },
     // drive)));
-    driver.rightTrigger().whileTrue(intake.spitRaw());
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
-    operator
-        .y()
-        .toggleOnTrue(
-            new DriverShootingTest(
-                superstructure,
-                shooter,
-                () -> -operator.getLeftY(),
-                () -> -operator.getRightY(),
-                () -> operator.getRightTriggerAxis(),
-                // () -> 0.0,
-                () -> operator.leftBumper().getAsBoolean()));
     // operator
-    // .x()
-    // .toggleOnTrue(
-    // Commands.startEnd(() -> inClimbingMode = true, () -> inClimbingMode = false)
-    // .raceWith(new DriverClimb(superstructure, () -> -operator.getRightY())));
-    operator.b().onTrue(superstructure.setPose(Preset.HOME));
+    //     .y()
+    //     .toggleOnTrue(
+    //         new DriverShootingTest(
+    //             superstructure,
+    //             shooter,
+    //             () -> -operator.getLeftY(),
+    //             () -> -operator.getRightY(),
+    //             () -> operator.getRightTriggerAxis(),
+    //             // () -> 0.0,
+    //             () -> operator.leftBumper().getAsBoolean()));
+
     operator.a().onTrue(PoseCommands.amp(drive, superstructure));
+    operator.b().onTrue(superstructure.setPose(Preset.HOME));
     operator.x().onTrue(PoseCommands.slide(drive, superstructure));
+    operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
 
     // operator
     // .leftTrigger()
@@ -176,7 +172,6 @@ public class RobotContainer {
                   }
                   return "shoot";
                 }));
-    // driver.rightBumper().onTrue(superstructure.setPose(Preset.AMP));
     // driver.povLeft().whileTrue(superstructure.autoZero());
     operator.povUp().onTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> true));
     operator.povDown().onTrue(PoseCommands.climbDown(drive, superstructure).onlyIf(() -> true));
