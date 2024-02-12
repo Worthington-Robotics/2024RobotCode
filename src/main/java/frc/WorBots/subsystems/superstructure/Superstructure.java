@@ -281,7 +281,7 @@ public class Superstructure extends SubsystemBase {
         GeneralMath.softLimitVelocity(
             volts,
             inputs.pivotPositionAbsRad - bottomLimit,
-            5.0,
+            6.5,
             pivotMaxAngle,
             pivotLimitDistance);
     io.setPivotVoltage(volts);
