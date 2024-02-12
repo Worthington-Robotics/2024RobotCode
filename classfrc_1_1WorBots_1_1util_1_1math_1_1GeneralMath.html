@@ -90,6 +90,8 @@ Classes</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e7152b5cf8949a7b0a4bbbd5e735eba"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a0e7152b5cf8949a7b0a4bbbd5e735eba">softLimitVelocity</a> (double velocity, double position, double maxVelocity, double maxPosition, double limitDistance)</td></tr>
 <tr class="separator:a0e7152b5cf8949a7b0a4bbbd5e735eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad36a8fb9ca2557c949f13354760905a2"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#ad36a8fb9ca2557c949f13354760905a2">softLimitVelocity</a> (double velocity, double position, double maxVelocity, double maxPosition, double backwardLimitDistance, double forwardLimitDistance)</td></tr>
+<tr class="separator:ad36a8fb9ca2557c949f13354760905a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e8eeb3c5900db783403b8a811301cab"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a9e8eeb3c5900db783403b8a811301cab">getScalarPosition</a> (double value, double min, double max)</td></tr>
 <tr class="separator:a9e8eeb3c5900db783403b8a811301cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb993c9673a372f36f7b635335dc6715"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715">clampMagnitude</a> (double value, double max)</td></tr>
@@ -397,8 +399,81 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ad36a8fb9ca2557c949f13354760905a2" name="ad36a8fb9ca2557c949f13354760905a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad36a8fb9ca2557c949f13354760905a2">&#9670;&#160;</a></span>softLimitVelocity() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.GeneralMath.softLimitVelocity </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>velocity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxVelocity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>backwardLimitDistance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>forwardLimitDistance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Clamps a directional velocity output to create a smooth limiting function at both ends of a boundary. The input velocity will be slowly clamped as the position gets too close to either end of the boundary, but only if it is moving toward that boundary.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">velocity</td><td>The velocity to limit </td></tr>
+    <tr><td class="paramname">position</td><td>The current position of the system </td></tr>
+    <tr><td class="paramname">maxVelocity</td><td>The maximum velocity. Output is guaranteed to be &lt;= to this. </td></tr>
+    <tr><td class="paramname">maxPosition</td><td>The maximum position of the boundary. The boundary goes from 0-maxPosition </td></tr>
+    <tr><td class="paramname">backwardLimitDistance</td><td>The distance from the left end of the boundary to start the soft limit at </td></tr>
+    <tr><td class="paramname">forwardLimitDistance</td><td>The distance from both the right end of the boundary to start the soft limit at </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The clamped velocity </dd></dl>
+
+</div>
+</div>
 <a id="a0e7152b5cf8949a7b0a4bbbd5e735eba" name="a0e7152b5cf8949a7b0a4bbbd5e735eba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e7152b5cf8949a7b0a4bbbd5e735eba">&#9670;&#160;</a></span>softLimitVelocity()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e7152b5cf8949a7b0a4bbbd5e735eba">&#9670;&#160;</a></span>softLimitVelocity() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
