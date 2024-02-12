@@ -52,8 +52,9 @@ public class Superstructure extends SubsystemBase {
   // Constants
   private static final String tableName = "Superstructure";
   private static final double elevatorLimitDistance = 0.25;
-  private static final double pivotLimitDistance = 1.05;
-  private static final double pivotDynamicLimitDistance = Units.degreesToRadians(18);
+  private static final double pivotBackwardLimitDistance = 0.90;
+  private static final double pivotForwardLimitDistance = 1.05;
+  private static final double pivotDynamicLimitDistance = Units.degreesToRadians(20);
   private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
@@ -287,7 +288,8 @@ public class Superstructure extends SubsystemBase {
             inputs.pivotPositionAbsRad - bottomLimit,
             6.5,
             pivotMaxAngle,
-            pivotLimitDistance);
+            pivotBackwardLimitDistance,
+            pivotForwardLimitDistance);
     io.setPivotVoltage(volts);
     Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
   }

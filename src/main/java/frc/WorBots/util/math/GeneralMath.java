@@ -29,6 +29,32 @@ public class GeneralMath {
       double maxVelocity,
       double maxPosition,
       double limitDistance) {
+    return softLimitVelocity(
+        velocity, position, maxVelocity, maxPosition, limitDistance, limitDistance);
+  }
+
+  /**
+   * Clamps a directional velocity output to create a smooth limiting function at both ends of a
+   * boundary. The input velocity will be slowly clamped as the position gets too close to either
+   * end of the boundary, but only if it is moving toward that boundary.
+   *
+   * @param velocity The velocity to limit
+   * @param position The current position of the system
+   * @param maxVelocity The maximum velocity. Output is guaranteed to be <= to this.
+   * @param maxPosition The maximum position of the boundary. The boundary goes from 0-maxPosition
+   * @param backwardLimitDistance The distance from the left end of the boundary to start the soft
+   *     limit at
+   * @param forwardLimitDistance The distance from both the right end of the boundary to start the
+   *     soft limit at
+   * @return The clamped velocity
+   */
+  public static double softLimitVelocity(
+      double velocity,
+      double position,
+      double maxVelocity,
+      double maxPosition,
+      double backwardLimitDistance,
+      double forwardLimitDistance) {
     velocity = clampMagnitude(velocity, maxVelocity);
     // Hard limits
     if (position <= 0) {
@@ -53,14 +79,14 @@ public class GeneralMath {
      */
     if (Math.signum(velocity) == -1) {
       // Left boundary check
-      if (position < limitDistance) {
-        final double scalar = getScalarPosition(position, 0, limitDistance);
+      if (position < backwardLimitDistance) {
+        final double scalar = getScalarPosition(position, 0, backwardLimitDistance);
         final double clamp = clampMagnitude(velocity, maxVelocity * scalar);
         return clamp;
       }
     } else {
       // Right boundary check
-      final double rightBound = maxPosition - limitDistance;
+      final double rightBound = maxPosition - forwardLimitDistance;
       if (position > rightBound) {
         // Get the reciprocal because we want the slope to go the other way
         final double scalar = 1 - getScalarPosition(position, rightBound, maxPosition);
