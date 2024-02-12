@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.superstructure;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.util.Units;
@@ -59,6 +60,9 @@ public class Superstructure extends SubsystemBase {
 
   /** The max angle the pivot can go to, in radians */
   public static final double pivotMaxAngle = 2.65;
+
+  /** The max distance the elevator can go to, in meters */
+  public static final double elevatorMaxMeters = 0.2674420965;
 
   /** The offset from the zero needed for the pivot to be horizontal */
   public static final double pivotHorizontalOffset = 0.5399;
@@ -175,6 +179,8 @@ public class Superstructure extends SubsystemBase {
    * @return The voltage for the elevator
    */
   private double calculateElevator(double setpoint) {
+    // Clamp the setpoint
+    setpoint = MathUtil.clamp(setpoint, 0.0, elevatorMaxMeters);
     final double elevatorVoltage =
         elevatorController.pid.calculate(inputs.elevatorPositionMeters, setpoint)
             + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
@@ -191,9 +197,8 @@ public class Superstructure extends SubsystemBase {
   private double calculatePivot(double setpoint) {
     // If we are below the dynamic limit, automatically bring the setpoint up
     final double bottomLimit = calculatePivotBottomLimit();
-    if (setpoint < bottomLimit) {
-      setpoint = bottomLimit;
-    }
+    // Clamp the setpoint
+    setpoint = MathUtil.clamp(setpoint, bottomLimit, pivotMaxAngle);
     final double pivotVoltage =
         pivotController.pid.calculate(inputs.pivotPositionAbsRad, setpoint)
             + calculatePivotFeedforward();
