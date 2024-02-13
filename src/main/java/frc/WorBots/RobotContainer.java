@@ -15,6 +15,7 @@ import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
+import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.debug.StatusPage;
@@ -22,11 +23,11 @@ import java.util.*;
 
 public class RobotContainer {
   // Subsystems
-  private Drive drive;
+  public Drive drive;
   private Vision vision;
-  private Superstructure superstructure;
-  private Intake intake;
-  private Shooter shooter;
+  public Superstructure superstructure;
+  public Intake intake;
+  public Shooter shooter;
   private AutoSelector selector;
 
   // Joysticks
@@ -99,9 +100,10 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-    superstructure.setDefaultCommand(
-        new SuperstructureManual(
-            superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    superstructure.setDefaultCommand(superstructure.setMode(SuperstructureState.STATIC));
+    // superstructure.setDefaultCommand(
+    //     new SuperstructureManual(
+    //         superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver.leftBumper().onTrue(new Turn90(drive, false));
     driver.rightBumper().onTrue(new Turn90(drive, true));
@@ -121,7 +123,7 @@ public class RobotContainer {
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
     driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
     operator
-        .y()
+        .rightStick()
         .toggleOnTrue(
             new DriverShootingTest(
                 superstructure,
@@ -155,23 +157,23 @@ public class RobotContainer {
         Commands.runEnd(
             () -> shooter.setRawFeederVolts(1.0), () -> shooter.setRawFeederVolts(0), shooter));
     shootMap.put("raw", shooter.spinToSpeed(2000));
-    operator
-        .rightTrigger()
-        .whileTrue(
-            Commands.select(
-                shootMap,
-                () -> {
-                  if (superstructure.isShooting()) {
-                    return "shoot";
-                  }
-                  if (superstructure.isInPose(Preset.AMP)) {
-                    return "amp";
-                  }
-                  if (superstructure.isInPose(Preset.SLIDE)) {
-                    return "slide";
-                  }
-                  return "shoot";
-                }));
+    // operator
+    //     .rightTrigger()
+    //     .whileTrue(
+    //         Commands.select(
+    //             shootMap,
+    //             () -> {
+    //               if (superstructure.isShooting()) {
+    //                 return "shoot";
+    //               }
+    //               if (superstructure.isInPose(Preset.AMP)) {
+    //                 return "amp";
+    //               }
+    //               if (superstructure.isInPose(Preset.SLIDE)) {
+    //                 return "slide";
+    //               }
+    //               return "shoot";
+    //             }));
     // driver.povLeft().whileTrue(superstructure.autoZero());
     operator.povUp().onTrue(PoseCommands.autoClimb(drive, superstructure).onlyIf(() -> true));
     operator.povDown().onTrue(PoseCommands.climbDown(drive, superstructure).onlyIf(() -> true));

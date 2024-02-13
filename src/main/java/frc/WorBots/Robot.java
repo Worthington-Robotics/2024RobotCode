@@ -15,12 +15,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
+import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.debug.StatusPage;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private Command autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+  private RobotContainer robotContainer;
 
   private PowerDistribution pdp;
 
@@ -31,7 +32,7 @@ public class Robot extends TimedRobot {
     Lights.getInstance();
     pdp = new PowerDistribution();
 
-    m_robotContainer = new RobotContainer();
+    robotContainer = new RobotContainer();
     StatusPage.reportStatus(StatusPage.ROBOT_CODE, true);
 
     if (Constants.getSim()) {
@@ -67,11 +68,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    autonomousCommand = robotContainer.getAutonomousCommand();
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
     }
+
+    robotContainer.drive.stop();
+    robotContainer.intake.setVolts(0.0);
+    robotContainer.shooter.setRawFlywheelSpeed(0);
+    robotContainer.shooter.setRawFeederVolts(0.0);
+    robotContainer.superstructure.setMode(SuperstructureState.STATIC);
   }
 
   @Override
@@ -82,9 +89,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
     }
+
+    robotContainer.drive.stop();
+    robotContainer.intake.setVolts(0.0);
+    robotContainer.shooter.setRawFlywheelSpeed(0);
+    robotContainer.shooter.setRawFeederVolts(0.0);
+    robotContainer.superstructure.setMode(SuperstructureState.STATIC);
   }
 
   @Override

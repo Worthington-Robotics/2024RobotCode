@@ -53,25 +53,26 @@ public class Superstructure extends SubsystemBase {
   private static final double elevatorLimitDistance = 0.25;
   private static final double pivotBackwardLimitDistance = 0.90;
   private static final double pivotForwardLimitDistance = 1.05;
-  private static final double pivotDynamicLimitDistance = Units.degreesToRadians(20);
+  private static final double pivotDynamicLimitDistance = Units.degreesToRadians(16);
   private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 
   /** The max angle the pivot can go to, in radians */
-  public static final double pivotMaxAngle = 2.65;
+  public static final double pivotMaxAngle = 2.386;
 
   /** The max distance the elevator can go to, in meters */
   public static final double elevatorMaxMeters = 0.2674420965;
 
   /** The offset from the zero needed for the pivot to be horizontal */
-  public static final double pivotHorizontalOffset = 0.381;
+  public static final double pivotHorizontalOffset = 0.36368;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
     POSE,
     SHOOTING,
-    MANUAL
+    MANUAL,
+    STATIC,
   }
 
   /**
@@ -135,6 +136,9 @@ public class Superstructure extends SubsystemBase {
       io.setPivotVoltage(0.0);
     } else {
       switch (state) {
+        case STATIC:
+          setElevatorVoltage(0.0);
+          setPivotVoltage(0.0);
         case POSE:
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;

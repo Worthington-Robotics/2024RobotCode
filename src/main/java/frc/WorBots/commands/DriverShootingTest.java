@@ -54,7 +54,7 @@ public class DriverShootingTest extends Command {
     double pivotVolts = pivot * 5.0;
     superstructure.setManualPivotVolts(pivotVolts);
     double shoot = MathUtil.applyDeadband(shootValue.get(), 0.09);
-    double shootRPM = shoot * 6000;
+    double shootRPM = shoot * 3000;
     shooter.setRawFlywheelSpeed(shootRPM);
     SmartDashboard.putNumber("Manual Shoot RPM", shootRPM);
     if (feederButton.get()) {
@@ -72,7 +72,7 @@ public class DriverShootingTest extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.setManualPivotVolts(0.0);
-    superstructure.setModeVoid(SuperstructureState.POSE);
+    superstructure.setModeVoid(SuperstructureState.STATIC);
     shooter.setRawFlywheelSpeed(0.0);
     shooter.setRawFeederVolts(0.0);
   }
