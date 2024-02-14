@@ -21,7 +21,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevatorFollower;
   private final DigitalInput bottomLimitSwitch = new DigitalInput(1);
   private final DigitalInput topLimitSwitch = new DigitalInput(2);
-  private final boolean isPivotInverted = false;
+  private final boolean isPivotInverted = true;
 
   private final TalonFX pivot;
   private final DutyCycleEncoder pivotAbsEncoder;
