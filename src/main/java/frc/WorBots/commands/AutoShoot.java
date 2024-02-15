@@ -10,6 +10,7 @@ package frc.WorBots.commands;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
@@ -30,12 +31,25 @@ public class AutoShoot extends SequentialCommandGroup {
    * @param drive The drive subsystem.
    */
   public AutoShoot(Superstructure superstructure, Drive drive) {
-    addRequirements(superstructure);
+    addRequirements(superstructure, drive);
     speakerOpeningHeightZ =
         (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
             / 2;
     speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
 
+    Supplier<Double> pivotAngle =
+        () -> {
+          Pose2d robotPose = drive.getPose();
+          Pose2d flippedRobotPose = AllianceFlipUtil.apply(robotPose);
+          double opposite =
+              (FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ)
+                  - superstructure.getShooterHeightMeters();
+          SmartDashboard.putNumber(
+              "SHOOTING", (Math.PI - Math.atan2(opposite, flippedRobotPose.getX())));
+          superstructure.setShootingAngleRad(
+              (Math.PI - Math.atan2(opposite, flippedRobotPose.getX())));
+          return ((Math.PI - Math.atan2(opposite, flippedRobotPose.getX())) - (Math.PI / 2));
+        };
     Supplier<Pose2d> driveTargetSupplier =
         () -> {
           // Robot Pose
@@ -46,39 +60,50 @@ public class AutoShoot extends SequentialCommandGroup {
           double opposite =
               (FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ)
                   - superstructure.getShooterHeightMeters();
-          superstructure.setShootingAngleRad(() -> Math.atan2(opposite, flippedRobotPose.getX()));
+          // superstructure.setShootingAngleRad(
+          //     Math.PI - Math.atan2(opposite, flippedRobotPose.getX()));
+          // SmartDashboard.putNumber(
+          //     "Calc angle", Math.PI - Math.atan2(opposite, flippedRobotPose.getX()));
 
           // Calculates the robot shooting rotation
           double robotAngle = getRobotRotationToShoot(robotPose).getRadians();
 
-          if (flippedRobotPose.getX()
-              > FieldConstants.Wing.endX) { // if robot is outside of the wing
-            if (flippedRobotPose.getY()
-                < FieldConstants.Stage.foot3Center.getY()) { // if robot is right of stage
-              return new Pose2d(
-                  AllianceFlipUtil.apply(FieldConstants.Wing.endX), 1, new Rotation2d(robotAngle));
-            } else if (flippedRobotPose.getY() < FieldConstants.Stage.foot2Center.getY()
-                && flippedRobotPose.getY()
-                    > FieldConstants.Stage.foot3Center
-                        .getY()) { // if robot is right of center, but not right of stage
-              return new Pose2d(
-                  AllianceFlipUtil.apply(FieldConstants.Wing.endX),
-                  FieldConstants.Stage.center.getY(),
-                  new Rotation2d(robotAngle));
-            } else { // if robot is left of stage
-              return new Pose2d(
-                  AllianceFlipUtil.apply(FieldConstants.Wing.endX), 7, new Rotation2d(robotAngle));
-            }
-          } else {
-            return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
-          }
+          // if (flippedRobotPose.getX()
+          //     > FieldConstants.Wing.endX) { // if robot is outside of the wing
+          //   if (flippedRobotPose.getY()
+          //       < FieldConstants.Stage.foot3Center.getY()) { // if robot is right of stage
+          //     return new Pose2d(
+          //         AllianceFlipUtil.apply(FieldConstants.Wing.endX), 1, new
+          // Rotation2d(robotAngle));
+          //   } else if (flippedRobotPose.getY() < FieldConstants.Stage.foot2Center.getY()
+          //       && flippedRobotPose.getY()
+          //           > FieldConstants.Stage.foot3Center
+          //               .getY()) { // if robot is right of center, but not right of stage
+          //     return new Pose2d(
+          //         AllianceFlipUtil.apply(FieldConstants.Wing.endX),
+          //         FieldConstants.Stage.center.getY(),
+          //         new Rotation2d(robotAngle));
+          //   } else { // if robot is left of stage
+          //     return new Pose2d(
+          //         AllianceFlipUtil.apply(FieldConstants.Wing.endX), 7, new
+          // Rotation2d(robotAngle));
+          //   }
+          // } else {
+          return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
+          // }
         };
     var driveToPose = new DriveToPose(drive, driveTargetSupplier);
+    var shooting =
+        Commands.run(
+            () -> {
+              superstructure.setShootingAngleRad(pivotAngle);
+            },
+            superstructure);
     addCommands(
         superstructure.setMode(SuperstructureState.SHOOTING),
-        driveToPose,
+        shooting.alongWith(driveToPose),
         Commands.waitUntil(() -> false)
-            .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.POSE)));
+            .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.DISABLED)));
   }
 
   /**

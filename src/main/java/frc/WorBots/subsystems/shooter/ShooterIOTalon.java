@@ -31,7 +31,7 @@ public class ShooterIOTalon implements ShooterIO {
     topFlywheel = new TalonFX(7);
     bottomFlywheel = new TalonFX(6);
     feederWheel = new TalonFX(8);
-    timeOfFlight = new TimeOfFlight(18);
+    timeOfFlight = new TimeOfFlight(12);
     timeOfFlight.setRangingMode(RangingMode.Short, 24);
 
     topFlywheel.setNeutralMode(NeutralModeValue.Coast);

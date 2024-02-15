@@ -15,7 +15,6 @@ import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
-import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.debug.StatusPage;
@@ -100,15 +99,20 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-    superstructure.setDefaultCommand(superstructure.setMode(SuperstructureState.STATIC));
-    // superstructure.setDefaultCommand(
-    //     new SuperstructureManual(
-    //         superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    // superstructure.setDefaultCommand(superstructure.setMode(SuperstructureState.DISABLED));
+    superstructure.setDefaultCommand(
+        new SuperstructureManual(
+            superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
 
-    driver.leftBumper().onTrue(new Turn90(drive, false));
-    driver.rightBumper().onTrue(new Turn90(drive, true));
-    driver.leftTrigger().whileTrue(intake.spitRaw());
-    driver.rightTrigger().whileTrue(new SmartIntake(intake, shooter, superstructure));
+    driver
+        .leftTrigger()
+        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(0.5)))
+        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+    driver.rightTrigger().whileTrue(intake.intakeRaw());
+    driver.x().onTrue(superstructure.setPose(Preset.HANDOFF));
+    driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
+    driver.b().toggleOnTrue(new AutoShoot(superstructure, drive));
+    driver.povUp().onTrue(shooter.spinToSpeed(5500)).onFalse(shooter.spinToSpeed(0));
     // driver
     // .rightTrigger()
     // .whileTrue(
@@ -121,7 +125,7 @@ public class RobotContainer {
     // },
     // drive)));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(), drive));
-    driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
+    // driver.povRight().whileTrue(PoseCommands.fullZero(drive, superstructure));
     operator
         .rightStick()
         .toggleOnTrue(
@@ -134,9 +138,9 @@ public class RobotContainer {
                 // () -> 0.0,
                 () -> operator.leftBumper().getAsBoolean()));
 
-    operator.a().onTrue(PoseCommands.amp(drive, superstructure));
+    // operator.a().onTrue(PoseCommands.amp(drive, superstructure));
     operator.b().onTrue(superstructure.setPose(Preset.HOME));
-    operator.x().onTrue(PoseCommands.slide(drive, superstructure));
+    // operator.x().onTrue(PoseCommands.slide(drive, superstructure));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
 
     // operator
@@ -149,14 +153,14 @@ public class RobotContainer {
     // () -> -driver.getLeftY(),
     // () -> -operator.getLeftY(),
     // () -> -operator.getRightY()));
-    HashMap<String, Command> shootMap = new HashMap<String, Command>();
-    shootMap.put("shoot", shooter.shootCommand(4000));
-    shootMap.put("amp", shooter.shootCommand(600));
-    shootMap.put(
-        "slide",
-        Commands.runEnd(
-            () -> shooter.setRawFeederVolts(1.0), () -> shooter.setRawFeederVolts(0), shooter));
-    shootMap.put("raw", shooter.spinToSpeed(2000));
+    // HashMap<String, Command> shootMap = new HashMap<String, Command>();
+    // shootMap.put("shoot", shooter.shootCommand(4000));
+    // shootMap.put("amp", shooter.shootCommand(600));
+    // shootMap.put(
+    //     "slide",
+    //     Commands.runEnd(
+    //         () -> shooter.setRawFeederVolts(1.0), () -> shooter.setRawFeederVolts(0), shooter));
+    // shootMap.put("raw", shooter.spinToSpeed(2000));
     // operator
     //     .rightTrigger()
     //     .whileTrue(

@@ -9,6 +9,7 @@ package frc.WorBots.subsystems.intake;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class IntakeIOTalon implements IntakeIO {
@@ -19,8 +20,8 @@ public class IntakeIOTalon implements IntakeIO {
 
   public IntakeIOTalon() {
     intakeMotor = new TalonFX(1);
-    // timeOfFlight = new TimeOfFlight(0);
-    // timeOfFlight.setRangingMode(RangingMode.Short, 24);
+    timeOfFlight = new TimeOfFlight(13);
+    timeOfFlight.setRangingMode(RangingMode.Short, 24);
     intakeMotor.setInverted(true);
 
     motorSignals = new TalonSignalsPositional(intakeMotor);
@@ -32,7 +33,7 @@ public class IntakeIOTalon implements IntakeIO {
     motorSignals.update(inputs.motor, intakeMotor);
     inputs.isConnected = inputs.motor.isConnected;
 
-    // inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
+    inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
     // inputs.isConnected &= DeviceUtils.getTimeOfFlightStatus(timeOfFlight);
   }
 

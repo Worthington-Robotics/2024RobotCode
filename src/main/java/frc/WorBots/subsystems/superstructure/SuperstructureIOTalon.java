@@ -40,8 +40,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     pivot = new TalonFX(10);
     pivotAbsEncoder = new DutyCycleEncoder(9);
     pivotRelEncoder = new Encoder(8, 7);
-
-    pivotAbsEncoder.setDistancePerRotation(2 * Math.PI);
+    pivotRelEncoder.setDistancePerPulse((2 * Math.PI) / 2048);
 
     elevator.setPosition(0.0);
     elevator.setInverted(false);
@@ -65,11 +64,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    elevatorSignals.setTalonVoltage(elevator, volts, 10);
+    elevatorSignals.setTalonVoltage(elevator, volts, 8);
   }
 
   public void setPivotVoltage(double volts) {
-    pivotSignals.setTalonVoltage(pivot, volts, 5.0);
+    pivotSignals.setTalonVoltage(pivot, volts, 8);
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {
@@ -87,23 +86,14 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     // inputs.topLimitReached = topLimitSwitch.get();
 
     final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
-    inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * pivotSign;
-    inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
+    inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * 2 * Math.PI * pivotSign;
+    inputs.pivotPositionRelRad = (pivotRelEncoder.getDistance()) * pivotSign;
     SmartDashboard.putNumber("AbsEncPiv", inputs.pivotPositionAbsRad);
     SmartDashboard.putNumber("RelEncPiv", inputs.pivotPositionRelRad);
     inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
     inputs.pivot.temperatureCelsius = pivot.getDeviceTemp().getValue();
     inputs.pivot.supplyVoltage = pivot.getMotorVoltage().getValue();
     inputs.pivot.isConnected = pivot.isAlive() && pivotAbsEncoder.isConnected();
-
-    // final double pivotSign = (isPivotInverted ? -1.0 : 1.0);
-    // SmartDashboard.putNumber("Encoder Raw", pivotAbsEncoder.get());
-    // inputs.pivotPositionAbsRad = (pivotAbsEncoder.get() - pivotOffset) * 2 * Math.PI;
-    // inputs.pivotPositionAbsRad = inputs.pivot.positionRads / 112.5;
-    // inputs.pivotPositionRelRad = pivotRelEncoder.getDistance() * pivotSign;
-    // inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
-    // inputs.pivotPositionRelRad = inputs.pivot.positionRads;
-    // inputs.pivot.isConnected &= pivotAbsEncoder.isConnected();
   }
 
   public void resetElevator() {

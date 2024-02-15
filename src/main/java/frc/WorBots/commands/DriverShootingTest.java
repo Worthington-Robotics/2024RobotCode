@@ -72,7 +72,7 @@ public class DriverShootingTest extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.setManualPivotVolts(0.0);
-    superstructure.setModeVoid(SuperstructureState.STATIC);
+    superstructure.setModeVoid(SuperstructureState.DISABLED);
     shooter.setRawFlywheelSpeed(0.0);
     shooter.setRawFeederVolts(0.0);
   }

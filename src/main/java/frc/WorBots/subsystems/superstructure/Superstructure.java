@@ -27,15 +27,17 @@ import java.util.function.Supplier;
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
-  private SuperstructureState state = SuperstructureState.POSE;
+  private SuperstructureState state = SuperstructureState.DISABLED;
   private SuperstructureVisualizer visualizer;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
-  private double pivotAbsAngleRadOffset = 0.0;
+  private double absoluteZeroOffsetRad = 0.2885;
+  private double initZeroPoseRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
   private Supplier<Double> climbingVolts = () -> 0.0;
   private Supplier<Double> manualPivotVolts = () -> 0.0;
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
+  private boolean hasGottenZeroPosition = false;
 
   private TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
@@ -59,7 +61,7 @@ public class Superstructure extends SubsystemBase {
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 
   /** The max angle the pivot can go to, in radians */
-  public static final double pivotMaxAngle = 2.386;
+  public static final double pivotMaxAngle = 2.91;
 
   /** The max distance the elevator can go to, in meters */
   public static final double elevatorMaxMeters = 0.2674420965;
@@ -72,7 +74,7 @@ public class Superstructure extends SubsystemBase {
     POSE,
     SHOOTING,
     MANUAL,
-    STATIC,
+    DISABLED,
   }
 
   /**
@@ -82,10 +84,8 @@ public class Superstructure extends SubsystemBase {
    */
   public Superstructure(SuperstructureIO io) {
     this.io = io;
-    io.updateInputs(inputs);
-    pivotAbsAngleRadOffset = inputs.pivotPositionAbsRad;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(9.0, 0, 0);
+      pivotController.setGains(7.0, 0, 0);
       pivotController.setConstraints(2.0, 2.0);
       pivotFeedForward = new ArmFeedforward(0.0, 0.25, 0.0);
 
@@ -109,9 +109,16 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
+    if (!hasGottenZeroPosition && inputs.pivotPositionAbsRad != 0.0) {
+      initZeroPoseRad = inputs.pivotPositionAbsRad;
+      hasGottenZeroPosition = true;
+    }
+
     // Log info
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
+    SmartDashboard.putNumber(
+        "Total Enc Rad", inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
@@ -136,19 +143,14 @@ public class Superstructure extends SubsystemBase {
       io.setPivotVoltage(0.0);
     } else {
       switch (state) {
-        case STATIC:
+        case DISABLED:
           setElevatorVoltage(0.0);
           setPivotVoltage(0.0);
         case POSE:
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
-          setElevatorVoltage(0.0);
-          setPivotVoltage(0.0);
-          // runPose(0.0, shootingAngleRad.get());
-          // setElevatorVoltage(calculateElevator(0.0));
-          // final double voltsPivot = manualPivotVolts.get();
-          // setPivotVoltage(voltsPivot);
+          runPose(0.0, shootingAngleRad.get());
           break;
         case MANUAL:
           final double volts = climbingVolts.get();
@@ -170,7 +172,7 @@ public class Superstructure extends SubsystemBase {
 
     visualizer.update(
         VecBuilder.fill(
-            inputs.pivotPositionRelRad + pivotAbsAngleRadOffset,
+            inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad,
             firstCarriagePositionMeters,
             secondCarriagePositionMeters,
             inputs.elevatorPositionMeters));
@@ -204,14 +206,15 @@ public class Superstructure extends SubsystemBase {
     // Clamp the setpoint
     setpoint = MathUtil.clamp(setpoint, bottomLimit, pivotMaxAngle);
     final double pivotVoltage =
-        pivotController.pid.calculate(inputs.pivotPositionAbsRad, setpoint)
+        pivotController.pid.calculate(
+                inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad, setpoint)
             + calculatePivotFeedforward();
 
     return pivotVoltage;
   }
 
   private double calculatePivotFeedforward() {
-    final double adjusted = (inputs.pivotPositionAbsRad) - pivotHorizontalOffset;
+    final double adjusted = (inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
     return out;
   }
@@ -367,12 +370,16 @@ public class Superstructure extends SubsystemBase {
    * @return The command.
    */
   public Command setPose(SuperstructurePose.Preset pose) {
-    return this.runOnce(
+    return this.run(
             () -> {
-              this.setMode(SuperstructureState.POSE);
+              this.setModeVoid(SuperstructureState.POSE);
               this.setpoint = pose;
             })
-        .alongWith(Commands.waitUntil(this::isAtSetpoint));
+        .alongWith(Commands.waitUntil(this::isAtSetpoint))
+        .finallyDo(
+            () -> {
+              this.setModeVoid(SuperstructureState.DISABLED);
+            });
   }
 
   /**

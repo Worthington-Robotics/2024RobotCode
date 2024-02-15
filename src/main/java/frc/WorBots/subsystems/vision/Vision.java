@@ -65,7 +65,8 @@ public class Vision extends SubsystemBase {
                   Units.inchesToMeters(-13),
                   Units.inchesToMeters(-13),
                   Units.inchesToMeters(-11.4)),
-              new Rotation3d(0, 0.24, 0.0))
+              new Rotation3d(
+                  0.0, Units.degreesToRadians(-28.125), Units.degreesToRadians(180 + 43.745)))
         };
     xyStdDevCoefficient = 0.01;
     thetaStdDevCoefficient = 0.015;

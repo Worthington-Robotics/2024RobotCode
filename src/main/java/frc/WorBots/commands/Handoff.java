@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
+import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.*;
 
 /**
@@ -34,6 +35,7 @@ public class Handoff extends Command {
 
   @Override
   public void initialize() {
+    superstructure.setModeVoid(SuperstructureState.POSE);
     superstructure.setPose(Preset.HANDOFF).schedule();
   }
 
@@ -57,6 +59,6 @@ public class Handoff extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.runFeederWheel(0.0);
-    superstructure.setPose(Preset.HOME);
+    superstructure.setModeVoid(SuperstructureState.DISABLED);
   }
 }

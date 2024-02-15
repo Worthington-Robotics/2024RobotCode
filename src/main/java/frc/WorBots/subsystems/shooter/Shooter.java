@@ -210,6 +210,13 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     feederWheelVolts = volts;
   }
 
+  public Command setRawFeederVoltsCommand(double volts) {
+    return this.runOnce(
+        () -> {
+          feederWheelVolts = volts;
+        });
+  }
+
   /**
    * This function increments the game piece forwards to move it into the flywheels.
    *
