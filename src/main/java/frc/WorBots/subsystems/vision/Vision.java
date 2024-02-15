@@ -8,27 +8,17 @@
 package frc.WorBots.subsystems.vision;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Quaternion;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
-import frc.WorBots.util.debug.Logger;
-import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.*;
 import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.PoseEstimator.TimestampedVisionUpdate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * This subsystem manages all of the camera inputs from our robot, reads them, decides which ones to

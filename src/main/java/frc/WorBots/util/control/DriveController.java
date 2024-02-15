@@ -30,7 +30,7 @@ public class DriveController {
   public static final double rotationalSpeed = 10.0;
 
   /** The amount of input deadband to apply */
-  public static final double deadband = 0.065;
+  public static final double deadband = 0.1;
 
   /** The minimum speed output that will make the drive stop */
   public static final double minimumSpeed = 1e-3;
