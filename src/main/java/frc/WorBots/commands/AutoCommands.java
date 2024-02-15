@@ -199,7 +199,7 @@ public class AutoCommands extends Command {
         reset(startingPose),
         shooter
             .spinToSpeed(5000, 5000)
-            .andThen(shooter.incrementGamePiece())
+            .andThen(shooter.setRawFeederVoltsCommand(0.5))
             .andThen(shooter.spinToSpeed(0.0, 0.0)));
   }
 
