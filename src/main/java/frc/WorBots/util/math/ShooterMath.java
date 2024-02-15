@@ -8,9 +8,13 @@
 package frc.WorBots.util.math;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.WorBots.FieldConstants;
+import java.util.Optional;
 
 public class ShooterMath {
   /** The maximum distance the robot can shoot, in meters */
@@ -69,7 +73,19 @@ public class ShooterMath {
    * @return The translation of the goal
    */
   public static Translation2d getGoal() {
-    return FieldConstants.Speaker.position;
+    Optional<Alliance> currentAlliance = DriverStation.getAlliance();
+    // double translatedX =
+    //     (currentAlliance == Alliance.Red
+    //         ? robotPose.getX() - FieldConstants.fieldLength
+    //         : robotPose.getX());
+    // double robotY = robotPose.getY();
+    // double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
+    // return new Rotation2d(robotAngle);
+    Translation2d out = FieldConstants.Speaker.position;
+    if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
+      out = out.plus(new Translation2d(FieldConstants.fieldLength, 0.0));
+    }
+    return out;
   }
 
   /**
@@ -80,6 +96,17 @@ public class ShooterMath {
    */
   public static double getGoalDistance(Pose2d robot) {
     return robot.getTranslation().getDistance(getGoal());
+  }
+
+  /**
+   * Get the angle to make the robot face the goal
+   *
+   * @param robot The robot pose
+   * @return The yaw angle for the robot
+   */
+  public static Rotation2d getGoalTheta(Pose2d robot) {
+    final double angle = Math.atan2(robot.getY() - (getGoal().getY()), robot.getX());
+    return new Rotation2d(angle);
   }
 
   /**

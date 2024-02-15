@@ -62,8 +62,8 @@ public class Vision extends SubsystemBase {
           new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)),
           new Pose3d(
               new Translation3d(
-                  Units.inchesToMeters(-13),
-                  Units.inchesToMeters(-13),
+                  Units.inchesToMeters(-10),
+                  Units.inchesToMeters(-10),
                   Units.inchesToMeters(-11.4)),
               new Rotation3d(
                   0.0, Units.degreesToRadians(-28.125), Units.degreesToRadians(180 + 43.745)))

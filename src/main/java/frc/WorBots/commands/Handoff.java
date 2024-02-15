@@ -59,7 +59,8 @@ public class Handoff extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.runFeederWheel(0.0);
-    intake.setVolts(0.0);;
+    intake.setVolts(0.0);
+    ;
     superstructure.setModeVoid(SuperstructureState.DISABLED);
   }
 }

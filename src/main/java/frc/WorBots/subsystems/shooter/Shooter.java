@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   public Shooter(ShooterIO io) {
     this.io = io;
 
-    if (!Constants.getSim()) { //Real
+    if (!Constants.getSim()) { // Real
       topFlywheelController.setGains(0.006, 0.00, 0);
       bottomFlywheelController.setGains(0.006, 0.000, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0.0, 0.0);
@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       feederWheelController.setGains(0.0, 0.0, 0.0);
       topFlywheelController.pid.setTolerance(80);
       bottomFlywheelController.pid.setTolerance(80);
-    } else { //Sim
+    } else { // Sim
       topFlywheelController.setGains(1, 0, 0);
       bottomFlywheelController.setGains(1, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);

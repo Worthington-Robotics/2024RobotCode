@@ -439,11 +439,12 @@ public class Drive extends SubsystemBase {
    * @return The translations.
    */
   public Translation2d[] getModuleTranslations() {
+    final double distance = Units.inchesToMeters(10);
     return new Translation2d[] {
-      new Translation2d(Units.inchesToMeters(13), Units.inchesToMeters(13)),
-      new Translation2d(Units.inchesToMeters(13), -Units.inchesToMeters(13)),
-      new Translation2d(-Units.inchesToMeters(13), Units.inchesToMeters(13)),
-      new Translation2d(-Units.inchesToMeters(13), -Units.inchesToMeters(13))
+      new Translation2d(distance, distance),
+      new Translation2d(distance, -distance),
+      new Translation2d(-distance, distance),
+      new Translation2d(-distance, -distance)
     };
   }
 }
