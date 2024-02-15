@@ -11,14 +11,13 @@ var searchData=
   ['fms_8',['FMS',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a69442a1322a6fdf11055846cb659bc94',1,'frc::WorBots::util::debug::StatusPage']]],
   ['fromdifferentialpose_9',['fromDifferentialPose',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a0070ea8c35ea8d70fe34c4f06fb2b3e0',1,'frc.WorBots.util.trajectory.Waypoint.fromDifferentialPose(Pose2d pose, Rotation2d holonomicRotation)'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#aaf46af49e2ef1d67d4cbd575ab2a2286',1,'frc.WorBots.util.trajectory.Waypoint.fromDifferentialPose(Pose2d pose)']]],
   ['fromholonomicpose_10',['fromHolonomicPose',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a093bdd0f45e37ff08fcb58fb9da1f50b',1,'frc.WorBots.util.trajectory.Waypoint.fromHolonomicPose(Pose2d pose, Rotation2d driveRotation)'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a8951b68d18719603c47ea994bc605989',1,'frc.WorBots.util.trajectory.Waypoint.fromHolonomicPose(Pose2d pose)']]],
-  ['fullzero_11',['fullZero',['../classfrc_1_1WorBots_1_1commands_1_1PoseCommands.html#af27da7acf687d29a7e8c514b2228d107',1,'frc::WorBots::commands::PoseCommands']]],
-  ['intake_12',['intake',['../namespacefrc_1_1WorBots_1_1subsystems_1_1intake.html',1,'frc::WorBots::subsystems']]],
-  ['lights_13',['lights',['../namespacefrc_1_1WorBots_1_1subsystems_1_1lights.html',1,'frc::WorBots::subsystems']]],
-  ['math_14',['math',['../namespacefrc_1_1WorBots_1_1util_1_1math.html',1,'frc::WorBots::util']]],
-  ['shooter_15',['shooter',['../namespacefrc_1_1WorBots_1_1subsystems_1_1shooter.html',1,'frc::WorBots::subsystems']]],
-  ['superstructure_16',['superstructure',['../namespacefrc_1_1WorBots_1_1subsystems_1_1superstructure.html',1,'frc::WorBots::subsystems']]],
-  ['trajectory_17',['trajectory',['../namespacefrc_1_1WorBots_1_1util_1_1trajectory.html',1,'frc::WorBots::util']]],
-  ['util_18',['util',['../namespacefrc_1_1WorBots_1_1util.html',1,'frc::WorBots']]],
-  ['vision_19',['vision',['../namespacefrc_1_1WorBots_1_1subsystems_1_1vision.html',1,'frc::WorBots::subsystems']]],
-  ['worbots_20',['WorBots',['../namespacefrc_1_1WorBots.html',1,'frc']]]
+  ['intake_11',['intake',['../namespacefrc_1_1WorBots_1_1subsystems_1_1intake.html',1,'frc::WorBots::subsystems']]],
+  ['lights_12',['lights',['../namespacefrc_1_1WorBots_1_1subsystems_1_1lights.html',1,'frc::WorBots::subsystems']]],
+  ['math_13',['math',['../namespacefrc_1_1WorBots_1_1util_1_1math.html',1,'frc::WorBots::util']]],
+  ['shooter_14',['shooter',['../namespacefrc_1_1WorBots_1_1subsystems_1_1shooter.html',1,'frc::WorBots::subsystems']]],
+  ['superstructure_15',['superstructure',['../namespacefrc_1_1WorBots_1_1subsystems_1_1superstructure.html',1,'frc::WorBots::subsystems']]],
+  ['trajectory_16',['trajectory',['../namespacefrc_1_1WorBots_1_1util_1_1trajectory.html',1,'frc::WorBots::util']]],
+  ['util_17',['util',['../namespacefrc_1_1WorBots_1_1util.html',1,'frc::WorBots']]],
+  ['vision_18',['vision',['../namespacefrc_1_1WorBots_1_1subsystems_1_1vision.html',1,'frc::WorBots::subsystems']]],
+  ['worbots_19',['WorBots',['../namespacefrc_1_1WorBots.html',1,'frc']]]
 ];
