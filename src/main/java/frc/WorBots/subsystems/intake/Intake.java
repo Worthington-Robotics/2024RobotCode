@@ -127,23 +127,6 @@ public class Intake extends SubsystemBase {
   }
 
   /**
-   * Hands off the game piece to the shooter.
-   *
-   * @return The command.
-   */
-  public Command handoff() {
-    return this.run(
-            () -> {
-              setpointVolts = 8.0;
-            })
-        .withTimeout(1.0)
-        .finallyDo(
-            () -> {
-              setpointVolts = 0.0;
-            });
-  }
-
-  /**
    * Gets wether or not a game piece is currently held.
    *
    * @return The command.

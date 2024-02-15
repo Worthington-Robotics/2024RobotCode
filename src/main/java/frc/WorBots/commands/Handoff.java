@@ -44,7 +44,7 @@ public class Handoff extends Command {
     // This check is here so we don't schedule the handoff every execution
     if (!hasBegun) {
       if (intake.hasGamePiece() && superstructure.isAtSetpoint()) {
-        intake.handoff().schedule();
+        intake.intakeRaw();
         shooter.runFeederWheel(3.0);
         hasBegun = true;
       }
@@ -59,6 +59,7 @@ public class Handoff extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.runFeederWheel(0.0);
+    intake.setVolts(0.0);;
     superstructure.setModeVoid(SuperstructureState.DISABLED);
   }
 }
