@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
-  private static final double distanceThreshold = 0.05;
+  private static final double distanceThreshold = 0.065;
   private static final String tableName = "Shooter";
 
   private TunablePIDController topFlywheelController =

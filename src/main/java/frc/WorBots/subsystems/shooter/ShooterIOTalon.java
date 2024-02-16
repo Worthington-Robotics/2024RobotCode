@@ -66,12 +66,12 @@ public class ShooterIOTalon implements ShooterIO {
 
   @Override
   public void setBottomFlywheelVolts(double volts) {
-    bottomSignals.setTalonVoltage(bottomFlywheel, volts, 12);
+    bottomSignals.setTalonVoltage(bottomFlywheel, volts, 10);
   }
 
   @Override
   public void setTopFlywheelVolts(double volts) {
-    topSignals.setTalonVoltage(topFlywheel, volts, 12);
+    topSignals.setTalonVoltage(topFlywheel, volts, 10);
   }
 
   @Override

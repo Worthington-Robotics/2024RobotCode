@@ -31,9 +31,11 @@ public class ShooterMath {
   private static final InterpolatingTable ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {1.121, 0.4959},
-            {2.228, 0.81425},
-            {4.196, 0.95845}
+            {1.121, 0.5459},
+            {2.228, 0.88425},
+            {3.973, 0.9756},
+            {4.305, 1.0205},
+            {6.348, 1.0823}
           });
 
   /** Difference confidence levels for a shot */

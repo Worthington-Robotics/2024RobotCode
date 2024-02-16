@@ -99,9 +99,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-    superstructure.setDefaultCommand(
-        new SuperstructureManual(
-            superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    // superstructure.setDefaultCommand(new SuperstructureManual(superstructure, () ->
+    // -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver
         .leftTrigger()
@@ -112,6 +111,11 @@ public class RobotContainer {
     driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
     driver.b().whileTrue(new AutoShoot(superstructure, drive, shooter));
     driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
+    driver
+        .povDown()
+        .toggleOnTrue(
+            new SuperstructureManual(
+                superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
     operator.b().onTrue(superstructure.setPose(Preset.HOME));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     driver
