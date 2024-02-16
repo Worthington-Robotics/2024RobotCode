@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
+import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
@@ -430,6 +431,14 @@ public class Superstructure extends SubsystemBase {
    */
   public boolean isInPose(SuperstructurePose.Preset pose) {
     return this.state == SuperstructureState.POSE && this.setpoint.equals(pose);
+  }
+
+  public double getPivotPoseRads() {
+    return inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad;
+  }
+
+  public Preset getCurrentPose() {
+    return this.setpoint;
   }
 
   /**

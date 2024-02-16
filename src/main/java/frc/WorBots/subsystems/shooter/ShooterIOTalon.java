@@ -37,6 +37,7 @@ public class ShooterIOTalon implements ShooterIO {
     topFlywheel.setNeutralMode(NeutralModeValue.Coast);
     bottomFlywheel.setNeutralMode(NeutralModeValue.Coast);
     feederWheel.setNeutralMode(NeutralModeValue.Brake);
+    feederWheel.setInverted(true);
     bottomFlywheel.setInverted(false);
 
     topSignals = new TalonSignalsPositional(topFlywheel);

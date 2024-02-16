@@ -26,13 +26,13 @@ public class Lights extends SubsystemBase {
     return instance;
   }
 
-  public static final int LIGHT_COUNT = 56;
+  public static final int LIGHT_COUNT = 23;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
   private LightsMode mode = LightsMode.Claire;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
-  private final int lightsID = 8;
+  private final int lightsID = 9;
 
   public enum LightsMode {
     Rainbow,

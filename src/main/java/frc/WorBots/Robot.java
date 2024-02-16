@@ -66,6 +66,8 @@ public class Robot extends TimedRobot {
     final var theta = ShooterMath.getGoalTheta(robotPose);
     final var adjusted = new Pose2d(robotPose.getTranslation(), theta);
     SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
+    var shotData = ShooterMath.calculateShotData(robotPose);
+    SmartDashboard.putNumber("Shot Angle", shotData.angle());
     // FieldConstants.testField();
   }
 

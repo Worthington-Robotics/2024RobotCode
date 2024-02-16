@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
-import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.*;
 
 /**
@@ -30,37 +29,36 @@ public class Handoff extends Command {
     this.intake = intake;
     this.superstructure = superstructure;
     this.shooter = shooter;
-    addRequirements(intake, superstructure, shooter);
-  }
-
-  @Override
-  public void initialize() {
-    superstructure.setModeVoid(SuperstructureState.POSE);
-    superstructure.setPose(Preset.HANDOFF).schedule();
+    addRequirements(intake, shooter);
   }
 
   @Override
   public void execute() {
-    // This check is here so we don't schedule the handoff every execution
-    if (!hasBegun) {
-      if (intake.hasGamePiece() && superstructure.isAtSetpoint()) {
-        intake.intakeRaw();
-        shooter.runFeederWheel(3.0);
-        hasBegun = true;
+    if (superstructure.getCurrentPose() == Preset.HANDOFF && superstructure.isAtSetpoint()) {
+      if (!shooter.hasGamePiece()) {
+        intake.setVolts(4.0);
+        shooter.setRawFeederVolts(-0.5);
+      } else {
+        shooter.setRawFeederVolts(0);
+        intake.setVolts(0.0);
+      }
+    } else {
+      if (intake.hasGamePiece() || shooter.hasGamePiece()) {
+        intake.setVolts(0.0);
+      } else {
+        intake.setVolts(4.0);
       }
     }
   }
 
   @Override
   public boolean isFinished() {
-    return shooter.hasGamePiece();
+    return false;
   }
 
   @Override
   public void end(boolean interrupted) {
-    shooter.runFeederWheel(0.0);
+    shooter.setRawFeederVolts(0.0);
     intake.setVolts(0.0);
-    ;
-    superstructure.setModeVoid(SuperstructureState.DISABLED);
   }
 }

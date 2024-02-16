@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
+import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.math.AllianceFlipUtil;
+import frc.WorBots.util.math.ShooterMath;
 import java.util.function.*;
 
 public class AutoShoot extends SequentialCommandGroup {
@@ -30,7 +32,7 @@ public class AutoShoot extends SequentialCommandGroup {
    * @param superstructure The superstructure subsystem.
    * @param drive The drive subsystem.
    */
-  public AutoShoot(Superstructure superstructure, Drive drive) {
+  public AutoShoot(Superstructure superstructure, Drive drive, Shooter shooter) {
     addRequirements(superstructure, drive);
     speakerOpeningHeightZ =
         (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
@@ -40,15 +42,9 @@ public class AutoShoot extends SequentialCommandGroup {
     Supplier<Double> pivotAngle =
         () -> {
           Pose2d robotPose = drive.getPose();
-          Pose2d flippedRobotPose = AllianceFlipUtil.apply(robotPose);
-          double opposite =
-              (FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ)
-                  - superstructure.getShooterHeightMeters();
-          SmartDashboard.putNumber(
-              "SHOOTING", (Math.PI - Math.atan2(opposite, flippedRobotPose.getX())));
-          superstructure.setShootingAngleRad(
-              (Math.PI - Math.atan2(opposite, flippedRobotPose.getX())));
-          return ((Math.PI - Math.atan2(opposite, flippedRobotPose.getX())) - (Math.PI / 2));
+          var shotData = ShooterMath.calculateShotData(robotPose);
+          SmartDashboard.putNumber("Shot Angle", shotData.angle());
+          return shotData.angle();
         };
     Supplier<Pose2d> driveTargetSupplier =
         () -> {

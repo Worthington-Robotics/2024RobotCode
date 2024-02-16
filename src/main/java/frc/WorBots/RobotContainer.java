@@ -105,15 +105,19 @@ public class RobotContainer {
 
     driver
         .leftTrigger()
-        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(0.5)))
+        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
-    driver.rightTrigger().whileTrue(intake.intakeRaw());
+    driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     driver.x().onTrue(superstructure.setPose(Preset.HANDOFF));
     driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
-    driver.b().toggleOnTrue(new AutoShoot(superstructure, drive));
-    driver.povUp().onTrue(shooter.spinToSpeed(5500)).onFalse(shooter.spinToSpeed(0));
+    driver.b().whileTrue(new AutoShoot(superstructure, drive, shooter));
+    driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
     operator.b().onTrue(superstructure.setPose(Preset.HOME));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
+    driver
+        .leftBumper()
+        .onTrue(shooter.setRawFeederVoltsCommand(-2))
+        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
   }
 
   public Command getAutonomousCommand() {

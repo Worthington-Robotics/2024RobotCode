@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
-  private static final double distanceThreshold = 0.25;
+  private static final double distanceThreshold = 0.05;
   private static final String tableName = "Shooter";
 
   private TunablePIDController topFlywheelController =
@@ -269,7 +269,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return True if we have a gamepiece, otherwise false.
    */
   public boolean hasGamePiece() {
-    // return hasGamePiece;
-    return false;
+    return hasGamePiece;
   }
 }

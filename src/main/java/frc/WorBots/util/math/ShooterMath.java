@@ -24,10 +24,17 @@ public class ShooterMath {
   private static final double MAX_ANGLE = Units.degreesToRadians(70);
 
   /** Distance -> RPM */
-  private static final InterpolatingTable RPM_LOOKUP = new InterpolatingTable(new double[][] {});
+  private static final InterpolatingTable RPM_LOOKUP =
+      new InterpolatingTable(new double[][] {{0.0, 0.0}});
 
   /** Distance -> pivot angle */
-  private static final InterpolatingTable ANGLE_LOOKUP = new InterpolatingTable(new double[][] {});
+  private static final InterpolatingTable ANGLE_LOOKUP =
+      new InterpolatingTable(
+          new double[][] {
+            {1.121, 0.4959},
+            {2.228, 0.81425},
+            {4.196, 0.95845}
+          });
 
   /** Difference confidence levels for a shot */
   public enum ShotConfidence {
@@ -75,11 +82,12 @@ public class ShooterMath {
   public static Translation2d getGoal() {
     Optional<Alliance> currentAlliance = DriverStation.getAlliance();
     // double translatedX =
-    //     (currentAlliance == Alliance.Red
-    //         ? robotPose.getX() - FieldConstants.fieldLength
-    //         : robotPose.getX());
+    // (currentAlliance == Alliance.Red
+    // ? robotPose.getX() - FieldConstants.fieldLength
+    // : robotPose.getX());
     // double robotY = robotPose.getY();
-    // double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
+    // double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY),
+    // translatedX);
     // return new Rotation2d(robotAngle);
     Translation2d out = FieldConstants.Speaker.position;
     if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
