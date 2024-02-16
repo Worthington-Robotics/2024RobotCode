@@ -80,6 +80,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
         inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI);
     inputs.elevatorPercentageRaised =
         inputs.elevator.positionRads / maxElevationRotations / (2 * Math.PI);
+    inputs.elevatorCurrentAmps = elevator.getStatorCurrent().getValue();
 
     // Enable when limit switches are added
     // inputs.bottomLimitReached = bottomLimitSwitch.get();

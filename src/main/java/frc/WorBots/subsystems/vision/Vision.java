@@ -11,6 +11,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
@@ -55,9 +56,10 @@ public class Vision extends SubsystemBase {
                   Units.inchesToMeters(-10),
                   Units.inchesToMeters(-10),
                   Units.inchesToMeters(-11.4)),
-              new Rotation3d(
-                  0.0, Units.degreesToRadians(-28.125), Units.degreesToRadians(180 + 43.745)))
+              new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                  .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))))
         };
+    SmartDashboard.putNumberArray("Camera Pose 1", Logger.pose3dToArray(cameraPoses[1]));
     xyStdDevCoefficient = 0.01;
     thetaStdDevCoefficient = 0.015;
     StatusPage.reportStatus(StatusPage.VISION_SUBSYSTEM, true);

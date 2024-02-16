@@ -39,6 +39,7 @@ public class Superstructure extends SubsystemBase {
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
   private boolean hasGottenZeroPosition = false;
+  private boolean shouldStopElevator = false;
 
   private TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
@@ -149,6 +150,9 @@ public class Superstructure extends SubsystemBase {
           setPivotVoltage(0.0);
         case POSE:
           runPose(setpoint.getElevator(), setpoint.getPivot());
+          if (inputs.elevatorCurrentAmps > 20) {
+            shouldStopElevator = true;
+          }
           break;
         case SHOOTING:
           runPose(0.0, shootingAngleRad.get());
@@ -177,6 +181,10 @@ public class Superstructure extends SubsystemBase {
             firstCarriagePositionMeters,
             secondCarriagePositionMeters,
             inputs.elevatorPositionMeters));
+    if (shouldStopElevator) {
+      io.setElevatorVoltage(0.0);
+      io.setPivotVoltage(0.0);
+    }
   }
 
   /**
