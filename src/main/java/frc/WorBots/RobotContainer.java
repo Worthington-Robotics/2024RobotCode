@@ -67,16 +67,18 @@ public class RobotContainer {
     var autoCommands =
         new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
 
-    selector.addRoutine(
-        "Mobility",
-        List.of(
-            new AutoQuestion(
-                "Starting Location?",
-                List.of(
-                    AutoQuestionResponse.AMP_SIDE,
-                    AutoQuestionResponse.CENTER,
-                    AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.mobility());
+    // selector.addRoutine(
+    //     "Mobility",
+    //     List.of(
+    //         new AutoQuestion(
+    //             "Starting Location?",
+    //             List.of(
+    //                 AutoQuestionResponse.AMP_SIDE,
+    //                 AutoQuestionResponse.CENTER,
+    //                 AutoQuestionResponse.WALL_SIDE))),
+    //     autoCommands.mobility());
+
+    selector.addRoutine("Do Nothing", List.of(), Commands.none());
 
     selector.addRoutine(
         "One Piece",

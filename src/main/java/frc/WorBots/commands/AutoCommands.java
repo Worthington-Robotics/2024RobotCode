@@ -199,7 +199,7 @@ public class AutoCommands extends Command {
     return Commands.sequence(
         // reset(startingPose),
         autoShoot
-            .alongWith(Commands.waitSeconds(2.0).andThen(shooter.setRawFeederVoltsCommand(-2)))
+            .alongWith(Commands.waitSeconds(2.5).andThen(shooter.setRawFeederVoltsCommand(-2)))
             .finallyDo(() -> shooter.setRawFeederVolts(0.0)));
   }
 
