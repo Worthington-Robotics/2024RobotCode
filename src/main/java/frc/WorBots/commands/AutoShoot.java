@@ -60,7 +60,7 @@ public class AutoShoot extends SequentialCommandGroup {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     thetaController.setP(5.0);
-    thetaController.setD(0.0);
+    thetaController.setD(0.05);
     thetaController.setConstraints(
         new Constraints(Units.degreesToRadians(360.0), Units.degreesToRadians(720.0)));
     thetaController.setTolerance(Units.degreesToRadians(1.0));

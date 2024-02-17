@@ -89,8 +89,6 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     final double pivotSign = (isPivotInverted ? 1.0 : -1.0);
     inputs.pivotPositionAbsRad = pivotAbsEncoder.get() * 2 * Math.PI * pivotSign;
     inputs.pivotPositionRelRad = (pivotRelEncoder.getDistance()) * pivotSign;
-    SmartDashboard.putNumber("AbsEncPiv", inputs.pivotPositionAbsRad);
-    SmartDashboard.putNumber("RelEncPiv", inputs.pivotPositionRelRad);
     inputs.pivot.velocityRadsPerSec = pivotRelEncoder.getRate() * pivotSign;
     inputs.pivot.temperatureCelsius = pivot.getDeviceTemp().getValue();
     inputs.pivot.supplyVoltage = pivot.getMotorVoltage().getValue();
