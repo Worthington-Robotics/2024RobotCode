@@ -64,6 +64,7 @@ public class Logger {
   NetworkTable pivotTable = superstructureTable.getSubTable("Pivot");
   DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Rad Rel").publish();
   DoublePublisher pivotPositionAbs = pivotTable.getDoubleTopic("Position Rad Abs").publish();
+  DoublePublisher pivotFusedAngleRad = pivotTable.getDoubleTopic("Fused Rad").publish();
   DoublePublisher pivotVelocity = pivotTable.getDoubleTopic("Velocity Rad Per Sec").publish();
   DoublePublisher pivotVoltage = pivotTable.getDoubleTopic("Voltage Applied").publish();
   DoublePublisher pivotTemp = pivotTable.getDoubleTopic("Temp Celsius").publish();
@@ -307,6 +308,10 @@ public class Logger {
 
   public void setSuperstructureMode(String mode) {
     modePublisher.set(mode);
+  }
+
+  public void setSuperstructurePivotFusedRad(double value) {
+    pivotFusedAngleRad.set(value);
   }
 
   public void setSuperstructurePivotPosSetpoint(double value) {

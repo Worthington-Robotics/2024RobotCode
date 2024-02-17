@@ -119,8 +119,9 @@ public class Superstructure extends SubsystemBase {
     // Log info
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
-    SmartDashboard.putNumber(
-        "Total Enc Rad", inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
+    Logger.getInstance()
+        .setSuperstructurePivotFusedRad(
+            inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
@@ -150,7 +151,7 @@ public class Superstructure extends SubsystemBase {
           setPivotVoltage(0.0);
         case POSE:
           runPose(setpoint.getElevator(), setpoint.getPivot());
-          if (inputs.elevatorCurrentAmps > 20) {
+          if (inputs.elevatorCurrentAmps > 15) {
             shouldStopElevator = true;
           }
           break;
