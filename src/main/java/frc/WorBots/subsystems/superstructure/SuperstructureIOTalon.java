@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class SuperstructureIOTalon implements SuperstructureIO {

@@ -195,12 +195,12 @@ public class AutoCommands extends Command {
   private Command onePiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
     // return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
+    AutoShoot autoShoot = new AutoShoot(superstructure, drive, shooter, () -> 0.0, () -> 0.0);
     return Commands.sequence(
-        reset(startingPose),
-        shooter
-            .spinToSpeed(5000, 5000)
-            .andThen(shooter.setRawFeederVoltsCommand(0.5))
-            .andThen(shooter.spinToSpeed(0.0, 0.0)));
+        // reset(startingPose),
+        autoShoot
+            .alongWith(Commands.waitSeconds(2.0).andThen(shooter.setRawFeederVoltsCommand(-2)))
+            .finallyDo(() -> shooter.setRawFeederVolts(0.0)));
   }
 
   public Command onePiece() {
