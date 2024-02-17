@@ -19,6 +19,8 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
     HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, 0.277))),
     PIVOTTOTOP(new SuperstructurePose(VecBuilder.fill(0.0, 1.8))),
+    STOW(new SuperstructurePose(VecBuilder.fill(0.0, 0.1))),
+    TRAP(new SuperstructurePose(VecBuilder.fill(0.0, 0.1516))),
     START_CLIMB(new SuperstructurePose(VecBuilder.fill(0.26, Superstructure.pivotMaxAngle / 2))),
     CLIMB(new SuperstructurePose(VecBuilder.fill(0.035, Superstructure.pivotMaxAngle / 2))),
     SLIDE(new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.pivotMaxAngle)));

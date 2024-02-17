@@ -7,7 +7,13 @@
 
 package frc.WorBots.commands;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +23,8 @@ import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
-import frc.WorBots.util.math.AllianceFlipUtil;
+import frc.WorBots.util.control.DriveController;
+import frc.WorBots.util.math.GeneralMath;
 import frc.WorBots.util.math.ShooterMath;
 import java.util.function.*;
 
@@ -25,6 +32,11 @@ public class AutoShoot extends SequentialCommandGroup {
   // Locations
   private double speakerOpeningHeightZ;
   private double speakerOpeningCenterY;
+  private Supplier<Double> leftXSupplier;
+  private Supplier<Double> leftYSupplier;
+  private final DriveController driveController = new DriveController();
+  private final ProfiledPIDController thetaController =
+      new ProfiledPIDController(5.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), 0.02);
 
   /**
    * This command automatically drives to a known safe shooting location and shoots a game piece.
@@ -32,12 +44,26 @@ public class AutoShoot extends SequentialCommandGroup {
    * @param superstructure The superstructure subsystem.
    * @param drive The drive subsystem.
    */
-  public AutoShoot(Superstructure superstructure, Drive drive, Shooter shooter) {
+  public AutoShoot(
+      Superstructure superstructure,
+      Drive drive,
+      Shooter shooter,
+      Supplier<Double> leftXSupplier,
+      Supplier<Double> leftYSupplier) {
     addRequirements(superstructure, drive);
     speakerOpeningHeightZ =
         (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
             / 2;
     speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
+    this.leftXSupplier = leftXSupplier;
+    this.leftYSupplier = leftYSupplier;
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    thetaController.setP(5.0);
+    thetaController.setD(0.0);
+    thetaController.setConstraints(
+        new Constraints(Units.degreesToRadians(360.0), Units.degreesToRadians(720.0)));
+    thetaController.setTolerance(Units.degreesToRadians(1.0));
 
     Supplier<Double> pivotAngle =
         () -> {
@@ -46,49 +72,68 @@ public class AutoShoot extends SequentialCommandGroup {
           SmartDashboard.putNumber("Shot Angle", shotData.angle());
           return shotData.angle();
         };
-    Supplier<Pose2d> driveTargetSupplier =
+    Supplier<Rotation2d> driveAngleSupplier =
         () -> {
-          // Robot Pose
           Pose2d robotPose = drive.getPose();
-          Pose2d flippedRobotPose = AllianceFlipUtil.apply(robotPose);
-
-          // Calculates the shooting angle
-          double opposite =
-              (FieldConstants.Speaker.openingHeightLower + speakerOpeningHeightZ)
-                  - superstructure.getShooterHeightMeters();
-          // superstructure.setShootingAngleRad(
-          //     Math.PI - Math.atan2(opposite, flippedRobotPose.getX()));
-          // SmartDashboard.putNumber(
-          //     "Calc angle", Math.PI - Math.atan2(opposite, flippedRobotPose.getX()));
-
-          // Calculates the robot shooting rotation
           double robotAngle = getRobotRotationToShoot(robotPose).getRadians();
-
-          // if (flippedRobotPose.getX()
-          //     > FieldConstants.Wing.endX) { // if robot is outside of the wing
-          //   if (flippedRobotPose.getY()
-          //       < FieldConstants.Stage.foot3Center.getY()) { // if robot is right of stage
-          //     return new Pose2d(
-          //         AllianceFlipUtil.apply(FieldConstants.Wing.endX), 1, new
-          // Rotation2d(robotAngle));
-          //   } else if (flippedRobotPose.getY() < FieldConstants.Stage.foot2Center.getY()
-          //       && flippedRobotPose.getY()
-          //           > FieldConstants.Stage.foot3Center
-          //               .getY()) { // if robot is right of center, but not right of stage
-          //     return new Pose2d(
-          //         AllianceFlipUtil.apply(FieldConstants.Wing.endX),
-          //         FieldConstants.Stage.center.getY(),
-          //         new Rotation2d(robotAngle));
-          //   } else { // if robot is left of stage
-          //     return new Pose2d(
-          //         AllianceFlipUtil.apply(FieldConstants.Wing.endX), 7, new
-          // Rotation2d(robotAngle));
-          //   }
-          // } else {
-          return new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d(robotAngle));
-          // }
+          return new Rotation2d(robotAngle);
         };
-    var driveToPose = new DriveToPose(drive, driveTargetSupplier);
+    Supplier<ChassisSpeeds> speedsSupplier =
+        () -> {
+          Pose2d robotPose = drive.getPose();
+          double x = leftXSupplier.get();
+          double y = leftYSupplier.get();
+          // Get direction and magnitude of linear axes
+          double linearMagnitude = Math.hypot(x, y);
+          Rotation2d linearDirection = new Rotation2d(x, y);
+
+          // Apply deadband
+          linearMagnitude = MathUtil.applyDeadband(linearMagnitude, DriveController.deadband);
+
+          // Apply squaring
+          linearMagnitude = GeneralMath.curve(linearMagnitude, DriveController.driveCurveAmount);
+
+          // Calcaulate new linear components
+          Translation2d linearVelocity =
+              new Pose2d(new Translation2d(), linearDirection)
+                  .transformBy(
+                      new Transform2d(
+                          new Translation2d(linearMagnitude, new Rotation2d()), new Rotation2d()))
+                  .getTranslation();
+
+          double thetaVelocity =
+              thetaController.getSetpoint().velocity
+                  + thetaController.calculate(
+                      robotPose.getRotation().getRadians(), driveAngleSupplier.get().getRadians());
+          double thetaErrorAbs =
+              Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
+          if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
+
+          // Convert to meters per second
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX()
+                      * drive.getMaxLinearSpeedMetersPerSec()
+                      * DriveController.driveSpeedMultiplier,
+                  linearVelocity.getY()
+                      * drive.getMaxLinearSpeedMetersPerSec()
+                      * DriveController.driveSpeedMultiplier,
+                  thetaVelocity);
+
+          // Convert to field relative based on the alliance
+          var driveRotation = robotPose.getRotation();
+          if (DriverStation.getAlliance().isPresent()
+              && DriverStation.getAlliance().get() == Alliance.Red) {
+            driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
+          }
+          speeds =
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  speeds.vxMetersPerSecond,
+                  speeds.vyMetersPerSecond,
+                  speeds.omegaRadiansPerSecond,
+                  driveRotation);
+          return speeds;
+        };
     var shooting =
         Commands.run(
             () -> {
@@ -97,9 +142,16 @@ public class AutoShoot extends SequentialCommandGroup {
             superstructure);
     addCommands(
         superstructure.setMode(SuperstructureState.SHOOTING),
-        shooting.alongWith(driveToPose),
+        shooting
+            .alongWith(shooter.spinToSpeed(5800))
+            .alongWith(Commands.run(() -> drive.runVelocity(speedsSupplier.get()), drive)),
         Commands.waitUntil(() -> false)
-            .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.DISABLED)));
+            .finallyDo(
+                () -> {
+                  superstructure.setModeVoid(SuperstructureState.DISABLED);
+                  shooter.spinToSpeedVoid(0);
+                })
+            .alongWith(shooter.spinToSpeed(0.0)));
   }
 
   /**

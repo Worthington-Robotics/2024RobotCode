@@ -106,19 +106,31 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+    driver.leftBumper().onTrue(superstructure.setPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
-    driver.x().onTrue(superstructure.setPose(Preset.HANDOFF));
+    driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
     driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
-    driver.b().whileTrue(new AutoShoot(superstructure, drive, shooter));
     driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
+    driver.povRight().onTrue(shooter.spinToSpeed(2500)).onFalse(shooter.spinToSpeed(0));
     driver
         .povDown()
         .toggleOnTrue(
             new SuperstructureManual(
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
-    operator.b().onTrue(superstructure.setPose(Preset.HOME));
+    operator.b().onTrue(superstructure.setPose(Preset.STOW));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
-    driver
+    operator.a().onTrue(superstructure.setPose(Preset.TRAP));
+    operator
+        .x()
+        .whileTrue(superstructure.setPose(Preset.AMP).alongWith(shooter.spinToSpeed(500)))
+        .onFalse(shooter.spinToSpeed(0.0));
+    operator
+        .rightBumper()
+        .whileTrue(
+            new AutoShoot(
+                superstructure, drive, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
+        .onFalse(shooter.spinToSpeed(0.0));
+    operator
         .leftBumper()
         .onTrue(shooter.setRawFeederVoltsCommand(-2))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));

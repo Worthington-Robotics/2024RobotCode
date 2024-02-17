@@ -122,14 +122,14 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       feederWheelVolts = 0.0;
     } else {
       // Calculate the desired voltages based on the setpoints
-      if (topFlywheelRPM != 0.0) {
+      if (topFlywheelRPM > 0.0) {
         io.setTopFlywheelVolts(
             topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
                 + topFlywheelFeedForward.calculate(topFlywheelRPM));
       } else {
         io.setTopFlywheelVolts(0);
       }
-      if (bottomFlywheelRPM != 0.0) {
+      if (bottomFlywheelRPM > 0.0) {
         io.setBottomFlywheelVolts(
             bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
                 + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
@@ -182,6 +182,11 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
               bottomFlywheelRPM = bottomRPM;
             })
         .alongWith(Commands.waitUntil(this::isAtSetpoint));
+  }
+
+  public void spinToSpeedVoid(double rpm) {
+    topFlywheelRPM = rpm;
+    bottomFlywheelRPM = rpm;
   }
 
   /**
