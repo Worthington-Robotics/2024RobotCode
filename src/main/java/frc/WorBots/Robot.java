@@ -68,6 +68,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
     var shotData = ShooterMath.calculateShotData(robotPose);
     SmartDashboard.putNumber("Shot Angle", shotData.angle());
+    var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
+    SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
+    var confidence = ShooterMath.getConfidence(robotPose);
+    SmartDashboard.putString("Shot Confidence", confidence.toString());
     // FieldConstants.testField();
   }
 

@@ -17,11 +17,19 @@ import frc.WorBots.FieldConstants;
 import java.util.Optional;
 
 public class ShooterMath {
-  /** The maximum distance the robot can shoot, in meters */
-  private static final double MAX_RANGE = 3.5;
+  /** The maximum distance the robot can reliably shoot, in meters */
+  private static final double MAX_RELIABLE_RANGE = 5.0;
 
-  /** The maximum robot angle the robot can reliably shoot from, in radians */
-  private static final double MAX_ANGLE = Units.degreesToRadians(70);
+  /** The maximum distance the robot can shoot, in meters */
+  private static final double MAX_RANGE = 7.0;
+
+  /**
+   * The maximum angle from the goal to the robot that the robot can reliably shoot from, in radians
+   */
+  private static final double MAX_RELIABLE_ANGLE = Units.degreesToRadians(50);
+
+  /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
+  private static final double MAX_ANGLE = Units.degreesToRadians(75);
 
   /** Distance -> RPM */
   private static final InterpolatingTable RPM_LOOKUP =
@@ -69,8 +77,14 @@ public class ShooterMath {
    * @return The calculated confidence
    */
   public static ShotConfidence getConfidence(Pose2d robot) {
-    if (!inRange(robot)) {
+    final double distance = getGoalDistance(robot);
+    final Rotation2d angle = getGoalToRobotAngle(robot);
+    if (distance > MAX_RANGE || Math.abs(angle.getRadians()) > MAX_ANGLE) {
       return ShotConfidence.LOW;
+    }
+
+    if (distance > MAX_RELIABLE_RANGE || Math.abs(angle.getRadians()) > MAX_RELIABLE_ANGLE) {
+      return ShotConfidence.MEDIUM;
     }
 
     return ShotConfidence.HIGH;
@@ -83,14 +97,6 @@ public class ShooterMath {
    */
   public static Translation2d getGoal() {
     Optional<Alliance> currentAlliance = DriverStation.getAlliance();
-    // double translatedX =
-    // (currentAlliance == Alliance.Red
-    // ? robotPose.getX() - FieldConstants.fieldLength
-    // : robotPose.getX());
-    // double robotY = robotPose.getY();
-    // double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY),
-    // translatedX);
-    // return new Rotation2d(robotAngle);
     Translation2d out = FieldConstants.Speaker.position;
     if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
       out = out.plus(new Translation2d(FieldConstants.fieldLength, 0.0));
@@ -115,7 +121,22 @@ public class ShooterMath {
    * @return The yaw angle for the robot
    */
   public static Rotation2d getGoalTheta(Pose2d robot) {
-    final double angle = Math.atan2(robot.getY() - (getGoal().getY()), robot.getX());
+    final var alliance = DriverStation.getAlliance();
+    double translatedX =
+        (alliance.isPresent() && alliance.get() == Alliance.Red
+            ? robot.getX() - FieldConstants.fieldLength
+            : robot.getX());
+    final double angle = Math.atan2(robot.getY() - getGoal().getY(), translatedX);
+    return new Rotation2d(angle);
+  }
+
+  public static Rotation2d getGoalToRobotAngle(Pose2d robot) {
+    final Translation2d goal = getGoal();
+    double angle = Math.atan2(robot.getX() - goal.getX(), robot.getY() - goal.getY()) + Math.PI / 2;
+    final var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+      angle -= Math.PI;
+    }
     return new Rotation2d(angle);
   }
 
