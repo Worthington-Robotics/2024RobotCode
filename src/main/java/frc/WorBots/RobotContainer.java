@@ -80,16 +80,16 @@ public class RobotContainer {
 
     selector.addRoutine("Do Nothing", List.of(), Commands.none());
 
-    selector.addRoutine(
-        "One Piece",
-        List.of(
-            new AutoQuestion(
-                "Starting Location?",
-                List.of(
-                    AutoQuestionResponse.AMP_SIDE,
-                    AutoQuestionResponse.CENTER,
-                    AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.onePiece());
+    // selector.addRoutine(
+    //     "One Piece",
+    //     List.of(
+    //         new AutoQuestion(
+    //             "Starting Location?",
+    //             List.of(
+    //                 AutoQuestionResponse.AMP_SIDE,
+    //                 AutoQuestionResponse.CENTER,
+    //                 AutoQuestionResponse.WALL_SIDE))),
+    //     autoCommands.onePiece());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     bindControls();

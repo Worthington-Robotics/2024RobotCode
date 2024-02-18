@@ -12,7 +12,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -36,7 +35,13 @@ public class AutoShoot extends SequentialCommandGroup {
   private Supplier<Double> leftYSupplier;
   private final DriveController driveController = new DriveController();
   private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(5.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), 0.02);
+      new ProfiledPIDController(
+          3.75,
+          0.0,
+          0.0,
+          new TrapezoidProfile.Constraints(
+              Units.degreesToRadians(140.0), Units.degreesToRadians(720.0)),
+          0.02);
 
   /**
    * This command automatically drives to a known safe shooting location and shoots a game piece.
@@ -58,12 +63,7 @@ public class AutoShoot extends SequentialCommandGroup {
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    thetaController.setP(5.0);
-    thetaController.setD(0.05);
-    thetaController.setConstraints(
-        new Constraints(Units.degreesToRadians(360.0), Units.degreesToRadians(720.0)));
-    thetaController.setTolerance(Units.degreesToRadians(1.0));
+    thetaController.setTolerance(Units.degreesToRadians(1.5));
 
     Supplier<Double> pivotAngle =
         () -> {
@@ -80,6 +80,7 @@ public class AutoShoot extends SequentialCommandGroup {
         };
     Supplier<ChassisSpeeds> speedsSupplier =
         () -> {
+          SmartDashboard.putNumber("Controller Error", thetaController.getPositionError());
           Pose2d robotPose = drive.getPose();
           double x = leftXSupplier.get();
           double y = leftYSupplier.get();
@@ -102,9 +103,8 @@ public class AutoShoot extends SequentialCommandGroup {
                   .getTranslation();
 
           double thetaVelocity =
-              thetaController.getSetpoint().velocity
-                  + thetaController.calculate(
-                      robotPose.getRotation().getRadians(), driveAngleSupplier.get().getRadians());
+              thetaController.calculate(
+                  robotPose.getRotation().getRadians(), driveAngleSupplier.get().getRadians());
           double thetaErrorAbs =
               Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
           if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
@@ -122,10 +122,6 @@ public class AutoShoot extends SequentialCommandGroup {
 
           // Convert to field relative based on the alliance
           var driveRotation = robotPose.getRotation();
-          if (DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red) {
-            driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
-          }
           speeds =
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds.vxMetersPerSecond,
@@ -143,7 +139,7 @@ public class AutoShoot extends SequentialCommandGroup {
     addCommands(
         superstructure.setMode(SuperstructureState.SHOOTING),
         shooting
-            .alongWith(shooter.spinToSpeed(5800))
+            .alongWith(shooter.spinToSpeed(4300))
             .alongWith(Commands.run(() -> drive.runVelocity(speedsSupplier.get()), drive)),
         Commands.waitUntil(() -> false)
             .finallyDo(

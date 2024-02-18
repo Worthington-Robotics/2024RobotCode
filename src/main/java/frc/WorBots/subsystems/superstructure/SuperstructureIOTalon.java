@@ -67,7 +67,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setPivotVoltage(double volts) {
-    pivotSignals.setTalonVoltage(pivot, volts, 8);
+    pivotSignals.setTalonVoltage(pivot, volts, 11);
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {

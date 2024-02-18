@@ -7,6 +7,7 @@
 
 package frc.WorBots.util.math;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 public class ShooterMath {
   /** The maximum distance the robot can reliably shoot, in meters */
-  private static final double MAX_RELIABLE_RANGE = 5.0;
+  private static final double MAX_RELIABLE_RANGE = 4.3;
 
   /** The maximum distance the robot can shoot, in meters */
   private static final double MAX_RANGE = 7.0;
@@ -31,6 +32,12 @@ public class ShooterMath {
   /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
   private static final double MAX_ANGLE = Units.degreesToRadians(75);
 
+  public static final double MAX_SHOOTER_RPM = 5800;
+
+  public static final double CLOSEST_RANGE = 1.07;
+
+  public static final double RPM_FALLOFF_COEFFICIENT = 0.64;
+
   /** Distance -> RPM */
   private static final InterpolatingTable RPM_LOOKUP =
       new InterpolatingTable(new double[][] {{0.0, 0.0}});
@@ -39,9 +46,10 @@ public class ShooterMath {
   private static final InterpolatingTable ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {2.197, 0.8352},
-            {4.305, 1.0205},
-            // {6.348, 1.0823}
+            {1.406, 0.52},
+            {2.197, 0.8102},
+            {2.379, 0.814},
+            {4.305, 1.0005},
           });
 
   /** Difference confidence levels for a shot */
@@ -136,6 +144,21 @@ public class ShooterMath {
       angle -= Math.PI;
     }
     return new Rotation2d(angle);
+  }
+
+  public static double calculateShooterRPM(Pose2d robot) {
+    double distance = getGoalDistance(robot);
+    // Clamp the distance to prevent bad values
+    distance = MathUtil.clamp(distance, CLOSEST_RANGE, MAX_RELIABLE_RANGE);
+
+    double scalar =
+        1.0 - GeneralMath.getScalarPosition(distance, CLOSEST_RANGE, MAX_RELIABLE_RANGE);
+    // 1.0 - x so that it is inverted
+    scalar = 1.0 - scalar;
+
+    final double rpmAmount = MAX_SHOOTER_RPM * RPM_FALLOFF_COEFFICIENT;
+    final double base = MAX_SHOOTER_RPM - rpmAmount;
+    return base + rpmAmount * scalar;
   }
 
   /**

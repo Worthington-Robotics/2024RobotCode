@@ -32,8 +32,8 @@ public class Intake extends SubsystemBase {
       intakeTable.getDoubleTopic("Time of Flight Distance").publish();
 
   // Constants
-  public static final double distanceThreshold = 0.22;
-  private static final double intakeVolts = 4.0;
+  public static final double distanceThreshold = 0.25;
+  private static final double intakeVolts = 3.5;
   private static final double constantForce = 0.0;
   private static final double maxTemperature = 80.0;
 

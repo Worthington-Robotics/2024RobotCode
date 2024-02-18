@@ -72,6 +72,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
     var confidence = ShooterMath.getConfidence(robotPose);
     SmartDashboard.putString("Shot Confidence", confidence.toString());
+    var rpm = ShooterMath.calculateShooterRPM(robotPose);
+    SmartDashboard.putNumber("Calculated Shooter RPM", rpm);
     // FieldConstants.testField();
   }
 

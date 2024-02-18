@@ -36,7 +36,7 @@ public class Handoff extends Command {
   public void execute() {
     if (superstructure.getCurrentPose() == Preset.HANDOFF && superstructure.isAtSetpoint()) {
       if (!shooter.hasGamePiece()) {
-        intake.setVolts(4.0);
+        intake.setVolts(3.5);
         shooter.setRawFeederVolts(-0.5);
       } else {
         shooter.setRawFeederVolts(0);
@@ -46,7 +46,7 @@ public class Handoff extends Command {
       if (intake.hasGamePiece() || shooter.hasGamePiece()) {
         intake.setVolts(0.0);
       } else {
-        intake.setVolts(4.0);
+        intake.setVolts(3.5);
       }
     }
   }
