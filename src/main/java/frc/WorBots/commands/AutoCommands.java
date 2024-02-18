@@ -222,6 +222,14 @@ public class AutoCommands extends Command {
                     new Pose2d(
                         rotationWaypoint.get().getTranslation(),
                         rotationWaypoint.get().getHolonomicRotation().get())));
+    var driveToHome =
+        new DriveToPose(
+            drive,
+            () ->
+                AllianceFlipUtil.apply(
+                    new Pose2d(
+                        startingWaypoint.getTranslation(),
+                        startingWaypoint.getHolonomicRotation().get())));
     return new CommandWithPose(
         Commands.sequence(
             reset(startingPose),
@@ -229,16 +237,20 @@ public class AutoCommands extends Command {
             superstructure.setMode(SuperstructureState.SHOOTING),
             Commands.runOnce(() -> superstructure.setShootingAngleRad(pivotAngle), superstructure),
             driveToPose
-                .andThen(shooter.spinToSpeed(ShooterMath.calculateShooterRPM(startingPose)))
                 .alongWith(
+                    shooter
+                        .spinToSpeed(ShooterMath.calculateShooterRPM(startingPose))
+                        .withTimeout(0.01))
+                .andThen(
                     Commands.waitUntil(
                         () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint()))
                 .andThen(shooter.setRawFeederVoltsCommand(3))
                 .until(() -> !shooter.hasGamePiece())
-                .andThen(shooter.setRawFeederVoltsCommand(speakerOpeningCenterY))
-                .andThen(shooter.spinToSpeed(0.0))
-                .andThen(superstructure.setPose(Preset.HANDOFF))),
-        new Pose2d(startingPose.getTranslation(), startingPose.getRotation()));
+                .andThen(shooter.setRawFeederVoltsCommand(0.0).andThen(shooter.spinToSpeed(0.0)))
+                .andThen(superstructure.setMode(SuperstructureState.POSE))
+                .andThen(superstructure.setPose(Preset.HANDOFF))
+                .andThen(driveToHome)),
+        new Pose2d(startingPose.getTranslation(), driveRotation.get()));
   }
 
   /**
@@ -271,9 +283,13 @@ public class AutoCommands extends Command {
    */
   private Command onePiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
-    // return Commands.sequence(reset(startingPose), driveAndShoot(startingPose, startingLocation));
-    // AutoShoot autoShoot = new AutoShoot(superstructure, drive, shooter, () -> 0.0, () -> 0.0);
-    return Commands.sequence(autoShoot(startingPose, true).command());
+    var autoShoot = autoShoot(startingPose, true);
+    return Commands.sequence(
+        autoShoot.command(),
+        path(
+            Waypoint.fromHolonomicPose(startingPose),
+            Waypoint.fromDifferentialPose(
+                startingPose.plus(new Transform2d(0.9, 0, new Rotation2d())))));
   }
 
   public Command onePiece() {

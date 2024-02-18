@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
@@ -60,6 +61,8 @@ public class Logger {
       superstructureTable.getDoubleTopic("Elevator Setpoint Voltage").publish();
   DoubleArrayPublisher pose3dPublisher =
       superstructureTable.getDoubleArrayTopic("3d Poses").publish();
+  BooleanPublisher isAtSetpointPublisher =
+      superstructureTable.getBooleanTopic("At Setpoint").publish();
 
   NetworkTable pivotTable = superstructureTable.getSubTable("Pivot");
   DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Rad Rel").publish();
@@ -342,5 +345,9 @@ public class Logger {
       data[i * 7 + 6] = value[i].getRotation().getQuaternion().getZ();
     }
     pose3dPublisher.set(data);
+  }
+
+  public void setSuperstructureAtSetpoint(boolean value) {
+    isAtSetpointPublisher.set(value);
   }
 }

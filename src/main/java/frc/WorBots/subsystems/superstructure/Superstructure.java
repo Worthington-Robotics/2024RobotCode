@@ -95,9 +95,9 @@ public class Superstructure extends SubsystemBase {
       elevatorController.setConstraints(2.0, 1.65);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
     } else { // Sim
-      pivotController.setGains(30, 0.2, 0);
+      pivotController.setGains(50, 0.25, 0);
       pivotController.setConstraints(12, 8);
-      pivotFeedForward = new ArmFeedforward(0.06, 0.25, 0.0);
+      pivotFeedForward = new ArmFeedforward(0.1, 0.3, 0.0);
 
       elevatorController.setGains(160, 0.00, 0);
       elevatorController.setConstraints(2.0, 1.65);
@@ -124,6 +124,7 @@ public class Superstructure extends SubsystemBase {
     Logger.getInstance()
         .setSuperstructurePivotFusedRad(
             inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
+    Logger.getInstance().setSuperstructureAtSetpoint(isAtSetpoint());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
@@ -380,10 +381,10 @@ public class Superstructure extends SubsystemBase {
    * Sets the desired pose of the subsystem. Also sets the superstructure to pose mode.
    *
    * @param pose The desired pose.
-   * @return The command.
+   * @return The command, exits when superstructure is at the desired pose.
    */
   public Command setPose(SuperstructurePose.Preset pose) {
-    return this.run(
+    return this.runOnce(
             () -> {
               this.setModeVoid(SuperstructureState.POSE);
               this.setpoint = pose;
@@ -399,7 +400,7 @@ public class Superstructure extends SubsystemBase {
    * Sets the desired state of the superstructure subsystem.
    *
    * @param state The state to be set.
-   * @return The command.
+   * @return The command, instantly exits.
    */
   public Command setMode(SuperstructureState state) {
     return this.runOnce(

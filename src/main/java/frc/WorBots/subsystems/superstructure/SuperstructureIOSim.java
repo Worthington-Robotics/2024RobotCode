@@ -30,7 +30,7 @@ public class SuperstructureIOSim implements SuperstructureIO {
     pivot =
         new SingleJointedArmSim(
             DCMotor.getFalcon500(1),
-            20,
+            40,
             SingleJointedArmSim.estimateMOI(Units.inchesToMeters(12), Units.lbsToKilograms(10)),
             Units.inchesToMeters(12),
             -Math.PI / 6,

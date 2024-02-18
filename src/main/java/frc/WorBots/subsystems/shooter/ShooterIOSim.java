@@ -18,7 +18,7 @@ public class ShooterIOSim implements ShooterIO {
   public ShooterIOSim() {
     topFlywheelSim = new FlywheelSim(DCMotor.getFalcon500(1), 1.0, 0.5);
     bottomFlywheelSim = new FlywheelSim(DCMotor.getFalcon500(1), 1.0, 0.5);
-    feederWheel = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, 0.5);
+    feederWheel = new FlywheelSim(DCMotor.getCIM(1), 100, 2);
   }
 
   @Override
@@ -41,6 +41,8 @@ public class ShooterIOSim implements ShooterIO {
     topFlywheelSim.update(0.02);
     bottomFlywheelSim.update(0.02);
     feederWheel.update(0.02);
+    inputs.feederWheel.isConnected = true;
+    inputs.feederWheel.velocityRadsPerSec = feederWheel.getAngularVelocityRadPerSec();
     inputs.isConnected = true;
     inputs.velocityRPMBottom = bottomFlywheelSim.getAngularVelocityRPM();
     inputs.velocityRPMTop = topFlywheelSim.getAngularVelocityRPM();
