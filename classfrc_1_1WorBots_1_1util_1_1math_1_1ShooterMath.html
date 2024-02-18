@@ -76,6 +76,7 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">frc.WorBots.util.math.ShooterMath Class Reference</div></div>
 </div><!--header-->
@@ -102,10 +103,47 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a983bf950f676595504220b79ae2fa8e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af450d5d4394bb4bf33caa5426a57d9bc"><td class="memItemLeft" align="right" valign="top">static Rotation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#af450d5d4394bb4bf33caa5426a57d9bc">getGoalToRobotAngle</a> (Pose2d robot)</td></tr>
 <tr class="separator:af450d5d4394bb4bf33caa5426a57d9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc738303e67f64c1ba2e95c9f88f6c60"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#afc738303e67f64c1ba2e95c9f88f6c60">calculateShooterRPM</a> (Pose2d robot)</td></tr>
+<tr class="separator:afc738303e67f64c1ba2e95c9f88f6c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742c1b4c7d39bbf35077e0cf88288fd1"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a742c1b4c7d39bbf35077e0cf88288fd1">inRange</a> (Pose2d robot)</td></tr>
 <tr class="separator:a742c1b4c7d39bbf35077e0cf88288fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:aec40a68d606c33aaea406fc1d149c2df"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#aec40a68d606c33aaea406fc1d149c2df">MAX_SHOOTER_RPM</a> = 5800</td></tr>
+<tr class="separator:aec40a68d606c33aaea406fc1d149c2df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1836854a6ab749228b2d125951d6f54"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#ad1836854a6ab749228b2d125951d6f54">CLOSEST_RANGE</a> = 1.07</td></tr>
+<tr class="separator:ad1836854a6ab749228b2d125951d6f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6614416842f822baef42f8fb07907e9e"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a6614416842f822baef42f8fb07907e9e">RPM_FALLOFF_COEFFICIENT</a> = 0.64</td></tr>
+<tr class="separator:a6614416842f822baef42f8fb07907e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="afc738303e67f64c1ba2e95c9f88f6c60" name="afc738303e67f64c1ba2e95c9f88f6c60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc738303e67f64c1ba2e95c9f88f6c60">&#9670;&#160;</a></span>calculateShooterRPM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.ShooterMath.calculateShooterRPM </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>robot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a730b48a5b739aad23bd34b5cfdf5dae1" name="a730b48a5b739aad23bd34b5cfdf5dae1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a730b48a5b739aad23bd34b5cfdf5dae1">&#9670;&#160;</a></span>calculateShotData()</h2>
 
@@ -369,6 +407,73 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Calculated outputs for a shot </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad1836854a6ab749228b2d125951d6f54" name="ad1836854a6ab749228b2d125951d6f54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1836854a6ab749228b2d125951d6f54">&#9670;&#160;</a></span>CLOSEST_RANGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.math.ShooterMath.CLOSEST_RANGE = 1.07</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec40a68d606c33aaea406fc1d149c2df" name="aec40a68d606c33aaea406fc1d149c2df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec40a68d606c33aaea406fc1d149c2df">&#9670;&#160;</a></span>MAX_SHOOTER_RPM</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.math.ShooterMath.MAX_SHOOTER_RPM = 5800</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6614416842f822baef42f8fb07907e9e" name="a6614416842f822baef42f8fb07907e9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6614416842f822baef42f8fb07907e9e">&#9670;&#160;</a></span>RPM_FALLOFF_COEFFICIENT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.math.ShooterMath.RPM_FALLOFF_COEFFICIENT = 0.64</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
