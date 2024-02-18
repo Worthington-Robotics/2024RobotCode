@@ -11,6 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +21,7 @@ import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.math.ShooterMath;
 
 public class Robot extends TimedRobot {
@@ -74,7 +76,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Shot Confidence", confidence.toString());
     var rpm = ShooterMath.calculateShooterRPM(robotPose);
     SmartDashboard.putNumber("Calculated Shooter RPM", rpm);
-    // FieldConstants.testField();
   }
 
   @Override
@@ -93,7 +94,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
-
+    AllianceFlipUtil.apply(0.0);
     robotContainer.drive.stop();
     robotContainer.intake.setVolts(0.0);
     robotContainer.shooter.setRawFlywheelSpeed(0);

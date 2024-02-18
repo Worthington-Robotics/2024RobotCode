@@ -29,8 +29,8 @@ import java.util.function.*;
 
 public class AutoShoot extends SequentialCommandGroup {
   // Locations
-  private double speakerOpeningHeightZ;
-  private double speakerOpeningCenterY;
+  private static double speakerOpeningHeightZ;
+  private static double speakerOpeningCenterY;
   private Supplier<Double> leftXSupplier;
   private Supplier<Double> leftYSupplier;
   private final DriveController driveController = new DriveController();

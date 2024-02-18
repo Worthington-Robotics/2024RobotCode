@@ -45,6 +45,6 @@ public class ShooterIOSim implements ShooterIO {
     inputs.velocityRPMBottom = bottomFlywheelSim.getAngularVelocityRPM();
     inputs.velocityRPMTop = topFlywheelSim.getAngularVelocityRPM();
     inputs.feederWheel.positionRads = 0.0;
-    inputs.timeOfFlightDistanceMeters = 0.2;
+    inputs.timeOfFlightDistanceMeters = 0.02;
   }
 }
