@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.util.trajectory.RotationSequence;
 
@@ -111,6 +110,6 @@ public class AllianceFlipUtil {
 
   private static boolean shouldFlip() {
     return DriverStation.getAlliance().isPresent()
-     && DriverStation.getAlliance().get() == Alliance.Red;
+        && DriverStation.getAlliance().get() == Alliance.Red;
   }
 }

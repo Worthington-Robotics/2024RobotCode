@@ -95,14 +95,16 @@ public class Superstructure extends SubsystemBase {
       elevatorController.setConstraints(2.0, 1.65);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
     } else { // Sim
-      pivotController.setGains(1.0, 0, 0);
-      pivotController.setConstraints(1.0, 1.0);
-      pivotFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
+      pivotController.setGains(30, 0.2, 0);
+      pivotController.setConstraints(12, 8);
+      pivotFeedForward = new ArmFeedforward(0.06, 0.25, 0.0);
 
-      elevatorController.setGains(185, 0.095, 0);
-      elevatorController.setConstraints(2.0, 1.2);
+      elevatorController.setGains(160, 0.00, 0);
+      elevatorController.setConstraints(2.0, 1.65);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
     }
+    pivotController.pid.setTolerance(0.01);
+    elevatorController.pid.setTolerance(0.025);
     visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
