@@ -11,11 +11,12 @@ var searchData=
   ['claire_8',['Claire',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a96c6a5b8c6ea860a5a891f6abfb6da50',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['clampmagnitude_9',['clampMagnitude',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715',1,'frc::WorBots::util::math::GeneralMath']]],
   ['closest_5frange_10',['CLOSEST_RANGE',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#ad1836854a6ab749228b2d125951d6f54',1,'frc::WorBots::util::math::ShooterMath']]],
-  ['constants_11',['Constants',['../classfrc_1_1WorBots_1_1Constants.html',1,'frc::WorBots']]],
-  ['constants_2ejava_12',['Constants.java',['../Constants_8java.html',1,'']]],
-  ['curve_13',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['customholonomicdrivecontroller_14',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.CustomHolonomicDriveController()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController']]],
-  ['customholonomicdrivecontroller_2ejava_15',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
-  ['customtrajectorygenerator_16',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]],
-  ['customtrajectorygenerator_2ejava_17',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
+  ['commandwithpose_11',['CommandWithPose',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a750c4d97373cdc6859686c26c2a53b55',1,'frc::WorBots::commands::AutoCommands']]],
+  ['constants_12',['Constants',['../classfrc_1_1WorBots_1_1Constants.html',1,'frc::WorBots']]],
+  ['constants_2ejava_13',['Constants.java',['../Constants_8java.html',1,'']]],
+  ['curve_14',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['customholonomicdrivecontroller_15',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.CustomHolonomicDriveController()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController']]],
+  ['customholonomicdrivecontroller_2ejava_16',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
+  ['customtrajectorygenerator_17',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]],
+  ['customtrajectorygenerator_2ejava_18',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
 ];

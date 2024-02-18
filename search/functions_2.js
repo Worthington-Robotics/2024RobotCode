@@ -6,6 +6,7 @@ var searchData=
   ['chassisspeedstoarray_3',['chassisSpeedsToArray',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a2bcdad9b5718b2503c10030ce0a1eec2',1,'frc::WorBots::util::debug::Logger']]],
   ['checkerror_4',['checkError',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a5f6433f94444df9fe20a9772d5ae51d4',1,'frc.WorBots.util.math.GeneralMath.checkError(double measurement, double goal, double margin)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a6ce3a805d7348460655f4ee9a0078b8f',1,'frc.WorBots.util.math.GeneralMath.checkError(double error, double margin)']]],
   ['clampmagnitude_5',['clampMagnitude',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['curve_6',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['customholonomicdrivecontroller_7',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
+  ['commandwithpose_6',['CommandWithPose',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a750c4d97373cdc6859686c26c2a53b55',1,'frc::WorBots::commands::AutoCommands']]],
+  ['curve_7',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['customholonomicdrivecontroller_8',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
 ];
