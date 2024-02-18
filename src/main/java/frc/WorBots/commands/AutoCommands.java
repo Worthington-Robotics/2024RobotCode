@@ -197,8 +197,25 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndIntakeWing(int wingPosition) {
-    return Commands.none();
+  private Command driveAndIntakeWing(Pose2d startingPosition, int wingPosition) {
+    List<Waypoint> waypoints = new ArrayList<>();
+    waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
+    waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
+    Command handoff = new Handoff(intake, superstructure, shooter);
+    if (!shooter.hasGamePiece()) {
+      return Commands.sequence(
+          superstructure.setMode(SuperstructureState.POSE),
+          superstructure.setPose(Preset.HANDOFF),
+          path(waypoints)
+              .alongWith(
+                  Commands.waitUntil(
+                          () -> {
+                            return drive.getPose().getX() >= FieldConstants.StartingZone.endX;
+                          })
+                      .andThen(handoff)));
+    } else {
+      return Commands.none();
+    }
   }
 
   private CommandWithPose autoShoot(Pose2d startingPose, boolean intakeFirst) {
@@ -288,11 +305,13 @@ public class AutoCommands extends Command {
   private Command onePiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
     var autoShoot = autoShoot(startingPose, true);
+    var driveIntakeWing1 = driveAndIntakeWing(startingPose, startingLocation);
     return Commands.sequence(
         autoShoot.command(),
-        path(
-            Waypoint.fromHolonomicPose(startingPose),
-            Waypoint.fromHolonomicPose(wingGamePieceLocations[startingLocation])));
+        // path(
+        //     Waypoint.fromHolonomicPose(startingPose),
+        //     Waypoint.fromHolonomicPose(wingGamePieceLocations[startingLocation]))
+        driveIntakeWing1);
   }
 
   public Command onePiece() {
