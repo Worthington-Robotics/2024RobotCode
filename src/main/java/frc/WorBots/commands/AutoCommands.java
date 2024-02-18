@@ -22,7 +22,6 @@ import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.Superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.*;
-import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.trajectory.*;
@@ -77,7 +76,7 @@ public class AutoCommands extends Command {
               new Pose2d(
                   FieldConstants.StartingZone.regionCorners[3].plus(
                       new Translation2d(-Units.inchesToMeters(22), -0.8)),
-                  new Rotation2d())),
+                  new Rotation2d(0.7865))),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
@@ -87,7 +86,7 @@ public class AutoCommands extends Command {
               new Pose2d(
                   FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
                   FieldConstants.Stage.foot1Center.getY(),
-                  new Rotation2d())),
+                  new Rotation2d(-0.8165))),
         };
     wingGamePieceLocations =
         new Pose2d[] {
@@ -153,11 +152,10 @@ public class AutoCommands extends Command {
           double translatedX =
               (isRed ? robotPose.getX() - FieldConstants.fieldLength : robotPose.getX());
           double robotY = robotPose.getY();
-          double robotAngle =
-              Math.atan2(robotY - (speakerOpeningCenterY), translatedX) - (isRed ? Math.PI / 2 : 0);
+          double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
+          robotAngle += isRed ? (-Math.signum(robotAngle) * Math.PI / 2) : 0.0;
           return new Rotation2d(robotAngle);
         };
-    SmartDashboard.putNumberArray("Starting", Logger.pose2dToArray(startingLocations[0]));
   }
 
   private Command reset(Pose2d pose) {
@@ -258,8 +256,14 @@ public class AutoCommands extends Command {
    *
    * @return The command.
    */
-  private Command driveAndIntakeCenter(int centerPosition) {
-    return Commands.none();
+  private Command driveAndIntakeCenter(Pose2d startingPosition, int centerPosition) {
+    List<Waypoint> waypoints = new ArrayList<>();
+    waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
+    if (!shooter.hasGamePiece()) {
+      return Commands.sequence(Commands.none());
+    } else {
+      return Commands.none();
+    }
   }
 
   /**
@@ -288,8 +292,7 @@ public class AutoCommands extends Command {
         autoShoot.command(),
         path(
             Waypoint.fromHolonomicPose(startingPose),
-            Waypoint.fromDifferentialPose(
-                startingPose.plus(new Transform2d(0.9, 0, new Rotation2d())))));
+            Waypoint.fromHolonomicPose(wingGamePieceLocations[startingLocation])));
   }
 
   public Command onePiece() {
@@ -310,7 +313,7 @@ public class AutoCommands extends Command {
         reset(startingPose),
         path(
             Waypoint.fromHolonomicPose(startingPose),
-            Waypoint.fromDifferentialPose(
+            Waypoint.fromHolonomicPose(
                 startingPose.plus(new Transform2d(0.9, 0, new Rotation2d())))));
   }
 
