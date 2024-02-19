@@ -376,7 +376,7 @@ public class Superstructure extends SubsystemBase {
    * @return The command, exits when superstructure is at the desired pose.
    */
   public Command setPose(SuperstructurePose.Preset pose) {
-    return this.run(
+    return this.runOnce(
             () -> {
               this.setModeVoid(SuperstructureState.POSE);
               this.setpoint = pose;

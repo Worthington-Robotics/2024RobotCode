@@ -90,7 +90,12 @@ public class RobotContainer {
         autoCommands.twoPiece());
 
     selector.addRoutine(
-        "Center 3, pickup from center, from left", List.of(), autoCommands.threePiece());
+        "Center 3, pickup from center, from left", List.of(), autoCommands.threePieceCenterWing());
+
+    selector.addRoutine(
+        "Center 4, pickup from center, from left, from right",
+        List.of(),
+        autoCommands.fourPieceCenterWing());
 
     selector.addRoutine("Test long boi", List.of(), autoCommands.testLongAuto());
 

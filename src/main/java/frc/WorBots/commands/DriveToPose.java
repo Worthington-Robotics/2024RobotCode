@@ -67,17 +67,17 @@ public class DriveToPose extends Command {
     driveController.setD(0.0);
     driveController.setConstraints(
         new Constraints(
-            slowMode ? Units.inchesToMeters(50.0) : Units.inchesToMeters(150.0),
+            slowMode ? Units.inchesToMeters(50.0) : Units.inchesToMeters(140.0),
             Units.inchesToMeters(90.0)));
     driveController.setTolerance(slowMode ? 0.06 : 0.01);
-    thetaController.setP(5.0);
-    thetaController.setD(0.0);
+    thetaController.setP(3.75);
+    thetaController.setD(0.05);
     thetaController.setConstraints(
         new Constraints(
-            slowMode ? Units.degreesToRadians(50.0) : Units.degreesToRadians(360.0),
+            slowMode ? Units.degreesToRadians(50.0) : Units.degreesToRadians(140.0),
             Units.degreesToRadians(720.0)));
     thetaController.setTolerance(
-        slowMode ? Units.degreesToRadians(3.0) : Units.degreesToRadians(1.0));
+        slowMode ? Units.degreesToRadians(2.0) : Units.degreesToRadians(1.0));
     // Reset all controllers
     var currentPose = drive.getPose();
     driveController.reset(

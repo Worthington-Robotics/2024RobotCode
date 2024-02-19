@@ -78,7 +78,7 @@ public class SuperstructureVisualizer {
                 new Translation3d(0.0, 0.0, Units.inchesToMeters(1)), new Rotation3d()));
     var pivotpose =
         stageOnePose.plus(
-            new Transform3d(0.0, 0.0, 0.51, new Rotation3d(0.0, angles.get(0, 0), 0.0)));
+            new Transform3d(0.0, 0.0, 0.51, new Rotation3d(0.0, -angles.get(0, 0), 0.0)));
     Logger.getInstance().setSuperstructurePoses3d(stageOnePose, stageTwoPose, pivotpose);
   }
 }
