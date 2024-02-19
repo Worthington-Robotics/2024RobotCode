@@ -8,7 +8,7 @@ var searchData=
   ['testinit_5',['testInit',['../classfrc_1_1WorBots_1_1Robot.html#aeb78f053ea33bc87df0937f367ba256d',1,'frc::WorBots::Robot']]],
   ['testlongauto_6',['testLongAuto',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a6677b532a7ba1c896b0dbdf25327125a',1,'frc::WorBots::commands::AutoCommands']]],
   ['testperiodic_7',['testPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#a3299c6c4b5035da120d01c97bad27ca5',1,'frc::WorBots::Robot']]],
-  ['threepiece_8',['threePiece',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#ad8c86e07783598faef1353aae2e366ac',1,'frc::WorBots::commands::AutoCommands']]],
+  ['threepiececenterwing_8',['threePieceCenterWing',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a29c36ddbeeb4412857e65cef5530f038',1,'frc::WorBots::commands::AutoCommands']]],
   ['timestampedvisionupdate_9',['TimestampedVisionUpdate',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#ab7b36d9b3365200b157f123c7e809148',1,'frc::WorBots::util::math::PoseEstimator']]],
   ['trajectorytoarray_10',['trajectoryToArray',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a4977bfb23cce16bb48c13280376b3798',1,'frc::WorBots::util::debug::Logger']]],
   ['transform3dtopose3d_11',['transform3dToPose3d',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a85aa94c1d74e0613b19c81a76e1eb731',1,'frc::WorBots::util::math::GeomUtil']]],
