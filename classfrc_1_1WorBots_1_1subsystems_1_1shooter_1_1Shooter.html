@@ -94,6 +94,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad96f695bd7db0d4da260959d23e98f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fc43c76483716e3e5034206ec9fb74d"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a3fc43c76483716e3e5034206ec9fb74d">spinToSpeed</a> (double rpm)</td></tr>
 <tr class="separator:a3fc43c76483716e3e5034206ec9fb74d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a86160bb6d36fdd74cea74d75b54eb"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a64a86160bb6d36fdd74cea74d75b54eb">spinToSpeed</a> (Supplier&lt; Double &gt; supplier)</td></tr>
+<tr class="separator:a64a86160bb6d36fdd74cea74d75b54eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6a98a6cf6e1bca047bdb2fac0bba7cd"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ae6a98a6cf6e1bca047bdb2fac0bba7cd">setSpeed</a> (double rpm)</td></tr>
+<tr class="separator:ae6a98a6cf6e1bca047bdb2fac0bba7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cfdd8e6766dbec1475aaae55592a1a1"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a8cfdd8e6766dbec1475aaae55592a1a1">spinToSpeed</a> (double topRPM, double bottomRPM)</td></tr>
 <tr class="separator:a8cfdd8e6766dbec1475aaae55592a1a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ab4b244c15108c1772e6e70a41238b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a0ab4b244c15108c1772e6e70a41238b7">spinToSpeedVoid</a> (double rpm)</td></tr>
@@ -362,6 +366,32 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ae6a98a6cf6e1bca047bdb2fac0bba7cd" name="ae6a98a6cf6e1bca047bdb2fac0bba7cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6a98a6cf6e1bca047bdb2fac0bba7cd">&#9670;&#160;</a></span>setSpeed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.shooter.Shooter.setSpeed </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>rpm</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae2419e96e751ca1dffe3329e052df36a" name="ae2419e96e751ca1dffe3329e052df36a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae2419e96e751ca1dffe3329e052df36a">&#9670;&#160;</a></span>shootCommand()</h2>
 
@@ -397,7 +427,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a3fc43c76483716e3e5034206ec9fb74d" name="a3fc43c76483716e3e5034206ec9fb74d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fc43c76483716e3e5034206ec9fb74d">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fc43c76483716e3e5034206ec9fb74d">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -431,7 +461,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a8cfdd8e6766dbec1475aaae55592a1a1" name="a8cfdd8e6766dbec1475aaae55592a1a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8cfdd8e6766dbec1475aaae55592a1a1">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cfdd8e6766dbec1475aaae55592a1a1">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -472,6 +502,32 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The command, exits when flywheels are up to speed </dd></dl>
+
+</div>
+</div>
+<a id="a64a86160bb6d36fdd74cea74d75b54eb" name="a64a86160bb6d36fdd74cea74d75b54eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64a86160bb6d36fdd74cea74d75b54eb">&#9670;&#160;</a></span>spinToSpeed() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.shooter.Shooter.spinToSpeed </td>
+          <td>(</td>
+          <td class="paramtype">Supplier&lt; Double &gt;&#160;</td>
+          <td class="paramname"><em>supplier</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
