@@ -15,7 +15,7 @@ import edu.wpi.first.math.numbers.N2;
 public record SuperstructurePose(Vector<N2> vectorPose) {
   public static enum Preset {
     HOME(new SuperstructurePose(VecBuilder.fill(0, 0))),
-    AMP(new SuperstructurePose(VecBuilder.fill(0.26, 1.92))),
+    AMP(new SuperstructurePose(VecBuilder.fill(0.26, 2))),
     CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
     HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, 0.277))),
     PIVOTTOTOP(new SuperstructurePose(VecBuilder.fill(0.0, 1.8))),

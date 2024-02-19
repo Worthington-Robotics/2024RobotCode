@@ -32,11 +32,11 @@ public class ShooterMath {
   /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
   private static final double MAX_ANGLE = Units.degreesToRadians(75);
 
-  public static final double MAX_SHOOTER_RPM = 5800;
+  public static final double MAX_SHOOTER_RPM = 5600;
 
-  public static final double CLOSEST_RANGE = 1.07;
+  public static final double CLOSEST_RANGE = 1.02;
 
-  public static final double RPM_FALLOFF_COEFFICIENT = 0.64;
+  public static final double RPM_FALLOFF_COEFFICIENT = 0.46;
 
   /** Distance -> RPM */
   private static final InterpolatingTable RPM_LOOKUP =
@@ -46,10 +46,12 @@ public class ShooterMath {
   private static final InterpolatingTable ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
+            {1.096, 0.498},
             {1.406, 0.52},
             {2.197, 0.8102},
             {2.379, 0.814},
-            {4.305, 1.0005},
+            {4.305, 1.0105},
+            {5.295, 1.0601}
           });
 
   /** Difference confidence levels for a shot */

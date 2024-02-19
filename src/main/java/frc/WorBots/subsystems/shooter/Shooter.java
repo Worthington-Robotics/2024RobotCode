@@ -19,6 +19,7 @@ import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.debug.TunablePIDController;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
+import java.util.function.Supplier;
 
 public class Shooter extends SubsystemBase { // 532 rpm/v
   private ShooterIO io;
@@ -166,6 +167,18 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    */
   public Command spinToSpeed(double rpm) {
     return spinToSpeed(rpm, rpm);
+  }
+
+  public Command spinToSpeed(Supplier<Double> supplier) {
+    return spinToSpeed(supplier.get());
+  }
+
+  public Command setSpeed(double rpm) {
+    return this.runOnce(
+        () -> {
+          topFlywheelRPM = rpm;
+          bottomFlywheelRPM = rpm;
+        });
   }
 
   /**

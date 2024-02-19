@@ -79,6 +79,22 @@ public class RobotContainer {
         autoCommands.onePiece());
 
     selector.addRoutine(
+        "Two Piece",
+        List.of(
+            new AutoQuestion(
+                "Starting Location?",
+                List.of(
+                    AutoQuestionResponse.AMP_SIDE,
+                    AutoQuestionResponse.CENTER,
+                    AutoQuestionResponse.WALL_SIDE))),
+        autoCommands.twoPiece());
+
+    selector.addRoutine(
+        "Center 3, pickup from center, from left", List.of(), autoCommands.threePiece());
+
+    selector.addRoutine("Test long boi", List.of(), autoCommands.testLongAuto());
+
+    selector.addRoutine(
         "Mobility",
         List.of(
             new AutoQuestion(
@@ -122,10 +138,7 @@ public class RobotContainer {
     operator.b().onTrue(superstructure.setPose(Preset.STOW));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     operator.a().onTrue(superstructure.setPose(Preset.TRAP));
-    operator
-        .x()
-        .whileTrue(superstructure.setPose(Preset.AMP).alongWith(shooter.spinToSpeed(500)))
-        .onFalse(shooter.spinToSpeed(0.0));
+    operator.x().onTrue(superstructure.setPose(Preset.AMP));
     operator
         .rightBumper()
         .whileTrue(

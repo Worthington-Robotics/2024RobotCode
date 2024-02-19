@@ -39,7 +39,6 @@ public class Superstructure extends SubsystemBase {
   private double firstCarriagePositionMeters;
   private double secondCarriagePositionMeters;
   private boolean hasGottenZeroPosition = false;
-  private boolean shouldStopElevator = false;
 
   private TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
@@ -57,7 +56,7 @@ public class Superstructure extends SubsystemBase {
   private static final double elevatorLimitDistance = 0.25;
   private static final double pivotBackwardLimitDistance = 0.90;
   private static final double pivotForwardLimitDistance = 1.05;
-  private static final double pivotDynamicLimitDistance = Units.degreesToRadians(16);
+  private static final double pivotDynamicLimitDistance = 0.0;
   private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
@@ -100,10 +99,10 @@ public class Superstructure extends SubsystemBase {
       pivotFeedForward = new ArmFeedforward(0.1, 0.3, 0.0);
 
       elevatorController.setGains(160, 0.00, 0);
-      elevatorController.setConstraints(2.0, 1.65);
-      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
+      elevatorController.setConstraints(1.0, 1.65);
+      elevatorFeedForward = new ElevatorFeedforward(0.1, 0.0, 0.0);
     }
-    pivotController.pid.setTolerance(0.01);
+    pivotController.pid.setTolerance(0.015);
     elevatorController.pid.setTolerance(0.025);
     visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
@@ -150,13 +149,10 @@ public class Superstructure extends SubsystemBase {
     } else {
       switch (state) {
         case DISABLED:
-          setElevatorVoltage(0.0);
-          setPivotVoltage(0.0);
+          io.setElevatorVoltage(0.0);
+          io.setPivotVoltage(0.0);
         case POSE:
           runPose(setpoint.getElevator(), setpoint.getPivot());
-          if (inputs.elevatorCurrentAmps > 50) {
-            shouldStopElevator = true;
-          }
           break;
         case SHOOTING:
           runPose(0.0, shootingAngleRad.get());
@@ -167,11 +163,11 @@ public class Superstructure extends SubsystemBase {
           double pivotVolts = manualPivotVolts.get();
           // pivotVolts += calculatePivotFeedforward();
           pivotVolts += 0.12;
-          final double bottomLimit = calculatePivotBottomLimit();
-          if (inputs.pivotPositionAbsRad < bottomLimit
-              && pivotVolts <= pivotDynamicLimitAvoidanceVolts) {
-            pivotVolts = pivotDynamicLimitAvoidanceVolts;
-          }
+          // final double bottomLimit = calculatePivotBottomLimit();
+          // if (inputs.pivotPositionAbsRad < bottomLimit
+          //     && pivotVolts <= pivotDynamicLimitAvoidanceVolts) {
+          //   pivotVolts = pivotDynamicLimitAvoidanceVolts;
+          // }
           setPivotVoltage(pivotVolts);
           break;
       }
@@ -186,10 +182,6 @@ public class Superstructure extends SubsystemBase {
             firstCarriagePositionMeters,
             secondCarriagePositionMeters,
             inputs.elevatorPositionMeters));
-    if (shouldStopElevator) {
-      io.setElevatorVoltage(0.0);
-      io.setPivotVoltage(0.0);
-    }
   }
 
   /**
@@ -255,7 +247,7 @@ public class Superstructure extends SubsystemBase {
     final double elevatorVoltage = calculateElevator(elevatorPose);
     final double pivotVoltage = calculatePivot(pivotPose);
     setElevatorVoltage(elevatorVoltage);
-    setPivotVoltage(pivotVoltage);
+    io.setPivotVoltage(pivotVoltage);
   }
 
   /**
@@ -264,7 +256,7 @@ public class Superstructure extends SubsystemBase {
    * @param volts The elevator voltage
    */
   private void setElevatorVoltage(double volts) {
-    SmartDashboard.putNumber("Superstructure/Raw Elevator Setpoint", volts);
+    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
 
     // Do soft limiting
     volts =
@@ -305,7 +297,7 @@ public class Superstructure extends SubsystemBase {
     volts =
         GeneralMath.softLimitVelocity(
             volts,
-            inputs.pivotPositionAbsRad - bottomLimit,
+            (inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad) - bottomLimit,
             6.5,
             pivotMaxAngle,
             pivotBackwardLimitDistance,
@@ -384,12 +376,12 @@ public class Superstructure extends SubsystemBase {
    * @return The command, exits when superstructure is at the desired pose.
    */
   public Command setPose(SuperstructurePose.Preset pose) {
-    return this.runOnce(
+    return this.run(
             () -> {
               this.setModeVoid(SuperstructureState.POSE);
               this.setpoint = pose;
             })
-        .alongWith(Commands.waitUntil(this::isAtSetpoint))
+        .alongWith(Commands.waitUntil(() -> isAtSetpoint()))
         .finallyDo(
             () -> {
               this.setModeVoid(SuperstructureState.DISABLED);

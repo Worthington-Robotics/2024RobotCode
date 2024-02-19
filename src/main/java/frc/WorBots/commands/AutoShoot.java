@@ -78,6 +78,11 @@ public class AutoShoot extends SequentialCommandGroup {
           double robotAngle = getRobotRotationToShoot(robotPose).getRadians();
           return new Rotation2d(robotAngle);
         };
+    Supplier<Double> shooterSpeedSupplier =
+        () -> {
+          Pose2d robotPose = drive.getPose();
+          return ShooterMath.calculateShooterRPM(robotPose);
+        };
     Supplier<ChassisSpeeds> speedsSupplier =
         () -> {
           SmartDashboard.putNumber("Controller Error", thetaController.getPositionError());
@@ -139,15 +144,15 @@ public class AutoShoot extends SequentialCommandGroup {
     addCommands(
         superstructure.setMode(SuperstructureState.SHOOTING),
         shooting
-            .alongWith(shooter.spinToSpeed(4300))
+            .alongWith(
+                Commands.run(() -> shooter.spinToSpeedVoid(shooterSpeedSupplier.get()), shooter))
             .alongWith(Commands.run(() -> drive.runVelocity(speedsSupplier.get()), drive)),
         Commands.waitUntil(() -> false)
             .finallyDo(
                 () -> {
                   superstructure.setModeVoid(SuperstructureState.DISABLED);
                   shooter.spinToSpeedVoid(0);
-                })
-            .alongWith(shooter.spinToSpeed(0.0)));
+                }));
   }
 
   /**
