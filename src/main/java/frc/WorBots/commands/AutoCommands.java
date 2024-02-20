@@ -71,13 +71,16 @@ public class AutoCommands extends Command {
     this.intake = intake;
     this.shooter = shooter;
     this.responses = responses;
+    driveRotation =
+        () -> {
+          Pose2d robotPose = drive.getPose();
+          return AllianceFlipUtil.apply(AutoShoot.getRobotRotationToShoot(robotPose));
+        };
     startingLocations =
         new Pose2d[] {
           AllianceFlipUtil.apply(
               new Pose2d(
-                  FieldConstants.StartingZone.regionCorners[3].plus(
-                      new Translation2d(-Units.inchesToMeters(22), -0.8)),
-                  new Rotation2d(0.7865))),
+                  new Translation2d(0.69, 6.63), new Rotation2d(Units.degreesToRadians(60)))),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
@@ -85,9 +88,7 @@ public class AutoCommands extends Command {
                   new Rotation2d())),
           AllianceFlipUtil.apply(
               new Pose2d(
-                  FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
-                  FieldConstants.Stage.foot1Center.getY(),
-                  new Rotation2d(-0.8165))),
+                  new Translation2d(0.69, 4.51), new Rotation2d(Units.degreesToRadians(-60)))),
         };
     wingGamePieceLocations =
         new Pose2d[] {
@@ -108,23 +109,23 @@ public class AutoCommands extends Command {
         new Pose2d[] {
           new Pose2d(
               FieldConstants.GamePieces.centerPieces[0].plus(
-                  new Translation2d(-Units.inchesToMeters(12), 0)),
+                  new Translation2d(-Units.inchesToMeters(0), Units.inchesToMeters(12))),
               new Rotation2d()),
           new Pose2d(
               FieldConstants.GamePieces.centerPieces[1].plus(
-                  new Translation2d(-Units.inchesToMeters(12), 0)),
+                  new Translation2d(-Units.inchesToMeters(0), Units.inchesToMeters(12))),
               new Rotation2d()),
           new Pose2d(
               FieldConstants.GamePieces.centerPieces[2].plus(
-                  new Translation2d(-Units.inchesToMeters(12), 0)),
+                  new Translation2d(-Units.inchesToMeters(0), Units.inchesToMeters(12))),
               new Rotation2d()),
           new Pose2d(
               FieldConstants.GamePieces.centerPieces[3].plus(
-                  new Translation2d(-Units.inchesToMeters(12), 0)),
+                  new Translation2d(-Units.inchesToMeters(0), Units.inchesToMeters(12))),
               new Rotation2d()),
           new Pose2d(
               FieldConstants.GamePieces.centerPieces[4].plus(
-                  new Translation2d(-Units.inchesToMeters(12), 0)),
+                  new Translation2d(-Units.inchesToMeters(0), Units.inchesToMeters(12))),
               new Rotation2d()),
         };
     shootingPositions =
@@ -144,20 +145,6 @@ public class AutoCommands extends Command {
           Pose2d robotPose = drive.getPose();
           var shotData = ShooterMath.calculateShotData(robotPose, drive.getFieldRelativeSpeeds());
           return shotData.pivotAngle();
-        };
-    driveRotation =
-        () -> {
-          Pose2d robotPose = drive.getPose();
-          // boolean isRed =
-          //     DriverStation.getAlliance().isPresent()
-          //         && DriverStation.getAlliance().get() == Alliance.Red;
-          // double translatedX =
-          //     (isRed ? robotPose.getX() - FieldConstants.fieldLength : robotPose.getX());
-          // double robotY = robotPose.getY();
-          // double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
-          // robotAngle += isRed ? (-Math.signum(robotAngle) * Math.PI / 2) : 0.0;
-          // return new Rotation2d(robotAngle);
-          return AllianceFlipUtil.apply(AutoShoot.getRobotRotationToShoot(robotPose));
         };
   }
 
@@ -355,9 +342,11 @@ public class AutoCommands extends Command {
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           Commands.sequence(
+              superstructure.setMode(SuperstructureState.POSE),
+              superstructure.setPose(Preset.HANDOFF),
               path(waypoints)
-                  .alongWith(Commands.waitUntil(() -> drive.getPose().getX() > 5))
-                  .andThen(handoff)),
+                  .alongWith(
+                      Commands.waitUntil(() -> drive.getPose().getX() > 4.5).andThen(handoff))),
           centerGamePieceLocations[centerPosition]);
     } else {
       return new CommandWithPose(Commands.none(), startingPosition);
@@ -467,7 +456,7 @@ public class AutoCommands extends Command {
     var autoShoot2 = autoShoot(centerGamePieceLocations[0], false, true);
     var driveAndIntakeCenter2 = driveAndIntakeCenter(autoShoot2.pose(), 1);
     var autoShoot3 = autoShoot(driveAndIntakeCenter2.pose(), false, true);
-    var driveAndIntakeWing1 = driveAndIntakeWing(autoShoot3.pose(), false, true, 2);
+    var driveAndIntakeWing1 = driveAndIntakeWing(autoShoot3.pose(), false, true, 0);
     return Commands.sequence(
         reset(startingLocations[0]),
         autoShoot1.command(),
