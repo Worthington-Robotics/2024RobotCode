@@ -67,7 +67,7 @@ public class AutoShoot extends SequentialCommandGroup {
     Supplier<Double> pivotAngle =
         () -> {
           Pose2d robotPose = drive.getPose();
-          var shotData = ShooterMath.calculateShotData(robotPose);
+          var shotData = ShooterMath.calculateShotData(robotPose, drive.getFieldRelativeSpeeds());
           SmartDashboard.putNumber("Shot Angle", shotData.pivotAngle());
           return shotData.pivotAngle();
         };

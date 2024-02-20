@@ -267,6 +267,15 @@ public class Drive extends SubsystemBase {
   }
 
   /**
+   * Gets the setpoint field-relative ChassisSpeeds of the robot
+   *
+   * @return The speed of the robot
+   */
+  public ChassisSpeeds getFieldRelativeSpeeds() {
+    return setpoint;
+  }
+
+  /**
    * Gets the current yaw velocity.
    *
    * @return The yaw velocity in rads per second.

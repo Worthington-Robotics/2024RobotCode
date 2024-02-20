@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 /** Geometry utilities for working with translations, rotations, transforms, and poses. */
 public class GeomUtil {
@@ -164,5 +165,15 @@ public class GeomUtil {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Gets the magnitude of a ChassisSpeeds
+   *
+   * @param speeds The speeds to get the magnitude of
+   * @return The magnitude of the speeds vector. Does not factor in rotational velocity.
+   */
+  public static double getChassisSpeedsMagnitude(ChassisSpeeds speeds) {
+    return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
   }
 }

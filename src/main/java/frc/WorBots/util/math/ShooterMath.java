@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -18,6 +19,8 @@ import frc.WorBots.FieldConstants;
 import java.util.Optional;
 
 public class ShooterMath {
+  // Confidence calculation constants
+
   /** The maximum distance the robot can reliably shoot, in meters */
   private static final double MAX_RELIABLE_RANGE = 4.3;
 
@@ -32,6 +35,12 @@ public class ShooterMath {
   /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
   private static final double MAX_ANGLE = Units.degreesToRadians(75);
 
+  /** The maximum speed the robot can reliably move at while shooting, in meters per second */
+  private static final double MAX_RELIABLE_ROBOT_VELOCITY = 1.0;
+
+  /** The maximum speed the robot can move at while shooting, in meters per second */
+  private static final double MAX_ROBOT_VELOCITY = 3.0;
+
   // Constants for RPM calculation
 
   /** The maxmimum RPM we can shoot at */
@@ -40,23 +49,33 @@ public class ShooterMath {
   /**
    * The closest range we can shoot at. The point where the RPM falloff results in the lowest RPM
    */
-  public static final double CLOSEST_RANGE = 1.02;
+  private static final double CLOSEST_RANGE = 1.02;
 
   /** The range past which the calculated RPM will be MAX_SHOOTER_RPM */
-  public static final double MAX_RPM_FALLOFF_RANGE = 4.3;
+  private static final double MAX_RPM_FALLOFF_RANGE = 4.3;
 
   /**
    * How much of the RPM range is controlled by linear distance falloff. From 0-1. The minimum RPM
    * will be (1 - RPM_FALLOFF_COEFFICIENT) * MAX_SHOOTER_RPM, which will be when the robot is
    * CLOSEST_RANGE away from the goal
    */
-  public static final double RPM_FALLOFF_COEFFICIENT = 0.46;
+  private static final double RPM_FALLOFF_COEFFICIENT = 0.46;
+
+  // Side shot constants
 
   /** The amount to move the pivot down for side shots */
-  public static final double SIDE_SHOT_PIVOT_COEFFICIENT = 0.00;
+  private static final double SIDE_SHOT_PIVOT_COEFFICIENT = 0.00;
 
   /** The amount to adjust the robot angle for side shots */
-  public static final double SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.00;
+  private static final double SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.00;
+
+  // Momentum compensation constants
+
+  /** The amount to adjust the robot angle based on the robot velocity */
+  private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.06;
+
+  /** The amount to increase robot angle momentum compensation by depending on the range */
+  private static final double ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT = 0.005;
 
   /** Distance -> pivot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
@@ -85,46 +104,59 @@ public class ShooterMath {
    * Calculates outputs for a shot based on robot position
    *
    * @param robot The robot pose
+   * @param robotSpeeds The field-relative speeds of the robot
    * @return The output data for the shot
    */
-  public static ShotData calculateShotData(Pose2d robot) {
+  public static ShotData calculateShotData(Pose2d robot, ChassisSpeeds robotSpeeds) {
     final double distance = getGoalDistance(robot);
     final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
 
     final double rpm = calculateShooterRPM(distance);
-
-    // Find pivot angle and robot angle, then adjust them for side shots
-    double pivotAngle = ANGLE_LOOKUP.get(distance);
-    Rotation2d robotAngle = getGoalTheta(robot);
-    // Move the pivot slightly down for side shots
-    pivotAngle -= Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT;
-    // Rotate the robot slightly away from the goal wall for side shots
-    robotAngle = robotAngle.minus(goalToRobotAngle.times(SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT));
-
-    final ShotConfidence confidence = getConfidence(distance, goalToRobotAngle);
+    final double pivotAngle = calculatePivotAngle(distance, goalToRobotAngle);
+    final Rotation2d robotAngle = getRobotAngle(robot, goalToRobotAngle, robotSpeeds, distance);
+    final ShotConfidence confidence = getConfidence(distance, goalToRobotAngle, robotSpeeds);
 
     return new ShotData(rpm, pivotAngle, robotAngle, confidence);
+  }
+
+  public static double calculatePivotAngle(double distance, Rotation2d goalToRobotAngle) {
+    double pivotAngle = ANGLE_LOOKUP.get(distance);
+    // Move the pivot slightly down for side shots
+    pivotAngle -= Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT;
+    return pivotAngle;
   }
 
   /**
    * Calculates confidence for a shot based on robot position
    *
    * @param robot The robot pose
+   * @param robotSpeeds The field-relative speeds of the robot
    * @return The calculated confidence
    */
-  public static ShotConfidence getConfidence(Pose2d robot) {
+  public static ShotConfidence getConfidence(Pose2d robot, ChassisSpeeds robotSpeeds) {
     final double distance = getGoalDistance(robot);
     final Rotation2d angle = getGoalToRobotAngle(robot);
-    return getConfidence(distance, angle);
+    return getConfidence(distance, angle, robotSpeeds);
   }
 
-  public static ShotConfidence getConfidence(double distance, Rotation2d goalToRobotAngle) {
+  public static ShotConfidence getConfidence(
+      double distance, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds) {
     if (distance > MAX_RANGE || Math.abs(goalToRobotAngle.getRadians()) > MAX_ANGLE) {
       return ShotConfidence.LOW;
     }
 
     if (distance > MAX_RELIABLE_RANGE
         || Math.abs(goalToRobotAngle.getRadians()) > MAX_RELIABLE_ANGLE) {
+      return ShotConfidence.MEDIUM;
+    }
+
+    // Speed checks
+    final double robotVelocity = GeomUtil.getChassisSpeedsMagnitude(robotSpeeds);
+    if (robotVelocity > MAX_ROBOT_VELOCITY) {
+      return ShotConfidence.LOW;
+    }
+
+    if (robotVelocity > MAX_RELIABLE_ROBOT_VELOCITY) {
       return ShotConfidence.MEDIUM;
     }
 
@@ -153,6 +185,25 @@ public class ShooterMath {
    */
   public static double getGoalDistance(Pose2d robot) {
     return robot.getTranslation().getDistance(getGoal());
+  }
+
+  public static Rotation2d getRobotAngle(Pose2d robot, ChassisSpeeds robotSpeeds) {
+    final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
+    final double distance = getGoalDistance(robot);
+    return getRobotAngle(robot, goalToRobotAngle, robotSpeeds, distance);
+  }
+
+  public static Rotation2d getRobotAngle(
+      Pose2d robot, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds, double distance) {
+    Rotation2d robotAngle = getGoalTheta(robot);
+    // Rotate the robot slightly away from the goal wall for side shots
+    robotAngle = robotAngle.minus(goalToRobotAngle.times(SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT));
+    // Apply momentum compensation
+    robotAngle =
+        robotAngle.plus(
+            Rotation2d.fromRadians(
+                calculateRobotAngleMomentumCompensation(robotAngle, robotSpeeds, distance)));
+    return robotAngle;
   }
 
   /**
@@ -193,6 +244,12 @@ public class ShooterMath {
     return calculateShooterRPM(distance);
   }
 
+  /**
+   * Calculate the desired shooter RPM based on the distance to the goal
+   *
+   * @param distance The distance in meters to the goal
+   * @return The desired RPM for the shooter
+   */
   public static double calculateShooterRPM(double distance) {
     // Clamp the distance to prevent bad values
     distance = MathUtil.clamp(distance, CLOSEST_RANGE, MAX_RPM_FALLOFF_RANGE);
@@ -207,6 +264,31 @@ public class ShooterMath {
     // The minimum RPM
     final double base = MAX_SHOOTER_RPM - rpmAmount;
     return base + rpmAmount * scalar;
+  }
+
+  /**
+   * Calculates momentum compensation for the robot angle based on robot speed
+   *
+   * @param robotAngle The angle for the robot that has it facing the goal
+   * @param robotSpeeds The field-relative speeds of the robot
+   * @param distance The distance to the goal
+   * @return The amount, in radians, to add to the desired robot angle
+   */
+  public static double calculateRobotAngleMomentumCompensation(
+      Rotation2d robotAngle, ChassisSpeeds robotSpeeds, double distance) {
+    // Calculate the velocity vector that is perpendicular to the goal
+    final Rotation2d robotAngleRotated = robotAngle.rotateBy(Rotation2d.fromDegrees(90));
+    // Calculate the dot product to find the robot velocity perpendicular to the
+    // goal
+    final double dotProduct =
+        (robotSpeeds.vxMetersPerSecond * robotAngleRotated.getCos())
+            + (robotSpeeds.vyMetersPerSecond * robotAngleRotated.getSin());
+
+    // We increase the compensation by the distance so that the effect is more pronounced the
+    // farther
+    // away we are
+    final double rangeCompensation = dotProduct * distance * ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT;
+    return dotProduct * ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT + rangeCompensation;
   }
 
   /**

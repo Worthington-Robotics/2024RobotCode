@@ -142,7 +142,7 @@ public class AutoCommands extends Command {
     pivotAngle =
         () -> {
           Pose2d robotPose = drive.getPose();
-          var shotData = ShooterMath.calculateShotData(robotPose);
+          var shotData = ShooterMath.calculateShotData(robotPose, drive.getFieldRelativeSpeeds());
           return shotData.pivotAngle();
         };
     driveRotation =

@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     final var robotPose = robotContainer.drive.getPose();
+    final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
     final double range = ShooterMath.getGoalDistance(robotPose);
     SmartDashboard.putNumber("Speaker Range", range);
     final var goalPose = ShooterMath.getGoal();
@@ -67,7 +68,7 @@ public class Robot extends TimedRobot {
     var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
     SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
 
-    var shotData = ShooterMath.calculateShotData(robotPose);
+    var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
     SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
     SmartDashboard.putString("Shot Confidence", shotData.confidence().toString());
     SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
