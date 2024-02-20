@@ -32,7 +32,7 @@ var searchData=
   ['getpose_29',['getPose',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a3598941c8730b2e5861bfc04e04c1bc4',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getpositionmeters_30',['getPositionMeters',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#a35b35b7a000050085a10c17aefb1a653',1,'frc::WorBots::subsystems::drive::Module']]],
   ['getresponses_31',['getResponses',['../classfrc_1_1WorBots_1_1AutoSelector.html#ae149bfb6bbb1411a59f496a86689c02a',1,'frc::WorBots::AutoSelector']]],
-  ['getrobotrotationtoshoot_32',['getRobotRotationToShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#aa489a354ca50a2f427ac7f2d12d8477f',1,'frc::WorBots::commands::AutoShoot']]],
+  ['getrobotrotationtoshoot_32',['getRobotRotationToShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#ab4400b90e5d0c63c8467b449e97d2ebd',1,'frc::WorBots::commands::AutoShoot']]],
   ['getroll_33',['getRoll',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a52c836fad441e2b7591fc1e180bc9365',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getrollvelocity_34',['getRollVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a09c31d981f45cbf1071b070582e6eba6',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getrotation_35',['getRotation',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7e6306dd3bc6078a7801345af6bc1147',1,'frc::WorBots::subsystems::drive::Drive']]],
