@@ -93,15 +93,15 @@ public class AutoCommands extends Command {
         new Pose2d[] {
           new Pose2d(
               FieldConstants.GamePieces.wingPieces[0].plus(
-                  new Translation2d(-Units.inchesToMeters(6), 0)),
+                  new Translation2d(-Units.inchesToMeters(10), 0)),
               new Rotation2d()),
           new Pose2d(
               FieldConstants.GamePieces.wingPieces[1].plus(
-                  new Translation2d(-Units.inchesToMeters(6), 0)),
+                  new Translation2d(-Units.inchesToMeters(10), 0)),
               new Rotation2d()),
           new Pose2d(
               FieldConstants.GamePieces.wingPieces[2].plus(
-                  new Translation2d(-Units.inchesToMeters(6), 0)),
+                  new Translation2d(-Units.inchesToMeters(10), 0)),
               new Rotation2d())
         };
     centerGamePieceLocations =
@@ -196,12 +196,19 @@ public class AutoCommands extends Command {
   }
 
   /**
-   * Drives to the specified game piece in the wing and intakes it.
+   * A command that takes the starting position, and various parameters to automitically drive and
+   * intake a game piece from the wing.
    *
-   * @return The command.
+   * @param startingPosition The starting pose of the robot.
+   * @param fromCenter Wether or not the robot is picking up from center, effects wether or not the
+   *     robot will rotate to get a game piece.
+   * @param wrapToPickup Wether or not the robot will not pick up from center, and will wrap around
+   *     the game piece to pick it up.
+   * @param wingPosition The position of the game piece, left being 0, right being 2.
+   * @return The command and pose.
    */
   private CommandWithPose driveAndIntakeWing(
-      Pose2d startingPosition, boolean fromCenter, int wingPosition) {
+      Pose2d startingPosition, boolean fromCenter, boolean wrapToPickup, int wingPosition) {
     List<Waypoint> waypoints = new ArrayList<>();
     waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
     if (fromCenter) {
@@ -219,6 +226,25 @@ public class AutoCommands extends Command {
         waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
       }
 
+    } else if (wrapToPickup) {
+      if (wingPosition <= 1) {
+        if (startingPosition.getX() >= Units.inchesToMeters(116)) {
+          waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+        }
+        waypoints.add(
+            Waypoint.fromHolonomicPose(
+                wingGamePieceLocations[wingPosition].plus(
+                    new Transform2d(-0.6, -0.35, new Rotation2d()))));
+      } else {
+        if (startingPosition.getX() >= Units.inchesToMeters(116)) {
+          waypoints.add(Waypoint.fromHolonomicPose(betweenOneandTwo));
+        }
+        waypoints.add(
+            Waypoint.fromHolonomicPose(
+                wingGamePieceLocations[wingPosition].plus(
+                    new Transform2d(-0.6, 0.35, new Rotation2d()))));
+      }
+      waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     } else {
       waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     }
@@ -281,19 +307,19 @@ public class AutoCommands extends Command {
             reset(startingPose),
             intakeCommand,
             superstructure.setMode(SuperstructureState.SHOOTING),
-            Commands.parallel(
-                    driveFirst ? driveToPose : Commands.none(),
-                    Commands.runOnce(
+            Commands.deadline(
+                    driveFirst ? driveToPose : Commands.waitSeconds(0.04),
+                    Commands.run(
                         () -> {
                           shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(startingPose));
                         },
                         shooter),
-                    Commands.runOnce(() -> superstructure.setShootingAngleRad(pivotAngle)))
+                    Commands.run(() -> superstructure.setShootingAngleRad(pivotAngle)))
                 .andThen(
                     Commands.waitUntil(
                         () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint()))
                 .andThen(shooter.setRawFeederVoltsCommand(-2))
-                .andThen(Commands.waitSeconds(0.2).withTimeout(0.2))
+                .andThen(Commands.waitSeconds(0.15).withTimeout(0.15))
                 .andThen(shooter.setRawFeederVoltsCommand(0.0))
                 .andThen(shooter.setSpeed(0.0))
                 .andThen(superstructure.setMode(SuperstructureState.POSE))),
@@ -312,11 +338,17 @@ public class AutoCommands extends Command {
     waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
     Command handoff = new Handoff(intake, superstructure, shooter);
     if (centerPosition <= 1) {
-      waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      if (startingPosition.getX() < 4) {
+        waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      }
       waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
+
     } else if (centerPosition == 2) {
-      waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      if (startingPosition.getX() < 4) {
+        waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      }
       waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
+
     } else {
 
     }
@@ -341,7 +373,7 @@ public class AutoCommands extends Command {
   private Command onePiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
     var autoShoot = autoShoot(startingPose, true, false);
-    var driveIntakeWing1 = driveAndIntakeWing(startingPose, false, startingLocation);
+    var driveIntakeWing1 = driveAndIntakeWing(startingPose, false, false, startingLocation);
     return Commands.sequence(
         autoShoot.command(),
         // path(
@@ -365,7 +397,7 @@ public class AutoCommands extends Command {
   private Command twoPiece(int startingLocation) {
     Pose2d startingPose = startingLocations[startingLocation];
     var autoShoot1 = autoShoot(startingPose, true, false);
-    var driveIntakeWing1 = driveAndIntakeWing(startingPose, false, startingLocation);
+    var driveIntakeWing1 = driveAndIntakeWing(startingPose, false, false, startingLocation);
     var autoShoot2 = autoShoot(driveIntakeWing1.pose(), true, true);
     return Commands.sequence(
         autoShoot1.command(), driveIntakeWing1.command(), autoShoot2.command());
@@ -386,9 +418,9 @@ public class AutoCommands extends Command {
   public Command threePieceCenterWing() {
     Pose2d startingPose = startingLocations[1];
     var autoShoot1 = autoShoot(startingPose, true, false);
-    var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, 1);
+    var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
     var autoShoot2 = autoShoot(intake1.pose(), false, true);
-    var intake2 = driveAndIntakeWing(autoShoot2.pose(), true, 0);
+    var intake2 = driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
     var autoShoot3 = autoShoot(wingGamePieceLocations[1], false, true);
     return Commands.sequence(
         autoShoot1.command(),
@@ -405,11 +437,11 @@ public class AutoCommands extends Command {
   public Command fourPieceCenterWing() {
     Pose2d startingPose = startingLocations[1];
     var autoShoot1 = autoShoot(startingPose, true, false);
-    var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, 1);
+    var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
     var autoShoot2 = autoShoot(intake1.pose(), false, true);
-    var intake2 = driveAndIntakeWing(autoShoot2.pose(), true, 0);
+    var intake2 = driveAndIntakeWing(autoShoot2.pose(), false, true, 0);
     var autoShoot3 = autoShoot(wingGamePieceLocations[1], false, true);
-    var intake3 = driveAndIntakeWing(autoShoot3.pose(), true, 2);
+    var intake3 = driveAndIntakeWing(autoShoot3.pose(), false, true, 2);
     var autoShoot4 = autoShoot(wingGamePieceLocations[1], false, true);
     return Commands.sequence(
         autoShoot1.command(),
@@ -433,11 +465,17 @@ public class AutoCommands extends Command {
     var autoShoot1 = autoShoot(startingLocations[0], true, false);
     var driveIntakeCenter1 = driveAndIntakeCenter(startingLocations[0], 0);
     var autoShoot2 = autoShoot(centerGamePieceLocations[0], false, true);
+    var driveAndIntakeCenter2 = driveAndIntakeCenter(autoShoot2.pose(), 1);
+    var autoShoot3 = autoShoot(driveAndIntakeCenter2.pose(), false, true);
+    var driveAndIntakeWing1 = driveAndIntakeWing(autoShoot3.pose(), false, true, 2);
     return Commands.sequence(
         reset(startingLocations[0]),
         autoShoot1.command(),
         driveIntakeCenter1.command(),
-        autoShoot2.command());
+        autoShoot2.command(),
+        driveAndIntakeCenter2.command(),
+        autoShoot3.command(),
+        driveAndIntakeWing1.command());
   }
 
   private Command mobility(int startingPosition) {
