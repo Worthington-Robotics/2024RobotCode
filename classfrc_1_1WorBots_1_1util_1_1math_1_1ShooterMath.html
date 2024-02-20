@@ -118,8 +118,14 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:aec40a68d606c33aaea406fc1d149c2df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1836854a6ab749228b2d125951d6f54"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#ad1836854a6ab749228b2d125951d6f54">CLOSEST_RANGE</a> = 1.02</td></tr>
 <tr class="separator:ad1836854a6ab749228b2d125951d6f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f6923090e98eff20169619908ce8ca5"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2f6923090e98eff20169619908ce8ca5">MAX_RPM_FALLOFF_RANGE</a> = 4.3</td></tr>
+<tr class="separator:a2f6923090e98eff20169619908ce8ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6614416842f822baef42f8fb07907e9e"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a6614416842f822baef42f8fb07907e9e">RPM_FALLOFF_COEFFICIENT</a> = 0.46</td></tr>
 <tr class="separator:a6614416842f822baef42f8fb07907e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1d9f454a764826c7b12353acc16171"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a7c1d9f454a764826c7b12353acc16171">SIDE_SHOT_PIVOT_COEFFICIENT</a> = 0.00</td></tr>
+<tr class="separator:a7c1d9f454a764826c7b12353acc16171"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a545ca1802c6b820f30878ffe17de3d3d"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a545ca1802c6b820f30878ffe17de3d3d">SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT</a> = 0.00</td></tr>
+<tr class="separator:a545ca1802c6b820f30878ffe17de3d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2a55c63e11dc36fde16455c7d23632e5" name="a2a55c63e11dc36fde16455c7d23632e5"></a>
@@ -502,6 +508,30 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >The closest range we can shoot at. The point where the RPM falloff results in the lowest RPM </p>
+
+</div>
+</div>
+<a id="a2f6923090e98eff20169619908ce8ca5" name="a2f6923090e98eff20169619908ce8ca5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f6923090e98eff20169619908ce8ca5">&#9670;&#160;</a></span>MAX_RPM_FALLOFF_RANGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.math.ShooterMath.MAX_RPM_FALLOFF_RANGE = 4.3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The range past which the calculated RPM will be MAX_SHOOTER_RPM </p>
 
 </div>
 </div>
@@ -524,6 +554,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >The maxmimum RPM we can shoot at </p>
 
 </div>
 </div>
@@ -546,6 +577,53 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >How much of the RPM range is controlled by linear distance falloff. From 0-1. The minimum RPM will be (1 - RPM_FALLOFF_COEFFICIENT) * MAX_SHOOTER_RPM, which will be when the robot is CLOSEST_RANGE away from the goal </p>
+
+</div>
+</div>
+<a id="a7c1d9f454a764826c7b12353acc16171" name="a7c1d9f454a764826c7b12353acc16171"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c1d9f454a764826c7b12353acc16171">&#9670;&#160;</a></span>SIDE_SHOT_PIVOT_COEFFICIENT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.math.ShooterMath.SIDE_SHOT_PIVOT_COEFFICIENT = 0.00</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The amount to move the pivot down for side shots </p>
+
+</div>
+</div>
+<a id="a545ca1802c6b820f30878ffe17de3d3d" name="a545ca1802c6b820f30878ffe17de3d3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a545ca1802c6b820f30878ffe17de3d3d">&#9670;&#160;</a></span>SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.util.math.ShooterMath.SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.00</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The amount to adjust the robot angle for side shots </p>
 
 </div>
 </div>
