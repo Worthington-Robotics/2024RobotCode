@@ -21,8 +21,7 @@ var searchData=
   ['rotationsequence_2ejava_18',['RotationSequence.java',['../RotationSequence_8java.html',1,'']]],
   ['rotationtopose_19',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a6d937a21ed822175b7958d7ad5cd0233',1,'frc::WorBots::util::math::GeomUtil']]],
   ['rotationtotransform_20',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1296067ad70179403938c47dc05416c7',1,'frc::WorBots::util::math::GeomUtil']]],
-  ['rpm_5ffalloff_5fcoefficient_21',['RPM_FALLOFF_COEFFICIENT',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a6614416842f822baef42f8fb07907e9e',1,'frc::WorBots::util::math::ShooterMath']]],
-  ['runfeederwheel_22',['runFeederWheel',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ac6a54e5185a07ba6637d6dd61ecd4f85',1,'frc::WorBots::subsystems::shooter::Shooter']]],
-  ['runstate_23',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['runvelocity_24',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
+  ['runfeederwheel_21',['runFeederWheel',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ac6a54e5185a07ba6637d6dd61ecd4f85',1,'frc::WorBots::subsystems::shooter::Shooter']]],
+  ['runstate_22',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['runvelocity_23',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
 ];

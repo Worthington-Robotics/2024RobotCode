@@ -108,10 +108,46 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a2f79fbd7fcf1bea0dd2207f997e7d6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e2952e54d0e41a04cb548bdbf9e1d7b"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1e2952e54d0e41a04cb548bdbf9e1d7b">translation2dInBoundingBox</a> (Translation2d translation, Translation2d[] bounds)</td></tr>
 <tr class="separator:a1e2952e54d0e41a04cb548bdbf9e1d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a853419ad4b325689b4ed6bb5786d14c9"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a853419ad4b325689b4ed6bb5786d14c9">getChassisSpeedsMagnitude</a> (ChassisSpeeds speeds)</td></tr>
+<tr class="separator:a853419ad4b325689b4ed6bb5786d14c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Geometry utilities for working with translations, rotations, transforms, and poses. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a853419ad4b325689b4ed6bb5786d14c9" name="a853419ad4b325689b4ed6bb5786d14c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a853419ad4b325689b4ed6bb5786d14c9">&#9670;&#160;</a></span>getChassisSpeedsMagnitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.GeomUtil.getChassisSpeedsMagnitude </td>
+          <td>(</td>
+          <td class="paramtype">ChassisSpeeds&#160;</td>
+          <td class="paramname"><em>speeds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Gets the magnitude of a ChassisSpeeds</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speeds</td><td>The speeds to get the magnitude of </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The magnitude of the speeds vector. Does not factor in rotational velocity. </dd></dl>
+
+</div>
+</div>
 <a id="a48d44e3aa04122f769fc88a6a661e8c3" name="a48d44e3aa04122f769fc88a6a661e8c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a48d44e3aa04122f769fc88a6a661e8c3">&#9670;&#160;</a></span>multiplyTwist()</h2>
 
