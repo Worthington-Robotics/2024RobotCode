@@ -33,7 +33,6 @@ public class AutoShoot extends SequentialCommandGroup {
   private static double speakerOpeningCenterY;
   private Supplier<Double> leftXSupplier;
   private Supplier<Double> leftYSupplier;
-  private final DriveController driveController = new DriveController();
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
           3.75,
@@ -162,12 +161,11 @@ public class AutoShoot extends SequentialCommandGroup {
    * @param robotPose The desired pose to be shot from, ignores rotation.
    * @return The rotation of the robot needed to shoot at the provided pose.
    */
-  public Rotation2d getRobotRotationToShoot(Pose2d robotPose) {
-    Alliance currentAlliance = DriverStation.getAlliance().get();
-    double translatedX =
-        (currentAlliance == Alliance.Red
-            ? robotPose.getX() - FieldConstants.fieldLength
-            : robotPose.getX());
+  public static Rotation2d getRobotRotationToShoot(Pose2d robotPose) {
+    boolean isRed =
+        DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == Alliance.Red;
+    double translatedX = (isRed ? robotPose.getX() - FieldConstants.fieldLength : robotPose.getX());
     double robotY = robotPose.getY();
     double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
     return new Rotation2d(robotAngle);

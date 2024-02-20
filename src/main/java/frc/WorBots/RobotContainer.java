@@ -134,7 +134,7 @@ public class RobotContainer {
     driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
     driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
     driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
-    driver.povRight().onTrue(shooter.spinToSpeed(2500)).onFalse(shooter.spinToSpeed(0));
+    driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
     driver
         .povDown()
         .toggleOnTrue(

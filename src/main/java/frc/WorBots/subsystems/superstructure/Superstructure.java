@@ -271,6 +271,8 @@ public class Superstructure extends SubsystemBase {
       volts = 0.0;
     }
 
+    volts = MathUtil.clamp(volts, -12, 12);
+
     setElevatorVoltageRaw(volts);
   }
 

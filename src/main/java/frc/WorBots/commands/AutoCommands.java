@@ -148,15 +148,16 @@ public class AutoCommands extends Command {
     driveRotation =
         () -> {
           Pose2d robotPose = drive.getPose();
-          boolean isRed =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
-          double translatedX =
-              (isRed ? robotPose.getX() - FieldConstants.fieldLength : robotPose.getX());
-          double robotY = robotPose.getY();
-          double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
-          robotAngle += isRed ? (-Math.signum(robotAngle) * Math.PI / 2) : 0.0;
-          return new Rotation2d(robotAngle);
+          // boolean isRed =
+          //     DriverStation.getAlliance().isPresent()
+          //         && DriverStation.getAlliance().get() == Alliance.Red;
+          // double translatedX =
+          //     (isRed ? robotPose.getX() - FieldConstants.fieldLength : robotPose.getX());
+          // double robotY = robotPose.getY();
+          // double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
+          // robotAngle += isRed ? (-Math.signum(robotAngle) * Math.PI / 2) : 0.0;
+          // return new Rotation2d(robotAngle);
+          return AllianceFlipUtil.apply(AutoShoot.getRobotRotationToShoot(robotPose));
         };
   }
 
@@ -244,6 +245,7 @@ public class AutoCommands extends Command {
   private CommandWithPose autoShoot(Pose2d startingPose, boolean intakeFirst, boolean driveFirst) {
     var startingWaypoint = Waypoint.fromHolonomicPose(startingPose);
     List<Waypoint> waypoints = new ArrayList<>();
+    waypoints.add(startingWaypoint);
     if (AllianceFlipUtil.apply(startingPose.getX()) > 4) {
       waypoints.add(Waypoint.fromHolonomicPose(new Pose2d(4, 6.25, driveRotation.get())));
     } else {
@@ -268,7 +270,6 @@ public class AutoCommands extends Command {
                         },
                         shooter),
                     Commands.runOnce(() -> superstructure.setShootingAngleRad(pivotAngle)))
-                .withTimeout(0.1)
                 .andThen(
                     Commands.waitUntil(
                         () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint()))
