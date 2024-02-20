@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
     final var adjusted = new Pose2d(robotPose.getTranslation(), theta);
     SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
     var shotData = ShooterMath.calculateShotData(robotPose);
-    SmartDashboard.putNumber("Shot Angle", shotData.angle());
+    SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
     var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
     SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
     var confidence = ShooterMath.getConfidence(robotPose);

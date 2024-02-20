@@ -38,10 +38,6 @@ public class ShooterMath {
 
   public static final double RPM_FALLOFF_COEFFICIENT = 0.46;
 
-  /** Distance -> RPM */
-  private static final InterpolatingTable RPM_LOOKUP =
-      new InterpolatingTable(new double[][] {{0.0, 0.0}});
-
   /** Distance -> pivot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
       new InterpolatingTable(
@@ -62,7 +58,8 @@ public class ShooterMath {
   }
 
   /** Calculated outputs for a shot */
-  public static record ShotData(double rpm, double angle, ShotConfidence confidence) {}
+  public static record ShotData(
+      double rpm, double pivotAngle, Rotation2d robotAngle, ShotConfidence confidence) {}
 
   /**
    * Calculates outputs for a shot based on robot position
@@ -72,10 +69,14 @@ public class ShooterMath {
    */
   public static ShotData calculateShotData(Pose2d robot) {
     final double distance = getGoalDistance(robot);
-    final double rpm = RPM_LOOKUP.get(distance);
-    final double angle = ANGLE_LOOKUP.get(distance);
-    final ShotConfidence confidence = getConfidence(robot);
-    return new ShotData(rpm, angle, confidence);
+    final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
+
+    final double rpm = calculateShooterRPM(distance);
+    final double pivotAngle = ANGLE_LOOKUP.get(distance);
+    final Rotation2d robotAngle = getGoalTheta(robot);
+    final ShotConfidence confidence = getConfidence(distance, goalToRobotAngle);
+
+    return new ShotData(rpm, pivotAngle, robotAngle, confidence);
   }
 
   /**
@@ -87,11 +88,16 @@ public class ShooterMath {
   public static ShotConfidence getConfidence(Pose2d robot) {
     final double distance = getGoalDistance(robot);
     final Rotation2d angle = getGoalToRobotAngle(robot);
-    if (distance > MAX_RANGE || Math.abs(angle.getRadians()) > MAX_ANGLE) {
+    return getConfidence(distance, angle);
+  }
+
+  public static ShotConfidence getConfidence(double distance, Rotation2d goalToRobotAngle) {
+    if (distance > MAX_RANGE || Math.abs(goalToRobotAngle.getRadians()) > MAX_ANGLE) {
       return ShotConfidence.LOW;
     }
 
-    if (distance > MAX_RELIABLE_RANGE || Math.abs(angle.getRadians()) > MAX_RELIABLE_ANGLE) {
+    if (distance > MAX_RELIABLE_RANGE
+        || Math.abs(goalToRobotAngle.getRadians()) > MAX_RELIABLE_ANGLE) {
       return ShotConfidence.MEDIUM;
     }
 
@@ -150,6 +156,10 @@ public class ShooterMath {
 
   public static double calculateShooterRPM(Pose2d robot) {
     double distance = getGoalDistance(robot);
+    return calculateShooterRPM(distance);
+  }
+
+  public static double calculateShooterRPM(double distance) {
     // Clamp the distance to prevent bad values
     distance = MathUtil.clamp(distance, CLOSEST_RANGE, MAX_RELIABLE_RANGE);
 
