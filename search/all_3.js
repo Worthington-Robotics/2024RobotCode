@@ -1,7 +1,7 @@
 var searchData=
 [
   ['calculate_0',['calculate',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a1e70efeef5bf6ab8ee36385674a5160e',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.calculate(Pose2d currentPose, Pose2d poseRef, double linearVelocityRefMeters, Rotation2d angleRef, double angleVelocityRefRadians)'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a93b64c3cdb1197878e3a391510f2448c',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.calculate(Pose2d currentPose, Trajectory.State driveState, RotationSequence.State holonomicRotationState)']]],
-  ['calculateshooterrpm_1',['calculateShooterRPM',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#afc738303e67f64c1ba2e95c9f88f6c60',1,'frc::WorBots::util::math::ShooterMath']]],
+  ['calculateshooterrpm_1',['calculateShooterRPM',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#afc738303e67f64c1ba2e95c9f88f6c60',1,'frc.WorBots.util.math.ShooterMath.calculateShooterRPM(Pose2d robot)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2a55c63e11dc36fde16455c7d23632e5',1,'frc.WorBots.util.math.ShooterMath.calculateShooterRPM(double distance)']]],
   ['calculateshotdata_2',['calculateShotData',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a730b48a5b739aad23bd34b5cfdf5dae1',1,'frc::WorBots::util::math::ShooterMath']]],
   ['cam0_3',['CAM0',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#ae57fee9cb9bb746279cd4840f017f809',1,'frc::WorBots::util::debug::StatusPage']]],
   ['cam1_4',['CAM1',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a149a2e205e6503be4e090c161d843605',1,'frc::WorBots::util::debug::StatusPage']]],

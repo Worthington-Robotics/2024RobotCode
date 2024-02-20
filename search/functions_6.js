@@ -5,7 +5,7 @@ var searchData=
   ['getangle_2',['getAngle',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#aca2ffe51115fcc240795e9f2d480bf31',1,'frc::WorBots::subsystems::drive::Module']]],
   ['getautonomouscommand_3',['getAutonomousCommand',['../classfrc_1_1WorBots_1_1RobotContainer.html#ae61066b2346ca0322a59e2c6c6b8329e',1,'frc::WorBots::RobotContainer']]],
   ['getcommand_4',['getCommand',['../classfrc_1_1WorBots_1_1AutoSelector.html#aee6cdd0eaaa892219ffc2adc7901102e',1,'frc::WorBots::AutoSelector']]],
-  ['getconfidence_5',['getConfidence',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2802d3666f2a6064fd3429ae3be512df',1,'frc::WorBots::util::math::ShooterMath']]],
+  ['getconfidence_5',['getConfidence',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2802d3666f2a6064fd3429ae3be512df',1,'frc.WorBots.util.math.ShooterMath.getConfidence(Pose2d robot)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#abeed1e103f793160e8ff8c90be362398',1,'frc.WorBots.util.math.ShooterMath.getConfidence(double distance, Rotation2d goalToRobotAngle)']]],
   ['getcurrent_6',['getCurrent',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1TunableDouble.html#a832d99e2e398606bf0225a82e8c073e4',1,'frc::WorBots::util::debug::TunableDouble']]],
   ['getcurrentpose_7',['getCurrentPose',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a98b42cec74bab67dbf4de1dc54b54658',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
   ['getdefault_8',['getDefault',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1TunableDouble.html#a86820ee98cb443cd5c669e3027e95b58',1,'frc::WorBots::util::debug::TunableDouble']]],

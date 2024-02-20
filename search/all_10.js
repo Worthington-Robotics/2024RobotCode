@@ -68,7 +68,7 @@ var searchData=
   ['shootermath_2ejava_65',['ShooterMath.java',['../ShooterMath_8java.html',1,'']]],
   ['shooting_66',['SHOOTING',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a76a9748b4c5d0ad1cccc4965c9f884b7',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
   ['shotconfidence_67',['ShotConfidence',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath_1_1ShotConfidence.html',1,'frc::WorBots::util::math::ShooterMath']]],
-  ['shotdata_68',['ShotData',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a3d23c4a1563054c62b552feea2cff779',1,'frc::WorBots::util::math::ShooterMath']]],
+  ['shotdata_68',['ShotData',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#aa27169b3ab56122fe3afb781f263d369',1,'frc::WorBots::util::math::ShooterMath']]],
   ['smodule_5fprefix_69',['SMODULE_PREFIX',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a38950f66ede60d4296607e58faec6f1f',1,'frc::WorBots::util::debug::StatusPage']]],
   ['snapdirection_70',['SnapDirection',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html',1,'frc::WorBots::util::math::GeneralMath']]],
   ['snaprotation_71',['snapRotation',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a84fd9490fe1831e97e4ecad9635d266e',1,'frc::WorBots::util::math::GeneralMath']]],
