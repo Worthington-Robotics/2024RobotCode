@@ -32,11 +32,31 @@ public class ShooterMath {
   /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
   private static final double MAX_ANGLE = Units.degreesToRadians(75);
 
+  // Constants for RPM calculation
+
+  /** The maxmimum RPM we can shoot at */
   public static final double MAX_SHOOTER_RPM = 5600;
 
+  /**
+   * The closest range we can shoot at. The point where the RPM falloff results in the lowest RPM
+   */
   public static final double CLOSEST_RANGE = 1.02;
 
+  /** The range past which the calculated RPM will be MAX_SHOOTER_RPM */
+  public static final double MAX_RPM_FALLOFF_RANGE = 4.3;
+
+  /**
+   * How much of the RPM range is controlled by linear distance falloff. From 0-1. The minimum RPM
+   * will be (1 - RPM_FALLOFF_COEFFICIENT) * MAX_SHOOTER_RPM, which will be when the robot is
+   * CLOSEST_RANGE away from the goal
+   */
   public static final double RPM_FALLOFF_COEFFICIENT = 0.46;
+
+  /** The amount to move the pivot down for side shots */
+  public static final double SIDE_SHOT_PIVOT_COEFFICIENT = 0.00;
+
+  /** The amount to adjust the robot angle for side shots */
+  public static final double SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.00;
 
   /** Distance -> pivot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
@@ -72,8 +92,15 @@ public class ShooterMath {
     final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
 
     final double rpm = calculateShooterRPM(distance);
-    final double pivotAngle = ANGLE_LOOKUP.get(distance);
-    final Rotation2d robotAngle = getGoalTheta(robot);
+
+    // Find pivot angle and robot angle, then adjust them for side shots
+    double pivotAngle = ANGLE_LOOKUP.get(distance);
+    Rotation2d robotAngle = getGoalTheta(robot);
+    // Move the pivot slightly down for side shots
+    pivotAngle -= Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT;
+    // Rotate the robot slightly away from the goal wall for side shots
+    robotAngle = robotAngle.minus(goalToRobotAngle.times(SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT));
+
     final ShotConfidence confidence = getConfidence(distance, goalToRobotAngle);
 
     return new ShotData(rpm, pivotAngle, robotAngle, confidence);
@@ -151,6 +178,13 @@ public class ShooterMath {
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
       angle -= Math.PI;
     }
+    // Convert pi-3pi/2 range to negative max
+    if (angle > Math.PI) {
+      angle = -Math.PI;
+    }
+    // Clamp the angle between -pi/2 and pi/2. We don't want weird wrapping behavior
+    // when the angle is beyond the alliance wall
+    angle = GeneralMath.clampMagnitude(angle, Math.PI / 2);
     return new Rotation2d(angle);
   }
 
@@ -161,14 +195,16 @@ public class ShooterMath {
 
   public static double calculateShooterRPM(double distance) {
     // Clamp the distance to prevent bad values
-    distance = MathUtil.clamp(distance, CLOSEST_RANGE, MAX_RELIABLE_RANGE);
+    distance = MathUtil.clamp(distance, CLOSEST_RANGE, MAX_RPM_FALLOFF_RANGE);
 
     double scalar =
-        1.0 - GeneralMath.getScalarPosition(distance, CLOSEST_RANGE, MAX_RELIABLE_RANGE);
+        1.0 - GeneralMath.getScalarPosition(distance, CLOSEST_RANGE, MAX_RPM_FALLOFF_RANGE);
     // 1.0 - x so that it is inverted
     scalar = 1.0 - scalar;
 
+    // The linear falloff part of the RPM
     final double rpmAmount = MAX_SHOOTER_RPM * RPM_FALLOFF_COEFFICIENT;
+    // The minimum RPM
     final double base = MAX_SHOOTER_RPM - rpmAmount;
     return base + rpmAmount * scalar;
   }

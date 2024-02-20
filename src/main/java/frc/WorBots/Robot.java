@@ -64,17 +64,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Speaker Range", range);
     final var goalPose = ShooterMath.getGoal();
     SmartDashboard.putNumberArray("Goal Pose", Logger.translation2dToArray(goalPose));
-    final var theta = ShooterMath.getGoalTheta(robotPose);
-    final var adjusted = new Pose2d(robotPose.getTranslation(), theta);
-    SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
-    var shotData = ShooterMath.calculateShotData(robotPose);
-    SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
     var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
     SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
-    var confidence = ShooterMath.getConfidence(robotPose);
-    SmartDashboard.putString("Shot Confidence", confidence.toString());
-    var rpm = ShooterMath.calculateShooterRPM(robotPose);
-    SmartDashboard.putNumber("Calculated Shooter RPM", rpm);
+
+    var shotData = ShooterMath.calculateShotData(robotPose);
+    SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
+    SmartDashboard.putString("Shot Confidence", shotData.confidence().toString());
+    SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
+    final var adjusted = new Pose2d(robotPose.getTranslation(), shotData.robotAngle());
+    SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
   }
 
   @Override
