@@ -48,7 +48,10 @@ public class TunableDouble {
   public TunableDouble(String table, String subtable, String name, double defaultValue) {
     value = defaultValue;
     this.defaultValue = defaultValue;
-    entry = NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable).getEntry(name);
+    if (enableTuning) {
+      entry =
+          NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable).getEntry(name);
+    }
   }
 
   /** Update the value to the latest version and log that value */
