@@ -28,9 +28,9 @@ public class DriveToPose extends Command {
 
   private boolean running = false;
   private final ProfiledPIDController driveController =
-      new ProfiledPIDController(2.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), 0.02);
+      new ProfiledPIDController(2.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
   private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(5.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), 0.02);
+      new ProfiledPIDController(5.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
   private double driveErrorAbs;
   private double thetaErrorAbs;
   private Translation2d lastSetpointTranslation;

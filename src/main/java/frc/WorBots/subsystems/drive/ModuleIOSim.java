@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.drive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.WorBots.Constants;
 
 public class ModuleIOSim implements ModuleIO {
   private FlywheelSim driveSim = new FlywheelSim(DCMotor.getKrakenX60(1), 6.75, 0.025);
@@ -21,10 +22,10 @@ public class ModuleIOSim implements ModuleIO {
   private double turnAppliedVolts = 0.0;
 
   public void updateInputs(ModuleIOInputs inputs) {
-    driveSim.update(0.02);
-    turnSim.update(0.02);
+    driveSim.update(Constants.ROBOT_PERIOD);
+    turnSim.update(Constants.ROBOT_PERIOD);
 
-    double angleDiffRad = turnSim.getAngularVelocityRadPerSec() * 0.02;
+    double angleDiffRad = turnSim.getAngularVelocityRadPerSec() * Constants.ROBOT_PERIOD;
     turnRelativePositionRad += angleDiffRad;
     turnAbsolutePositionRad += angleDiffRad;
     while (turnAbsolutePositionRad < 0) {
@@ -34,7 +35,7 @@ public class ModuleIOSim implements ModuleIO {
       turnAbsolutePositionRad -= 2.0 * Math.PI;
     }
 
-    inputs.drive.positionRads += (driveSim.getAngularVelocityRadPerSec() * 0.02);
+    inputs.drive.positionRads += (driveSim.getAngularVelocityRadPerSec() * Constants.ROBOT_PERIOD);
     inputs.drive.velocityRadsPerSec = driveSim.getAngularVelocityRadPerSec();
     inputs.drive.appliedPowerVolts = driveAppliedVolts;
     inputs.drive.currentDrawAmps = Math.abs(driveSim.getCurrentDrawAmps());

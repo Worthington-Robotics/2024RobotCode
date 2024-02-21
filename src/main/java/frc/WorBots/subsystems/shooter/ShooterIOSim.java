@@ -9,6 +9,7 @@ package frc.WorBots.subsystems.shooter;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.WorBots.Constants;
 
 public class ShooterIOSim implements ShooterIO {
   FlywheelSim topFlywheelSim;
@@ -38,9 +39,9 @@ public class ShooterIOSim implements ShooterIO {
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    topFlywheelSim.update(0.02);
-    bottomFlywheelSim.update(0.02);
-    feederWheel.update(0.02);
+    topFlywheelSim.update(Constants.ROBOT_PERIOD);
+    bottomFlywheelSim.update(Constants.ROBOT_PERIOD);
+    feederWheel.update(Constants.ROBOT_PERIOD);
     inputs.feederWheel.isConnected = true;
     inputs.feederWheel.velocityRadsPerSec = feederWheel.getAngularVelocityRadPerSec();
     inputs.isConnected = true;

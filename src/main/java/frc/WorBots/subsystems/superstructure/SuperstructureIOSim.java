@@ -11,6 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.WorBots.Constants;
 
 public class SuperstructureIOSim implements SuperstructureIO {
   private ElevatorSim elevator;
@@ -48,8 +49,8 @@ public class SuperstructureIOSim implements SuperstructureIO {
   }
 
   public void updateInputs(SuperstructureIOInputs inputs) {
-    elevator.update(0.02);
-    pivot.update(0.02);
+    elevator.update(Constants.ROBOT_PERIOD);
+    pivot.update(Constants.ROBOT_PERIOD);
 
     inputs.elevatorPositionMeters = elevator.getPositionMeters();
     inputs.elevatorVelocityMetersPerSec = elevator.getVelocityMetersPerSecond();

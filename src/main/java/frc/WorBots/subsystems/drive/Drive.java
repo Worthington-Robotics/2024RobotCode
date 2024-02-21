@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
@@ -139,11 +140,14 @@ public class Drive extends SubsystemBase {
               .log(
                   new Pose2d(
                       new Translation2d(
-                          setpoint.vxMetersPerSecond * 0.02, setpoint.vyMetersPerSecond * 0.02),
-                      new Rotation2d(setpointRadsPerSec * 0.02)));
+                          setpoint.vxMetersPerSecond * Constants.ROBOT_PERIOD,
+                          setpoint.vyMetersPerSecond * Constants.ROBOT_PERIOD),
+                      new Rotation2d(setpointRadsPerSec * Constants.ROBOT_PERIOD)));
       var adjustedSpeeds =
           new ChassisSpeeds(
-              setpointTwist.dx / 0.02, setpointTwist.dy / 0.02, setpointTwist.dtheta / 0.02);
+              setpointTwist.dx / Constants.ROBOT_PERIOD,
+              setpointTwist.dy / Constants.ROBOT_PERIOD,
+              setpointTwist.dtheta / Constants.ROBOT_PERIOD);
       speedSetpointPublisher.set(Logger.chassisSpeedsToArray(adjustedSpeeds));
 
       SwerveModuleState[] setpointStates =

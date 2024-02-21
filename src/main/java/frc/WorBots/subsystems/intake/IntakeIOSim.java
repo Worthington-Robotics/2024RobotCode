@@ -9,6 +9,7 @@ package frc.WorBots.subsystems.intake;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.WorBots.Constants;
 
 public class IntakeIOSim implements IntakeIO {
   FlywheelSim sim;
@@ -18,7 +19,7 @@ public class IntakeIOSim implements IntakeIO {
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
-    sim.update(0.02);
+    sim.update(Constants.ROBOT_PERIOD);
     inputs.motor.velocityRadsPerSec = sim.getAngularVelocityRadPerSec();
     inputs.motor.currentDrawAmps = sim.getCurrentDrawAmps();
     inputs.isConnected = true;

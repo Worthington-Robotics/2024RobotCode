@@ -20,6 +20,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
+import frc.WorBots.Constants;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.trajectory.RotationSequence;
 import java.util.ArrayList;
@@ -166,7 +167,7 @@ public class Logger {
   public static double[] holonomicTrajectoryToArray(
       Trajectory trajectory, RotationSequence rotations) {
     List<Double> doubles = new ArrayList<>();
-    for (double i = 0.0; i < trajectory.getTotalTimeSeconds(); i += 0.02) {
+    for (double i = 0.0; i < trajectory.getTotalTimeSeconds(); i += Constants.ROBOT_PERIOD) {
       doubles.add(trajectory.sample(i).poseMeters.getX());
       doubles.add(trajectory.sample(i).poseMeters.getY());
       doubles.add(rotations.sample(i).position.getRadians());
@@ -176,7 +177,7 @@ public class Logger {
 
   public static double[] trajectoryToArray(Trajectory trajectory) {
     List<Double> doubles = new ArrayList<>();
-    for (double i = 0.0; i < trajectory.getTotalTimeSeconds(); i += 0.02) {
+    for (double i = 0.0; i < trajectory.getTotalTimeSeconds(); i += Constants.ROBOT_PERIOD) {
       doubles.add(trajectory.sample(i).poseMeters.getX());
       doubles.add(trajectory.sample(i).poseMeters.getY());
       doubles.add(trajectory.sample(i).poseMeters.getRotation().getRadians());

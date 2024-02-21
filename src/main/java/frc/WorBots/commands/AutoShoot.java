@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.shooter.Shooter;
@@ -40,7 +41,7 @@ public class AutoShoot extends SequentialCommandGroup {
           0.0,
           new TrapezoidProfile.Constraints(
               Units.degreesToRadians(140.0), Units.degreesToRadians(720.0)),
-          0.02);
+          Constants.ROBOT_PERIOD);
 
   /**
    * This command automatically drives to a known safe shooting location and shoots a game piece.

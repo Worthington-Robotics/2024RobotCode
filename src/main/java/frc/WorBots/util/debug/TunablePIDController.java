@@ -10,6 +10,7 @@ package frc.WorBots.util.debug;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.WorBots.Constants;
 
 /**
  * A PIDController that can be tuned by the dashboard. It will hold a TunablePIDGains object and
@@ -108,7 +109,7 @@ public class TunablePIDController {
      * @param kI The I constant
      */
     public TunablePIDGains(String table, String name, double kP, double kD, double kI) {
-      this(table, name, kP, kD, kI, 0.02);
+      this(table, name, kP, kD, kI, Constants.ROBOT_PERIOD);
     }
 
     /**

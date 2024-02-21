@@ -22,4 +22,7 @@ public class Constants {
 
   /** The CAN bus name used for swerve devices and pigeon */
   public static final String SWERVE_CAN_BUS = "Swerve";
+
+  /** The robot update period in seconds */
+  public static final double ROBOT_PERIOD = 0.02;
 }
