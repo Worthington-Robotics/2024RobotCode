@@ -176,4 +176,19 @@ public class GeomUtil {
   public static double getChassisSpeedsMagnitude(ChassisSpeeds speeds) {
     return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
   }
+
+  /**
+   * Applies a ChassisSpeeds to a Pose2d to get what that pose will be after a period of time
+   *
+   * @param pose The pose to modify
+   * @param speeds The speeds to apply to the pose
+   * @param period The period of time to apply over, in seconds
+   * @return The modified pose
+   */
+  public static Pose2d applyChassisSpeeds(Pose2d pose, ChassisSpeeds speeds, double period) {
+    return new Pose2d(
+        pose.getX() + speeds.vxMetersPerSecond * period,
+        pose.getY() + speeds.vyMetersPerSecond * period,
+        pose.getRotation().plus(Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * period)));
+  }
 }

@@ -21,6 +21,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
+import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.ShooterMath;
 
 public class Robot extends TimedRobot {
@@ -74,6 +75,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
     final var adjusted = new Pose2d(robotPose.getTranslation(), shotData.robotAngle());
     SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
+
+    var nextRobotPose = GeomUtil.applyChassisSpeeds(robotPose, robotSpeeds, Constants.ROBOT_PERIOD);
+    SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
   }
 
   @Override
