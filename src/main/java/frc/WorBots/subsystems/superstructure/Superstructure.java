@@ -143,14 +143,14 @@ public class Superstructure extends SubsystemBase {
             + Units.inchesToMeters(1.0);
 
     if (DriverStation.isDisabled()) {
-      // Set it raw in the io, no fancy functions
-      io.setElevatorVoltage(0.0);
-      io.setPivotVoltage(0.0);
+      setElevatorVoltageRaw(0.0);
+      setPivotVoltageRaw(0.0);
     } else {
       switch (state) {
         case DISABLED:
-          io.setElevatorVoltage(0.0);
-          io.setPivotVoltage(0.0);
+          setElevatorVoltageRaw(0.0);
+          setPivotVoltageRaw(0.0);
+          break;
         case POSE:
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
@@ -304,6 +304,16 @@ public class Superstructure extends SubsystemBase {
             pivotMaxAngle,
             pivotBackwardLimitDistance,
             pivotForwardLimitDistance);
+
+    setPivotVoltageRaw(volts);
+  }
+
+  /**
+   * Sets and logs the pivot voltage while bypassing software limits
+   *
+   * @param volts The pivot voltage
+   */
+  private void setPivotVoltageRaw(double volts) {
     io.setPivotVoltage(volts);
     Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
   }
