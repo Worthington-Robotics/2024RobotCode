@@ -72,10 +72,10 @@ public class ShooterMath {
   // Momentum compensation constants
 
   /** The amount to adjust the robot angle based on the robot velocity */
-  private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.06;
+  private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
 
   /** The amount to increase robot angle momentum compensation by depending on the range */
-  private static final double ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT = 0.005;
+  private static final double ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT = 0.000;
 
   /** Distance -> pivot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
