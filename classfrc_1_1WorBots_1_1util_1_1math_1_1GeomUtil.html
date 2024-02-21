@@ -110,10 +110,64 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a1e2952e54d0e41a04cb548bdbf9e1d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a853419ad4b325689b4ed6bb5786d14c9"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a853419ad4b325689b4ed6bb5786d14c9">getChassisSpeedsMagnitude</a> (ChassisSpeeds speeds)</td></tr>
 <tr class="separator:a853419ad4b325689b4ed6bb5786d14c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4e5373fce52e6537479230f19faa720"><td class="memItemLeft" align="right" valign="top">static Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#ab4e5373fce52e6537479230f19faa720">applyChassisSpeeds</a> (Pose2d pose, ChassisSpeeds speeds, double period)</td></tr>
+<tr class="separator:ab4e5373fce52e6537479230f19faa720"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Geometry utilities for working with translations, rotations, transforms, and poses. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab4e5373fce52e6537479230f19faa720" name="ab4e5373fce52e6537479230f19faa720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4e5373fce52e6537479230f19faa720">&#9670;&#160;</a></span>applyChassisSpeeds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Pose2d frc.WorBots.util.math.GeomUtil.applyChassisSpeeds </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ChassisSpeeds&#160;</td>
+          <td class="paramname"><em>speeds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>period</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Applies a ChassisSpeeds to a Pose2d to get what that pose will be after a period of time</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The pose to modify </td></tr>
+    <tr><td class="paramname">speeds</td><td>The speeds to apply to the pose </td></tr>
+    <tr><td class="paramname">period</td><td>The period of time to apply over, in seconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The modified pose </dd></dl>
+
+</div>
+</div>
 <a id="a853419ad4b325689b4ed6bb5786d14c9" name="a853419ad4b325689b4ed6bb5786d14c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a853419ad4b325689b4ed6bb5786d14c9">&#9670;&#160;</a></span>getChassisSpeedsMagnitude()</h2>
 
