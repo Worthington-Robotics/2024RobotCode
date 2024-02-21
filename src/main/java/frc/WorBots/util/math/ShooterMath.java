@@ -78,7 +78,7 @@ public class ShooterMath {
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT = 0.000;
 
   /** Distance -> pivot angle */
-  private static final InterpolatingTable ANGLE_LOOKUP =
+  private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
             {1.096, 0.498},
@@ -114,13 +114,20 @@ public class ShooterMath {
     final double rpm = calculateShooterRPM(distance);
     final double pivotAngle = calculatePivotAngle(distance, goalToRobotAngle);
     final Rotation2d robotAngle = getRobotAngle(robot, goalToRobotAngle, robotSpeeds, distance);
-    final ShotConfidence confidence = getConfidence(distance, goalToRobotAngle, robotSpeeds);
+    final ShotConfidence confidence = calculateConfidence(distance, goalToRobotAngle, robotSpeeds);
 
     return new ShotData(rpm, pivotAngle, robotAngle, confidence);
   }
 
+  /**
+   * Calculates the desired pivot angle from robot information
+   *
+   * @param distance The distance to the goal
+   * @param goalToRobotAngle The goal-to-robot angle
+   * @return The desired fused pivot angle
+   */
   public static double calculatePivotAngle(double distance, Rotation2d goalToRobotAngle) {
-    double pivotAngle = ANGLE_LOOKUP.get(distance);
+    double pivotAngle = PIVOT_ANGLE_LOOKUP.get(distance);
     // Move the pivot slightly down for side shots
     pivotAngle -= Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT;
     return pivotAngle;
@@ -133,13 +140,21 @@ public class ShooterMath {
    * @param robotSpeeds The field-relative speeds of the robot
    * @return The calculated confidence
    */
-  public static ShotConfidence getConfidence(Pose2d robot, ChassisSpeeds robotSpeeds) {
+  public static ShotConfidence calculateConfidence(Pose2d robot, ChassisSpeeds robotSpeeds) {
     final double distance = getGoalDistance(robot);
     final Rotation2d angle = getGoalToRobotAngle(robot);
-    return getConfidence(distance, angle, robotSpeeds);
+    return calculateConfidence(distance, angle, robotSpeeds);
   }
 
-  public static ShotConfidence getConfidence(
+  /**
+   * Calculates confidence for a shot based on robot position
+   *
+   * @param distance The distance to the goal
+   * @param goalToRobotAngle The goal-to-robot angle
+   * @param robotSpeeds The field-relative speeds of the robot
+   * @return The calculated confidence
+   */
+  public static ShotConfidence calculateConfidence(
       double distance, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds) {
     if (distance > MAX_RANGE || Math.abs(goalToRobotAngle.getRadians()) > MAX_ANGLE) {
       return ShotConfidence.LOW;
@@ -164,35 +179,27 @@ public class ShooterMath {
   }
 
   /**
-   * Get the location of the goal on the field
-   *
-   * @return The translation of the goal
-   */
-  public static Translation2d getGoal() {
-    Optional<Alliance> currentAlliance = DriverStation.getAlliance();
-    Translation2d out = FieldConstants.Speaker.position;
-    if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
-      out = out.plus(new Translation2d(FieldConstants.fieldLength, 0.0));
-    }
-    return out;
-  }
-
-  /**
-   * Get the distance between the robot and the goal
+   * Calculate the desired robot angle
    *
    * @param robot The robot pose
-   * @return The euclidean distance
+   * @param robotSpeeds The field-relative speeds of the robot
+   * @return The desired yaw for the robot
    */
-  public static double getGoalDistance(Pose2d robot) {
-    return robot.getTranslation().getDistance(getGoal());
-  }
-
   public static Rotation2d getRobotAngle(Pose2d robot, ChassisSpeeds robotSpeeds) {
     final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
     final double distance = getGoalDistance(robot);
     return getRobotAngle(robot, goalToRobotAngle, robotSpeeds, distance);
   }
 
+  /**
+   * Calculate the desired robot angle
+   *
+   * @param robot The robot pose
+   * @param goalToRobotAngle The goal-to-robot angle
+   * @param robotSpeeds The field-relative speeds of the robot
+   * @param distance The distance to the goal
+   * @return The desired yaw for the robot
+   */
   public static Rotation2d getRobotAngle(
       Pose2d robot, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds, double distance) {
     Rotation2d robotAngle = getGoalTheta(robot);
@@ -207,38 +214,35 @@ public class ShooterMath {
   }
 
   /**
-   * Get the angle to make the robot face the goal
+   * Calculates momentum compensation for the robot angle based on robot speed
+   *
+   * @param robotAngle The angle for the robot that has it facing the goal
+   * @param robotSpeeds The field-relative speeds of the robot
+   * @param distance The distance to the goal
+   * @return The amount, in radians, to add to the desired robot angle
+   */
+  public static double calculateRobotAngleMomentumCompensation(
+      Rotation2d robotAngle, ChassisSpeeds robotSpeeds, double distance) {
+    // Calculate the velocity vector that is perpendicular to the goal
+    final Rotation2d robotAngleRotated = robotAngle.rotateBy(Rotation2d.fromDegrees(90));
+    // Calculate the dot product to find the robot velocity perpendicular to the
+    // goal
+    final double dotProduct =
+        (robotSpeeds.vxMetersPerSecond * robotAngleRotated.getCos())
+            + (robotSpeeds.vyMetersPerSecond * robotAngleRotated.getSin());
+
+    // We increase the compensation by the distance so that the effect is more
+    // pronounced the farther away we are
+    final double rangeCompensation = dotProduct * distance * ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT;
+    return dotProduct * ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT + rangeCompensation;
+  }
+
+  /**
+   * Calculate the desired shooter RPM based on the distance to the goal
    *
    * @param robot The robot pose
-   * @return The yaw angle for the robot
+   * @return The desired RPM for the shooter
    */
-  public static Rotation2d getGoalTheta(Pose2d robot) {
-    final var alliance = DriverStation.getAlliance();
-    double translatedX =
-        (alliance.isPresent() && alliance.get() == Alliance.Red
-            ? robot.getX() - FieldConstants.fieldLength
-            : robot.getX());
-    final double angle = Math.atan2(robot.getY() - getGoal().getY(), translatedX);
-    return new Rotation2d(angle);
-  }
-
-  public static Rotation2d getGoalToRobotAngle(Pose2d robot) {
-    final Translation2d goal = getGoal();
-    double angle = Math.atan2(robot.getX() - goal.getX(), robot.getY() - goal.getY()) + Math.PI / 2;
-    final var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-      angle -= Math.PI;
-    }
-    // Convert pi-3pi/2 range to negative max
-    if (angle > Math.PI) {
-      angle = -Math.PI;
-    }
-    // Clamp the angle between -pi/2 and pi/2. We don't want weird wrapping behavior
-    // when the angle is beyond the alliance wall
-    angle = GeneralMath.clampMagnitude(angle, Math.PI / 2);
-    return new Rotation2d(angle);
-  }
-
   public static double calculateShooterRPM(Pose2d robot) {
     double distance = getGoalDistance(robot);
     return calculateShooterRPM(distance);
@@ -267,28 +271,69 @@ public class ShooterMath {
   }
 
   /**
-   * Calculates momentum compensation for the robot angle based on robot speed
+   * Get the location of the goal on the field
    *
-   * @param robotAngle The angle for the robot that has it facing the goal
-   * @param robotSpeeds The field-relative speeds of the robot
-   * @param distance The distance to the goal
-   * @return The amount, in radians, to add to the desired robot angle
+   * @return The translation of the goal
    */
-  public static double calculateRobotAngleMomentumCompensation(
-      Rotation2d robotAngle, ChassisSpeeds robotSpeeds, double distance) {
-    // Calculate the velocity vector that is perpendicular to the goal
-    final Rotation2d robotAngleRotated = robotAngle.rotateBy(Rotation2d.fromDegrees(90));
-    // Calculate the dot product to find the robot velocity perpendicular to the
-    // goal
-    final double dotProduct =
-        (robotSpeeds.vxMetersPerSecond * robotAngleRotated.getCos())
-            + (robotSpeeds.vyMetersPerSecond * robotAngleRotated.getSin());
+  public static Translation2d getGoal() {
+    Optional<Alliance> currentAlliance = DriverStation.getAlliance();
+    Translation2d out = FieldConstants.Speaker.position;
+    if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
+      out = out.plus(new Translation2d(FieldConstants.fieldLength, 0.0));
+    }
+    return out;
+  }
 
-    // We increase the compensation by the distance so that the effect is more pronounced the
-    // farther
-    // away we are
-    final double rangeCompensation = dotProduct * distance * ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT;
-    return dotProduct * ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT + rangeCompensation;
+  /**
+   * Get the distance between the robot and the goal
+   *
+   * @param robot The robot pose
+   * @return The euclidean distance
+   */
+  public static double getGoalDistance(Pose2d robot) {
+    return robot.getTranslation().getDistance(getGoal());
+  }
+
+  /**
+   * Get the angle to make the robot face the goal
+   *
+   * @param robot The robot pose
+   * @return The yaw angle for the robot
+   */
+  public static Rotation2d getGoalTheta(Pose2d robot) {
+    final var alliance = DriverStation.getAlliance();
+    double translatedX =
+        (alliance.isPresent() && alliance.get() == Alliance.Red
+            ? robot.getX() - FieldConstants.fieldLength
+            : robot.getX());
+    final double angle = Math.atan2(robot.getY() - getGoal().getY(), translatedX);
+    return new Rotation2d(angle);
+  }
+
+  /**
+   * Gets the angle from the goal to the robot. When viewing from behind the alliance wall, this
+   * will be zero when the robot is straight ahead, -pi/2 when the robot is all the way to your
+   * left, and pi/2 when the robot is all the way to the right. Any angles outside of this range are
+   * clamped.
+   *
+   * @param robot The robot pose
+   * @return The angle
+   */
+  public static Rotation2d getGoalToRobotAngle(Pose2d robot) {
+    final Translation2d goal = getGoal();
+    double angle = Math.atan2(robot.getX() - goal.getX(), robot.getY() - goal.getY()) + Math.PI / 2;
+    final var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+      angle -= Math.PI;
+    }
+    // Convert pi-3pi/2 range to negative max
+    if (angle > Math.PI) {
+      angle = -Math.PI;
+    }
+    // Clamp the angle between -pi/2 and pi/2. We don't want weird wrapping behavior
+    // when the angle is beyond the alliance wall
+    angle = GeneralMath.clampMagnitude(angle, Math.PI / 2);
+    return new Rotation2d(angle);
   }
 
   /**
