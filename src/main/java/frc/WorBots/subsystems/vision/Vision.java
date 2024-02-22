@@ -50,7 +50,11 @@ public class Vision extends SubsystemBase {
     }
     cameraPoses =
         new Pose3d[] {
-          new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)),
+          new Pose3d(
+              new Translation3d(
+                  Units.inchesToMeters(11), Units.inchesToMeters(-11), Units.inchesToMeters(-9)),
+              new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                  .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(90 + 43.745)))),
           new Pose3d(
               new Translation3d(
                   Units.inchesToMeters(-11), Units.inchesToMeters(-11), Units.inchesToMeters(-9)),
