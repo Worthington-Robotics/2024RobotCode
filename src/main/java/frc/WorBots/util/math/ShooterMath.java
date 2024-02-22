@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import java.util.Optional;
 
@@ -67,9 +68,18 @@ public class ShooterMath {
   private static final double SIDE_SHOT_PIVOT_COEFFICIENT = 0.00;
 
   /** The amount to adjust the robot angle for side shots */
-  private static final double SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.00;
+  private static final double SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.2;
 
   // Momentum compensation constants
+
+  /**
+   * The amount to adjust the robot pose we are calculating with based on robot velocity. Will be
+   * multiplied by the robot period to find the period of time over which to apply the robot
+   * velocity to the pose to get the expected pose
+   */
+  private static final double PREDICTION_FACTOR = 0.0;
+
+  private static final double PREDICTION_DISTANCE_FACTOR = 1.4;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
@@ -110,10 +120,13 @@ public class ShooterMath {
   public static ShotData calculateShotData(Pose2d robot, ChassisSpeeds robotSpeeds) {
     final double distance = getGoalDistance(robot);
     final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
+    final Pose2d predicted = predictNextPose(robot, robotSpeeds);
+    final double predictedDistance = getGoalDistance(predicted);
+    final Rotation2d predictedGoalToRobotAngle = getGoalToRobotAngle(predicted);
 
     final double rpm = calculateShooterRPM(distance);
-    final double pivotAngle = calculatePivotAngle(distance, goalToRobotAngle);
-    final Rotation2d robotAngle = getRobotAngle(robot, goalToRobotAngle, robotSpeeds, distance);
+    final double pivotAngle = calculatePivotAngle(predictedDistance, predictedGoalToRobotAngle);
+    final Rotation2d robotAngle = calculateRobotAngle(predicted, robotSpeeds);
     final ShotConfidence confidence = calculateConfidence(distance, goalToRobotAngle, robotSpeeds);
 
     return new ShotData(rpm, pivotAngle, robotAngle, confidence);
@@ -136,7 +149,7 @@ public class ShooterMath {
   /**
    * Calculates confidence for a shot based on robot position
    *
-   * @param robot The robot pose
+   * @param robot The robot pose without prediction
    * @param robotSpeeds The field-relative speeds of the robot
    * @return The calculated confidence
    */
@@ -181,26 +194,27 @@ public class ShooterMath {
   /**
    * Calculate the desired robot angle
    *
-   * @param robot The robot pose
+   * @param robot The robot pose without prediction
    * @param robotSpeeds The field-relative speeds of the robot
    * @return The desired yaw for the robot
    */
-  public static Rotation2d getRobotAngle(Pose2d robot, ChassisSpeeds robotSpeeds) {
-    final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
-    final double distance = getGoalDistance(robot);
-    return getRobotAngle(robot, goalToRobotAngle, robotSpeeds, distance);
+  public static Rotation2d calculateRobotAngle(Pose2d robot, ChassisSpeeds robotSpeeds) {
+    final Pose2d predicted = predictNextPose(robot, robotSpeeds);
+    final Rotation2d goalToRobotAngle = getGoalToRobotAngle(predicted);
+    final double distance = getGoalDistance(predicted);
+    return calculateRobotAngle(predicted, goalToRobotAngle, robotSpeeds, distance);
   }
 
   /**
    * Calculate the desired robot angle
    *
-   * @param robot The robot pose
+   * @param robot The robot pose with prediction
    * @param goalToRobotAngle The goal-to-robot angle
    * @param robotSpeeds The field-relative speeds of the robot
    * @param distance The distance to the goal
    * @return The desired yaw for the robot
    */
-  public static Rotation2d getRobotAngle(
+  public static Rotation2d calculateRobotAngle(
       Pose2d robot, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds, double distance) {
     Rotation2d robotAngle = getGoalTheta(robot);
     // Rotate the robot slightly away from the goal wall for side shots
@@ -271,6 +285,21 @@ public class ShooterMath {
   }
 
   /**
+   * Applies ChassisSpeeds to the robot pose to predict what it will be in the future based on
+   * constants
+   *
+   * @param robot The robot pose
+   * @param robotSpeeds The field-relative speeds of the robot
+   * @return The modified pose
+   */
+  public static Pose2d predictNextPose(Pose2d robot, ChassisSpeeds robotSpeeds) {
+    final double period =
+        Constants.ROBOT_PERIOD * PREDICTION_FACTOR
+            + Constants.ROBOT_PERIOD * PREDICTION_DISTANCE_FACTOR * getGoalDistance(robot);
+    return GeomUtil.applyChassisSpeeds(robot, robotSpeeds, period);
+  }
+
+  /**
    * Get the location of the goal on the field
    *
    * @return The translation of the goal
@@ -325,10 +354,16 @@ public class ShooterMath {
     final var alliance = DriverStation.getAlliance();
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
       angle -= Math.PI;
-    }
-    // Convert pi-3pi/2 range to negative max
-    if (angle > Math.PI) {
-      angle = -Math.PI;
+      // angle *= -1;
+      // Convert pi-3pi/2 range to negative max
+      if (angle < -Math.PI) {
+        angle = Math.PI;
+      }
+    } else {
+      // Convert pi-3pi/2 range to negative max
+      if (angle > Math.PI) {
+        angle = -Math.PI;
+      }
     }
     // Clamp the angle between -pi/2 and pi/2. We don't want weird wrapping behavior
     // when the angle is beyond the alliance wall

@@ -67,7 +67,8 @@ public class AutoShoot extends SequentialCommandGroup {
         () -> {
           Pose2d robotPose = drive.getPose();
           double robotAngle =
-              ShooterMath.getRobotAngle(robotPose, drive.getFieldRelativeSpeeds()).getRadians();
+              ShooterMath.calculateRobotAngle(robotPose, drive.getFieldRelativeSpeeds())
+                  .getRadians();
           return new Rotation2d(robotAngle);
         };
     Supplier<Double> shooterSpeedSupplier =
