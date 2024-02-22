@@ -231,11 +231,10 @@ public class AutoCommands extends Command {
                 wingGamePieceLocations[wingPosition].plus(
                     new Transform2d(-0.6, 0.35, new Rotation2d()))));
       }
-      waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     } else {
       waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     }
-    Command handoff = new Handoff(intake, superstructure, shooter);
+    var handoff = new Handoff(intake, superstructure, shooter);
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           Commands.sequence(
@@ -249,7 +248,8 @@ public class AutoCommands extends Command {
                               })
                           .andThen(handoff))),
           new Pose2d(
-              waypoints.get(1).getTranslation(), waypoints.get(1).getHolonomicRotation().get()));
+              waypoints.get(waypoints.size() - 1).getTranslation(),
+              waypoints.get(waypoints.size() - 1).getHolonomicRotation().get()));
     } else {
       return new CommandWithPose(Commands.none(), startingPosition);
     }
@@ -292,10 +292,10 @@ public class AutoCommands extends Command {
     return new CommandWithPose(
         Commands.sequence(
             reset(startingPose),
-            intakeCommand,
+            intakeFirst ? intakeCommand : Commands.none(),
             superstructure.setMode(SuperstructureState.SHOOTING),
             Commands.deadline(
-                    driveFirst ? driveToPose : Commands.none(),
+                    driveFirst ? driveToPose.withTimeout(0.1) : Commands.none(),
                     Commands.run(
                         () -> {
                           shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(startingPose));
@@ -306,7 +306,7 @@ public class AutoCommands extends Command {
                     Commands.waitUntil(
                         () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint()))
                 .andThen(shooter.setRawFeederVoltsCommand(-2))
-                .andThen(Commands.waitSeconds(0.25).withTimeout(0.25))
+                .andThen(Commands.waitSeconds(0.15).withTimeout(0.15))
                 .andThen(shooter.setRawFeederVoltsCommand(0.0))
                 .andThen(shooter.setSpeed(0.0))
                 .andThen(superstructure.setMode(SuperstructureState.POSE))),
@@ -428,25 +428,17 @@ public class AutoCommands extends Command {
     var autoShoot1 = autoShoot(startingPose, true, false);
     var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
     var autoShoot2 = autoShoot(intake1.pose(), false, true);
-    var intake2 = driveAndIntakeWing(autoShoot2.pose(), false, true, 0);
-    var autoShoot3 = autoShoot(wingGamePieceLocations[1], false, true);
-    var intake3 = driveAndIntakeWing(autoShoot3.pose(), false, true, 2);
-    var autoShoot4 = autoShoot(wingGamePieceLocations[1], false, true);
+    var intake2 = driveAndIntakeWing(autoShoot2.pose(), true, true, 0);
+    var autoShoot3 = autoShoot(intake2.pose(), false, true);
+    var intake3 = driveAndIntakeWing(autoShoot3.pose(), true, false, 2);
+    var autoShoot4 = autoShoot(intake3.pose(), false, true);
     return Commands.sequence(
         autoShoot1.command(),
         intake1.command(),
         autoShoot2.command(),
         intake2.command(),
-        path(
-            List.of(
-                Waypoint.fromHolonomicPose(autoShoot2.pose()),
-                Waypoint.fromHolonomicPose(wingGamePieceLocations[1]))),
         autoShoot3.command(),
         intake3.command(),
-        path(
-            List.of(
-                Waypoint.fromHolonomicPose(autoShoot3.pose()),
-                Waypoint.fromHolonomicPose(wingGamePieceLocations[1]))),
         autoShoot4.command());
   }
 
