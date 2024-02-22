@@ -57,7 +57,7 @@ public class Superstructure extends SubsystemBase {
   private static final double pivotBackwardLimitDistance = 0.90;
   private static final double pivotForwardLimitDistance = 1.05;
   private static final double pivotDynamicLimitDistance = 0.0;
-  private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
+  // private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 

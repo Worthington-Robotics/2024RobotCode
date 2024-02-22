@@ -13,12 +13,9 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
-import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
@@ -30,8 +27,6 @@ import java.util.function.*;
 
 public class AutoShoot extends SequentialCommandGroup {
   // Locations
-  private static double speakerOpeningHeightZ;
-  private static double speakerOpeningCenterY;
   private Supplier<Double> leftXSupplier;
   private Supplier<Double> leftYSupplier;
   private final ProfiledPIDController thetaController =
@@ -56,10 +51,6 @@ public class AutoShoot extends SequentialCommandGroup {
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier) {
     addRequirements(superstructure, drive);
-    speakerOpeningHeightZ =
-        (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
-            / 2;
-    speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -154,22 +145,5 @@ public class AutoShoot extends SequentialCommandGroup {
                   superstructure.setModeVoid(SuperstructureState.DISABLED);
                   shooter.spinToSpeedVoid(0);
                 }));
-  }
-
-  /**
-   * Calculates the needed robot rotation in order to shoot into the speaker for a given pose,
-   * automatically factors in alliance.
-   *
-   * @param robotPose The desired pose to be shot from, ignores rotation.
-   * @return The rotation of the robot needed to shoot at the provided pose.
-   */
-  public static Rotation2d getRobotRotationToShoot(Pose2d robotPose) {
-    boolean isRed =
-        DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red;
-    double translatedX = (isRed ? robotPose.getX() - FieldConstants.fieldLength : robotPose.getX());
-    double robotY = robotPose.getY();
-    double robotAngle = Math.atan2(robotY - (speakerOpeningCenterY), translatedX);
-    return new Rotation2d(robotAngle);
   }
 }

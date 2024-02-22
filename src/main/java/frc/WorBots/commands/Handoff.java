@@ -22,9 +22,6 @@ public class Handoff extends Command {
   private final Intake intake;
   private final Shooter shooter;
 
-  /** Whether the pose is in place and the handoff has begun */
-  private boolean hasBegun = false;
-
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
     this.superstructure = superstructure;

@@ -74,7 +74,7 @@ public class AutoCommands extends Command {
     driveRotation =
         () -> {
           Pose2d robotPose = drive.getPose();
-          return AllianceFlipUtil.apply(AutoShoot.getRobotRotationToShoot(robotPose));
+          return AllianceFlipUtil.apply(ShooterMath.getGoalTheta(robotPose));
         };
     startingLocations =
         new Pose2d[] {

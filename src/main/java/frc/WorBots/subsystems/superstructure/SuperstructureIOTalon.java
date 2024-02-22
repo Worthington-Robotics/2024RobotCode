@@ -10,7 +10,6 @@ package frc.WorBots.subsystems.superstructure;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
@@ -18,8 +17,8 @@ import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonFX elevator;
   private final TalonFX elevatorFollower;
-  private final DigitalInput bottomLimitSwitch = new DigitalInput(1);
-  private final DigitalInput topLimitSwitch = new DigitalInput(2);
+  // private final DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  // private final DigitalInput topLimitSwitch = new DigitalInput(2);
   private final boolean isPivotInverted = true;
 
   private final TalonFX pivot;
