@@ -5,5 +5,6 @@ var searchData=
   ['pose3dtoarray_2',['pose3dToArray',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a7bb27fe18b25ecbd7ac22852af3ad63d',1,'frc::WorBots::util::debug::Logger']]],
   ['pose3dtotransform3d_3',['pose3dToTransform3d',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a00cb3f70639b641aeabc3a85f85da810',1,'frc::WorBots::util::math::GeomUtil']]],
   ['poseestimator_4',['PoseEstimator',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#aec14806be0d20061818ac3ccf68af615',1,'frc::WorBots::util::math::PoseEstimator']]],
-  ['posetotransform_5',['poseToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#afe81fcc0abcced93d62fb298512e9761',1,'frc::WorBots::util::math::GeomUtil']]]
+  ['posetotransform_5',['poseToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#afe81fcc0abcced93d62fb298512e9761',1,'frc::WorBots::util::math::GeomUtil']]],
+  ['predictnextpose_6',['predictNextPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2d7176de50033d916171bd74a05aab45',1,'frc::WorBots::util::math::ShooterMath']]]
 ];
