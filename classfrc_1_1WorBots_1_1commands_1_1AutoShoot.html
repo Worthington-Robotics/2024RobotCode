@@ -75,7 +75,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classfrc_1_1WorBots_1_1commands_1_1AutoShoot-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">frc.WorBots.commands.AutoShoot Class Reference</div></div>
 </div><!--header-->
@@ -91,11 +90,6 @@ Inheritance diagram for frc.WorBots.commands.AutoShoot:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abab99e8aaf600768540056510cc1b160"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#abab99e8aaf600768540056510cc1b160">AutoShoot</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html">Superstructure</a> superstructure, <a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a> drive, <a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html">Shooter</a> shooter, Supplier&lt; Double &gt; leftXSupplier, Supplier&lt; Double &gt; leftYSupplier)</td></tr>
 <tr class="separator:abab99e8aaf600768540056510cc1b160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab4400b90e5d0c63c8467b449e97d2ebd"><td class="memItemLeft" align="right" valign="top">static Rotation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#ab4400b90e5d0c63c8467b449e97d2ebd">getRobotRotationToShoot</a> (Pose2d robotPose)</td></tr>
-<tr class="separator:ab4400b90e5d0c63c8467b449e97d2ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abab99e8aaf600768540056510cc1b160" name="abab99e8aaf600768540056510cc1b160"></a>
@@ -157,41 +151,6 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab4400b90e5d0c63c8467b449e97d2ebd" name="ab4400b90e5d0c63c8467b449e97d2ebd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4400b90e5d0c63c8467b449e97d2ebd">&#9670;&#160;</a></span>getRobotRotationToShoot()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static Rotation2d frc.WorBots.commands.AutoShoot.getRobotRotationToShoot </td>
-          <td>(</td>
-          <td class="paramtype">Pose2d&#160;</td>
-          <td class="paramname"><em>robotPose</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >Calculates the needed robot rotation in order to shoot into the speaker for a given pose, automatically factors in alliance.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">robotPose</td><td>The desired pose to be shot from, ignores rotation. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The rotation of the robot needed to shoot at the provided pose. </dd></dl>
 
 </div>
 </div>
