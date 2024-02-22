@@ -22,7 +22,7 @@ public class ShooterMath {
   // Confidence calculation constants
 
   /** The maximum distance the robot can reliably shoot, in meters */
-  private static final double MAX_RELIABLE_RANGE = 4.3;
+  private static final double MAX_RELIABLE_RANGE = 4.5;
 
   /** The maximum distance the robot can shoot, in meters */
   private static final double MAX_RANGE = 7.0;
@@ -85,7 +85,7 @@ public class ShooterMath {
             {1.406, 0.52},
             {2.197, 0.8072},
             {2.379, 0.816},
-            {4.305, 1.0105},
+            {4.305, 1.0005},
             {5.295, 1.0601}
           });
 

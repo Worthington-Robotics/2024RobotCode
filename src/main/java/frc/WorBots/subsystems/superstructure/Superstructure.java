@@ -393,10 +393,10 @@ public class Superstructure extends SubsystemBase {
               this.setModeVoid(SuperstructureState.POSE);
               this.setpoint = pose;
             })
-        .alongWith(Commands.waitUntil(() -> isAtSetpoint()))
+        .andThen(Commands.waitUntil(() -> isAtSetpoint()))
         .finallyDo(
             () -> {
-              this.setModeVoid(SuperstructureState.DISABLED);
+              this.setModeVoid(SuperstructureState.POSE);
             });
   }
 

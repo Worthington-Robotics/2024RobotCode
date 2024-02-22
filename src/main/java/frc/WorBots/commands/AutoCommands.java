@@ -295,7 +295,7 @@ public class AutoCommands extends Command {
             intakeCommand,
             superstructure.setMode(SuperstructureState.SHOOTING),
             Commands.deadline(
-                    driveFirst ? driveToPose : Commands.waitSeconds(0.04),
+                    driveFirst ? driveToPose : Commands.none(),
                     Commands.run(
                         () -> {
                           shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(startingPose));
@@ -306,7 +306,7 @@ public class AutoCommands extends Command {
                     Commands.waitUntil(
                         () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint()))
                 .andThen(shooter.setRawFeederVoltsCommand(-2))
-                .andThen(Commands.waitSeconds(0.15).withTimeout(0.15))
+                .andThen(Commands.waitSeconds(0.25).withTimeout(0.25))
                 .andThen(shooter.setRawFeederVoltsCommand(0.0))
                 .andThen(shooter.setSpeed(0.0))
                 .andThen(superstructure.setMode(SuperstructureState.POSE))),
