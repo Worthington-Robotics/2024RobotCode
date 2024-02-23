@@ -58,6 +58,7 @@ public class StatusPage {
   public static final String CAM0 = "Cam 0";
   public static final String CAM1 = "Cam 1";
   public static final String LAUNCHPAD = "Launchpad";
+  public static final String DRIVER_CAM = "Driver Cam";
 
   // Sort in order of priority, from highest to lowest
   /** All systems that the StatusPage reports */
@@ -85,6 +86,7 @@ public class StatusPage {
     SMODULE_PREFIX + "1",
     SMODULE_PREFIX + "2",
     SMODULE_PREFIX + "3",
+    DRIVER_CAM,
     DRIVER_STATION,
     FMS,
     INTAKE_CONNECTED,
@@ -163,7 +165,7 @@ public class StatusPage {
         DriverStation.isJoystickConnected(0) && DriverStation.getJoystickIsXbox(0));
     StatusPage.reportStatus(
         StatusPage.OPERATOR_CONTROLLER,
-        DriverStation.isJoystickConnected(1) && !DriverStation.getJoystickIsXbox(1));
+        DriverStation.isJoystickConnected(1) && DriverStation.getJoystickIsXbox(1));
     StatusPage.reportStatus(StatusPage.NOT_ESTOPPED, !DriverStation.isEStopped());
 
     // PDP

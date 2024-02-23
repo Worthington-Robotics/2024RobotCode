@@ -8,6 +8,7 @@
 package frc.WorBots;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
 
   private PowerDistribution pdp;
+  private UsbCamera camera;
 
   @Override
   public void robotInit() {
@@ -52,10 +54,17 @@ public class Robot extends TimedRobot {
         () -> {
           // Simple status updates
           StatusPage.periodic(pdp);
+          StatusPage.reportStatus(
+              StatusPage.DRIVER_CAM,
+              camera.isConnected() && camera.isEnabled() && camera.isValid());
+          StatusPage.reportStatus(
+              StatusPage.DRIVE_CONTROLLER, robotContainer.driver.getHID().isConnected());
+          StatusPage.reportStatus(
+              StatusPage.OPERATOR_CONTROLLER, robotContainer.operator.getHID().isConnected());
         },
         kDefaultPeriod);
 
-    CameraServer.startAutomaticCapture();
+    camera = CameraServer.startAutomaticCapture();
   }
 
   @Override
