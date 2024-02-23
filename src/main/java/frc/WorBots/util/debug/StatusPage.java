@@ -28,7 +28,6 @@ public class StatusPage {
   private static boolean hasBeenStarted = false;
 
   // System name constants
-  public static final String AUTO_RUNNING = "Auto Running";
   public static final String ALL_AUTO_QUESTIONS = "All Auto Questions";
   public static final String AUTO_CHOSEN = "Auto Chosen";
   public static final String ROBOT_CODE = "Robot Code";
@@ -60,42 +59,42 @@ public class StatusPage {
   public static final String CAM1 = "Cam 1";
   public static final String LAUNCHPAD = "Launchpad";
 
+  // Sort in order of priority, from highest to lowest
   /** All systems that the StatusPage reports */
   public static final String[] ALL_SYSTEMS = {
-    AUTO_RUNNING,
-    ALL_AUTO_QUESTIONS,
     AUTO_CHOSEN,
     ROBOT_CODE,
     DRIVE_CONTROLLER,
+    OPERATOR_CONTROLLER,
     SUPERSTRUCTURE_SUBSYSTEM,
     DRIVE_SUBSYSTEM,
     INTAKE_SUBSYSTEM,
-    LIGHTS_SUBSYSTEM,
     VISION_SUBSYSTEM,
     SHOOTER_SUBSYSTEM,
     SHOOTER_CONNECTED,
+    ALL_AUTO_QUESTIONS,
     PIVOT_CONNECTED,
     ELEVATOR_CONNECTED,
     GYROSCOPE,
+    CAM0,
+    CAM1,
+    BATTERY,
+    IDEAL_BATTERY,
+    NETWORK_TABLES,
     SMODULE_PREFIX + "0",
     SMODULE_PREFIX + "1",
     SMODULE_PREFIX + "2",
     SMODULE_PREFIX + "3",
-    NETWORK_TABLES,
     DRIVER_STATION,
     FMS,
-    BATTERY,
-    IDEAL_BATTERY,
     INTAKE_CONNECTED,
     BROWNOUT,
-    OPERATOR_CONTROLLER,
-    NOT_ESTOPPED,
     PDP_BREAKERS,
     CAN_WARNING,
     PDP_HARDWARE,
-    CAM0,
-    CAM1,
     LAUNCHPAD,
+    LIGHTS_SUBSYSTEM,
+    NOT_ESTOPPED,
   };
 
   private StatusPage() {

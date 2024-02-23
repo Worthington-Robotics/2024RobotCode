@@ -13,6 +13,8 @@ import frc.WorBots.AutoSelector.*;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
+import frc.WorBots.subsystems.lights.Lights;
+import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
@@ -113,6 +115,8 @@ public class RobotContainer {
     selector.addRoutine("Do Nothing", List.of(), Commands.none());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
+    Lights.getInstance()
+        .setDataInterfaces(() -> drive.getPose(), () -> drive.getFieldRelativeSpeeds());
     bindControls();
   }
 
@@ -122,7 +126,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-    // superstructure.setDefaultCommand(new SuperstructureManual(superstructure, () ->
+    // superstructure.setDefaultCommand(new SuperstructureManual(superstructure, ()
+    // ->
     // -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver
@@ -143,13 +148,26 @@ public class RobotContainer {
     operator.b().onTrue(superstructure.setPose(Preset.STOW));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     operator.a().onTrue(superstructure.setPose(Preset.TRAP));
-    operator.x().onTrue(superstructure.setPose(Preset.AMP));
+    operator.x().onTrue(superstructure.setPose(Preset.AMP2));
     operator
         .rightBumper()
         .whileTrue(
             new AutoShoot(
-                superstructure, drive, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
-        .onFalse(shooter.spinToSpeed(0.0));
+                    superstructure,
+                    drive,
+                    shooter,
+                    () -> -driver.getLeftY(),
+                    () -> -driver.getLeftX())
+                .alongWith(
+                    Commands.run(
+                        () -> {
+                          Lights.getInstance().setMode(LightsMode.Shooting);
+                        })))
+        .onFalse(
+            shooter
+                .spinToSpeed(0.0)
+                .alongWith(
+                    Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Alliance))));
     operator
         .leftBumper()
         .onTrue(shooter.setRawFeederVoltsCommand(-2))

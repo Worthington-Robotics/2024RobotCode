@@ -24,24 +24,24 @@ public class ShooterMath {
   // Confidence calculation constants
 
   /** The maximum distance the robot can reliably shoot, in meters */
-  private static final double MAX_RELIABLE_RANGE = 4.5;
+  private static final double MAX_RELIABLE_RANGE = 5.0;
 
   /** The maximum distance the robot can shoot, in meters */
-  private static final double MAX_RANGE = 7.0;
+  private static final double MAX_RANGE = 6.4;
 
   /**
    * The maximum angle from the goal to the robot that the robot can reliably shoot from, in radians
    */
-  private static final double MAX_RELIABLE_ANGLE = Units.degreesToRadians(50);
+  private static final double MAX_RELIABLE_ANGLE = Units.degreesToRadians(48);
 
   /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
-  private static final double MAX_ANGLE = Units.degreesToRadians(75);
+  private static final double MAX_ANGLE = Units.degreesToRadians(70);
 
   /** The maximum speed the robot can reliably move at while shooting, in meters per second */
-  private static final double MAX_RELIABLE_ROBOT_VELOCITY = 1.0;
+  private static final double MAX_RELIABLE_ROBOT_VELOCITY = 1.2;
 
   /** The maximum speed the robot can move at while shooting, in meters per second */
-  private static final double MAX_ROBOT_VELOCITY = 3.0;
+  private static final double MAX_ROBOT_VELOCITY = 1.9;
 
   // Constants for RPM calculation
 
@@ -82,7 +82,7 @@ public class ShooterMath {
    */
   private static final double PREDICTION_FACTOR = 0.0;
 
-  private static final double PREDICTION_DISTANCE_FACTOR = 2.0;
+  private static final double PREDICTION_DISTANCE_FACTOR = 3.5;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;

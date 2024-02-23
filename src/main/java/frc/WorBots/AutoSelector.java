@@ -39,8 +39,6 @@ public class AutoSelector extends SubsystemBase {
    * @param key The SmartDashboard table to be logged under.
    */
   public AutoSelector(String key) {
-    StatusPage.reportStatus(StatusPage.AUTO_RUNNING, false);
-
     routineChooser = new SwitchableChooser(key);
     lastRoutine = defaultRoutine;
 
@@ -159,15 +157,7 @@ public class AutoSelector extends SubsystemBase {
    * us errors
    */
   private static Command createRoutineCommand(Command command) {
-    return Commands.deadline(
-        command,
-        Commands.startEnd(
-            () -> {
-              StatusPage.reportStatus(StatusPage.AUTO_RUNNING, true);
-            },
-            () -> {
-              StatusPage.reportStatus(StatusPage.AUTO_RUNNING, false);
-            }));
+    return Commands.deadline(command);
   }
 
   private static final record AutoRoutine(
