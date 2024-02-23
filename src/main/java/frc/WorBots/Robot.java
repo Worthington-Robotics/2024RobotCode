@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     robotContainer.intake.setVolts(0.0);
     robotContainer.shooter.setRawFlywheelSpeed(0);
     robotContainer.shooter.setRawFeederVolts(0.0);
-    robotContainer.superstructure.setMode(SuperstructureState.DISABLED);
+    robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
   }
 
   @Override

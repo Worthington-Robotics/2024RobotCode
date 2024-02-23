@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
 
   // Constants
   public static final double distanceThreshold = 0.25;
-  private static final double intakeVolts = 3.5;
+  private static final double intakeVolts = 35.0;
   private static final double constantForce = 0.0;
   private static final double maxTemperature = 80.0;
 

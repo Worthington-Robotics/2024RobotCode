@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
+import frc.WorBots.util.debug.TunableDouble;
 import java.util.Optional;
 
 public class ShooterMath {
@@ -65,10 +66,12 @@ public class ShooterMath {
   // Side shot constants
 
   /** The amount to move the pivot down for side shots */
-  private static final double SIDE_SHOT_PIVOT_COEFFICIENT = 0.00;
+  private static final TunableDouble SIDE_SHOT_PIVOT_COEFFICIENT =
+      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.045);
 
   /** The amount to adjust the robot angle for side shots */
-  private static final double SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT = 0.2;
+  private static final TunableDouble SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT =
+      new TunableDouble("Tuning", "Shooting", "Side Robot Coeff", 0.032);
 
   // Momentum compensation constants
 
@@ -79,7 +82,7 @@ public class ShooterMath {
    */
   private static final double PREDICTION_FACTOR = 0.0;
 
-  private static final double PREDICTION_DISTANCE_FACTOR = 1.4;
+  private static final double PREDICTION_DISTANCE_FACTOR = 2.0;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
@@ -142,7 +145,7 @@ public class ShooterMath {
   public static double calculatePivotAngle(double distance, Rotation2d goalToRobotAngle) {
     double pivotAngle = PIVOT_ANGLE_LOOKUP.get(distance);
     // Move the pivot slightly down for side shots
-    pivotAngle -= Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT;
+    pivotAngle += Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT.get();
     return pivotAngle;
   }
 
@@ -218,7 +221,7 @@ public class ShooterMath {
       Pose2d robot, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds, double distance) {
     Rotation2d robotAngle = getGoalTheta(robot);
     // Rotate the robot slightly away from the goal wall for side shots
-    robotAngle = robotAngle.minus(goalToRobotAngle.times(SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT));
+    robotAngle = robotAngle.minus(goalToRobotAngle.times(SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT.get()));
     // Apply momentum compensation
     robotAngle =
         robotAngle.plus(

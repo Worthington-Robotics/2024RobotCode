@@ -118,6 +118,7 @@ public class Drive extends SubsystemBase {
         module.stop();
       }
       removeThetaSetpoint();
+      setpoint = new ChassisSpeeds();
     } else {
       double setpointRadsPerSec = setpoint.omegaRadiansPerSecond;
 
