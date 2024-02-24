@@ -104,8 +104,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a88bc753bc98176676bd690c1a2114f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8202367a642abebb3a6ba98f7c343c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#aa8202367a642abebb3a6ba98f7c343c1">setMode</a> (<a class="el" href="enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html">LightsMode</a> mode)</td></tr>
 <tr class="separator:aa8202367a642abebb3a6ba98f7c343c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49ff31ebf3732f28d7b247afab12787a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#a49ff31ebf3732f28d7b247afab12787a">setDataInterfaces</a> (Supplier&lt; Pose2d &gt; drivePoseSupplier, Supplier&lt; ChassisSpeeds &gt; driveSpeedsSupplier)</td></tr>
-<tr class="separator:a49ff31ebf3732f28d7b247afab12787a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad68d7f1076e53ed3f721432eacf4bec4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#ad68d7f1076e53ed3f721432eacf4bec4">setDataInterfaces</a> (Supplier&lt; Pose2d &gt; drivePoseSupplier, Supplier&lt; ChassisSpeeds &gt; driveSpeedsSupplier, Supplier&lt; Boolean &gt; inHandoff, Supplier&lt; Boolean &gt; hasGamePieceBottom, Supplier&lt; Boolean &gt; hasGamePieceTop)</td></tr>
+<tr class="separator:ad68d7f1076e53ed3f721432eacf4bec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -216,8 +216,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a49ff31ebf3732f28d7b247afab12787a" name="a49ff31ebf3732f28d7b247afab12787a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49ff31ebf3732f28d7b247afab12787a">&#9670;&#160;</a></span>setDataInterfaces()</h2>
+<a id="ad68d7f1076e53ed3f721432eacf4bec4" name="ad68d7f1076e53ed3f721432eacf4bec4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad68d7f1076e53ed3f721432eacf4bec4">&#9670;&#160;</a></span>setDataInterfaces()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,7 +235,25 @@ Static Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Supplier&lt; ChassisSpeeds &gt;&#160;</td>
-          <td class="paramname"><em>driveSpeedsSupplier</em>&#160;</td>
+          <td class="paramname"><em>driveSpeedsSupplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Supplier&lt; Boolean &gt;&#160;</td>
+          <td class="paramname"><em>inHandoff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Supplier&lt; Boolean &gt;&#160;</td>
+          <td class="paramname"><em>hasGamePieceBottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Supplier&lt; Boolean &gt;&#160;</td>
+          <td class="paramname"><em>hasGamePieceTop</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
