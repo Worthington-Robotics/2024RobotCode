@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.intake;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
@@ -22,6 +23,7 @@ public class IntakeIOTalon implements IntakeIO {
     intakeMotor = new TalonFX(1);
     timeOfFlight = new TimeOfFlight(13);
     timeOfFlight.setRangingMode(RangingMode.Short, 24);
+    intakeMotor.setNeutralMode(NeutralModeValue.Brake);
     intakeMotor.setInverted(false);
 
     motorSignals = new TalonSignalsPositional(intakeMotor);

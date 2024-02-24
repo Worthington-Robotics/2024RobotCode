@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.math.ShooterMath.ShotConfidence;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class Lights extends SubsystemBase {
@@ -37,10 +36,13 @@ public class Lights extends SubsystemBase {
   public static final int LIGHT_COUNT = 27;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
-  private LightsMode mode = LightsMode.Status;
+  private LightsMode mode = LightsMode.Claire;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
   private final int lightsID = 9;
+  private final Timer timer = new Timer();
+  private boolean hasStartedTimer = false;
+  private Supplier<Boolean> isTargeted = () -> false;
   // Data interfaces
   private Supplier<Pose2d> drivePoseSupplier = () -> new Pose2d();
   private Supplier<ChassisSpeeds> driveSpeedsSupplier = () -> new ChassisSpeeds();
@@ -82,12 +84,10 @@ public class Lights extends SubsystemBase {
         status();
         break;
       case Alliance:
-        final Optional<Alliance> alliance = DriverStation.getAlliance();
-        var color = Color.kBlue;
-        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-          color = Color.kFirstRed;
-        }
-        wave(100, color, Color.kBlack, 25.0, 2.0, 0.4);
+        boolean isRed =
+            DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get() == Alliance.Red;
+        wave(100, isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
         break;
       case MatchTime:
         matchTime();
@@ -105,6 +105,10 @@ public class Lights extends SubsystemBase {
 
     leds.setData(io);
     SmartDashboard.putString("Lights/Mode", mode.toString());
+  }
+
+  public void setTargetedSupplier(Supplier<Boolean> supplier) {
+    this.isTargeted = supplier;
   }
 
   private void solid(double percent, Color color) {
@@ -297,20 +301,28 @@ public class Lights extends SubsystemBase {
     final ChassisSpeeds speeds = driveSpeedsSupplier.get();
 
     final ShotConfidence confidence = ShooterMath.calculateConfidence(pose, speeds);
-    switch (confidence) {
-      case LOW:
-        solid(1.0, Color.kRed);
-        break;
-      case MEDIUM:
-        solid(1.0, Color.kOrangeRed);
-        break;
-      case HIGH:
-        solid(1.0, Color.kGreen);
-        break;
+    if (confidence.equals(ShotConfidence.LOW)) {
+      solid(1.0, Color.kRed);
+    } else if (confidence.equals(ShotConfidence.MEDIUM) && !isTargeted.get()) {
+      solid(1.0, Color.kRed);
+    } else if (confidence.equals(ShotConfidence.MEDIUM) && isTargeted.get()) {
+      solid(1.0, Color.kOrange);
+    } else if (confidence.equals(ShotConfidence.HIGH) && !isTargeted.get()) {
+      solid(1.0, Color.kRed);
+    } else if (confidence.equals(ShotConfidence.HIGH) && isTargeted.get()) {
+      solid(1.0, Color.kGreen);
+    } else if (timer.hasElapsed(0.5) && hasStartedTimer) {
+      solid(1.0, Color.kOrange);
     }
   }
 
   public void setMode(LightsMode mode) {
+    if (mode.equals(LightsMode.Shooting)) {
+      timer.restart();
+      hasStartedTimer = true;
+    } else {
+      hasStartedTimer = false;
+    }
     this.mode = mode;
   }
 

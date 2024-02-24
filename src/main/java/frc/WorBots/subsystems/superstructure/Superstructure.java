@@ -86,11 +86,11 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(7.5, 0.05, 0);
-      pivotController.setConstraints(12, 8);
-      pivotFeedForward = new ArmFeedforward(0.06, 0.25, 0.0);
+      pivotController.setGains(10.0, 0.1, 0);
+      pivotController.setConstraints(10, 8);
+      pivotFeedForward = new ArmFeedforward(0.04, 0.25, 0.01);
 
-      elevatorController.setGains(160, 0.00, 0);
+      elevatorController.setGains(160, 0.2, 0);
       elevatorController.setConstraints(2.0, 1.65);
       elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
     } else { // Sim
@@ -102,7 +102,7 @@ public class Superstructure extends SubsystemBase {
       elevatorController.setConstraints(1.0, 1.65);
       elevatorFeedForward = new ElevatorFeedforward(0.1, 0.0, 0.0);
     }
-    pivotController.pid.setTolerance(0.015);
+    pivotController.pid.setTolerance(0.03);
     elevatorController.pid.setTolerance(0.025);
     visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);

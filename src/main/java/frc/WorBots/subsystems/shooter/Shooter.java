@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
-  private static final double distanceThreshold = 0.0675;
+  private static final double distanceThreshold = 0.075;
   private static final String tableName = "Shooter";
 
   private TunablePIDController topFlywheelController =
@@ -77,16 +77,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       topFlywheelFeedForward = new SimpleMotorFeedforward(0.0, 0.002);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.002);
       feederWheelController.setGains(0.0, 0.0, 0.0);
-      topFlywheelController.pid.setTolerance(80);
-      bottomFlywheelController.pid.setTolerance(80);
+      topFlywheelController.pid.setTolerance(120);
+      bottomFlywheelController.pid.setTolerance(120);
     } else { // Sim
       topFlywheelController.setGains(1, 0, 0);
       bottomFlywheelController.setGains(1, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
       feederWheelController.setGains(1.0, 0.0, 0.0);
-      topFlywheelController.pid.setTolerance(50);
-      bottomFlywheelController.pid.setTolerance(50);
+      topFlywheelController.pid.setTolerance(120);
+      bottomFlywheelController.pid.setTolerance(120);
     }
 
     StatusPage.reportStatus(StatusPage.SHOOTER_SUBSYSTEM, true);

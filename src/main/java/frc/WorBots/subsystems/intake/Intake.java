@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
 
   // Constants
   public static final double distanceThreshold = 0.25;
-  private static final double intakeVolts = 35.0;
+  private static final double intakeVolts = 4.25;
   private static final double constantForce = 0.0;
   private static final double maxTemperature = 80.0;
 
@@ -72,6 +72,14 @@ public class Intake extends SubsystemBase {
     setpointPub.set(setpointVolts);
     hasGamePiecePub.set(hasGamepiece);
     timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
+  }
+
+  public double getSetpointVolts() {
+    return setpointVolts;
+  }
+
+  public double getToFDistanceMeters() {
+    return inputs.timeOfFlightDistanceMeters;
   }
 
   /**

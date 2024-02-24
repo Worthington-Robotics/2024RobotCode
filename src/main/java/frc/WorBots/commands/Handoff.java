@@ -7,6 +7,7 @@
 
 package frc.WorBots.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
@@ -21,6 +22,7 @@ public class Handoff extends Command {
   private final Superstructure superstructure;
   private final Intake intake;
   private final Shooter shooter;
+  private boolean slowDeacrease;
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -33,17 +35,18 @@ public class Handoff extends Command {
   public void execute() {
     if (superstructure.getCurrentPose() == Preset.HANDOFF && superstructure.isAtSetpoint()) {
       if (!shooter.hasGamePiece()) {
-        intake.setVolts(5.0);
+        intake.setVolts(4.25);
         shooter.setRawFeederVolts(-0.5);
       } else {
         shooter.setRawFeederVolts(0);
         intake.setVolts(0.0);
       }
     } else {
-      if (intake.hasGamePiece() || shooter.hasGamePiece()) {
+      if (!intake.hasGamePiece()) {
+        intake.setVolts(MathUtil.clamp((intake.getToFDistanceMeters() / 0.3) * 4.25, 0, 4.25));
+      } else if (intake.hasGamePiece()
+          || shooter.hasGamePiece() && intake.getSetpointVolts() < 2.0) {
         intake.setVolts(0.0);
-      } else {
-        intake.setVolts(5.0);
       }
     }
   }

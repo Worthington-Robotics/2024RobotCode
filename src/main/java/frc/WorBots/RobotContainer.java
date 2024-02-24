@@ -99,7 +99,7 @@ public class RobotContainer {
         List.of(),
         autoCommands.fourPieceCenterWing());
 
-    selector.addRoutine("Test long boi", List.of(), autoCommands.testLongAuto());
+    selector.addRoutine("Test long boi", List.of(), autoCommands.fourPieceLong());
 
     selector.addRoutine(
         "Mobility",
@@ -123,6 +123,8 @@ public class RobotContainer {
   /** Bind driver controls to commands */
   private void bindControls() {
     StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER, driver.getHID().isConnected());
+    Lights.getInstance()
+        .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
@@ -159,7 +161,7 @@ public class RobotContainer {
                     () -> -driver.getLeftY(),
                     () -> -driver.getLeftX())
                 .alongWith(
-                    Commands.run(
+                    Commands.runOnce(
                         () -> {
                           Lights.getInstance().setMode(LightsMode.Shooting);
                         })))

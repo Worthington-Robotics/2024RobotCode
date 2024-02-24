@@ -24,7 +24,7 @@ public class ShooterMath {
   // Confidence calculation constants
 
   /** The maximum distance the robot can reliably shoot, in meters */
-  private static final double MAX_RELIABLE_RANGE = 5.0;
+  private static final double MAX_RELIABLE_RANGE = 4.25;
 
   /** The maximum distance the robot can shoot, in meters */
   private static final double MAX_RANGE = 6.4;
@@ -46,7 +46,7 @@ public class ShooterMath {
   // Constants for RPM calculation
 
   /** The maxmimum RPM we can shoot at */
-  public static final double MAX_SHOOTER_RPM = 5600;
+  public static final double MAX_SHOOTER_RPM = 5400;
 
   /**
    * The closest range we can shoot at. The point where the RPM falloff results in the lowest RPM
@@ -96,9 +96,10 @@ public class ShooterMath {
           new double[][] {
             {1.096, 0.498},
             {1.406, 0.52},
-            {2.197, 0.8072},
-            {2.379, 0.816},
-            {4.305, 1.0005},
+            {2.197, 0.8172},
+            {2.379, 0.826},
+            {3.145, 0.948},
+            {4.305, 0.9805},
             {5.295, 1.0601}
           });
 

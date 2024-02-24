@@ -54,7 +54,7 @@ public class AutoShoot extends SequentialCommandGroup {
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    thetaController.setTolerance(Units.degreesToRadians(1.5));
+    thetaController.setTolerance(Units.degreesToRadians(1.0));
 
     Supplier<Double> pivotAngle =
         () -> {

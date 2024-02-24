@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    Lights.getInstance().setMode(LightsMode.Status);
+    Lights.getInstance().setMode(LightsMode.Claire);
   }
 
   @Override
