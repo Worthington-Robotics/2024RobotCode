@@ -24,6 +24,7 @@ public class AutoSelector extends SubsystemBase {
       new AutoRoutine("Do Nothing", List.of(), Commands.none());
 
   private SwitchableChooser routineChooser;
+  private SwitchableChooser dashboardRoutineChooser;
   private final List<StringPublisher> questionPublishers;
   private final List<SwitchableChooser> questionChoosers;
 
@@ -40,6 +41,7 @@ public class AutoSelector extends SubsystemBase {
    */
   public AutoSelector(String key) {
     routineChooser = new SwitchableChooser(key);
+    dashboardRoutineChooser = new SwitchableChooser(key);
     lastRoutine = defaultRoutine;
 
     questionPublishers = new ArrayList<>();

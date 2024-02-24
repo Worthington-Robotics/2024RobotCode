@@ -116,7 +116,12 @@ public class RobotContainer {
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
     Lights.getInstance()
-        .setDataInterfaces(() -> drive.getPose(), () -> drive.getFieldRelativeSpeeds());
+        .setDataInterfaces(
+            () -> drive.getPose(),
+            () -> drive.getFieldRelativeSpeeds(),
+            () -> superstructure.inHandoff(),
+            () -> intake.hasGamePiece(),
+            () -> shooter.hasGamePiece());
     bindControls();
   }
 
@@ -169,11 +174,14 @@ public class RobotContainer {
             shooter
                 .spinToSpeed(0.0)
                 .alongWith(
-                    Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Alliance))));
+                    Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery))));
     operator
         .leftBumper()
         .onTrue(shooter.setRawFeederVoltsCommand(-2))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+
+    // Contextual shooting
+    // HashMap<String, Command>
   }
 
   public Command getAutonomousCommand() {

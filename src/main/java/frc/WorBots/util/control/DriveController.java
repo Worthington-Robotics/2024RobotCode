@@ -51,8 +51,8 @@ public class DriveController {
 
   /** Construct a new DriveController */
   public DriveController() {
-    driveFilter = LinearFilter.movingAverage(1);
-    turnFilter = LinearFilter.movingAverage(2);
+    driveFilter = LinearFilter.movingAverage(25);
+    turnFilter = LinearFilter.movingAverage(1);
     stopLockTimer.restart();
   }
 
@@ -84,7 +84,7 @@ public class DriveController {
         && Math.abs(speeds.vyMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.omegaRadiansPerSecond) < minimumSpeed) {
       if (stopLockTimer.hasElapsed(stopLockDelay)) {
-        drive.stopWithLock();
+        drive.stop();
       } else {
         drive.stop();
       }

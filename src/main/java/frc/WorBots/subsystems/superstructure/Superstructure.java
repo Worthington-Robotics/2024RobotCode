@@ -124,6 +124,7 @@ public class Superstructure extends SubsystemBase {
         .setSuperstructurePivotFusedRad(
             inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
     Logger.getInstance().setSuperstructureAtSetpoint(isAtSetpoint());
+    Logger.getInstance().setSuperstructureInHandoff(inHandoff());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
@@ -482,6 +483,10 @@ public class Superstructure extends SubsystemBase {
    */
   public boolean isShooting() {
     return this.state == SuperstructureState.SHOOTING;
+  }
+
+  public boolean inHandoff() {
+    return this.getCurrentPose() == Preset.HANDOFF && this.isAtSetpoint();
   }
 
   /**

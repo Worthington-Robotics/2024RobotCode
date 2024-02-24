@@ -46,6 +46,9 @@ public class Lights extends SubsystemBase {
   // Data interfaces
   private Supplier<Pose2d> drivePoseSupplier = () -> new Pose2d();
   private Supplier<ChassisSpeeds> driveSpeedsSupplier = () -> new ChassisSpeeds();
+  private Supplier<Boolean> inHandoff = () -> false;
+  private Supplier<Boolean> hasGamePieceBottom = () -> false;
+  private Supplier<Boolean> hasGamePieceTop = () -> false;
 
   public enum LightsMode {
     Rainbow,
@@ -55,6 +58,7 @@ public class Lights extends SubsystemBase {
     Disabled,
     Claire,
     Shooting,
+    Delivery,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -84,10 +88,7 @@ public class Lights extends SubsystemBase {
         status();
         break;
       case Alliance:
-        boolean isRed =
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red;
-        wave(100, isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
+        alliance();
         break;
       case MatchTime:
         matchTime();
@@ -101,6 +102,9 @@ public class Lights extends SubsystemBase {
       case Shooting:
         shooting();
         break;
+      case Delivery:
+        delivery();
+        break;
     }
 
     leds.setData(io);
@@ -112,7 +116,8 @@ public class Lights extends SubsystemBase {
   }
 
   private void solid(double percent, Color color) {
-    for (int i = 0; i < LIGHT_COUNT; i++) {
+    final int count = (int) (LIGHT_COUNT * percent);
+    for (int i = 0; i < count; i++) {
       io.setLED(i, color);
     }
   }
@@ -232,33 +237,10 @@ public class Lights extends SubsystemBase {
   }
 
   private void alliance() {
-    int t = 1 - ((int) (Timer.getFPGATimestamp() / 0.2) % LIGHT_COUNT);
-    Color color = Color.kBlack;
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      switch (alliance.get()) {
-        case Red:
-          color = Color.kRed;
-          break;
-        case Blue:
-          color = Color.kBlue;
-          break;
-      }
-    } else {
-      color = Color.kPurple;
-    }
-
-    // We create a moving 4145 pattern
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      final int pos = (i - t) % LIGHT_COUNT;
-      final boolean usePattern =
-          (pos >= 0 && pos < 4) || pos == 5 || (pos >= 7 && pos < 11) || (pos >= 12 && pos < 17);
-      if (usePattern) {
-        io.setLED(i, color);
-      } else {
-        io.setLED(i, color);
-      }
-    }
+    boolean isRed =
+        DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == Alliance.Red;
+    wave(100, isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
   }
 
   private void matchTime() {
@@ -316,6 +298,26 @@ public class Lights extends SubsystemBase {
     }
   }
 
+  private void delivery() {
+    final boolean inHandoff = this.inHandoff.get();
+    final boolean hasGamePieceBottom = this.hasGamePieceBottom.get();
+    final boolean hasGamePieceTop = this.hasGamePieceTop.get();
+    final Color pieceColor = inHandoff ? Color.kOrangeRed : Color.kRed;
+    if (hasGamePieceTop) {
+      solid(1.0, pieceColor);
+      solid(0.65, Color.kBlack);
+    } else if (hasGamePieceBottom) {
+      solid(1.0, Color.kBlack);
+      solid(0.65, pieceColor);
+    } else {
+      if (inHandoff) {
+        solid(1.0, Color.kWhite);
+      } else {
+        alliance();
+      }
+    }
+  }
+
   public void setMode(LightsMode mode) {
     if (mode.equals(LightsMode.Shooting)) {
       timer.restart();
@@ -327,8 +329,15 @@ public class Lights extends SubsystemBase {
   }
 
   public void setDataInterfaces(
-      Supplier<Pose2d> drivePoseSupplier, Supplier<ChassisSpeeds> driveSpeedsSupplier) {
+      Supplier<Pose2d> drivePoseSupplier,
+      Supplier<ChassisSpeeds> driveSpeedsSupplier,
+      Supplier<Boolean> inHandoff,
+      Supplier<Boolean> hasGamePieceBottom,
+      Supplier<Boolean> hasGamePieceTop) {
     this.drivePoseSupplier = drivePoseSupplier;
     this.driveSpeedsSupplier = driveSpeedsSupplier;
+    this.inHandoff = inHandoff;
+    this.hasGamePieceBottom = hasGamePieceBottom;
+    this.hasGamePieceTop = hasGamePieceTop;
   }
 }

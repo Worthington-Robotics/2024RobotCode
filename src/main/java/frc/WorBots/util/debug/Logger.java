@@ -64,6 +64,7 @@ public class Logger {
       superstructureTable.getDoubleArrayTopic("3d Poses").publish();
   BooleanPublisher isAtSetpointPublisher =
       superstructureTable.getBooleanTopic("At Setpoint").publish();
+  BooleanPublisher inHandoffPublisher = superstructureTable.getBooleanTopic("In Handoff").publish();
 
   NetworkTable pivotTable = superstructureTable.getSubTable("Pivot");
   DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Rad Rel").publish();
@@ -350,5 +351,9 @@ public class Logger {
 
   public void setSuperstructureAtSetpoint(boolean value) {
     isAtSetpointPublisher.set(value);
+  }
+
+  public void setSuperstructureInHandoff(boolean value) {
+    inHandoffPublisher.set(value);
   }
 }

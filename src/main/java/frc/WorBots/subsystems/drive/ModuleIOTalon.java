@@ -15,7 +15,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
-import frc.WorBots.util.HardwareUtils;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class ModuleIOTalon implements ModuleIO {
@@ -95,13 +94,13 @@ public class ModuleIOTalon implements ModuleIO {
   }
 
   public void setDriveVoltage(double volts) {
-    final double limit =
-        (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 6.8 : 9;
-    driveSignals.setTalonVoltage(driveMotor, volts, limit);
+    // final double limit =
+    //     (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 6.8 : 9;
+    driveSignals.setTalonVoltage(driveMotor, volts, 11.0);
   }
 
   public void setTurnVoltage(double volts) {
-    turnSignals.setTalonVoltage(turnMotor, volts, 6);
+    turnSignals.setTalonVoltage(turnMotor, volts, 11.0);
   }
 
   public void setDriveBrakeMode(boolean enable) {}
