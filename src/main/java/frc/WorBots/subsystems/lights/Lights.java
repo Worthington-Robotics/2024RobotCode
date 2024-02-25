@@ -36,7 +36,7 @@ public class Lights extends SubsystemBase {
   public static final int LIGHT_COUNT = 27;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
-  private LightsMode mode = LightsMode.Claire;
+  private LightsMode mode = LightsMode.Bounce;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
   private final int lightsID = 9;
@@ -59,6 +59,7 @@ public class Lights extends SubsystemBase {
     Claire,
     Shooting,
     Delivery,
+    Bounce,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -104,6 +105,12 @@ public class Lights extends SubsystemBase {
         break;
       case Delivery:
         delivery();
+        break;
+      case Bounce:
+        // bounce(100, Color.kBlue, Color.kRed, 15.0, 1.0, 0.35);
+        // solid(1.0, Color.kRed);
+        // solid(0.5, Color.kBlue);
+        wave(100, Color.kBlue, Color.kRed, 25.0, 2.0, 0.6);
         break;
     }
 

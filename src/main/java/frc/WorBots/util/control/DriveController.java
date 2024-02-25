@@ -44,15 +44,13 @@ public class DriveController {
   /** The amount of time in seconds after which to apply stop locking */
   public static final double stopLockDelay = 0.5;
 
-  private final LinearFilter driveFilter;
-  private final LinearFilter turnFilter;
+  private static final LinearFilter driveFilter = LinearFilter.movingAverage(25);
+  private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
 
   private Timer stopLockTimer = new Timer();
 
   /** Construct a new DriveController */
   public DriveController() {
-    driveFilter = LinearFilter.movingAverage(25);
-    turnFilter = LinearFilter.movingAverage(1);
     stopLockTimer.restart();
   }
 
@@ -88,6 +86,9 @@ public class DriveController {
       } else {
         drive.stop();
       }
+      // drive.stop();
+      // driveFilter.reset();
+      // turnFilter.reset();
     } else {
       stopLockTimer.restart();
       drive.runVelocity(speeds);
@@ -112,7 +113,13 @@ public class DriveController {
 
     // Apply deadband
     linearMagnitude = MathUtil.applyDeadband(linearMagnitude, deadband);
+    if (linearMagnitude == 0.0) {
+      driveFilter.reset();
+    }
     theta = MathUtil.applyDeadband(theta, deadband);
+    if (theta == 0.0) {
+      turnFilter.reset();
+    }
 
     // Apply squaring
     linearMagnitude = GeneralMath.curve(linearMagnitude, driveCurveAmount);

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
-import frc.WorBots.subsystems.superstructure.SuperstructurePose.*;
 
 /**
  * This command waits for the driver to intake a game piece, then moves it into the shooter to prep
@@ -33,7 +32,7 @@ public class Handoff extends Command {
 
   @Override
   public void execute() {
-    if (superstructure.getCurrentPose() == Preset.HANDOFF && superstructure.isAtSetpoint()) {
+    if (superstructure.inHandoff()) {
       if (!shooter.hasGamePiece()) {
         intake.setVolts(4.25);
         shooter.setRawFeederVolts(-0.5);

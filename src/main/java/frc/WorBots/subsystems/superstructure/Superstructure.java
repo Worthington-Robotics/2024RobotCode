@@ -179,7 +179,7 @@ public class Superstructure extends SubsystemBase {
 
     visualizer.update(
         VecBuilder.fill(
-            inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad,
+            getPivotPoseRads(),
             firstCarriagePositionMeters,
             secondCarriagePositionMeters,
             inputs.elevatorPositionMeters));
@@ -213,15 +213,13 @@ public class Superstructure extends SubsystemBase {
     // Clamp the setpoint
     setpoint = MathUtil.clamp(setpoint, bottomLimit, pivotMaxAngle);
     final double pivotVoltage =
-        pivotController.pid.calculate(
-                inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad, setpoint)
-            + calculatePivotFeedforward();
+        pivotController.pid.calculate(getPivotPoseRads(), setpoint) + calculatePivotFeedforward();
 
     return pivotVoltage;
   }
 
   private double calculatePivotFeedforward() {
-    final double adjusted = (inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
+    final double adjusted = getPivotPoseRads();
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
     return out;
   }
@@ -300,7 +298,7 @@ public class Superstructure extends SubsystemBase {
     volts =
         GeneralMath.softLimitVelocity(
             volts,
-            (inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad) - bottomLimit,
+            getPivotPoseRads() - bottomLimit,
             6.5,
             pivotMaxAngle,
             pivotBackwardLimitDistance,
@@ -473,7 +471,7 @@ public class Superstructure extends SubsystemBase {
       SuperstructurePose.Preset pose, double elevatorTolerance, double pivotTolerance) {
     return GeneralMath.checkError(
             pose.getElevator(), inputs.elevatorPositionMeters, elevatorTolerance)
-        && GeneralMath.checkError(pose.getPivot(), inputs.pivotPositionAbsRad, pivotTolerance);
+        && GeneralMath.checkError(pose.getPivot(), getPivotPoseRads(), pivotTolerance);
   }
 
   /**
@@ -486,7 +484,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean inHandoff() {
-    return this.getCurrentPose() == Preset.HANDOFF && this.isAtSetpoint();
+    return this.isNearPose(Preset.HANDOFF, 0.02, Units.degreesToRadians(2.8));
   }
 
   /**

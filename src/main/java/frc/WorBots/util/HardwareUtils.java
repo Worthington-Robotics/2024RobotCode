@@ -58,8 +58,8 @@ public class HardwareUtils {
     protected final NetworkTable table;
     private final DoublePublisher voltsPub;
     private final DoublePublisher supplyVoltsPub;
-    private final DoublePublisher currentPub;
-    private final DoublePublisher tempPub;
+    // private final DoublePublisher currentPub;
+    // private final DoublePublisher tempPub;
     private final BooleanPublisher connectedPub;
 
     public double appliedPowerVolts = 0.0;
@@ -72,16 +72,16 @@ public class HardwareUtils {
       this.table = NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable);
       voltsPub = this.table.getDoubleTopic("Applied Voltage").publish();
       supplyVoltsPub = this.table.getDoubleTopic("Supply Voltage").publish();
-      currentPub = this.table.getDoubleTopic("Current Draw").publish();
-      tempPub = this.table.getDoubleTopic("Temp Celsius").publish();
+      // currentPub = this.table.getDoubleTopic("Current Draw").publish();
+      // tempPub = this.table.getDoubleTopic("Temp Celsius").publish();
       connectedPub = this.table.getBooleanTopic("Connected").publish();
     }
 
     public void publish() {
       voltsPub.set(appliedPowerVolts);
       supplyVoltsPub.set(supplyVoltage);
-      currentPub.set(currentDrawAmps);
-      tempPub.set(temperatureCelsius);
+      // currentPub.set(currentDrawAmps);
+      // tempPub.set(temperatureCelsius);
       connectedPub.set(isConnected);
     }
   }
@@ -118,12 +118,12 @@ public class HardwareUtils {
       voltsSignal = motor.getSupplyVoltage();
       currentSignal = motor.getSupplyCurrent();
 
-      tempSignal.setUpdateFrequency(8);
-      voltsSignal.setUpdateFrequency(100);
-      currentSignal.setUpdateFrequency(80);
+      // tempSignal.setUpdateFrequency(8);
+      // voltsSignal.setUpdateFrequency(10);
+      // currentSignal.setUpdateFrequency(5);
 
       // For .get calls we need the duty cycle
-      motor.getDutyCycle().setUpdateFrequency(100);
+      motor.getDutyCycle().setUpdateFrequency(50);
     }
 
     protected void refresh() {
@@ -132,10 +132,10 @@ public class HardwareUtils {
 
     public void update(TalonInputs inputs, TalonFX motor) {
       refresh();
-      inputs.temperatureCelsius = tempSignal.getValue();
-      inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
-      inputs.supplyVoltage = voltsSignal.getValue();
-      inputs.currentDrawAmps = currentSignal.getValue();
+      // inputs.temperatureCelsius = tempSignal.getValue();
+      // inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
+      // inputs.supplyVoltage = voltsSignal.getValue();
+      // inputs.currentDrawAmps = currentSignal.getValue();
       inputs.isConnected = motor.isAlive() && inputs.temperatureCelsius < maxMotorTemperature;
     }
 
@@ -145,7 +145,8 @@ public class HardwareUtils {
      * @return The supply voltage
      */
     public double getSupplyVoltage() {
-      return voltsSignal.getValue();
+      // return voltsSignal.getValue();
+      return 0.0;
     }
 
     /**
@@ -156,7 +157,8 @@ public class HardwareUtils {
      * @param maxVolts The maximum magnitude for the voltage
      */
     public void setTalonVoltage(TalonFX talon, double volts, double maxVolts) {
-      HardwareUtils.setTalonVoltage(talon, volts, maxVolts, this.tempSignal.getValue());
+      // HardwareUtils.setTalonVoltage(talon, volts, maxVolts, this.tempSignal.getValue());
+      HardwareUtils.setTalonVoltage(talon, volts, maxVolts, 0.0);
     }
   }
 
@@ -169,8 +171,8 @@ public class HardwareUtils {
       super(motor);
       posSignal = motor.getPosition();
       velSignal = motor.getVelocity();
-      posSignal.setUpdateFrequency(150);
-      velSignal.setUpdateFrequency(150);
+      posSignal.setUpdateFrequency(50);
+      velSignal.setUpdateFrequency(50);
     }
 
     @Override

@@ -21,10 +21,15 @@ import frc.WorBots.util.debug.TunableDouble;
 import java.util.Optional;
 
 public class ShooterMath {
+  // Goal constants
+
+  /** The amount to adjust the goal position away from the wall */
+  private static final double GOAL_ADJUSTMENT = Units.inchesToMeters(8.0);
+
   // Confidence calculation constants
 
   /** The maximum distance the robot can reliably shoot, in meters */
-  private static final double MAX_RELIABLE_RANGE = 4.25;
+  private static final double MAX_RELIABLE_RANGE = 4.7;
 
   /** The maximum distance the robot can shoot, in meters */
   private static final double MAX_RANGE = 6.4;
@@ -32,7 +37,7 @@ public class ShooterMath {
   /**
    * The maximum angle from the goal to the robot that the robot can reliably shoot from, in radians
    */
-  private static final double MAX_RELIABLE_ANGLE = Units.degreesToRadians(48);
+  private static final double MAX_RELIABLE_ANGLE = Units.degreesToRadians(54);
 
   /** The maximum angle from the goal to the robot that the robot can shoot from, in radians */
   private static final double MAX_ANGLE = Units.degreesToRadians(70);
@@ -67,11 +72,11 @@ public class ShooterMath {
 
   /** The amount to move the pivot down for side shots */
   private static final TunableDouble SIDE_SHOT_PIVOT_COEFFICIENT =
-      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.045);
+      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.042);
 
   /** The amount to adjust the robot angle for side shots */
   private static final TunableDouble SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT =
-      new TunableDouble("Tuning", "Shooting", "Side Robot Coeff", 0.032);
+      new TunableDouble("Tuning", "Shooting", "Side Robot Coeff", 0.0);
 
   // Momentum compensation constants
 
@@ -80,9 +85,9 @@ public class ShooterMath {
    * multiplied by the robot period to find the period of time over which to apply the robot
    * velocity to the pose to get the expected pose
    */
-  private static final double PREDICTION_FACTOR = 0.0;
+  private static final double PREDICTION_FACTOR = 0.1;
 
-  private static final double PREDICTION_DISTANCE_FACTOR = 3.5;
+  private static final double PREDICTION_DISTANCE_FACTOR = 3.9;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
@@ -311,9 +316,12 @@ public class ShooterMath {
   public static Translation2d getGoal() {
     Optional<Alliance> currentAlliance = DriverStation.getAlliance();
     Translation2d out = FieldConstants.Speaker.position;
+    double adjustment = GOAL_ADJUSTMENT;
     if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
       out = out.plus(new Translation2d(FieldConstants.fieldLength, 0.0));
+      adjustment *= -1;
     }
+    out = out.plus(new Translation2d(adjustment, 0.0));
     return out;
   }
 

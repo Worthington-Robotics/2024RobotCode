@@ -7,6 +7,7 @@
 
 package frc.WorBots;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
@@ -17,6 +18,7 @@ import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
+import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.debug.StatusPage;
@@ -122,17 +124,18 @@ public class RobotContainer {
             () -> superstructure.inHandoff(),
             () -> intake.hasGamePiece(),
             () -> shooter.hasGamePiece());
+    Lights.getInstance()
+        .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     bindControls();
   }
 
   /** Bind driver controls to commands */
   private void bindControls() {
     StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER, driver.getHID().isConnected());
-    Lights.getInstance()
-        .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
+    shooter.setDefaultCommand(shooter.idleCommand());
     // superstructure.setDefaultCommand(new SuperstructureManual(superstructure, ()
     // ->
     // -operator.getLeftY(), () -> -operator.getRightY()));
@@ -144,7 +147,7 @@ public class RobotContainer {
     driver.leftBumper().onTrue(superstructure.setPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
-    driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
+    // driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
     driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
     driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
     driver
@@ -156,6 +159,7 @@ public class RobotContainer {
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     operator.a().onTrue(superstructure.setPose(Preset.TRAP));
     operator.x().onTrue(superstructure.setPose(Preset.AMP2));
+    operator.povUp().onTrue(superstructure.setPose(Preset.SUBWOOFER_SHOOT));
     operator
         .rightBumper()
         .whileTrue(
@@ -169,7 +173,8 @@ public class RobotContainer {
                     Commands.runOnce(
                         () -> {
                           Lights.getInstance().setMode(LightsMode.Shooting);
-                        })))
+                        }))
+                .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.DISABLED)))
         .onFalse(
             shooter
                 .spinToSpeed(0.0)
@@ -181,7 +186,32 @@ public class RobotContainer {
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
 
     // Contextual shooting
-    // HashMap<String, Command>
+    HashMap<String, Command> shootMap = new HashMap<>();
+    shootMap.put("amp", shooter.setSpeedContinuous(500));
+    shootMap.put("trap", shooter.setSpeedContinuous(2000));
+    shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(2900));
+    shootMap.put("raw", shooter.setSpeedContinuous(2000));
+
+    operator
+        .rightTrigger()
+        .whileTrue(
+            Commands.select(
+                shootMap,
+                () -> {
+                  final double elevTolerance = 0.02;
+                  final double pivotTolerance = Units.degreesToRadians(3.2);
+                  if (superstructure.isNearPose(Preset.AMP2, elevTolerance, pivotTolerance)) {
+                    return "amp";
+                  }
+                  if (superstructure.isNearPose(Preset.TRAP, elevTolerance, pivotTolerance)) {
+                    return "trap";
+                  }
+                  if (superstructure.isNearPose(
+                      Preset.SUBWOOFER_SHOOT, elevTolerance, pivotTolerance)) {
+                    return "subwoofer_shoot";
+                  }
+                  return "raw";
+                }));
   }
 
   public Command getAutonomousCommand() {

@@ -181,6 +181,14 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         });
   }
 
+  public Command setSpeedContinuous(double rpm) {
+    return this.run(
+        () -> {
+          topFlywheelRPM = rpm;
+          bottomFlywheelRPM = rpm;
+        });
+  }
+
   /**
    * A function that spins up the flywheels and returns when at the desired speed
    *
@@ -230,7 +238,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   }
 
   public Command setRawFeederVoltsCommand(double volts) {
-    return this.runOnce(
+    return Commands.runOnce(
         () -> {
           feederWheelVolts = volts;
         });
@@ -247,6 +255,10 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
               shouldIncrement = true;
             })
         .alongWith(Commands.waitUntil(this::hasGamePiece));
+  }
+
+  public Command idleCommand() {
+    return this.setSpeed(500);
   }
 
   public Command runFeederWheel(double volts) {

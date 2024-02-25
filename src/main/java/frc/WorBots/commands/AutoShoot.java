@@ -7,7 +7,6 @@
 
 package frc.WorBots.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,7 +20,6 @@ import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.control.DriveController;
-import frc.WorBots.util.math.GeneralMath;
 import frc.WorBots.util.math.ShooterMath;
 import java.util.function.*;
 
@@ -31,12 +29,13 @@ public class AutoShoot extends SequentialCommandGroup {
   private Supplier<Double> leftYSupplier;
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
-          3.75,
-          0.0,
-          0.0,
+          3.8,
+          0.001,
+          0.03,
           new TrapezoidProfile.Constraints(
               Units.degreesToRadians(140.0), Units.degreesToRadians(720.0)),
           Constants.ROBOT_PERIOD);
+  private DriveController driveController = new DriveController();
 
   /**
    * This command automatically drives to a known safe shooting location and shoots a game piece.
@@ -50,7 +49,7 @@ public class AutoShoot extends SequentialCommandGroup {
       Shooter shooter,
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier) {
-    addRequirements(superstructure, drive);
+    addRequirements(superstructure, drive, shooter);
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -82,24 +81,12 @@ public class AutoShoot extends SequentialCommandGroup {
           Pose2d robotPose = drive.getPose();
           double x = leftXSupplier.get();
           double y = leftYSupplier.get();
-          // Get direction and magnitude of linear axes
-          double linearMagnitude = Math.hypot(x, y);
-          Rotation2d linearDirection = new Rotation2d(x, y);
 
-          // Apply deadband
-          linearMagnitude = MathUtil.applyDeadband(linearMagnitude, DriveController.deadband);
+          ChassisSpeeds speeds =
+              driveController.getSpeeds(
+                  x, y, 0.0, drive.getRotation(), drive.getMaxLinearSpeedMetersPerSec() / 2.0);
 
-          // Apply squaring
-          linearMagnitude = GeneralMath.curve(linearMagnitude, DriveController.driveCurveAmount);
-
-          // Calcaulate new linear components
-          Translation2d linearVelocity =
-              new Pose2d(new Translation2d(), linearDirection)
-                  .transformBy(
-                      new Transform2d(
-                          new Translation2d(linearMagnitude, new Rotation2d()), new Rotation2d()))
-                  .getTranslation();
-
+          // Calculate turn
           double thetaVelocity =
               thetaController.calculate(
                   robotPose.getRotation().getRadians(), driveAngleSupplier.get().getRadians());
@@ -107,25 +94,8 @@ public class AutoShoot extends SequentialCommandGroup {
               Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
           if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
 
-          // Convert to meters per second
-          ChassisSpeeds speeds =
-              new ChassisSpeeds(
-                  linearVelocity.getX()
-                      * drive.getMaxLinearSpeedMetersPerSec()
-                      * DriveController.driveSpeedMultiplier,
-                  linearVelocity.getY()
-                      * drive.getMaxLinearSpeedMetersPerSec()
-                      * DriveController.driveSpeedMultiplier,
-                  thetaVelocity);
+          speeds.omegaRadiansPerSecond = thetaVelocity;
 
-          // Convert to field relative based on the alliance
-          var driveRotation = robotPose.getRotation();
-          speeds =
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  speeds.vxMetersPerSecond,
-                  speeds.vyMetersPerSecond,
-                  speeds.omegaRadiansPerSecond,
-                  driveRotation);
           return speeds;
         };
     var shooting =
@@ -139,12 +109,12 @@ public class AutoShoot extends SequentialCommandGroup {
         shooting
             .alongWith(
                 Commands.run(() -> shooter.spinToSpeedVoid(shooterSpeedSupplier.get()), shooter))
-            .alongWith(Commands.run(() -> drive.runVelocity(speedsSupplier.get()), drive)),
+            .alongWith(
+                Commands.run(() -> driveController.drive(drive, speedsSupplier.get()), drive)),
         Commands.waitUntil(() -> false)
             .finallyDo(
                 () -> {
                   superstructure.setModeVoid(SuperstructureState.DISABLED);
-                  shooter.spinToSpeedVoid(0);
                 }));
   }
 }

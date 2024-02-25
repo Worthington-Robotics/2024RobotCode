@@ -9,17 +9,22 @@ package frc.WorBots;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
+import frc.WorBots.util.math.GeomUtil;
+import frc.WorBots.util.math.ShooterMath;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -65,30 +70,30 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // final var robotPose = robotContainer.drive.getPose();
-    // final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
-    // final double range = ShooterMath.getGoalDistance(robotPose);
-    // SmartDashboard.putNumber("Speaker Range", range);
-    // final var goalPose = ShooterMath.getGoal();
-    // SmartDashboard.putNumberArray("Goal Pose", Logger.translation2dToArray(goalPose));
-    // var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
-    // SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
+    // DISABLE BEFORE COMP
+    final var robotPose = robotContainer.drive.getPose();
+    final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
+    final double range = ShooterMath.getGoalDistance(robotPose);
+    SmartDashboard.putNumber("Speaker Range", range);
+    final var goalPose = ShooterMath.getGoal();
+    SmartDashboard.putNumberArray("Goal Pose", Logger.translation2dToArray(goalPose));
+    var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
+    SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
 
-    // var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
-    // SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
-    // SmartDashboard.putString("Shot Confidence", shotData.confidence().toString());
-    // SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
-    // final var adjusted = new Pose2d(robotPose.getTranslation(), shotData.robotAngle());
-    // SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
+    var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
+    SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
+    SmartDashboard.putString("Shot Confidence", shotData.confidence().toString());
+    SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
+    final var adjusted = new Pose2d(robotPose.getTranslation(), shotData.robotAngle());
+    SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
 
-    // var nextRobotPose = GeomUtil.applyChassisSpeeds(robotPose, robotSpeeds,
-    // Constants.ROBOT_PERIOD);
-    // SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
+    var nextRobotPose = GeomUtil.applyChassisSpeeds(robotPose, robotSpeeds, Constants.ROBOT_PERIOD);
+    SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
   }
 
   @Override
   public void disabledInit() {
-    Lights.getInstance().setMode(LightsMode.Claire);
+    Lights.getInstance().setMode(LightsMode.Bounce);
   }
 
   @Override
@@ -128,7 +133,7 @@ public class Robot extends TimedRobot {
     robotContainer.intake.setVolts(0.0);
     robotContainer.shooter.setRawFlywheelSpeed(0);
     robotContainer.shooter.setRawFeederVolts(0.0);
-    robotContainer.superstructure.setMode(SuperstructureState.DISABLED);
+    robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
 
     Lights.getInstance().setMode(LightsMode.Delivery);
   }

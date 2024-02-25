@@ -17,7 +17,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class TunableDouble {
   // Set this to false to disable tuning and improve performance.
   // All tunables will just use their default value
-  private static final boolean enableTuning = true;
+  private static final boolean enableTuning = false;
 
   private double value;
   // We have to keep this around since we need to supply a default
