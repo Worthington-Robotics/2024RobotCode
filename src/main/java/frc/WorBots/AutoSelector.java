@@ -10,6 +10,7 @@ package frc.WorBots;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,18 +21,22 @@ import java.util.List;
 
 public class AutoSelector extends SubsystemBase {
   public static final int maxQuestions = 4;
+
+  /** Whether to use the LabVIEW dashboard instead of multiple question choosers */
+  private static final boolean useDriverStation = true;
+
   private static final AutoRoutine defaultRoutine =
       new AutoRoutine("Do Nothing", List.of(), Commands.none());
 
   private SwitchableChooser routineChooser;
-  private SwitchableChooser dashboardRoutineChooser;
-  private final List<StringPublisher> questionPublishers;
-  private final List<SwitchableChooser> questionChoosers;
+  private List<StringPublisher> questionPublishers;
+  private List<SwitchableChooser> questionChoosers;
 
   private AutoRoutine lastRoutine;
   private List<String> names = new ArrayList<>();
   private List<AutoRoutine> routines = new ArrayList<>();
   private List<AutoQuestionResponse> lastResponses;
+  private List<String> answers = new ArrayList<>();
 
   /**
    * The auto selector is logged onto SmartDashboard and allows for the drivers to set the desired
@@ -40,26 +45,27 @@ public class AutoSelector extends SubsystemBase {
    * @param key The SmartDashboard table to be logged under.
    */
   public AutoSelector(String key) {
-    routineChooser = new SwitchableChooser(key);
-    dashboardRoutineChooser = new SwitchableChooser(key);
     lastRoutine = defaultRoutine;
 
-    questionPublishers = new ArrayList<>();
-    questionChoosers = new ArrayList<>();
-    for (int i = 0; i < maxQuestions; i++) {
-      var publisher =
-          NetworkTableInstance.getDefault()
-              .getStringTopic("/SmartDashboard/" + key + "/Question #" + Integer.toString(i + 1))
-              .publish();
-      publisher.set("NA");
-      questionPublishers.add(publisher);
-      questionChoosers.add(
-          new SwitchableChooser(key + "/Question #" + Integer.toString(i + 1) + " Chooser"));
+    if (!useDriverStation) {
+      routineChooser = new SwitchableChooser(key);
+      questionPublishers = new ArrayList<>();
+      questionChoosers = new ArrayList<>();
+      for (int i = 0; i < maxQuestions; i++) {
+        var publisher =
+            NetworkTableInstance.getDefault()
+                .getStringTopic("/SmartDashboard/" + key + "/Question #" + Integer.toString(i + 1))
+                .publish();
+        publisher.set("NA");
+        questionPublishers.add(publisher);
+        questionChoosers.add(
+            new SwitchableChooser(key + "/Question #" + Integer.toString(i + 1) + " Chooser"));
+      }
     }
   }
 
   /**
-   * Adds a auto the the auto selector.
+   * Adds an auto to the auto selector.
    *
    * @param name The name of the auto.
    * @param questions The auto questions to be asked.
@@ -75,7 +81,11 @@ public class AutoSelector extends SubsystemBase {
     }
     names.add(name);
     routines.add(new AutoRoutine(name, questions, createRoutineCommand(command)));
-    routineChooser.setOptions(names.toArray(new String[0]));
+    if (useDriverStation) {
+      createAnswerList();
+    } else {
+      routineChooser.setOptions(names.toArray(new String[0]));
+    }
   }
 
   public AutoRoutine getRoutineFromName(String name) {
@@ -88,6 +98,30 @@ public class AutoSelector extends SubsystemBase {
     return returnRoutine;
   }
 
+  private void createAnswerList() {
+    answers.clear();
+    for (AutoRoutine routine : routines) {
+      if (routine.questions.size() > 0) {
+        createAnswerPermutations(routine.name, 0, routine.questions);
+      } else {
+        answers.add(routine.name);
+      }
+    }
+  }
+
+  // Recursive thing for creating answers
+  private void createAnswerPermutations(String answer, int index, List<AutoQuestion> questions) {
+    AutoQuestion question = questions.get(index);
+    for (AutoQuestionResponse response : question.responses) {
+      final String modified = answer + "; " + response;
+      if (index < questions.size() - 1) {
+        createAnswerPermutations(modified, index + 1, questions);
+      } else {
+        answers.add(modified);
+      }
+    }
+  }
+
   /**
    * Gets the current chosen auto.
    *
@@ -98,50 +132,77 @@ public class AutoSelector extends SubsystemBase {
   }
 
   public void periodic() {
-    if (DriverStation.isAutonomousEnabled() && lastRoutine != null && lastResponses == null) {
+    if (DriverStation.isAutonomousEnabled()
+        || DriverStation.isTeleopEnabled() && lastRoutine != null && lastResponses == null) {
       return;
     }
-    routineChooser.periodic();
+    if (useDriverStation) {
+      SmartDashboard.putStringArray("Auto List", answers.toArray(new String[0]));
+      String answer = SmartDashboard.getString("Auto Selector", "Do Nothing");
+      if (answer == null) {
+        return;
+      }
+      String[] items = answer.split("; ");
+      var selectedRoutine = getRoutineFromName(items[0]);
+      if (selectedRoutine == null || selectedRoutine.equals(lastRoutine)) {
+        return;
+      }
 
-    var selectedRoutine = getRoutineFromName(routineChooser.get());
-    if (selectedRoutine == null) {
-      return;
-    }
-    for (SwitchableChooser chooser : questionChoosers) {
-      chooser.periodic();
-    }
-    if (!selectedRoutine.equals(lastRoutine)) {
-      var questions = selectedRoutine.questions();
-      for (int i = 0; i < maxQuestions; i++) {
-        if (i < questions.size()) {
-          questionPublishers.get(i).set(questions.get(i).question());
-          questionChoosers
-              .get(i)
-              .setOptions(
-                  questions.get(i).responses().stream()
-                      .map((AutoQuestionResponse response) -> response.toString())
-                      .toArray(String[]::new));
-        } else {
-          questionPublishers.get(i).set("");
-          questionChoosers.get(i).setOptions(new String[] {});
+      lastRoutine = selectedRoutine;
+
+      lastResponses = new ArrayList<>();
+      for (int i = 0; i < lastRoutine.questions().size(); i++) {
+        String responseString = items[i + 1];
+        lastResponses.add(
+            responseString == null
+                ? lastRoutine.questions().get(i).responses().get(0)
+                : AutoQuestionResponse.valueOf(responseString));
+      }
+
+      StatusPage.reportStatus(StatusPage.ALL_AUTO_QUESTIONS, true);
+    } else {
+      routineChooser.periodic();
+
+      var selectedRoutine = getRoutineFromName(routineChooser.get());
+      if (selectedRoutine == null) {
+        return;
+      }
+      for (SwitchableChooser chooser : questionChoosers) {
+        chooser.periodic();
+      }
+      if (!selectedRoutine.equals(lastRoutine)) {
+        var questions = selectedRoutine.questions();
+        for (int i = 0; i < maxQuestions; i++) {
+          if (i < questions.size()) {
+            questionPublishers.get(i).set(questions.get(i).question());
+            questionChoosers
+                .get(i)
+                .setOptions(
+                    questions.get(i).responses().stream()
+                        .map((AutoQuestionResponse response) -> response.toString())
+                        .toArray(String[]::new));
+          } else {
+            questionPublishers.get(i).set("");
+            questionChoosers.get(i).setOptions(new String[] {});
+          }
         }
       }
-    }
 
-    lastRoutine = selectedRoutine;
-    lastResponses = new ArrayList<>();
-    boolean allQuestionsChosen = true;
-    for (int i = 0; i < lastRoutine.questions().size(); i++) {
-      String responseString = questionChoosers.get(i).get();
-      if (responseString == null) {
-        allQuestionsChosen = false;
+      lastRoutine = selectedRoutine;
+      lastResponses = new ArrayList<>();
+      boolean allQuestionsChosen = true;
+      for (int i = 0; i < lastRoutine.questions().size(); i++) {
+        String responseString = questionChoosers.get(i).get();
+        if (responseString == null) {
+          allQuestionsChosen = false;
+        }
+        lastResponses.add(
+            responseString == null
+                ? lastRoutine.questions().get(i).responses().get(0)
+                : AutoQuestionResponse.valueOf(responseString));
       }
-      lastResponses.add(
-          responseString == null
-              ? lastRoutine.questions().get(i).responses().get(0)
-              : AutoQuestionResponse.valueOf(responseString));
+      StatusPage.reportStatus(StatusPage.ALL_AUTO_QUESTIONS, allQuestionsChosen);
     }
-    StatusPage.reportStatus(StatusPage.ALL_AUTO_QUESTIONS, allQuestionsChosen);
     StatusPage.reportStatus(StatusPage.AUTO_CHOSEN, lastRoutine != null);
   }
 
