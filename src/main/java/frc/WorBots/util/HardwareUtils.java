@@ -181,8 +181,8 @@ public class HardwareUtils {
       super(motor);
       posSignal = motor.getPosition();
       velSignal = motor.getVelocity();
-      posSignal.setUpdateFrequency(50);
-      velSignal.setUpdateFrequency(50);
+      posSignal.setUpdateFrequency(100);
+      velSignal.setUpdateFrequency(100);
     }
 
     @Override

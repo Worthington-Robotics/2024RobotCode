@@ -71,7 +71,7 @@ public class ModuleIOTalon implements ModuleIO {
     turnSignals = new TalonSignalsPositional(turnMotor);
     turnAbsPosSignal = absoluteEncoder.getAbsolutePosition();
 
-    StatusSignal.setUpdateFrequencyForAll(50, turnAbsPosSignal);
+    StatusSignal.setUpdateFrequencyForAll(100, turnAbsPosSignal);
 
     driveMotor.optimizeBusUtilization();
     turnMotor.optimizeBusUtilization();
