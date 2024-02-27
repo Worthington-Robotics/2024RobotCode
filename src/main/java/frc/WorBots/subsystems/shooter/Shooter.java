@@ -124,16 +124,24 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     } else {
       // Calculate the desired voltages based on the setpoints
       if (topFlywheelRPM > 0.0) {
-        io.setTopFlywheelVolts(
+        double setpoint =
             topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
-                + topFlywheelFeedForward.calculate(topFlywheelRPM));
+                + topFlywheelFeedForward.calculate(topFlywheelRPM);
+        if (setpoint < -0.3) {
+          setpoint = 0.0;
+        }
+        io.setTopFlywheelVolts(setpoint);
       } else {
         io.setTopFlywheelVolts(0);
       }
       if (bottomFlywheelRPM > 0.0) {
-        io.setBottomFlywheelVolts(
+        double setpoint =
             bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
-                + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM));
+                + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM);
+        if (setpoint < -0.3) {
+          setpoint = 0.0;
+        }
+        io.setBottomFlywheelVolts(setpoint);
       } else {
         io.setBottomFlywheelVolts(0.0);
       }

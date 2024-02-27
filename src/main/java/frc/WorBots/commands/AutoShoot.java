@@ -29,11 +29,11 @@ public class AutoShoot extends SequentialCommandGroup {
   private Supplier<Double> leftYSupplier;
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
-          3.8,
+          3.9,
           0.001,
-          0.03,
+          0.032,
           new TrapezoidProfile.Constraints(
-              Units.degreesToRadians(140.0), Units.degreesToRadians(720.0)),
+              Units.degreesToRadians(150.0), Units.degreesToRadians(700.0)),
           Constants.ROBOT_PERIOD);
   private DriveController driveController = new DriveController();
 
@@ -53,7 +53,7 @@ public class AutoShoot extends SequentialCommandGroup {
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    thetaController.setTolerance(Units.degreesToRadians(1.0));
+    thetaController.setTolerance(Units.degreesToRadians(1.3));
 
     Supplier<Double> pivotAngle =
         () -> {
@@ -84,15 +84,15 @@ public class AutoShoot extends SequentialCommandGroup {
 
           ChassisSpeeds speeds =
               driveController.getSpeeds(
-                  x, y, 0.0, drive.getRotation(), drive.getMaxLinearSpeedMetersPerSec() / 2.0);
+                  x, y, 0.0, drive.getRotation(), drive.getMaxLinearSpeedMetersPerSec() / 3.0);
 
           // Calculate turn
           double thetaVelocity =
               thetaController.calculate(
                   robotPose.getRotation().getRadians(), driveAngleSupplier.get().getRadians());
-          double thetaErrorAbs =
-              Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
-          if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
+          // double thetaErrorAbs =
+          //     Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
+          // if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
 
           speeds.omegaRadiansPerSecond = thetaVelocity;
 
@@ -110,7 +110,12 @@ public class AutoShoot extends SequentialCommandGroup {
             .alongWith(
                 Commands.run(() -> shooter.spinToSpeedVoid(shooterSpeedSupplier.get()), shooter))
             .alongWith(
-                Commands.run(() -> driveController.drive(drive, speedsSupplier.get()), drive)),
+                Commands.run(() -> driveController.drive(drive, speedsSupplier.get()), drive))
+            .alongWith(
+                Commands.run(
+                    () ->
+                        SmartDashboard.putNumber(
+                            "Goal Range", ShooterMath.getGoalDistance(drive.getPose())))),
         Commands.waitUntil(() -> false)
             .finallyDo(
                 () -> {

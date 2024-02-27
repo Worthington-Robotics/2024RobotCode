@@ -60,6 +60,7 @@ public class Lights extends SubsystemBase {
     Shooting,
     Delivery,
     Bounce,
+    Indicator
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -110,7 +111,15 @@ public class Lights extends SubsystemBase {
         // bounce(100, Color.kBlue, Color.kRed, 15.0, 1.0, 0.35);
         // solid(1.0, Color.kRed);
         // solid(0.5, Color.kBlue);
-        wave(100, Color.kBlue, Color.kRed, 25.0, 2.0, 0.6);
+        // final double time = Timer.getFPGATimestamp();
+        // var red = (time % 1.0 < 0.5) ? new Color(0.4, 0.0, 0.0) : Color.kRed;
+        // var blue = (time % 1.0 > 0.5) ? new Color(0.0, 0.0, 0.4) : Color.kBlue;
+        var red = Color.kRed;
+        var blue = Color.kBlue;
+        wave(100, blue, red, 14.0, 1.2, 0.3);
+        break;
+      case Indicator:
+        solid(1.0, Color.kRed);
         break;
     }
 

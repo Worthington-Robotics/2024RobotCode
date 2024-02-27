@@ -24,7 +24,7 @@ public class ShooterMath {
   // Goal constants
 
   /** The amount to adjust the goal position away from the wall */
-  private static final double GOAL_ADJUSTMENT = Units.inchesToMeters(8.0);
+  private static final double GOAL_ADJUSTMENT = Units.inchesToMeters(4.0);
 
   // Confidence calculation constants
 
@@ -85,9 +85,9 @@ public class ShooterMath {
    * multiplied by the robot period to find the period of time over which to apply the robot
    * velocity to the pose to get the expected pose
    */
-  private static final double PREDICTION_FACTOR = 0.1;
+  private static final double PREDICTION_FACTOR = 0.8;
 
-  private static final double PREDICTION_DISTANCE_FACTOR = 3.9;
+  private static final double PREDICTION_DISTANCE_FACTOR = 8.0;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
@@ -99,13 +99,13 @@ public class ShooterMath {
   private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {1.096, 0.498},
-            {1.406, 0.52},
-            {2.197, 0.8172},
-            {2.379, 0.826},
-            {3.145, 0.948},
-            {4.305, 0.9805},
-            {5.295, 1.0601}
+            {1.096 - 0.1, 0.498},
+            {1.406 - 0.1, 0.52},
+            {2.197 - 0.1, 0.8172},
+            {2.379 - 0.1, 0.826},
+            {3.145 - 0.1, 0.948},
+            {4.305 - 0.1, 0.9805},
+            {5.295 - 0.1, 1.0601}
           });
 
   /** Difference confidence levels for a shot */

@@ -64,8 +64,8 @@ public class Module {
     driveFeedback.update();
     turnFeedback.update();
     io.updateInputs(inputs);
-    inputs.drive.publish();
-    inputs.turn.publish();
+    // inputs.drive.publish();
+    // inputs.turn.publish();
     StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, inputs.isConnected);
   }
 

@@ -114,6 +114,8 @@ public class RobotContainer {
                     AutoQuestionResponse.WALL_SIDE))),
         autoCommands.mobility());
 
+    selector.addRoutine("Pit Test", List.of(), autoCommands.pitTest());
+
     selector.addRoutine("Do Nothing", List.of(), Commands.none());
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose);
@@ -187,7 +189,7 @@ public class RobotContainer {
 
     // Contextual shooting
     HashMap<String, Command> shootMap = new HashMap<>();
-    shootMap.put("amp", shooter.setSpeedContinuous(500));
+    shootMap.put("amp", shooter.setSpeedContinuous(350));
     shootMap.put("trap", shooter.setSpeedContinuous(2000));
     shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(2900));
     shootMap.put("raw", shooter.setSpeedContinuous(2000));

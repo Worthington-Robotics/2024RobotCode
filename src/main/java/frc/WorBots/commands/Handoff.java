@@ -42,7 +42,7 @@ public class Handoff extends Command {
       }
     } else {
       if (!intake.hasGamePiece()) {
-        intake.setVolts(MathUtil.clamp((intake.getToFDistanceMeters() / 0.3) * 4.25, 0, 4.25));
+        intake.setVolts(MathUtil.clamp((intake.getToFDistanceMeters() / 0.44) * 4.25, 0, 4.25));
       } else if (intake.hasGamePiece()
           || shooter.hasGamePiece() && intake.getSetpointVolts() < 2.0) {
         intake.setVolts(0.0);
