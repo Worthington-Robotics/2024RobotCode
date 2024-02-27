@@ -36,7 +36,7 @@ public class GyroIOPigeon2 implements GyroIO {
     rollVelSignal = pigeon.getAngularVelocityXWorld();
     yawVelSignal = pigeon.getAngularVelocityZDevice();
     StatusSignal.setUpdateFrequencyForAll(
-        100,
+        50,
         tempSignal,
         pitchSignal,
         rollSignal,

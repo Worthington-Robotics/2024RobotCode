@@ -11,9 +11,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.WorBots.FieldConstants;
+import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.trajectory.RotationSequence;
 
 /**
@@ -109,7 +109,7 @@ public class AllianceFlipUtil {
   }
 
   private static boolean shouldFlip() {
-    return DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Red;
+    final var alliance = AllianceCache.getInstance().get();
+    return alliance.isPresent() && alliance.get() == Alliance.Red;
   }
 }

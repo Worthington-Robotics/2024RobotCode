@@ -17,18 +17,19 @@ import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
 import frc.WorBots.util.debug.StatusPage;
 
 public class Intake extends SubsystemBase {
-  private IntakeIO io;
-  private IntakeIOInputs inputs = new IntakeIOInputs();
+  private final IntakeIO io;
+  private final IntakeIOInputs inputs = new IntakeIOInputs();
   private double setpointVolts = 0.0;
   private boolean hasGamepiece = false;
 
   // Publishers
-  private NetworkTableInstance instance = NetworkTableInstance.getDefault();
-  private NetworkTable intakeTable = instance.getTable("Intake");
-  private DoublePublisher setpointPub = intakeTable.getDoubleTopic("Setpoint Volts").publish();
-  private BooleanPublisher hasGamePiecePub =
+  private final NetworkTableInstance instance = NetworkTableInstance.getDefault();
+  private final NetworkTable intakeTable = instance.getTable("Intake");
+  private final DoublePublisher setpointPub =
+      intakeTable.getDoubleTopic("Setpoint Volts").publish();
+  private final BooleanPublisher hasGamePiecePub =
       intakeTable.getBooleanTopic("Has Game Piece").publish();
-  private DoublePublisher timeOfFlightDistancePub =
+  private final DoublePublisher timeOfFlightDistancePub =
       intakeTable.getDoubleTopic("Time of Flight Distance").publish();
 
   // Constants

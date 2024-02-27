@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.WorBots.util.debug.*;
@@ -60,7 +61,9 @@ public class Vision extends SubsystemBase {
               new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
                   .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))))
         };
-    SmartDashboard.putNumberArray("Camera Pose 1", Logger.pose3dToArray(cameraPoses[1]));
+    if (!Constants.IS_COMP) {
+      SmartDashboard.putNumberArray("Camera Pose 1", Logger.pose3dToArray(cameraPoses[1]));
+    }
     xyStdDevCoefficient = 0.01;
     thetaStdDevCoefficient = 0.015;
     StatusPage.reportStatus(StatusPage.VISION_SUBSYSTEM, true);
@@ -78,8 +81,8 @@ public class Vision extends SubsystemBase {
 
     for (int index = 0; index < io.length; index++) {
       for (int frame = 0; frame < inputs[index].timestamps.length; frame++) {
-        var timestamp = inputs[index].timestamps[frame];
-        var values = inputs[index].frames[frame];
+        final var timestamp = inputs[index].timestamps[frame];
+        final var values = inputs[index].frames[frame];
 
         if (values.length == 0 || values[0] == 0) {
           continue;
@@ -99,24 +102,24 @@ public class Vision extends SubsystemBase {
             robotPose3d = cameraPose.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
             break;
           case 2:
-            double error0 = values[1];
-            double error1 = values[9];
+            final double error0 = values[1];
+            final double error1 = values[9];
 
-            Pose3d cameraPose0 =
+            final Pose3d cameraPose0 =
                 new Pose3d(
                     values[2],
                     values[3],
                     values[4],
                     new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
-            Pose3d cameraPose1 =
+            final Pose3d cameraPose1 =
                 new Pose3d(
                     values[10],
                     values[11],
                     values[12],
                     new Rotation3d(new Quaternion(values[13], values[14], values[15], values[16])));
-            Pose3d robotPose3d0 =
+            final Pose3d robotPose3d0 =
                 cameraPose0.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
-            Pose3d robotPose3d1 =
+            final Pose3d robotPose3d1 =
                 cameraPose1.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
 
             // Select pose using projection errors
@@ -145,14 +148,14 @@ public class Vision extends SubsystemBase {
           continue;
         }
         // Get 2D robot pose
-        Pose2d robotPose = robotPose3d.toPose2d();
+        final Pose2d robotPose = robotPose3d.toPose2d();
 
         // Get tag poses and update last detection times
         List<Pose3d> tagPoses = new ArrayList<>();
         for (int i = (values[0] == 1 ? 9 : 17); i < values.length; i++) {
-          int tagId = (int) values[i];
+          final int tagId = (int) values[i];
           lastTagDetectionTimes.put(tagId, Timer.getFPGATimestamp());
-          Optional<Pose3d> tagPose = FieldConstants.aprilTags.getTagPose((int) values[i]);
+          final Optional<Pose3d> tagPose = FieldConstants.aprilTags.getTagPose((int) values[i]);
           if (tagPose.isPresent()) {
             tagPoses.add(tagPose.get());
           }
@@ -162,11 +165,12 @@ public class Vision extends SubsystemBase {
         for (Pose3d tagPose : tagPoses) {
           totalDistance += tagPose.getTranslation().getDistance(cameraPose.getTranslation());
         }
-        double avgDistance = totalDistance / tagPoses.size();
+        final double avgDistance = totalDistance / tagPoses.size();
 
         // Add to vision updates
-        double xyStdDev = xyStdDevCoefficient * Math.pow(avgDistance, 2.0) / tagPoses.size();
-        double thetaStdDev = thetaStdDevCoefficient * Math.pow(avgDistance, 2.0) / tagPoses.size();
+        final double xyStdDev = xyStdDevCoefficient * Math.pow(avgDistance, 2.0) / tagPoses.size();
+        final double thetaStdDev =
+            thetaStdDevCoefficient * Math.pow(avgDistance, 2.0) / tagPoses.size();
         visionUpdates.add(
             new TimestampedVisionUpdate(
                 timestamp, robotPose, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)));

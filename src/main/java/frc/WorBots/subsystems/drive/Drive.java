@@ -42,9 +42,11 @@ public class Drive extends SubsystemBase {
         new SwerveModuleState()
       };
   private Rotation2d lastGyroYaw = new Rotation2d();
-  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private PoseEstimator poseEstimator = new PoseEstimator(VecBuilder.fill(0.003, 0.003, 0.0002));
-  private NetworkTableInstance instance = NetworkTableInstance.getDefault();
+  private final SwerveDriveKinematics kinematics =
+      new SwerveDriveKinematics(getModuleTranslations());
+  private final PoseEstimator poseEstimator =
+      new PoseEstimator(VecBuilder.fill(0.003, 0.003, 0.0002));
+  private final NetworkTableInstance instance = NetworkTableInstance.getDefault();
   private Twist2d fieldVelocity = new Twist2d();
   private Translation2d centerOfRotation = new Translation2d();
 
@@ -52,7 +54,7 @@ public class Drive extends SubsystemBase {
   private Rotation2d thetaSetpoint = null;
 
   /** PID controller for the theta setpoint */
-  private TunableProfiledPIDController thetaController =
+  private final TunableProfiledPIDController thetaController =
       new TunableProfiledPIDController(
           new TunablePIDGains(driveTableName, "Theta Gains"),
           new TunableTrapezoidConstraints(driveTableName, "Theta Constraints"));
@@ -61,16 +63,16 @@ public class Drive extends SubsystemBase {
   private boolean autoRemoveThetaSetpoint;
 
   private static final String driveTableName = "Drive";
-  private NetworkTable driveTable = instance.getTable(driveTableName);
-  private DoubleArrayPublisher speedSetpointPublisher =
+  private final NetworkTable driveTable = instance.getTable(driveTableName);
+  private final DoubleArrayPublisher speedSetpointPublisher =
       driveTable.getDoubleArrayTopic("Speed Setpoint").publish();
-  private DoubleArrayPublisher setpointPublisher =
+  private final DoubleArrayPublisher setpointPublisher =
       driveTable.getDoubleArrayTopic("Setpoint").publish();
-  private DoubleArrayPublisher optimizedPublisher =
+  private final DoubleArrayPublisher optimizedPublisher =
       driveTable.getDoubleArrayTopic("Optimized").publish();
-  private DoubleArrayPublisher measuredPublisher =
+  private final DoubleArrayPublisher measuredPublisher =
       driveTable.getDoubleArrayTopic("Measured").publish();
-  private DoubleArrayPublisher posePublisher =
+  private final DoubleArrayPublisher posePublisher =
       driveTable.getDoubleArrayTopic("Pose Estimator").publish();
 
   /**

@@ -53,6 +53,16 @@ public class HardwareUtils {
     }
   }
 
+  /**
+   * Prepares a motor to be set as a leader
+   *
+   * @param talon The motor to prepare as a leader
+   */
+  public static void prepareLeader(TalonFX talon) {
+    talon.getTorqueCurrent().setUpdateFrequency(50);
+    talon.getDutyCycle().setUpdateFrequency(50);
+  }
+
   /** Base inputs for a TalonFX */
   public static class TalonInputs {
     protected final NetworkTable table;

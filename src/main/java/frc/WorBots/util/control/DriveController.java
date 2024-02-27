@@ -14,10 +14,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import frc.WorBots.subsystems.drive.Drive;
+import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.math.GeneralMath;
 
 /** Controller for teleoperated driving */
@@ -147,8 +147,8 @@ public class DriveController {
 
     // Convert to field relative based on the alliance
     var driveRotation = robotRotation;
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Red) {
+    final var alliance = AllianceCache.getInstance().get();
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
     }
     speeds =

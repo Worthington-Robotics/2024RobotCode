@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.util.Units;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class ShooterIOTalon implements ShooterIO {
@@ -54,10 +55,12 @@ public class ShooterIOTalon implements ShooterIO {
     topSignals.update(inputs.top, topFlywheel);
     bottomSignals.update(inputs.bottom, bottomFlywheel);
     feederWheelSignals.update(inputs.feederWheel, feederWheel);
-
     inputs.velocityRPMBottom =
-        bottomFilter.calculate(inputs.bottom.velocityRadsPerSec / (2 * Math.PI) * 60);
-    inputs.velocityRPMTop = topFilter.calculate(inputs.top.velocityRadsPerSec / (2 * Math.PI) * 60);
+        bottomFilter.calculate(
+            Units.radiansPerSecondToRotationsPerMinute(inputs.bottom.velocityRadsPerSec));
+    inputs.velocityRPMTop =
+        topFilter.calculate(
+            Units.radiansPerSecondToRotationsPerMinute(inputs.top.velocityRadsPerSec));
 
     inputs.timeOfFlightDistanceMeters = tofFilter.calculate(timeOfFlight.getRange()) / 1000.0;
 

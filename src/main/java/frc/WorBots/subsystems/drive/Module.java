@@ -24,14 +24,17 @@ public class Module {
   private SwerveModuleState lastSetpoint = new SwerveModuleState();
 
   private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-  private static TunablePIDGains driveFeedbackGains =
+  private static final TunablePIDGains driveFeedbackGains =
       new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
-  private TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
-  private static TunablePIDGains turnFeedbackGains =
+  private final TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
+  private static final TunablePIDGains turnFeedbackGains =
       new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
-  private TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
+  private final TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
   // Constants
+  /** The radius of the wheels, in meters */
+  private static final double wheelRadius = Units.inchesToMeters(2.0);
+
   /**
    * The minimum speed percentage of the maximum that can be set before angle changes are ignored
    */
@@ -130,7 +133,7 @@ public class Module {
    * @return The position in meters.
    */
   public double getPositionMeters() {
-    return inputs.drive.positionRads * Units.inchesToMeters(2.0);
+    return inputs.drive.positionRads * wheelRadius;
   }
 
   /**
@@ -139,7 +142,7 @@ public class Module {
    * @return The velocity in meters per second.
    */
   public double getVelocityMetersPerSec() {
-    return inputs.drive.velocityRadsPerSec * Units.inchesToMeters(2.0);
+    return inputs.drive.velocityRadsPerSec * wheelRadius;
   }
 
   /**

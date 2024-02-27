@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.ShooterMath;
@@ -109,9 +110,6 @@ public class Lights extends SubsystemBase {
         delivery();
         break;
       case RedBlue:
-        // bounce(100, Color.kBlue, Color.kRed, 15.0, 1.0, 0.35);
-        // solid(1.0, Color.kRed);
-        // solid(0.5, Color.kBlue);
         // final double time = Timer.getFPGATimestamp();
         // var red = (time % 1.0 < 0.5) ? new Color(0.4, 0.0, 0.0) : Color.kRed;
         // var blue = (time % 1.0 > 0.5) ? new Color(0.0, 0.0, 0.4) : Color.kBlue;
@@ -231,9 +229,7 @@ public class Lights extends SubsystemBase {
       // Some statuses are not necessarily errors and
       // we want to display them as yellow
       boolean isWarning = false;
-      if (system.equals(StatusPage.FMS)
-          || system.equals(StatusPage.LAUNCHPAD)
-          || system.equals(StatusPage.IDEAL_BATTERY)) {
+      if (system.equals(StatusPage.LAUNCHPAD) || system.equals(StatusPage.IDEAL_BATTERY)) {
         isWarning = true;
       }
       final boolean status = StatusPage.getStatus(system);
@@ -247,6 +243,7 @@ public class Lights extends SubsystemBase {
         }
       }
     }
+
     // Clear additional lights
     for (int i = StatusPage.ALL_SYSTEMS.length; i < LIGHT_COUNT; i++) {
       io.setLED(i, Color.kBlack);
@@ -254,9 +251,8 @@ public class Lights extends SubsystemBase {
   }
 
   private void alliance() {
-    boolean isRed =
-        DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red;
+    final var alliance = AllianceCache.getInstance().get();
+    final boolean isRed = alliance.isPresent() && alliance.get() == Alliance.Red;
     wave(100, isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
   }
 
@@ -276,11 +272,9 @@ public class Lights extends SubsystemBase {
     final boolean isVeryLittleTimeLeft = ratio <= 0.20;
     final int lightCount = (int) (ratio * LIGHT_COUNT);
     for (int i = 0; i < LIGHT_COUNT; i++) {
-      // Puts a brighter light at the very end
-      int value = 180;
-      if (i == lightCount) {
-        value = 255;
-      }
+      // Put a brighter light at the very end
+      final int value = (i == lightCount) ? 255 : 180;
+
       if (i <= lightCount) {
         if (isVeryLittleTimeLeft) {
           io.setHSV(i, 0, 255, value);

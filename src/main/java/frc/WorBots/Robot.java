@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
@@ -87,8 +88,9 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
     // ==========
 
-    // Update TimeCache
+    // Update caches
     TimeCache.getInstance().update();
+    AllianceCache.getInstance().update();
   }
 
   @Override

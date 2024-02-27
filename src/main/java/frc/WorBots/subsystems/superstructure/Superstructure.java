@@ -164,11 +164,6 @@ public class Superstructure extends SubsystemBase {
           double pivotVolts = manualPivotVolts.get();
           // pivotVolts += calculatePivotFeedforward();
           pivotVolts += 0.12;
-          // final double bottomLimit = calculatePivotBottomLimit();
-          // if (inputs.pivotPositionAbsRad < bottomLimit
-          //     && pivotVolts <= pivotDynamicLimitAvoidanceVolts) {
-          //   pivotVolts = pivotDynamicLimitAvoidanceVolts;
-          // }
           setPivotVoltage(pivotVolts);
           break;
       }

@@ -13,10 +13,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
+import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.debug.TunableDouble;
 import java.util.Optional;
 
@@ -314,7 +314,7 @@ public class ShooterMath {
    * @return The translation of the goal
    */
   public static Translation2d getGoal() {
-    Optional<Alliance> currentAlliance = DriverStation.getAlliance();
+    Optional<Alliance> currentAlliance = AllianceCache.getInstance().get();
     Translation2d out = FieldConstants.Speaker.position;
     double adjustment = GOAL_ADJUSTMENT;
     if (currentAlliance.isPresent() && currentAlliance.get() == Alliance.Red) {
@@ -342,8 +342,8 @@ public class ShooterMath {
    * @return The yaw angle for the robot
    */
   public static Rotation2d getGoalTheta(Pose2d robot) {
-    final var alliance = DriverStation.getAlliance();
-    double translatedX =
+    final var alliance = AllianceCache.getInstance().get();
+    final double translatedX =
         (alliance.isPresent() && alliance.get() == Alliance.Red
             ? robot.getX() - FieldConstants.fieldLength
             : robot.getX());
@@ -363,11 +363,9 @@ public class ShooterMath {
   public static Rotation2d getGoalToRobotAngle(Pose2d robot) {
     final Translation2d goal = getGoal();
     double angle = Math.atan2(robot.getX() - goal.getX(), robot.getY() - goal.getY()) + Math.PI / 2;
-    final var alliance = DriverStation.getAlliance();
+    final var alliance = AllianceCache.getInstance().get();
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
       angle -= Math.PI;
-      // angle *= -1;
-      // Convert pi-3pi/2 range to negative max
       if (angle < -Math.PI) {
         angle = Math.PI;
       }
