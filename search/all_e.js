@@ -18,5 +18,6 @@ var searchData=
   ['poseestimator_2ejava_15',['PoseEstimator.java',['../PoseEstimator_8java.html',1,'']]],
   ['posetotransform_16',['poseToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#afe81fcc0abcced93d62fb298512e9761',1,'frc::WorBots::util::math::GeomUtil']]],
   ['positive_17',['Positive',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html#a8724096a327fbc8b32f2b4a264764445',1,'frc::WorBots::util::math::GeneralMath::SnapDirection']]],
-  ['predictnextpose_18',['predictNextPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2d7176de50033d916171bd74a05aab45',1,'frc::WorBots::util::math::ShooterMath']]]
+  ['predictnextpose_18',['predictNextPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2d7176de50033d916171bd74a05aab45',1,'frc::WorBots::util::math::ShooterMath']]],
+  ['prepareleader_19',['prepareLeader',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#ac6d071fcb051ae04a184f183ff794a8f',1,'frc::WorBots::util::HardwareUtils']]]
 ];

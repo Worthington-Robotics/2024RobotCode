@@ -8,5 +8,6 @@ var searchData=
   ['pose3dtotransform3d_5',['pose3dToTransform3d',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a00cb3f70639b641aeabc3a85f85da810',1,'frc::WorBots::util::math::GeomUtil']]],
   ['poseestimator_6',['PoseEstimator',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#aec14806be0d20061818ac3ccf68af615',1,'frc::WorBots::util::math::PoseEstimator']]],
   ['posetotransform_7',['poseToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#afe81fcc0abcced93d62fb298512e9761',1,'frc::WorBots::util::math::GeomUtil']]],
-  ['predictnextpose_8',['predictNextPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2d7176de50033d916171bd74a05aab45',1,'frc::WorBots::util::math::ShooterMath']]]
+  ['predictnextpose_8',['predictNextPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a2d7176de50033d916171bd74a05aab45',1,'frc::WorBots::util::math::ShooterMath']]],
+  ['prepareleader_9',['prepareLeader',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#ac6d071fcb051ae04a184f183ff794a8f',1,'frc::WorBots::util::HardwareUtils']]]
 ];
