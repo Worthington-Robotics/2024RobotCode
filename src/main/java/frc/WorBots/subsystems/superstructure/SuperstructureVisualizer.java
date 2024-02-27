@@ -25,7 +25,7 @@ public class SuperstructureVisualizer {
   private static final double elevatorAngleDegrees = (105);
   private static final double elevatorPositionX =
       Units.inchesToMeters(13.293); // From center of elevator to edge of front frame - not intake;
-  private static final double elevatorFrameLengthAngledMeters = Units.inchesToMeters(18.750);
+  //   private static final double elevatorFrameLengthAngledMeters = Units.inchesToMeters(18.750);
   private static final double pivotLengthMeters = Units.inchesToMeters(13.5);
 
   /**
@@ -63,7 +63,7 @@ public class SuperstructureVisualizer {
      */
 
     // 3D logging
-    var zeroPose = new Pose3d();
+    // var zeroPose = new Pose3d();
     var baseRotatedPose =
         new Pose3d(
             new Translation3d(0.0, 0.0, 0.0),

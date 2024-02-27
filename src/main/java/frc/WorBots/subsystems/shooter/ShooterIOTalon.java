@@ -24,8 +24,9 @@ public class ShooterIOTalon implements ShooterIO {
   private final TalonSignalsPositional bottomSignals;
   private final TalonSignalsPositional feederWheelSignals;
 
-  private final LinearFilter topFilter = LinearFilter.movingAverage(2);
-  private final LinearFilter bottomFilter = LinearFilter.movingAverage(2);
+  private final LinearFilter topFilter = LinearFilter.movingAverage(3);
+  private final LinearFilter bottomFilter = LinearFilter.movingAverage(3);
+  private final LinearFilter tofFilter = LinearFilter.movingAverage(1);
 
   public ShooterIOTalon() {
     topFlywheel = new TalonFX(7);
@@ -58,7 +59,7 @@ public class ShooterIOTalon implements ShooterIO {
         bottomFilter.calculate(inputs.bottom.velocityRadsPerSec / (2 * Math.PI) * 60);
     inputs.velocityRPMTop = topFilter.calculate(inputs.top.velocityRadsPerSec / (2 * Math.PI) * 60);
 
-    inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000.0;
+    inputs.timeOfFlightDistanceMeters = tofFilter.calculate(timeOfFlight.getRange()) / 1000.0;
 
     inputs.isConnected =
         inputs.top.isConnected && inputs.bottom.isConnected && inputs.feederWheel.isConnected;

@@ -16,7 +16,7 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
   public static enum Preset {
     HOME(new SuperstructurePose(VecBuilder.fill(0, 0))),
     // AMP(new SuperstructurePose(VecBuilder.fill(0.26, 2))),
-    AMP2(new SuperstructurePose(VecBuilder.fill(0.05924, 1.8611))),
+    AMP(new SuperstructurePose(VecBuilder.fill(0.05924, 1.8611))),
     CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
     HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, 0.277))),
     PIVOTTOTOP(new SuperstructurePose(VecBuilder.fill(0.0, 1.8))),

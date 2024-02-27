@@ -14,6 +14,11 @@ import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
 
 public class SuperstructureManual extends Command {
+  // Constants
+  private static final double DEADBAND = 0.1;
+  private static final double ELEVATOR_VOLTS = 9.0;
+  private static final double PIVOT_VOLTS = 6.0;
+
   private Supplier<Double> elevatorValue;
   private Supplier<Double> pivotValue;
   private Superstructure superstructure;
@@ -33,11 +38,11 @@ public class SuperstructureManual extends Command {
 
   @Override
   public void execute() {
-    double joystick = MathUtil.applyDeadband(elevatorValue.get(), 0.09);
-    double volts = joystick * 9.0;
+    double joystick = MathUtil.applyDeadband(elevatorValue.get(), DEADBAND);
+    double volts = joystick * ELEVATOR_VOLTS;
     superstructure.setClimbingVolts(volts);
-    joystick = MathUtil.applyDeadband(pivotValue.get(), 0.09);
-    volts = joystick * 6.0;
+    joystick = MathUtil.applyDeadband(pivotValue.get(), DEADBAND);
+    volts = joystick * PIVOT_VOLTS;
     superstructure.setManualPivotVolts(volts);
   }
 
@@ -48,7 +53,7 @@ public class SuperstructureManual extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    superstructure.setModeVoid(SuperstructureState.POSE);
+    superstructure.setModeVoid(SuperstructureState.DISABLED);
     superstructure.setClimbingVolts(0.0);
     superstructure.setManualPivotVolts(0.0);
   }

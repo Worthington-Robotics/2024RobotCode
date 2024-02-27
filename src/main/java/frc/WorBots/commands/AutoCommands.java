@@ -10,8 +10,6 @@ package frc.WorBots.commands;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.trajectory.constraint.*;
 import edu.wpi.first.math.util.*;
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.DriverStation.*;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.*;
 import frc.WorBots.AutoSelector.*;
@@ -43,8 +41,6 @@ public class AutoCommands extends Command {
   private final Pose2d[] shootingPositions;
   private final Pose2d betweenZeroAndOne;
   private final Pose2d betweenOneandTwo;
-  private double speakerOpeningHeightZ;
-  private double speakerOpeningCenterY;
 
   // Other
   public static record CommandWithPose(Command command, Pose2d pose) {}
@@ -142,10 +138,6 @@ public class AutoCommands extends Command {
         };
     betweenZeroAndOne = new Pose2d(2.88, 6.28, new Rotation2d());
     betweenOneandTwo = new Pose2d(2.88, 4.8, new Rotation2d());
-    speakerOpeningHeightZ =
-        (FieldConstants.Speaker.openingHeightHigher - FieldConstants.Speaker.openingHeightLower)
-            / 2;
-    speakerOpeningCenterY = (FieldConstants.Speaker.speakerY);
     pivotAngle =
         () -> {
           Pose2d robotPose = drive.getPose();
@@ -154,11 +146,21 @@ public class AutoCommands extends Command {
         };
   }
 
+  /**
+   * Returns a command that resets the robot to a pose
+   *
+   * @param pose The unflipped pose to set
+   * @return The command to run
+   */
   private Command reset(Pose2d pose) {
     return Commands.runOnce(() -> drive.setPose(AllianceFlipUtil.apply(pose)));
   }
 
-  /** Drives along the specified trajectory. */
+  /**
+   * Drives along the specified trajectory.
+   *
+   * @param waypoints The list of waypoints to path through
+   */
   private Command path(List<Waypoint> waypoints) {
     return path(waypoints, List.of());
   }
@@ -189,6 +191,7 @@ public class AutoCommands extends Command {
   }
 
   private Rotation2d driveRotation(Pose2d robotPose) {
+    // FIXME: No alliance flip
     return AllianceFlipUtil.apply(ShooterMath.getGoalTheta(robotPose));
   }
 
@@ -254,12 +257,12 @@ public class AutoCommands extends Command {
     } else {
       waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     }
-    var handoff = new Handoff(intake, superstructure, shooter).withTimeout(3.0);
+    var handoff = new Handoff(intake, superstructure, shooter).withTimeout(2.5);
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           Commands.sequence(
               superstructure.setMode(SuperstructureState.POSE),
-              superstructure.setPose(Preset.HANDOFF).withTimeout(0.2),
+              superstructure.setPose(Preset.HANDOFF).withTimeout(0.3),
               path(waypoints)
                   .alongWith(
                       Commands.waitUntil(
@@ -386,12 +389,21 @@ public class AutoCommands extends Command {
     }
   }
 
-  private Command driveOutToCenter() {
+  /**
+   * Drives the robot out to the center of the field. Used for the end of some autos so that drivers
+   * are in a good position to start the teleop period
+   *
+   * @param currentPose The current pose of the robot
+   * @return The command to run
+   */
+  private Command driveOutToCenter(Pose2d currentPose) {
     double x = FieldConstants.midLineX - 2.5;
     double y = FieldConstants.midLineY / 2;
-    if (drive.getPose().getY() > FieldConstants.midLineY) {
-      y += FieldConstants.midLineY;
+    // Choose the quicker side to go to based on where the robot is
+    if (currentPose.getY() > FieldConstants.midLineY) {
+      y = FieldConstants.fieldWidth - y;
     }
+    // Create a transitory waypoint so that the robot doesn't go through the stage
     final double transitoryX = x / 4.0;
     final double transitoryY = y;
     return path(
@@ -432,17 +444,28 @@ public class AutoCommands extends Command {
 
   private Command twoPiece(int startingLocation) {
     Pose2d startingPose = twoPieceStartingLocations[startingLocation];
+    // We are already in the right spot for the center start, so give it a shorter
+    // timeout
     double shootTimeout = startingLocation == 1 ? 0.1 : 1.3;
+    // Shoot the loaded game piece
     var autoShoot1 = autoShoot(startingPose, true, true, true, shootTimeout);
+    // Intake the piece right behind us
     var driveIntakeWing1 = driveAndIntakeWing(startingPose, false, false, startingLocation);
+    // A better spot to shoot from, near the starting position
     var driveToBetterSpotPose =
         startingPose.plus(new Transform2d(Units.inchesToMeters(5), 0.0, new Rotation2d()));
     var driveToBetterSpot = path(Waypoint.fromHolonomicPose(driveToBetterSpotPose));
+
+    // Drive to the better spot before the first shot for the amp side, for a more
+    // accurate shot
     var driveToBetterSpot1 = startingLocation == 0 ? driveToBetterSpot : Commands.none();
+    // Drive to the better spot before the second shot for the wall side, so that we
+    // don't run into the stage while targeting
     var driveToBetterSpot2 =
         startingLocation == 2
             ? new CommandWithPose(driveToBetterSpot, driveToBetterSpotPose)
             : new CommandWithPose(Commands.none(), driveIntakeWing1.pose());
+    // Shoot the second piece
     var autoShoot2 = autoShoot(driveToBetterSpot2.pose(), true, true, true, shootTimeout);
     return Commands.sequence(
         driveToBetterSpot1,
@@ -450,7 +473,7 @@ public class AutoCommands extends Command {
         driveIntakeWing1.command(),
         driveToBetterSpot2.command(),
         autoShoot2.command(),
-        driveOutToCenter());
+        driveOutToCenter(autoShoot2.pose()));
   }
 
   public Command twoPiece() {

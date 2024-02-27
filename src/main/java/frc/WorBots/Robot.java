@@ -7,7 +7,6 @@
 
 package frc.WorBots;
 
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -17,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.WorBots.util.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
 
@@ -26,7 +26,8 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
 
   private PowerDistribution pdp;
-  private UsbCamera camera;
+
+  // private UsbCamera camera;
 
   @Override
   public void robotInit() {
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // DISABLE BEFORE COMP
+    // ==== DISABLE BEFORE COMP ====
     // final var robotPose = robotContainer.drive.getPose();
     // final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
     // final double range = ShooterMath.getGoalDistance(robotPose);
@@ -84,6 +85,10 @@ public class Robot extends TimedRobot {
     // var nextRobotPose = GeomUtil.applyChassisSpeeds(robotPose, robotSpeeds,
     // Constants.ROBOT_PERIOD);
     // SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
+    // ==========
+
+    // Update TimeCache
+    TimeCache.getInstance().update();
   }
 
   @Override
@@ -95,7 +100,7 @@ public class Robot extends TimedRobot {
     if (robotContainer.shooter.hasGamePiece()) {
       Lights.getInstance().setMode(LightsMode.Delivery);
     } else {
-      Lights.getInstance().setMode(LightsMode.Bounce);
+      Lights.getInstance().setMode(LightsMode.RedBlue);
     }
   }
 
@@ -115,6 +120,7 @@ public class Robot extends TimedRobot {
     robotContainer.shooter.setRawFlywheelSpeed(0);
     robotContainer.shooter.setRawFeederVolts(0.0);
     robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
+    Lights.getInstance().setMode(LightsMode.MatchTime);
   }
 
   @Override

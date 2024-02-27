@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.WorBots.util.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.math.ShooterMath.ShotConfidence;
@@ -36,7 +37,7 @@ public class Lights extends SubsystemBase {
   public static final int LIGHT_COUNT = 27;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
-  private LightsMode mode = LightsMode.Bounce;
+  private LightsMode mode = LightsMode.RedBlue;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
   private final int lightsID = 9;
@@ -59,7 +60,7 @@ public class Lights extends SubsystemBase {
     Claire,
     Shooting,
     Delivery,
-    Bounce,
+    RedBlue,
     Indicator
   }
 
@@ -107,7 +108,7 @@ public class Lights extends SubsystemBase {
       case Delivery:
         delivery();
         break;
-      case Bounce:
+      case RedBlue:
         // bounce(100, Color.kBlue, Color.kRed, 15.0, 1.0, 0.35);
         // solid(1.0, Color.kRed);
         // solid(0.5, Color.kBlue);
@@ -139,7 +140,7 @@ public class Lights extends SubsystemBase {
   }
 
   private void rainbow(double percent, double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() / duration) % 1.0)) * 180.0;
+    double x = (1 - ((TimeCache.getInstance().get() / duration) % 1.0)) * 180.0;
     double xDiffPerLed = 180.0 / cycleLength;
     for (int i = 0; i < LIGHT_COUNT; i++) {
       x += xDiffPerLed;
@@ -157,7 +158,7 @@ public class Lights extends SubsystemBase {
       double cycleLength,
       double duration,
       double waveExponent) {
-    double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration)) * 2.0 * Math.PI;
+    double x = (1 - ((TimeCache.getInstance().get() % duration) / duration)) * 2.0 * Math.PI;
     double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < LIGHT_COUNT; i++) {
       x += xDiffPerLed;
@@ -184,7 +185,7 @@ public class Lights extends SubsystemBase {
       double cycleLength,
       double duration,
       double waveExponent) {
-    double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration) * 2.0 * Math.PI);
+    double x = (1 - ((TimeCache.getInstance().get() % duration) / duration) * 2.0 * Math.PI);
     double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < LIGHT_COUNT; i++) {
       if (i == 0) {
@@ -212,7 +213,7 @@ public class Lights extends SubsystemBase {
   }
 
   public void bounce(Color c1, double cycleLength, double duration, double waveExponent) {
-    double x = (Math.sin((Timer.getFPGATimestamp() % (Math.PI * 2))) + 1) / 2;
+    double x = (Math.sin((TimeCache.getInstance().get() % (Math.PI * 2))) + 1) / 2;
     double xDiffPerLed = cycleLength;
     for (int i = 0; i < LIGHT_COUNT; i++) {
       x -= xDiffPerLed;

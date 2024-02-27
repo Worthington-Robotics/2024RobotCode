@@ -30,7 +30,6 @@ public class Vision extends SubsystemBase {
   private final VisionIOInputs[] inputs;
 
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
-  private Supplier<Pose2d> poseSupplier = () -> new Pose2d();
   private final Pose3d[] cameraPoses;
   // How much influence XY data has on the robot pose
   private final double xyStdDevCoefficient;
@@ -196,6 +195,5 @@ public class Vision extends SubsystemBase {
   public void setDataInterfaces(
       Consumer<List<TimestampedVisionUpdate>> visionConsumer, Supplier<Pose2d> poseSupplier) {
     this.visionConsumer = visionConsumer;
-    this.poseSupplier = poseSupplier;
   }
 }

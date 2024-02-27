@@ -51,7 +51,19 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   // Constants
   private static final double increasePositionRads = 2 * Math.PI;
+
+  /** Distance threshold for the ToF */
   private static final double distanceThreshold = 0.075;
+
+  /**
+   * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
+   * instead of violently braking. In volts.
+   */
+  private static final double coastDownThreshold = -0.3;
+
+  /** The default idle speed for the flywheels */
+  private static final double idleSpeed = 500.0;
+
   private static final String tableName = "Shooter";
 
   private TunablePIDController topFlywheelController =
@@ -127,7 +139,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         double setpoint =
             topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
                 + topFlywheelFeedForward.calculate(topFlywheelRPM);
-        if (setpoint < -0.3) {
+        if (setpoint < coastDownThreshold) {
           setpoint = 0.0;
         }
         io.setTopFlywheelVolts(setpoint);
@@ -138,7 +150,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         double setpoint =
             bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
                 + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM);
-        if (setpoint < -0.3) {
+        if (setpoint < coastDownThreshold) {
           setpoint = 0.0;
         }
         io.setBottomFlywheelVolts(setpoint);
@@ -265,8 +277,13 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         .alongWith(Commands.waitUntil(this::hasGamePiece));
   }
 
+  /**
+   * Returns a command that idles the flywheels
+   *
+   * @return The command to run
+   */
   public Command idleCommand() {
-    return this.setSpeed(500);
+    return this.setSpeed(idleSpeed);
   }
 
   public Command runFeederWheel(double volts) {

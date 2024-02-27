@@ -19,14 +19,16 @@ import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.WorBots.util.Cache;
 import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.ShooterMath;
+import frc.WorBots.util.math.ShooterMath.ShotData;
 import java.util.function.*;
 
 public class AutoShoot extends SequentialCommandGroup {
-  // Locations
-  private Supplier<Double> leftXSupplier;
-  private Supplier<Double> leftYSupplier;
+  // Constants
+  private static final double DRIVE_SPEED_REDUCTION = 3.0;
+  private static final double THETA_TOLERANCE = 1.3;
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
           3.9,
@@ -50,72 +52,54 @@ public class AutoShoot extends SequentialCommandGroup {
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier) {
     addRequirements(superstructure, drive, shooter);
-    this.leftXSupplier = leftXSupplier;
-    this.leftYSupplier = leftYSupplier;
+    // FIXME: Try 0-2pi
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    thetaController.setTolerance(Units.degreesToRadians(1.3));
+    thetaController.setTolerance(Units.degreesToRadians(THETA_TOLERANCE));
 
-    Supplier<Double> pivotAngle =
-        () -> {
-          Pose2d robotPose = drive.getPose();
-          var shotData = ShooterMath.calculateShotData(robotPose, drive.getFieldRelativeSpeeds());
-          SmartDashboard.putNumber("Shot Angle", shotData.pivotAngle());
-          return shotData.pivotAngle();
-        };
-    Supplier<Rotation2d> driveAngleSupplier =
-        () -> {
-          Pose2d robotPose = drive.getPose();
-          double robotAngle =
-              ShooterMath.calculateRobotAngle(robotPose, drive.getFieldRelativeSpeeds())
-                  .getRadians();
-          return new Rotation2d(robotAngle);
-        };
-    Supplier<Double> shooterSpeedSupplier =
-        () -> {
-          Pose2d robotPose = drive.getPose();
-          return ShooterMath.calculateShooterRPM(robotPose);
-        };
+    Supplier<ShotData> supplier =
+        () -> ShooterMath.calculateShotData(drive.getPose(), drive.getFieldRelativeSpeeds());
+    Cache<ShotData> shotSupplier = new Cache<ShotData>(supplier);
     Supplier<ChassisSpeeds> speedsSupplier =
         () -> {
-          SmartDashboard.putNumber("Controller Error", thetaController.getPositionError());
-          Pose2d robotPose = drive.getPose();
-          double x = leftXSupplier.get();
-          double y = leftYSupplier.get();
+          SmartDashboard.putNumber(
+              "Autoshoot Theta Controller Error", thetaController.getPositionError());
+          final Pose2d robotPose = drive.getPose();
+          final double x = leftXSupplier.get();
+          final double y = leftYSupplier.get();
 
           ChassisSpeeds speeds =
               driveController.getSpeeds(
-                  x, y, 0.0, drive.getRotation(), drive.getMaxLinearSpeedMetersPerSec() / 3.0);
+                  x,
+                  y,
+                  0.0,
+                  drive.getRotation(),
+                  drive.getMaxLinearSpeedMetersPerSec() / DRIVE_SPEED_REDUCTION);
 
           // Calculate turn
+          final double setpointAngle = shotSupplier.get().robotAngle().getRadians();
           double thetaVelocity =
-              thetaController.calculate(
-                  robotPose.getRotation().getRadians(), driveAngleSupplier.get().getRadians());
+              thetaController.calculate(robotPose.getRotation().getRadians(), setpointAngle);
           // double thetaErrorAbs =
-          //     Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
-          // if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
+          // Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
+          // if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity =
+          // 0.0;
 
           speeds.omegaRadiansPerSecond = thetaVelocity;
 
           return speeds;
         };
-    var shooting =
-        Commands.run(
-            () -> {
-              superstructure.setShootingAngleRad(pivotAngle);
-            },
-            superstructure);
     addCommands(
         superstructure.setMode(SuperstructureState.SHOOTING),
-        shooting
-            .alongWith(
-                Commands.run(() -> shooter.spinToSpeedVoid(shooterSpeedSupplier.get()), shooter))
-            .alongWith(
-                Commands.run(() -> driveController.drive(drive, speedsSupplier.get()), drive))
-            .alongWith(
-                Commands.run(
-                    () ->
-                        SmartDashboard.putNumber(
-                            "Goal Range", ShooterMath.getGoalDistance(drive.getPose())))),
+        Commands.run(
+            () -> {
+              shotSupplier.update();
+              shooter.spinToSpeedVoid(shotSupplier.get().rpm());
+              driveController.drive(drive, speedsSupplier.get());
+              superstructure.setShootingAngleRad(shotSupplier.get().pivotAngle());
+              SmartDashboard.putNumber("Goal Range", ShooterMath.getGoalDistance(drive.getPose()));
+            },
+            shooter,
+            drive),
         Commands.waitUntil(() -> false)
             .finallyDo(
                 () -> {

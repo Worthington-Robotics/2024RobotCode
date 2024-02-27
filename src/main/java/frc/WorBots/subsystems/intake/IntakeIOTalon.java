@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class IntakeIOTalon implements IntakeIO {
@@ -18,6 +19,8 @@ public class IntakeIOTalon implements IntakeIO {
   private TimeOfFlight timeOfFlight;
 
   private final TalonSignalsPositional motorSignals;
+
+  private final LinearFilter tofFilter = LinearFilter.movingAverage(1);
 
   public IntakeIOTalon() {
     intakeMotor = new TalonFX(1);
@@ -35,7 +38,7 @@ public class IntakeIOTalon implements IntakeIO {
     motorSignals.update(inputs.motor, intakeMotor);
     inputs.isConnected = inputs.motor.isConnected;
 
-    inputs.timeOfFlightDistanceMeters = timeOfFlight.getRange() / 1000;
+    inputs.timeOfFlightDistanceMeters = tofFilter.calculate(timeOfFlight.getRange()) / 1000;
     // inputs.isConnected &= DeviceUtils.getTimeOfFlightStatus(timeOfFlight);
   }
 

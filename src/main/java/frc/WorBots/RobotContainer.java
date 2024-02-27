@@ -138,9 +138,6 @@ public class RobotContainer {
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
     shooter.setDefaultCommand(shooter.idleCommand());
-    // superstructure.setDefaultCommand(new SuperstructureManual(superstructure, ()
-    // ->
-    // -operator.getLeftY(), () -> -operator.getRightY()));
 
     driver
         .leftTrigger()
@@ -149,7 +146,6 @@ public class RobotContainer {
     driver.leftBumper().onTrue(superstructure.setPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
-    // driver.a().onTrue(superstructure.setPose(Preset.PIVOTTOTOP));
     driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
     driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
     driver
@@ -160,7 +156,7 @@ public class RobotContainer {
     operator.b().onTrue(superstructure.setPose(Preset.STOW));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     operator.a().onTrue(superstructure.setPose(Preset.TRAP));
-    operator.x().onTrue(superstructure.setPose(Preset.AMP2));
+    operator.x().onTrue(superstructure.setPose(Preset.AMP));
     operator.povUp().onTrue(superstructure.setPose(Preset.SUBWOOFER_SHOOT));
     operator
         .rightBumper()
@@ -202,7 +198,7 @@ public class RobotContainer {
                 () -> {
                   final double elevTolerance = 0.02;
                   final double pivotTolerance = Units.degreesToRadians(3.2);
-                  if (superstructure.isNearPose(Preset.AMP2, elevTolerance, pivotTolerance)) {
+                  if (superstructure.isNearPose(Preset.AMP, elevTolerance, pivotTolerance)) {
                     return "amp";
                   }
                   if (superstructure.isNearPose(Preset.TRAP, elevTolerance, pivotTolerance)) {

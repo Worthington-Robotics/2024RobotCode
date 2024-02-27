@@ -58,8 +58,6 @@ public class TunableDouble {
   public void update() {
     if (enableTuning) {
       value = entry.getDouble(defaultValue);
-    } else {
-      value = defaultValue;
     }
   }
 

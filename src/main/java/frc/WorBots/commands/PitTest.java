@@ -48,7 +48,7 @@ public class PitTest extends SequentialCommandGroup {
     return Commands.sequence(
         superstructure.setPose(Preset.HANDOFF),
         UtilCommands.waitForDriverstationButton(),
-        superstructure.setPose(Preset.AMP2),
+        superstructure.setPose(Preset.AMP),
         UtilCommands.waitForDriverstationButton(),
         superstructure.setPose(Preset.HANDOFF));
   }
