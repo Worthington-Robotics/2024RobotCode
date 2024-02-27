@@ -7,10 +7,14 @@
 
 package frc.WorBots;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /** Miscellaneous global constants for the robot and code */
 public class Constants {
+  /** Whether the robot is in competition mode */
+  public static final boolean IS_COMP = DriverStation.isFMSAttached() && false;
+
   /**
    * Gets whether the robot is running in a simulation or is real
    *

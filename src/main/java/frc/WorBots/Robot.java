@@ -96,11 +96,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    // Display red to show whether the shooter has a game piece, for loading
-    if (robotContainer.shooter.hasGamePiece()) {
-      Lights.getInstance().setMode(LightsMode.Delivery);
+    if (Constants.IS_COMP) {
+      Lights.getInstance().setMode(LightsMode.Status);
     } else {
-      Lights.getInstance().setMode(LightsMode.RedBlue);
+      // Display red to show whether the shooter has a game piece, for loading
+      if (robotContainer.shooter.hasGamePiece()) {
+        Lights.getInstance().setMode(LightsMode.Delivery);
+      } else {
+        Lights.getInstance().setMode(LightsMode.RedBlue);
+      }
     }
   }
 
@@ -120,7 +124,11 @@ public class Robot extends TimedRobot {
     robotContainer.shooter.setRawFlywheelSpeed(0);
     robotContainer.shooter.setRawFeederVolts(0.0);
     robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
-    Lights.getInstance().setMode(LightsMode.MatchTime);
+    if (Constants.IS_COMP) {
+      Lights.getInstance().setMode(LightsMode.Alliance);
+    } else {
+      Lights.getInstance().setMode(LightsMode.MatchTime);
+    }
   }
 
   @Override

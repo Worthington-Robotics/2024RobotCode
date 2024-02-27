@@ -9,6 +9,7 @@ package frc.WorBots.util.debug;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.WorBots.Constants;
 
 /**
  * Simple utility that allows you to have a double value that is modifiable at runtime using the
@@ -17,7 +18,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class TunableDouble {
   // Set this to false to disable tuning and improve performance.
   // All tunables will just use their default value
-  private static final boolean enableTuning = false;
+  private static final boolean ENABLE_TUNING = !Constants.IS_COMP && false;
 
   private double value;
   // We have to keep this around since we need to supply a default
@@ -48,7 +49,7 @@ public class TunableDouble {
   public TunableDouble(String table, String subtable, String name, double defaultValue) {
     value = defaultValue;
     this.defaultValue = defaultValue;
-    if (enableTuning) {
+    if (ENABLE_TUNING) {
       entry =
           NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable).getEntry(name);
     }
@@ -56,7 +57,7 @@ public class TunableDouble {
 
   /** Update the value to the latest version and log that value */
   public void update() {
-    if (enableTuning) {
+    if (ENABLE_TUNING) {
       value = entry.getDouble(defaultValue);
     }
   }
@@ -87,7 +88,7 @@ public class TunableDouble {
    */
   public void set(double value) {
     defaultValue = value;
-    if (enableTuning) {
+    if (ENABLE_TUNING) {
       entry.setDouble(value);
     }
   }
