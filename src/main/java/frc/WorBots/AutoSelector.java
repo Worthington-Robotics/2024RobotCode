@@ -143,14 +143,13 @@ public class AutoSelector extends SubsystemBase {
         return;
       }
       String[] items = answer.split("; ");
-      SmartDashboard.putString("First", items[0]);
       var selectedRoutine = getRoutineFromName(items[0]);
       if (selectedRoutine == null || selectedRoutine.equals(lastRoutine)) {
         return;
       }
 
       lastRoutine = selectedRoutine;
-      SmartDashboard.putString("Actually selected auto", lastRoutine.name);
+      SmartDashboard.putString("Actually Selected Auto", lastRoutine.name);
 
       lastResponses = new ArrayList<>();
       for (int i = 0; i < lastRoutine.questions().size(); i++) {

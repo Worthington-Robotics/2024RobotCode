@@ -46,6 +46,7 @@ public class DriveController {
 
   private static final LinearFilter driveFilter = LinearFilter.movingAverage(25);
   private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
+  private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(10);
 
   private Timer stopLockTimer = new Timer();
 
@@ -86,9 +87,6 @@ public class DriveController {
       } else {
         drive.stop();
       }
-      // drive.stop();
-      // driveFilter.reset();
-      // turnFilter.reset();
     } else {
       stopLockTimer.restart();
       drive.runVelocity(speeds);
@@ -138,10 +136,13 @@ public class DriveController {
             .getTranslation();
 
     // Convert to meters per second
+
+    // Filter max speed to prevent large speed changes
+    final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * driveSpeedMultiplier);
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            linearVelocity.getX() * maxSpeed * driveSpeedMultiplier,
-            linearVelocity.getY() * maxSpeed * driveSpeedMultiplier,
+            linearVelocity.getX() * maximumSpeed,
+            linearVelocity.getY() * maximumSpeed,
             theta * rotationalSpeed);
 
     // Convert to field relative based on the alliance
