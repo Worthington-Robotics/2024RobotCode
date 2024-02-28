@@ -24,15 +24,15 @@ public class ShooterMath {
   // Goal constants
 
   /** The amount to adjust the goal position away from the wall */
-  private static final double GOAL_ADJUSTMENT = Units.inchesToMeters(4.0);
+  private static final double GOAL_ADJUSTMENT = Units.inchesToMeters(0.0);
 
   // Confidence calculation constants
 
   /** The maximum distance the robot can reliably shoot, in meters */
-  private static final double MAX_RELIABLE_RANGE = 4.7;
+  private static final double MAX_RELIABLE_RANGE = 4.9;
 
   /** The maximum distance the robot can shoot, in meters */
-  private static final double MAX_RANGE = 6.4;
+  private static final double MAX_RANGE = 6.2;
 
   /**
    * The maximum angle from the goal to the robot that the robot can reliably shoot from, in radians
@@ -72,7 +72,7 @@ public class ShooterMath {
 
   /** The amount to move the pivot down for side shots */
   private static final TunableDouble SIDE_SHOT_PIVOT_COEFFICIENT =
-      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.042);
+      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.022);
 
   /** The amount to adjust the robot angle for side shots */
   private static final TunableDouble SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT =
@@ -85,9 +85,9 @@ public class ShooterMath {
    * multiplied by the robot period to find the period of time over which to apply the robot
    * velocity to the pose to get the expected pose
    */
-  private static final double PREDICTION_FACTOR = 0.8;
+  private static final double PREDICTION_FACTOR = 2.0;
 
-  private static final double PREDICTION_DISTANCE_FACTOR = 8.0;
+  private static final double PREDICTION_DISTANCE_FACTOR = 6.0;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
@@ -99,13 +99,13 @@ public class ShooterMath {
   private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {1.096 - 0.1, 0.498},
-            {1.406 - 0.1, 0.52},
-            {2.197 - 0.1, 0.8172},
-            {2.379 - 0.1, 0.826},
-            {3.145 - 0.1, 0.948},
-            {4.305 - 0.1, 0.9805},
-            {5.295 - 0.1, 1.0601}
+            {1.096 - GOAL_ADJUSTMENT, 0.498},
+            {1.406 - GOAL_ADJUSTMENT, 0.52},
+            {2.197 - GOAL_ADJUSTMENT, 0.8172},
+            {2.379 - GOAL_ADJUSTMENT, 0.826},
+            {3.145 - GOAL_ADJUSTMENT, 0.948},
+            {4.305 - GOAL_ADJUSTMENT, 0.9805},
+            {5.295 - GOAL_ADJUSTMENT, 1.0601}
           });
 
   /** Difference confidence levels for a shot */
@@ -342,12 +342,8 @@ public class ShooterMath {
    * @return The yaw angle for the robot
    */
   public static Rotation2d getGoalTheta(Pose2d robot) {
-    final var alliance = AllianceCache.getInstance().get();
-    final double translatedX =
-        (alliance.isPresent() && alliance.get() == Alliance.Red
-            ? robot.getX() - FieldConstants.fieldLength
-            : robot.getX());
-    final double angle = Math.atan2(robot.getY() - getGoal().getY(), translatedX);
+    final var goal = getGoal();
+    final double angle = Math.atan2(robot.getY() - goal.getY(), robot.getX() - goal.getX());
     return new Rotation2d(angle);
   }
 

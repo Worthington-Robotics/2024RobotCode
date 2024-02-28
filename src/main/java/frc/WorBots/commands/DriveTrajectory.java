@@ -99,7 +99,9 @@ public class DriveTrajectory extends Command {
       thetaController = new PIDController(5.0, 0, 0.0);
     }
     customHolonomicDriveController.setTolerance(
-        new Pose2d(new Translation2d(0.02, 0.02), new Rotation2d(0.02)));
+        new Pose2d(
+            new Translation2d(Units.inchesToMeters(2), Units.inchesToMeters(2)),
+            Rotation2d.fromDegrees(1.2)));
     generate(waypoints, constraints, startVelocity, true);
   }
 

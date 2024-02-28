@@ -30,7 +30,7 @@ public class DriveToPose extends Command {
   private final ProfiledPIDController driveController =
       new ProfiledPIDController(2.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
   private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(5.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
+      new ProfiledPIDController(6.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
   private double driveErrorAbs;
   private double thetaErrorAbs;
   private Translation2d lastSetpointTranslation;
@@ -69,12 +69,12 @@ public class DriveToPose extends Command {
         new Constraints(
             slowMode ? Units.inchesToMeters(50.0) : Units.inchesToMeters(140.0),
             Units.inchesToMeters(90.0)));
-    driveController.setTolerance(slowMode ? 0.06 : 0.01);
-    thetaController.setP(3.75);
+    driveController.setTolerance(slowMode ? Units.inchesToMeters(2) : Units.inchesToMeters(1.2));
+    thetaController.setP(4.75);
     thetaController.setD(0.05);
     thetaController.setConstraints(
         new Constraints(
-            slowMode ? Units.degreesToRadians(50.0) : Units.degreesToRadians(140.0),
+            slowMode ? Units.degreesToRadians(50.0) : Units.degreesToRadians(160.0),
             Units.degreesToRadians(720.0)));
     thetaController.setTolerance(
         slowMode ? Units.degreesToRadians(2.0) : Units.degreesToRadians(1.0));

@@ -67,7 +67,7 @@ public class RobotContainer {
       intake = new Intake(new IntakeIOSim());
       shooter = new Shooter(new ShooterIOSim());
     }
-    selector = new AutoSelector("Auto Selector");
+    selector = new AutoSelector("Auto Selector 2");
     var autoCommands =
         new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
 

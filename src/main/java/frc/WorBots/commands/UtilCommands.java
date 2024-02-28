@@ -37,9 +37,9 @@ public class UtilCommands {
     for (int i = 0; i < commands.length; i++) {
       final int finalI = i;
       commands[i] =
-          commands[i].alongWith(Commands.run(() -> SmartDashboard.putNumber(key, finalI)));
+          commands[i].alongWith(Commands.runOnce(() -> SmartDashboard.putNumber(key, finalI)));
     }
-    return Commands.parallel(commands);
+    return Commands.sequence(commands);
   }
 
   /**

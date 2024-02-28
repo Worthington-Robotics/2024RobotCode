@@ -8,6 +8,7 @@
 package frc.WorBots.commands;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.constraint.*;
 import edu.wpi.first.math.util.*;
 import edu.wpi.first.wpilibj2.command.*;
@@ -41,6 +42,7 @@ public class AutoCommands extends Command {
   private final Pose2d[] shootingPositions;
   private final Pose2d betweenZeroAndOne;
   private final Pose2d betweenOneandTwo;
+  private final Pose2d farShootingPose;
 
   // Other
   public static record CommandWithPose(Command command, Pose2d pose) {}
@@ -138,6 +140,11 @@ public class AutoCommands extends Command {
         };
     betweenZeroAndOne = new Pose2d(2.88, 6.28, new Rotation2d());
     betweenOneandTwo = new Pose2d(2.88, 4.8, new Rotation2d());
+    farShootingPose =
+        new Pose2d(
+            FieldConstants.Wing.endX * 0.85,
+            FieldConstants.Speaker.speakerY * 1.2,
+            new Rotation2d());
     pivotAngle =
         () -> {
           Pose2d robotPose = drive.getPose();
@@ -278,6 +285,28 @@ public class AutoCommands extends Command {
     }
   }
 
+  private Command prepareShooting(Pose2d targetPose) {
+    final var shot = ShooterMath.calculateShotData(targetPose, new ChassisSpeeds());
+    final double rpm = shot.rpm();
+    final double angle = shot.pivotAngle();
+
+    return superstructure
+        .setPose(Preset.HANDOFF)
+        .withTimeout(0.8)
+        .andThen(
+            new Handoff(intake, superstructure, shooter)
+                .withTimeout(0.3)
+                .andThen(
+                    Commands.parallel(
+                        superstructure.setMode(SuperstructureState.SHOOTING),
+                        Commands.run(
+                            () -> {
+                              shooter.spinToSpeedVoid(rpm);
+                            },
+                            shooter),
+                        Commands.run(() -> superstructure.setShootingAngleRad(angle)))));
+  }
+
   private CommandWithPose autoShoot(
       Pose2d startingPose, boolean intakeFirst, boolean driveFirst, double timeout) {
     return autoShoot(startingPose, intakeFirst, driveFirst, false, timeout);
@@ -382,7 +411,8 @@ public class AutoCommands extends Command {
               superstructure.setPose(Preset.HANDOFF).withTimeout(0.2),
               path(waypoints)
                   .alongWith(
-                      Commands.waitUntil(() -> drive.getPose().getX() > 4.5).andThen(handoff))),
+                      Commands.waitUntil(() -> drive.getPose().getX() > 4.5)
+                          .andThen(handoff.withTimeout(2.5)))),
           centerGamePieceLocations[centerPosition]);
     } else {
       return new CommandWithPose(Commands.none(), startingPosition);
@@ -398,7 +428,7 @@ public class AutoCommands extends Command {
    */
   private Command driveOutToCenter(Pose2d currentPose) {
     double x = FieldConstants.midLineX - 2.5;
-    double y = FieldConstants.midLineY / 2;
+    double y = FieldConstants.midLineY / 3;
     // Choose the quicker side to go to based on where the robot is
     if (currentPose.getY() > FieldConstants.midLineY) {
       y = FieldConstants.fieldWidth - y;
@@ -443,32 +473,43 @@ public class AutoCommands extends Command {
   }
 
   private Command twoPiece(int startingLocation) {
-    Pose2d startingPose = twoPieceStartingLocations[startingLocation];
+    final Pose2d startingPose = twoPieceStartingLocations[startingLocation];
     // We are already in the right spot for the center start, so give it a shorter
     // timeout
-    double shootTimeout = startingLocation == 1 ? 0.1 : 1.3;
-    // Shoot the loaded game piece
-    var autoShoot1 = autoShoot(startingPose, true, true, true, shootTimeout);
-    // Intake the piece right behind us
-    var driveIntakeWing1 = driveAndIntakeWing(startingPose, false, false, startingLocation);
+    final double shootTimeout = startingLocation == 1 ? 0.1 : 2.0;
+
     // A better spot to shoot from, near the starting position
-    var driveToBetterSpotPose =
-        startingPose.plus(new Transform2d(Units.inchesToMeters(5), 0.0, new Rotation2d()));
-    var driveToBetterSpot = path(Waypoint.fromHolonomicPose(driveToBetterSpotPose));
+    final var driveToBetterSpotPose1 =
+        startingPose.plus(new Transform2d(Units.inchesToMeters(20), 0.0, new Rotation2d()));
+    final var driveToBetterSpotPose2 =
+        startingPose.plus(new Transform2d(Units.inchesToMeters(50), 0.0, new Rotation2d()));
 
     // Drive to the better spot before the first shot for the amp side, for a more
     // accurate shot
-    var driveToBetterSpot1 = startingLocation == 0 ? driveToBetterSpot : Commands.none();
+    final var driveToBetterSpot1 =
+        startingLocation == 0
+            ? new CommandWithPose(
+                new DriveToPose(drive, driveToBetterSpotPose1), driveToBetterSpotPose1)
+            : new CommandWithPose(Commands.none(), startingPose);
+    // Shoot the loaded game piece
+    final var autoShoot1 = autoShoot(driveToBetterSpot1.pose(), true, true, true, shootTimeout);
+
+    // Intake the piece right behind us
+    final var driveIntakeWing1 =
+        driveAndIntakeWing(autoShoot1.pose(), false, false, startingLocation);
     // Drive to the better spot before the second shot for the wall side, so that we
     // don't run into the stage while targeting
-    var driveToBetterSpot2 =
+    final var driveToBetterSpot2 =
         startingLocation == 2
-            ? new CommandWithPose(driveToBetterSpot, driveToBetterSpotPose)
+            ? new CommandWithPose(
+                new DriveToPose(drive, driveToBetterSpotPose2), driveToBetterSpotPose2)
             : new CommandWithPose(Commands.none(), driveIntakeWing1.pose());
     // Shoot the second piece
-    var autoShoot2 = autoShoot(driveToBetterSpot2.pose(), true, true, true, shootTimeout);
-    return Commands.sequence(
-        driveToBetterSpot1,
+    final var autoShoot2 = autoShoot(driveToBetterSpot2.pose(), true, true, true, shootTimeout);
+    return UtilCommands.namedSequence(
+        "Auto Progress",
+        Commands.runOnce(() -> drive.setPose(startingPose)),
+        driveToBetterSpot1.command(),
         autoShoot1.command(),
         driveIntakeWing1.command(),
         driveToBetterSpot2.command(),
@@ -490,11 +531,11 @@ public class AutoCommands extends Command {
 
   public Command threePieceCenterWing() {
     Pose2d startingPose = startingLocations[1];
-    var autoShoot1 = autoShoot(startingPose, true, false, 0.1);
+    var autoShoot1 = autoShoot(startingPose, true, false, true, 0.1);
     var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
-    var autoShoot2 = autoShoot(intake1.pose(), false, true, 0.75);
+    var autoShoot2 = autoShoot(intake1.pose(), false, true, true, 2.0);
     var intake2 = driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
-    var autoShoot3 = autoShoot(wingGamePieceLocations[1], false, true, 1.25);
+    var autoShoot3 = autoShoot(wingGamePieceLocations[1], false, true, true, 2.0);
     return Commands.sequence(
         autoShoot1.command(),
         intake1.command(),
@@ -533,19 +574,33 @@ public class AutoCommands extends Command {
   }
 
   public Command fourPieceLong() {
-    var autoShoot1 = autoShoot(startingLocations[1], true, false, 0.1);
+    var autoShoot1 = autoShoot(startingLocations[1], true, false, true, 0.3);
     var driveIntakeCenter1 = driveAndIntakeCenter(startingLocations[1], 0);
-    var autoShoot2 = autoShoot(centerGamePieceLocations[0], false, true, 2.5);
+    final var robotAngle1 = ShooterMath.calculateRobotAngle(farShootingPose, new ChassisSpeeds());
+    final var move1 =
+        new DriveToPose(drive, farShootingPose.plus(new Transform2d(0.0, 0.0, robotAngle1)));
+    var autoShoot2 = autoShoot(farShootingPose, false, false, false, 1.2);
     var driveAndIntakeCenter2 = driveAndIntakeCenter(autoShoot2.pose(), 1);
-    var autoShoot3 = autoShoot(driveAndIntakeCenter2.pose(), false, true, 2.5);
+    final Pose2d shootPose2 =
+        betweenZeroAndOne.plus(new Transform2d(-Units.inchesToMeters(30), 0.0, new Rotation2d()));
+    final var robotAngle2 = ShooterMath.calculateRobotAngle(shootPose2, new ChassisSpeeds());
+    final var move2 =
+        path(
+            Waypoint.fromHolonomicPose(shootPose2),
+            Waypoint.fromHolonomicPose(
+                shootPose2.plus(new Transform2d(0.0, 0.0, new Rotation2d()))));
+    // final var move2 =
+    var autoShoot3 = autoShoot(shootPose2, false, true, true, 1.2);
     var driveAndIntakeWing1 = driveAndIntakeWing(autoShoot3.pose(), false, true, 0);
-    var autoShoot4 = autoShoot(driveAndIntakeWing1.pose(), false, true, 1.25);
+    var autoShoot4 = autoShoot(driveAndIntakeWing1.pose(), false, true, true, 1.5);
     return Commands.sequence(
         reset(startingLocations[1]),
         autoShoot1.command(),
         driveIntakeCenter1.command(),
+        Commands.deadline(move1, prepareShooting(autoShoot2.pose())),
         autoShoot2.command(),
         driveAndIntakeCenter2.command(),
+        Commands.deadline(move2, prepareShooting(autoShoot3.pose())),
         autoShoot3.command(),
         driveAndIntakeWing1.command(),
         autoShoot4.command());
