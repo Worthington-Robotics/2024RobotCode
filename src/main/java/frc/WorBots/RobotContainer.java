@@ -7,7 +7,8 @@
 
 package frc.WorBots;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
@@ -153,6 +154,14 @@ public class RobotContainer {
         .toggleOnTrue(
             new SuperstructureManual(
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    driver
+        .y()
+        .onTrue(
+            Commands.runOnce(
+                () ->
+                    drive.setPose(
+                        new Pose2d(
+                            drive.getPose().getX(), drive.getPose().getY(), new Rotation2d()))));
     operator.b().onTrue(superstructure.setPose(Preset.STOW));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     operator.a().onTrue(superstructure.setPose(Preset.TRAP));
@@ -185,7 +194,7 @@ public class RobotContainer {
 
     // Contextual shooting
     HashMap<String, Command> shootMap = new HashMap<>();
-    shootMap.put("amp", shooter.setSpeedContinuous(350));
+    shootMap.put("amp", shooter.setSpeedContinuous(2250));
     shootMap.put("trap", shooter.setSpeedContinuous(2000));
     shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(2900));
     shootMap.put("raw", shooter.setSpeedContinuous(2000));
@@ -196,16 +205,15 @@ public class RobotContainer {
             Commands.select(
                 shootMap,
                 () -> {
-                  final double elevTolerance = 0.02;
-                  final double pivotTolerance = Units.degreesToRadians(3.2);
-                  if (superstructure.isNearPose(Preset.AMP, elevTolerance, pivotTolerance)) {
+                  // final double elevTolerance = 0.02;
+                  // final double pivotTolerance = Units.degreesToRadians(3.2);
+                  if (superstructure.isInPose(Preset.AMP)) {
                     return "amp";
                   }
-                  if (superstructure.isNearPose(Preset.TRAP, elevTolerance, pivotTolerance)) {
+                  if (superstructure.isInPose(Preset.TRAP)) {
                     return "trap";
                   }
-                  if (superstructure.isNearPose(
-                      Preset.SUBWOOFER_SHOOT, elevTolerance, pivotTolerance)) {
+                  if (superstructure.isInPose(Preset.SUBWOOFER_SHOOT)) {
                     return "subwoofer_shoot";
                   }
                   return "raw";

@@ -144,7 +144,7 @@ public class AutoSelector extends SubsystemBase {
       }
       String[] items = answer.split("; ");
       var selectedRoutine = getRoutineFromName(items[0]);
-      if (selectedRoutine == null || selectedRoutine.equals(lastRoutine)) {
+      if (selectedRoutine == null) {
         return;
       }
 
@@ -213,7 +213,13 @@ public class AutoSelector extends SubsystemBase {
    * @return The command.
    */
   public Command getCommand() {
-    SmartDashboard.putString("Auto Attempted", lastRoutine.name);
+    StringBuilder attempted = new StringBuilder(lastRoutine.name);
+    if (lastResponses != null) {
+      for (var response : lastResponses) {
+        attempted.append("; " + response);
+      }
+    }
+    SmartDashboard.putString("Auto Attempted", attempted.toString());
     return lastRoutine.command();
   }
 

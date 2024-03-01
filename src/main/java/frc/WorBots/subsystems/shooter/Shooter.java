@@ -283,7 +283,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return The command to run
    */
   public Command idleCommand() {
-    return this.setSpeed(idleSpeed);
+    return this.setSpeedContinuous(idleSpeed);
   }
 
   public Command runFeederWheel(double volts) {

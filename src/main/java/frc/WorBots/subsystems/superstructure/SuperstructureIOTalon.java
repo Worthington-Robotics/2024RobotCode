@@ -28,7 +28,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonSignalsPositional pivotSignals;
 
   // Constants
-  private static final double maxElevationRotations = 158.1;
+  private static final double maxElevationRotations = 158.1 * 1.1;
   private static final double elevatorGearing = 591.156; // in meter per rotation of 1st carriage
 
   public SuperstructureIOTalon() {

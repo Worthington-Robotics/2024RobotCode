@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.util.debug.Logger;
-import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.trajectory.*;
 import java.util.List;
 import java.util.function.Supplier;
@@ -144,7 +143,7 @@ public class DriveTrajectory extends Command {
     Logger.getInstance()
         .setDriveTrajectory(
             customGenerator.getDriveTrajectory().getStates().stream()
-                .map(state -> AllianceFlipUtil.apply(state.poseMeters))
+                .map(state -> state.poseMeters)
                 .toArray(Pose2d[]::new));
 
     // Reset all controllers
@@ -163,10 +162,9 @@ public class DriveTrajectory extends Command {
     }
 
     // Get setpoint
-    Trajectory.State driveState =
-        AllianceFlipUtil.apply(customGenerator.getDriveTrajectory().sample(timer.get()));
+    Trajectory.State driveState = customGenerator.getDriveTrajectory().sample(timer.get());
     RotationSequence.State holonomicRotationState =
-        AllianceFlipUtil.apply(customGenerator.getHolonomicRotationSequence().sample(timer.get()));
+        customGenerator.getHolonomicRotationSequence().sample(timer.get());
 
     // Log Setpoint
     Logger.getInstance()

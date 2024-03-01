@@ -99,13 +99,13 @@ public class ShooterMath {
   private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {1.096 - GOAL_ADJUSTMENT, 0.498},
-            {1.406 - GOAL_ADJUSTMENT, 0.52},
-            {2.197 - GOAL_ADJUSTMENT, 0.8172},
-            {2.379 - GOAL_ADJUSTMENT, 0.826},
-            {3.145 - GOAL_ADJUSTMENT, 0.948},
-            {4.305 - GOAL_ADJUSTMENT, 0.9805},
-            {5.295 - GOAL_ADJUSTMENT, 1.0601}
+            {1.096 - GOAL_ADJUSTMENT, 0.93 * 0.498},
+            {1.406 - GOAL_ADJUSTMENT, 0.93 * 0.52},
+            {2.197 - GOAL_ADJUSTMENT, 0.93 * 0.8172},
+            {2.379 - GOAL_ADJUSTMENT, 0.93 * 0.826},
+            {3.145 - GOAL_ADJUSTMENT, 0.93 * 0.948},
+            {4.305 - GOAL_ADJUSTMENT, 0.93 * 0.9805},
+            {5.295 - GOAL_ADJUSTMENT, 0.95 * 1.0601}
           });
 
   /** Difference confidence levels for a shot */

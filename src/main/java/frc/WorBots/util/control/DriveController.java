@@ -24,7 +24,7 @@ import frc.WorBots.util.math.GeneralMath;
 public class DriveController {
   // Constants
   /** The percentage of the max drive speed that the robot will drive at */
-  public static final double driveSpeedMultiplier = 0.76;
+  public static final double driveSpeedMultiplier = 0.66;
 
   /** The max rotational speed in radians per update that the robot will drive at */
   public static final double rotationalSpeed = 5.0;
@@ -44,7 +44,7 @@ public class DriveController {
   /** The amount of time in seconds after which to apply stop locking */
   public static final double stopLockDelay = 0.5;
 
-  private static final LinearFilter driveFilter = LinearFilter.movingAverage(25);
+  private static final LinearFilter driveFilter = LinearFilter.movingAverage(30);
   private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
   private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(1);
 

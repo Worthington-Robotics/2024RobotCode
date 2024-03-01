@@ -64,7 +64,7 @@ public class Vision extends SubsystemBase {
     if (!Constants.IS_COMP) {
       SmartDashboard.putNumberArray("Camera Pose 1", Logger.pose3dToArray(cameraPoses[1]));
     }
-    xyStdDevCoefficient = 0.01;
+    xyStdDevCoefficient = 0.025;
     thetaStdDevCoefficient = 0.015;
     StatusPage.reportStatus(StatusPage.VISION_SUBSYSTEM, true);
   }

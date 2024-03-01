@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
         kDefaultPeriod);
 
     // camera = CameraServer.startAutomaticCapture();
+    TimeCache.getInstance().update();
+    AllianceCache.getInstance().update();
   }
 
   @Override
