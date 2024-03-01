@@ -2,8 +2,8 @@ var searchData=
 [
   ['deadband_0',['deadband',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a1526546b1f89cb750f986def74a3badc',1,'frc::WorBots::util::control::DriveController']]],
   ['delivery_1',['Delivery',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a9a8152250183adfd702a7dcd8b8984fb',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['disabled_2',['Disabled',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#acff3f4a9be20a0212ca9aa3407c56753',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['disabled_3',['DISABLED',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a9863b83096fd41a4d0ee82ee596cf7df',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
+  ['disabled_2',['DISABLED',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#a9863b83096fd41a4d0ee82ee596cf7df',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
+  ['disabled_3',['Disabled',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#acff3f4a9be20a0212ca9aa3407c56753',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['disabledexit_4',['disabledExit',['../classfrc_1_1WorBots_1_1Robot.html#ad4485342954c30b7212daf4e7ca93bab',1,'frc::WorBots::Robot']]],
   ['disabledinit_5',['disabledInit',['../classfrc_1_1WorBots_1_1Robot.html#aa3ec1410a9a10954cfccd90b7466eb09',1,'frc::WorBots::Robot']]],
   ['disabledperiodic_6',['disabledPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#aef62d0f148f883f6eaa03d162bfbb26b',1,'frc::WorBots::Robot']]],
