@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
+import frc.WorBots.util.Cache.TimeCache;
 
 public class VisionIOCustom implements VisionIO {
   private NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
@@ -19,6 +20,8 @@ public class VisionIOCustom implements VisionIO {
   private NetworkTable subTable;
   private DoubleArraySubscriber data;
   private DoubleSubscriber subFps;
+
+  private static final double connectionTimeout = 2.0;
 
   public VisionIOCustom(int index) {
     table = defaultInstance.getTable("module" + index);
@@ -47,5 +50,7 @@ public class VisionIOCustom implements VisionIO {
     }
 
     inputs.fps = subFps.get();
+    final double lastUpdate = subFps.getLastChange() / 1000000.0;
+    inputs.isConnected = (TimeCache.getInstance().get() - lastUpdate < connectionTimeout);
   }
 }

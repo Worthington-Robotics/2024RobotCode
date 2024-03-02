@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.vision;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,6 +32,7 @@ public class Vision extends SubsystemBase {
   private final VisionIOInputs[] inputs;
 
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
+  private Consumer<Pose2d> lastPoseConsumer = (x) -> {};
   private final Pose3d[] cameraPoses;
   // How much influence XY data has on the robot pose
   private final double xyStdDevCoefficient;
@@ -41,6 +43,9 @@ public class Vision extends SubsystemBase {
   private static final double fieldBorderMargin = 0.5;
   private static final double zMargin = 0.75;
   private static final double targetLogTimeSecs = 0.1;
+
+  private Optional<Pose2d> lastPose = Optional.empty();
+  private double lastPoseTime = 0.0;
 
   public Vision(VisionIO... io) {
     this.io = io;
@@ -72,6 +77,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
+      StatusPage.reportStatus(StatusPage.CAM_PREFIX + i, inputs[i].isConnected);
     }
 
     // Loop over instances
@@ -185,10 +191,20 @@ public class Vision extends SubsystemBase {
           allTagPoses.add(FieldConstants.aprilTags.getTagPose(detectionEntry.getKey()).get());
         }
       }
+      if (DriverStation.isTeleop()) {
+        if (allRobotPoses.size() > 0) {
+          lastPose = Optional.of(allRobotPoses.get(0));
+          lastPoseTime = Timer.getFPGATimestamp();
+          SmartDashboard.putNumber("Last Vision Pose Time", lastPoseTime);
+        }
+      }
       Logger.getInstance().setTagPoses(allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
       Logger.getInstance()
           .setRobotPoses3d(allRobotPoses3d.toArray(new Pose3d[allRobotPoses3d.size()]));
       visionConsumer.accept(visionUpdates);
+      if (lastPose.isPresent()) {
+        lastPoseConsumer.accept(lastPose.get());
+      }
     }
   }
 
@@ -197,7 +213,14 @@ public class Vision extends SubsystemBase {
    * updates, and recieving poses.
    */
   public void setDataInterfaces(
-      Consumer<List<TimestampedVisionUpdate>> visionConsumer, Supplier<Pose2d> poseSupplier) {
+      Consumer<List<TimestampedVisionUpdate>> visionConsumer,
+      Supplier<Pose2d> poseSupplier,
+      Consumer<Pose2d> foo) {
     this.visionConsumer = visionConsumer;
+    this.lastPoseConsumer = foo;
+  }
+
+  public double getLastPoseTime() {
+    return this.lastPoseTime;
   }
 }

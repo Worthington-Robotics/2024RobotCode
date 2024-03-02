@@ -120,16 +120,17 @@ public class HardwareUtils {
   /** Base status signals for a TalonFX */
   public abstract static class TalonSignals {
     // private final StatusSignal<Double> tempSignal;
-    // private final StatusSignal<Double> voltsSignal;
+    private final StatusSignal<Double> voltsSignal;
+
     // private final StatusSignal<Double> currentSignal;
 
     public TalonSignals(TalonFX motor) {
       // tempSignal = motor.getDeviceTemp();
-      // voltsSignal = motor.getSupplyVoltage();
+      voltsSignal = motor.getSupplyVoltage();
       // currentSignal = motor.getSupplyCurrent();
 
       // tempSignal.setUpdateFrequency(8);
-      // voltsSignal.setUpdateFrequency(10);
+      voltsSignal.setUpdateFrequency(20);
       // currentSignal.setUpdateFrequency(5);
 
       // For .get calls we need the duty cycle
@@ -137,14 +138,14 @@ public class HardwareUtils {
     }
 
     protected void refresh() {
-      // StatusSignal.refreshAll(tempSignal, voltsSignal, currentSignal);
+      StatusSignal.refreshAll(voltsSignal);
     }
 
     public void update(TalonInputs inputs, TalonFX motor) {
       refresh();
       // inputs.temperatureCelsius = tempSignal.getValue();
-      // inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
-      // inputs.supplyVoltage = voltsSignal.getValue();
+      inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
+      inputs.supplyVoltage = voltsSignal.getValue();
       // inputs.currentDrawAmps = currentSignal.getValue();
       inputs.isConnected = motor.isAlive() && inputs.temperatureCelsius < maxMotorTemperature;
     }

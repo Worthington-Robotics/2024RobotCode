@@ -13,6 +13,7 @@ public interface VisionIO {
     public double[][] frames = new double[][] {};
     public double timestamps[] = new double[] {};
     public double fps = 0.0;
+    public boolean isConnected = false;
   }
 
   /**

@@ -294,18 +294,23 @@ public class Lights extends SubsystemBase {
     final ChassisSpeeds speeds = driveSpeedsSupplier.get();
 
     final ShotConfidence confidence = ShooterMath.calculateConfidence(pose, speeds);
-    if (confidence.equals(ShotConfidence.LOW)) {
+    final double lastPoseTime = SmartDashboard.getNumber("Last Vision Pose Time", 0.0);
+    if (TimeCache.getInstance().get() - lastPoseTime > 1.0) {
       solid(1.0, Color.kRed);
-    } else if (confidence.equals(ShotConfidence.MEDIUM) && !isTargeted.get()) {
-      solid(1.0, Color.kRed);
-    } else if (confidence.equals(ShotConfidence.MEDIUM) && isTargeted.get()) {
-      solid(1.0, Color.kOrange);
-    } else if (confidence.equals(ShotConfidence.HIGH) && !isTargeted.get()) {
-      solid(1.0, Color.kRed);
-    } else if (confidence.equals(ShotConfidence.HIGH) && isTargeted.get()) {
-      solid(1.0, Color.kGreen);
-    } else if (timer.hasElapsed(0.5) && hasStartedTimer) {
-      solid(1.0, Color.kOrange);
+    } else {
+      if (confidence.equals(ShotConfidence.LOW)) {
+        solid(1.0, Color.kRed);
+      } else if (confidence.equals(ShotConfidence.MEDIUM) && !isTargeted.get()) {
+        solid(1.0, Color.kRed);
+      } else if (confidence.equals(ShotConfidence.MEDIUM) && isTargeted.get()) {
+        solid(1.0, Color.kOrange);
+      } else if (confidence.equals(ShotConfidence.HIGH) && !isTargeted.get()) {
+        solid(1.0, Color.kRed);
+      } else if (confidence.equals(ShotConfidence.HIGH) && isTargeted.get()) {
+        solid(1.0, Color.kGreen);
+      } else if (timer.hasElapsed(0.5) && hasStartedTimer) {
+        solid(1.0, Color.kOrange);
+      }
     }
   }
 
@@ -314,12 +319,13 @@ public class Lights extends SubsystemBase {
     final boolean hasGamePieceBottom = this.hasGamePieceBottom.get();
     final boolean hasGamePieceTop = this.hasGamePieceTop.get();
     final Color pieceColor = inHandoff ? Color.kOrangeRed : Color.kRed;
-    if (hasGamePieceTop) {
+    if (hasGamePieceBottom) {
+      final double time = TimeCache.getInstance().get();
+      final var color = (time % 1.25 < 0.75) ? Color.kOrangeRed : Color.kBlack;
+      solid(1.0, color);
+    } else if (hasGamePieceTop) {
       solid(1.0, pieceColor);
       solid(0.65, Color.kBlack);
-    } else if (hasGamePieceBottom) {
-      solid(1.0, Color.kBlack);
-      solid(0.65, pieceColor);
     } else {
       if (inHandoff) {
         solid(1.0, Color.kWhite);

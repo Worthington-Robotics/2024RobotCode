@@ -41,4 +41,9 @@ public class DriveWithJoysticks extends Command {
 
     driveController.drive(drive, leftX, leftY, rightY);
   }
+
+  @Override
+  public void end(boolean interrupted) {
+    drive.stop();
+  }
 }

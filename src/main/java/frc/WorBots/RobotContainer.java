@@ -9,6 +9,7 @@ package frc.WorBots;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.AutoSelector.*;
@@ -117,9 +118,15 @@ public class RobotContainer {
 
     selector.addRoutine("Pit Test", List.of(), autoCommands.pitTest());
 
+    selector.addRoutine(
+        "Drive Straight 10s",
+        List.of(),
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)), drive)
+            .withTimeout(10));
+
     selector.addRoutine("Do Nothing", List.of(), Commands.none());
 
-    vision.setDataInterfaces(drive::addVisionData, drive::getPose);
+    vision.setDataInterfaces(drive::addVisionData, drive::getPose, drive::setLastVisionPose);
     Lights.getInstance()
         .setDataInterfaces(
             () -> drive.getPose(),
@@ -154,14 +161,11 @@ public class RobotContainer {
         .toggleOnTrue(
             new SuperstructureManual(
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+    driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading()));
+    driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
     driver
-        .y()
-        .onTrue(
-            Commands.runOnce(
-                () ->
-                    drive.setPose(
-                        new Pose2d(
-                            drive.getPose().getX(), drive.getPose().getY(), new Rotation2d()))));
+        .povLeft()
+        .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));
     operator.b().onTrue(superstructure.setPose(Preset.STOW));
     operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
     operator.a().onTrue(superstructure.setPose(Preset.TRAP));

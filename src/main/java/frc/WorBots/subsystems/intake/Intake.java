@@ -52,11 +52,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    if (inputs.timeOfFlightDistanceMeters > distanceThreshold) {
-      hasGamepiece = false;
-    } else {
-      hasGamepiece = true;
-    }
+    hasGamepiece = inputs.timeOfFlightDistanceMeters <= distanceThreshold;
 
     if (inputs.motor.temperatureCelsius > maxTemperature || DriverStation.isDisabled()) {
       setpointVolts = 0.0;

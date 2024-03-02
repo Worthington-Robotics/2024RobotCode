@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.util.BuildConstants;
 import java.util.HashMap;
 
@@ -55,8 +56,7 @@ public class StatusPage {
   public static final String PDP_BREAKERS = "PDP Breakers";
   public static final String CAN_WARNING = "CAN Warning";
   public static final String PDP_HARDWARE = "PDP Hardware";
-  public static final String CAM0 = "Cam 0";
-  public static final String CAM1 = "Cam 1";
+  public static final String CAM_PREFIX = "Cam";
   public static final String LAUNCHPAD = "Launchpad";
   public static final String DRIVER_CAM = "Driver Cam";
 
@@ -77,8 +77,8 @@ public class StatusPage {
     PIVOT_CONNECTED,
     ELEVATOR_CONNECTED,
     GYROSCOPE,
-    CAM0,
-    CAM1,
+    CAM_PREFIX + "0",
+    CAM_PREFIX + "1",
     BATTERY,
     IDEAL_BATTERY,
     NETWORK_TABLES,
@@ -155,8 +155,8 @@ public class StatusPage {
     StatusPage.reportStatus(StatusPage.FMS, DriverStation.isFMSAttached());
 
     // Power
-    // StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
-    // StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
+    StatusPage.reportStatus(StatusPage.BATTERY, pdp.getVoltage() > 11.0);
+    StatusPage.reportStatus(StatusPage.IDEAL_BATTERY, pdp.getVoltage() > 11.6);
     StatusPage.reportStatus(StatusPage.BROWNOUT, !HAL.getBrownedOut());
 
     // Controllers
@@ -169,7 +169,7 @@ public class StatusPage {
     StatusPage.reportStatus(StatusPage.NOT_ESTOPPED, !DriverStation.isEStopped());
 
     // PDP
-    // var pdpFaults = pdp.getFaults();
+    var pdpFaults = pdp.getFaults();
     // boolean breakerFault =
     //     pdpFaults.Channel0BreakerFault
     //         || pdpFaults.Channel1BreakerFault
@@ -197,31 +197,31 @@ public class StatusPage {
     //         || pdpFaults.Channel23BreakerFault;
     // StatusPage.reportStatus(StatusPage.PDP_BREAKERS, !breakerFault);
     // StatusPage.reportStatus(StatusPage.CAN_WARNING, !pdpFaults.CanWarning);
-    // StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
+    StatusPage.reportStatus(StatusPage.PDP_HARDWARE, !pdpFaults.HardwareFault);
 
     // Statuses for different clients
-    boolean cam0 = false;
-    boolean cam1 = false;
+    // boolean cam0 = false;
+    // boolean cam1 = false;
     boolean launchpad = false;
     for (var connection : NetworkTableInstance.getDefault().getConnections()) {
-      if (connection.remote_id.contains("VisionModule0")) {
-        cam0 = true;
-      }
-      if (connection.remote_id.contains("VisionModule1")) {
-        cam1 = true;
-      }
+      // if (connection.remote_id.contains("VisionModule0")) {
+      //   cam0 = true;
+      // }
+      // if (connection.remote_id.contains("VisionModule1")) {
+      //   cam1 = true;
+      // }
       if (connection.remote_id.contains("Launchpad")) {
         launchpad = true;
       }
     }
-    StatusPage.reportStatus(StatusPage.CAM0, cam0);
-    StatusPage.reportStatus(StatusPage.CAM1, cam1);
+    // StatusPage.reportStatus(StatusPage.CAM0, cam0);
+    // StatusPage.reportStatus(StatusPage.CAM1, cam1);
     StatusPage.reportStatus(StatusPage.LAUNCHPAD, launchpad);
 
     // Robot information
-    // SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
-    // SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
-    // SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
+    SmartDashboard.putNumber("System/Battery Voltage", pdp.getVoltage());
+    SmartDashboard.putNumber("System/PDP Current", pdp.getTotalCurrent());
+    SmartDashboard.putNumber("System/PDP Temperature", pdp.getTemperature());
 
     // Report metadata
     StatusPage.reportMetadata();

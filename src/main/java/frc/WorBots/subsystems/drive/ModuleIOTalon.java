@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.drive;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -65,6 +66,16 @@ public class ModuleIOTalon implements ModuleIO {
 
     driveMotor.setInverted(false);
     turnMotor.setInverted(true);
+
+    TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+    driveConfig.CurrentLimits.SupplyCurrentLimit = 10;
+    driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    driveMotor.getConfigurator().apply(driveConfig);
+
+    TalonFXConfiguration turnConfig = new TalonFXConfiguration();
+    turnConfig.CurrentLimits.SupplyCurrentLimit = 10;
+    turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    driveMotor.getConfigurator().apply(turnConfig);
 
     // Signals
     driveSignals = new TalonSignalsPositional(driveMotor);

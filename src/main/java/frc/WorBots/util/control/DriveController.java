@@ -14,10 +14,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.subsystems.drive.Drive;
-import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.math.GeneralMath;
 
 /** Controller for teleoperated driving */
@@ -41,18 +40,23 @@ public class DriveController {
   /** The amount of curving to apply to the turn input */
   public static final double turnCurveAmount = 2.0;
 
+  /** The amount of time in seconds after which to force brake */
+  public static final double brakeDelay = 0.2;
+
   /** The amount of time in seconds after which to apply stop locking */
   public static final double stopLockDelay = 0.5;
 
-  private static final LinearFilter driveFilter = LinearFilter.movingAverage(30);
+  private static final LinearFilter driveFilter = LinearFilter.movingAverage(10);
   private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
   private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(1);
 
   private Timer stopLockTimer = new Timer();
+  private Timer stopTimer = new Timer();
 
   /** Construct a new DriveController */
   public DriveController() {
     stopLockTimer.restart();
+    stopTimer.restart();
   }
 
   /**
@@ -65,7 +69,7 @@ public class DriveController {
    */
   public void drive(Drive drive, double x, double y, double theta) {
     final ChassisSpeeds speeds =
-        getSpeeds(x, y, theta, drive.getRotation(), drive.getMaxLinearSpeedMetersPerSec());
+        getSpeeds(x, y, theta, drive.getYaw(), drive.getMaxLinearSpeedMetersPerSec());
 
     drive(drive, speeds);
   }
@@ -82,11 +86,7 @@ public class DriveController {
     if (Math.abs(speeds.vxMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.vyMetersPerSecond) < minimumSpeed
         && Math.abs(speeds.omegaRadiansPerSecond) < minimumSpeed) {
-      if (stopLockTimer.hasElapsed(stopLockDelay)) {
-        drive.stop();
-      } else {
-        drive.stop();
-      }
+      drive.stop();
     } else {
       stopLockTimer.restart();
       drive.runVelocity(speeds);
@@ -107,12 +107,15 @@ public class DriveController {
       double x, double y, double theta, Rotation2d robotRotation, double maxSpeed) {
     // Get direction and magnitude of linear axes
     double linearMagnitude = Math.hypot(x, y);
+    SmartDashboard.putNumber("Drive Magnitude", linearMagnitude);
     Rotation2d linearDirection = new Rotation2d(x, y);
 
     // Apply deadband
     linearMagnitude = MathUtil.applyDeadband(linearMagnitude, deadband);
     if (linearMagnitude == 0.0) {
       driveFilter.reset();
+    } else {
+      stopTimer.reset();
     }
     theta = MathUtil.applyDeadband(theta, deadband);
     if (theta == 0.0) {
@@ -147,10 +150,10 @@ public class DriveController {
 
     // Convert to field relative based on the alliance
     var driveRotation = robotRotation;
-    final var alliance = AllianceCache.getInstance().get();
-    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
-    }
+    // final var alliance = AllianceCache.getInstance().get();
+    // if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+    //   driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
+    // }
     speeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
             speeds.vxMetersPerSecond,
@@ -158,5 +161,10 @@ public class DriveController {
             speeds.omegaRadiansPerSecond,
             driveRotation);
     return speeds;
+  }
+
+  public double driveSingleAxis(double axis, double maxSpeed) {
+    final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * driveSpeedMultiplier);
+    return driveFilter.calculate(axis) * maximumSpeed;
   }
 }

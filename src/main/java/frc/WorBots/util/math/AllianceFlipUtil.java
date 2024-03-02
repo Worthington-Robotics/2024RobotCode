@@ -9,7 +9,6 @@ package frc.WorBots.util.math;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -113,10 +112,10 @@ public class AllianceFlipUtil {
     if (shouldFlip()) {
       unflippedX *= -1;
     }
-    return flipped.plus(new Transform2d(unflippedX, 0.0, new Rotation2d()));
+    return new Pose2d(flipped.getX() + unflippedX, flipped.getY(), flipped.getRotation());
   }
 
-  private static boolean shouldFlip() {
+  public static boolean shouldFlip() {
     final var alliance = DriverStation.getAlliance();
     // final var alliance = AllianceCache.getInstance().get();
     return alliance.isPresent() && alliance.get() == Alliance.Red;

@@ -97,43 +97,42 @@ public class AutoCommands extends Command {
         };
     twoPieceStartingLocations =
         new Pose2d[] {
-          AllianceFlipUtil.apply(
-              wingGamePieceLocations[0].plus(
-                  new Transform2d(-Units.inchesToMeters(60), 0.0, new Rotation2d()))),
+          AllianceFlipUtil.addToFlipped(wingGamePieceLocations[0], -Units.inchesToMeters(60)),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.StartingZone.endX - Units.inchesToMeters(22),
                   FieldConstants.Speaker.speakerY,
                   new Rotation2d())),
-          AllianceFlipUtil.apply(
-              wingGamePieceLocations[2].plus(
-                  new Transform2d(-Units.inchesToMeters(60), 0.0, new Rotation2d()))),
-          AllianceFlipUtil.apply(
-              wingGamePieceLocations[2].plus(
-                  new Transform2d(-Units.inchesToMeters(65), 0.0, new Rotation2d())))
+          AllianceFlipUtil.addToFlipped(wingGamePieceLocations[2], -Units.inchesToMeters(60)),
+          AllianceFlipUtil.addToFlipped(wingGamePieceLocations[2], -Units.inchesToMeters(65))
         };
     centerGamePieceLocations =
         new Pose2d[] {
-          new Pose2d(
-              FieldConstants.GamePieces.centerPieces[0].plus(
-                  new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
-              new Rotation2d()),
-          new Pose2d(
-              FieldConstants.GamePieces.centerPieces[1].plus(
-                  new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
-              new Rotation2d()),
-          new Pose2d(
-              FieldConstants.GamePieces.centerPieces[2].plus(
-                  new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
-              new Rotation2d()),
-          new Pose2d(
-              FieldConstants.GamePieces.centerPieces[3].plus(
-                  new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
-              new Rotation2d()),
-          new Pose2d(
-              FieldConstants.GamePieces.centerPieces[4].plus(
-                  new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
-              new Rotation2d()),
+          AllianceFlipUtil.apply(
+              new Pose2d(
+                  FieldConstants.GamePieces.centerPieces[0].plus(
+                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                  new Rotation2d())),
+          AllianceFlipUtil.apply(
+              new Pose2d(
+                  FieldConstants.GamePieces.centerPieces[1].plus(
+                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                  new Rotation2d())),
+          AllianceFlipUtil.apply(
+              new Pose2d(
+                  FieldConstants.GamePieces.centerPieces[2].plus(
+                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                  new Rotation2d())),
+          AllianceFlipUtil.apply(
+              new Pose2d(
+                  FieldConstants.GamePieces.centerPieces[3].plus(
+                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                  new Rotation2d())),
+          AllianceFlipUtil.apply(
+              new Pose2d(
+                  FieldConstants.GamePieces.centerPieces[4].plus(
+                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                  new Rotation2d())),
         };
     shootingPositions =
         new Pose2d[] {
@@ -233,11 +232,16 @@ public class AutoCommands extends Command {
     waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
     if (fromCenter) {
       if (wingPosition == 0) {
+        var rotation = AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(100)));
+        // We have to turn 180 on the red alliance so that we don't try to intake with the wrong
+        // side of the robot
+        if (AllianceFlipUtil.shouldFlip()) {
+          rotation = rotation.rotateBy(Rotation2d.fromDegrees(180));
+        }
         waypoints.add(
             Waypoint.fromHolonomicPose(
                 AllianceFlipUtil.addToFlipped(
-                    wingGamePieceLocations[wingPosition].plus(
-                        new Transform2d(0.0, 0.0, new Rotation2d(Units.degreesToRadians(100)))),
+                    wingGamePieceLocations[wingPosition].plus(new Transform2d(0.0, 0.0, rotation)),
                     Units.inchesToMeters(-8))));
       } else if (wingPosition == 2) {
         waypoints.add(
@@ -247,7 +251,7 @@ public class AutoCommands extends Command {
                         new Transform2d(
                             0.0,
                             Units.inchesToMeters(-20),
-                            new Rotation2d(Units.degreesToRadians(-90)))),
+                            AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(-90))))),
                     Units.inchesToMeters(-6))));
       } else {
         waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
@@ -448,18 +452,44 @@ public class AutoCommands extends Command {
    * @return The command to run
    */
   private Command driveOutToCenter(Pose2d currentPose) {
+    ArrayList<Waypoint> waypoints = new ArrayList<>();
+
+    final Rotation2d rotation = AllianceFlipUtil.apply(new Rotation2d());
+
     double x = FieldConstants.midLineX - 2.5;
     double y = FieldConstants.midLineY / 3;
     // Choose the quicker side to go to based on where the robot is
     if (currentPose.getY() > FieldConstants.midLineY) {
       y = FieldConstants.fieldWidth - y;
+      waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+    } else {
+      // Create a transitory waypoint so that the robot doesn't go through the stage
+      final double transitoryX = x / 4.0;
+      final double transitoryY = y;
+      waypoints.add(
+          Waypoint.fromHolonomicPose(
+              new Pose2d(AllianceFlipUtil.apply(transitoryX), transitoryY, rotation)));
     }
-    // Create a transitory waypoint so that the robot doesn't go through the stage
-    final double transitoryX = x / 4.0;
-    final double transitoryY = y;
-    return path(
-        Waypoint.fromHolonomicPose(new Pose2d(transitoryX, transitoryY, new Rotation2d())),
-        Waypoint.fromHolonomicPose(new Pose2d(x, y, new Rotation2d())));
+
+    waypoints.add(Waypoint.fromHolonomicPose(new Pose2d(AllianceFlipUtil.apply(x), y, rotation)));
+    return path(waypoints);
+  }
+
+  /**
+   * Get a transitory pose for pathing on the wing line, but on the side that your current pose's y
+   * is on
+   *
+   * @param currentPose The current pose of the robot
+   * @param desiredRotation The unflipped desired rotation for the pose
+   * @return The pose
+   */
+  private Pose2d getWingLinePose(Pose2d currentPose, Rotation2d desiredRotation) {
+    final double x = AllianceFlipUtil.apply(FieldConstants.Wing.endX);
+    double y = FieldConstants.midLineY / 3;
+    if (currentPose.getY() > FieldConstants.midLineY) {
+      y = FieldConstants.fieldWidth - y;
+    }
+    return new Pose2d(x, y, AllianceFlipUtil.apply(desiredRotation));
   }
 
   /**
@@ -613,24 +643,21 @@ public class AutoCommands extends Command {
 
   public Command fourPieceLong() {
     var autoShoot1 = autoShoot(startingLocations[1], true, false, true, 0.3);
-    var driveIntakeCenter1 = driveAndIntakeCenter(startingLocations[1], 0);
-    final var flippedFarShootingPose = AllianceFlipUtil.apply(farShootingPose);
-    final var robotAngle1 =
-        ShooterMath.calculateRobotAngle(flippedFarShootingPose, new ChassisSpeeds());
-    final var move1 =
-        new DriveToPose(drive, flippedFarShootingPose.plus(new Transform2d(0.0, 0.0, robotAngle1)));
-    var autoShoot2 = autoShoot(flippedFarShootingPose, false, false, false, 1.2);
+    var driveAndIntakeCenter1 = driveAndIntakeCenter(startingLocations[1], 0);
+    final var robotAngle1 = ShooterMath.getGoalTheta(farShootingPose);
+    final var shootPose1 = farShootingPose.plus(new Transform2d(0.0, 0.0, robotAngle1));
+    final var move1 = new DriveToPose(drive, shootPose1);
+    var autoShoot2 = autoShoot(shootPose1, false, false, false, 1.2);
     var driveAndIntakeCenter2 = driveAndIntakeCenter(autoShoot2.pose(), 1);
     final Pose2d shootPose2 =
-        AllianceFlipUtil.apply(
-            betweenZeroAndOne.plus(
-                new Transform2d(-Units.inchesToMeters(30), 0.0, new Rotation2d())));
-    final var robotAngle2 = ShooterMath.calculateRobotAngle(shootPose2, new ChassisSpeeds());
+        AllianceFlipUtil.addToFlipped(betweenZeroAndOne, -Units.inchesToMeters(30));
+    final var robotAngle2 = ShooterMath.getGoalTheta(shootPose2);
+    final var wingLine = getWingLinePose(driveAndIntakeCenter2.pose(), Rotation2d.fromDegrees(180));
     final var move2 =
         path(
+            // Waypoint.fromHolonomicPose(wingLine, new Rotation2d()),
             Waypoint.fromHolonomicPose(shootPose2),
-            Waypoint.fromHolonomicPose(
-                shootPose2.plus(new Transform2d(0.0, 0.0, new Rotation2d()))));
+            Waypoint.fromHolonomicPose(shootPose2.plus(new Transform2d(0.0, 0.0, robotAngle2))));
     // final var move2 =
     var autoShoot3 = autoShoot(shootPose2, false, true, true, 1.2);
     var driveAndIntakeWing1 = driveAndIntakeWing(autoShoot3.pose(), false, true, 0);
@@ -639,7 +666,7 @@ public class AutoCommands extends Command {
         "Auto Progress",
         reset(startingLocations[1]),
         autoShoot1.command(),
-        driveIntakeCenter1.command(),
+        driveAndIntakeCenter1.command(),
         Commands.deadline(move1, prepareShooting(autoShoot2.pose())),
         autoShoot2.command(),
         driveAndIntakeCenter2.command(),

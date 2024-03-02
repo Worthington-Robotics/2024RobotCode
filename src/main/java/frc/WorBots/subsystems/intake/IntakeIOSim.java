@@ -23,5 +23,6 @@ public class IntakeIOSim implements IntakeIO {
     inputs.motor.velocityRadsPerSec = sim.getAngularVelocityRadPerSec();
     inputs.motor.currentDrawAmps = sim.getCurrentDrawAmps();
     inputs.isConnected = true;
+    inputs.motor.isConnected = true;
   }
 }

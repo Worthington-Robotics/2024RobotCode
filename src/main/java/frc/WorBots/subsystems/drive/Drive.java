@@ -237,6 +237,12 @@ public class Drive extends SubsystemBase {
     poseEstimator.addVisionData(updates);
   }
 
+  public void setLastVisionPose(Pose2d pose) {
+    if (DriverStation.isTeleop()) {
+      this.poseEstimator.resetPose(pose);
+    }
+  }
+
   /**
    * Returns the maximum linear speed (free speed) that the drive train can physically attain.
    *

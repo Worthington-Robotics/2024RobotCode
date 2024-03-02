@@ -54,7 +54,7 @@ public class Module {
     if (RobotBase.isReal()) { // Real constants
       driveFeedforward = new SimpleMotorFeedforward(0.18868, 0.12825);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-      turnFeedbackGains.setGains(8.5, 0.015, 0.0);
+      turnFeedbackGains.setGains(6.5, 0.017, 0.0);
     } else { // Sim constants
       driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
       driveFeedbackGains.setGains(0.08, 0.0, 0.0);
@@ -67,8 +67,8 @@ public class Module {
     driveFeedback.update();
     turnFeedback.update();
     io.updateInputs(inputs);
-    // inputs.drive.publish();
-    // inputs.turn.publish();
+    inputs.drive.publish();
+    inputs.turn.publish();
     StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, inputs.isConnected);
   }
 
