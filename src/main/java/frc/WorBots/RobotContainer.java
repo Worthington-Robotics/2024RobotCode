@@ -12,7 +12,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import frc.WorBots.AutoSelector.*;
+import frc.WorBots.auto.AutoSelector;
+import frc.WorBots.auto.AutoSelector.*;
+import frc.WorBots.auto.Autos;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
@@ -70,8 +72,7 @@ public class RobotContainer {
       shooter = new Shooter(new ShooterIOSim());
     }
     selector = new AutoSelector("Auto Selector 2");
-    var autoCommands =
-        new AutoCommands(drive, superstructure, intake, shooter, selector::getResponses);
+    final Autos autos = new Autos(drive, superstructure, intake, shooter, selector::getResponses);
 
     selector.addRoutine(
         "One Piece",
@@ -82,7 +83,7 @@ public class RobotContainer {
                     AutoQuestionResponse.AMP_SIDE,
                     AutoQuestionResponse.CENTER,
                     AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.onePiece());
+        autos.onePiece());
 
     selector.addRoutine(
         "Two Piece",
@@ -93,7 +94,7 @@ public class RobotContainer {
                     AutoQuestionResponse.AMP_SIDE,
                     AutoQuestionResponse.CENTER,
                     AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.twoPiece());
+        autos.twoPiece());
 
     selector.addRoutine(
         "Close 3",
@@ -101,14 +102,9 @@ public class RobotContainer {
             new AutoQuestion(
                 "Direction?",
                 List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.threePieceClose());
+        autos.threePieceClose());
 
-    selector.addRoutine(
-        "Center 4, pickup from center, from left, from right",
-        List.of(),
-        autoCommands.fourPieceCenterWing());
-
-    selector.addRoutine("Test long boi", List.of(), autoCommands.fourPieceLong());
+    selector.addRoutine("Long 4", List.of(), autos.fourPieceLong());
 
     selector.addRoutine(
         "Mobility",
@@ -119,12 +115,11 @@ public class RobotContainer {
                     AutoQuestionResponse.AMP_SIDE,
                     AutoQuestionResponse.CENTER,
                     AutoQuestionResponse.WALL_SIDE))),
-        autoCommands.mobility());
+        autos.mobility());
 
-    selector.addRoutine("Pit Test", List.of(), autoCommands.pitTest());
+    selector.addRoutine("Pit Test", List.of(), autos.pitTest());
 
-    selector.addRoutine("Plow", List.of(), autoCommands.plow(0));
-    selector.addRoutine("Plow 2", List.of(), autoCommands.plow2(0));
+    selector.addRoutine("Plow", List.of(), autos.plow());
 
     selector.addRoutine(
         "Drive Straight 10s",

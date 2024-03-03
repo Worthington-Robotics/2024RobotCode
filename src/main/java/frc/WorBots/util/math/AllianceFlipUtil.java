@@ -108,6 +108,13 @@ public class AllianceFlipUtil {
     }
   }
 
+  /**
+   * Adds an alliance-relative distance to the x value of an already flipped pose
+   *
+   * @param flipped The already alliance-flipped pose
+   * @param unflippedX The alliance-relative x value to add
+   * @return The modified pose
+   */
   public static Pose2d addToFlipped(Pose2d flipped, double unflippedX) {
     if (shouldFlip()) {
       unflippedX *= -1;
@@ -115,6 +122,7 @@ public class AllianceFlipUtil {
     return new Pose2d(flipped.getX() + unflippedX, flipped.getY(), flipped.getRotation());
   }
 
+  /** Gets whether alliance-relative x-values should be flipped, for the red side */
   public static boolean shouldFlip() {
     final var alliance = DriverStation.getAlliance();
     // final var alliance = AllianceCache.getInstance().get();

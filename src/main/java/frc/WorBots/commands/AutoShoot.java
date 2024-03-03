@@ -52,7 +52,6 @@ public class AutoShoot extends SequentialCommandGroup {
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier) {
     addRequirements(superstructure, drive, shooter);
-    // FIXME: Try 0-2pi
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(Units.degreesToRadians(THETA_TOLERANCE));
 

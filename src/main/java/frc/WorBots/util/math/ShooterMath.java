@@ -143,6 +143,18 @@ public class ShooterMath {
   }
 
   /**
+   * Calculates the desired pivot angle from the robot pose
+   *
+   * @param robot The robot pose
+   * @return The desired fused pivot angle
+   */
+  public static double calculatePivotAngle(Pose2d robot) {
+    final double distance = getGoalDistance(robot);
+    final Rotation2d goalToRobotAngle = getGoalToRobotAngle(robot);
+    return calculatePivotAngle(distance, goalToRobotAngle);
+  }
+
+  /**
    * Calculates the desired pivot angle from robot information
    *
    * @param distance The distance to the goal

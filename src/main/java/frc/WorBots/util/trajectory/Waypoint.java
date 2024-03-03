@@ -12,6 +12,7 @@ import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /** A trajectory waypoint, including a translation and optional drive/holonomic rotations. */
@@ -110,5 +111,15 @@ public class Waypoint {
    */
   public Optional<Rotation2d> getHolonomicRotation() {
     return Optional.ofNullable(holonomicRotation);
+  }
+
+  /**
+   * Gets the associated pose for this waypoint. Uses holonomic rotation for rotation, and will
+   * throw an exception if no holonomic rotation is present
+   *
+   * @return The pose
+   */
+  public Pose2d getPose() throws NoSuchElementException {
+    return new Pose2d(this.getTranslation(), this.getHolonomicRotation().get());
   }
 }

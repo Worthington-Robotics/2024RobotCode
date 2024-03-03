@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.WorBots;
+package frc.WorBots.auto;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
@@ -19,8 +19,13 @@ import frc.WorBots.util.debug.SwitchableChooser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Subsystem for running a persistent auto selector on the dashboard. Can either display multiple
+ * dropdown choosers on Shuffleboard or one dropdown on the dashboard
+ */
 public class AutoSelector extends SubsystemBase {
-  public static final int maxQuestions = 4;
+  /** The maximum number of questions */
+  public static final int MAX_QUESTIONS = 4;
 
   /** Whether to use the LabVIEW dashboard instead of multiple question choosers */
   private static final boolean useDriverStation = true;
@@ -51,7 +56,7 @@ public class AutoSelector extends SubsystemBase {
       routineChooser = new SwitchableChooser(key);
       questionPublishers = new ArrayList<>();
       questionChoosers = new ArrayList<>();
-      for (int i = 0; i < maxQuestions; i++) {
+      for (int i = 0; i < MAX_QUESTIONS; i++) {
         var publisher =
             NetworkTableInstance.getDefault()
                 .getStringTopic("/SmartDashboard/" + key + "/Question #" + Integer.toString(i + 1))
@@ -72,15 +77,17 @@ public class AutoSelector extends SubsystemBase {
    * @param command The command that needs to be ran.
    */
   public void addRoutine(String name, List<AutoQuestion> questions, Command command) {
-    if (questions.size() > maxQuestions) {
+    addRoutine(new AutoRoutine(name, questions, command));
+  }
+
+  public void addRoutine(AutoRoutine routine) {
+    if (routine.questions.size() > MAX_QUESTIONS) {
       throw new RuntimeException(
-          "Auto routine contained more than "
-              + Integer.toString(maxQuestions)
-              + " questions: "
-              + name);
+          "Auto routine contained more than " + MAX_QUESTIONS + " questions: " + routine.name);
     }
-    names.add(name);
-    routines.add(new AutoRoutine(name, questions, createRoutineCommand(command)));
+    names.add(routine.name);
+    routines.add(
+        new AutoRoutine(routine.name, routine.questions, createRoutineCommand(routine.command)));
     if (useDriverStation) {
       createAnswerList();
     } else {
@@ -132,6 +139,7 @@ public class AutoSelector extends SubsystemBase {
   }
 
   public void periodic() {
+    // Don't run expensive periodic code if we are enabled
     if (DriverStation.isAutonomousEnabled()
         || DriverStation.isTeleopEnabled() && lastRoutine != null && lastResponses == null) {
       return;
@@ -173,7 +181,7 @@ public class AutoSelector extends SubsystemBase {
       }
       if (!selectedRoutine.equals(lastRoutine)) {
         var questions = selectedRoutine.questions();
-        for (int i = 0; i < maxQuestions; i++) {
+        for (int i = 0; i < MAX_QUESTIONS; i++) {
           if (i < questions.size()) {
             questionPublishers.get(i).set(questions.get(i).question());
             questionChoosers
@@ -231,6 +239,7 @@ public class AutoSelector extends SubsystemBase {
     return Commands.deadline(command);
   }
 
+  /** A named auto routine */
   private static final record AutoRoutine(
       String name, List<AutoQuestion> questions, Command command) {}
 
