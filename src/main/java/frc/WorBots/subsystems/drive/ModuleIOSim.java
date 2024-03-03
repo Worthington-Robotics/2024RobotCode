@@ -9,12 +9,14 @@ package frc.WorBots.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.WorBots.Constants;
 
 public class ModuleIOSim implements ModuleIO {
   private FlywheelSim driveSim = new FlywheelSim(DCMotor.getKrakenX60(1), 6.75, 0.025);
   private FlywheelSim turnSim = new FlywheelSim(DCMotor.getKrakenX60(1), 150.0 / 7.0, 0.004);
+  private final double wheelRadius = Units.inchesToMeters(2.0);
 
   private double turnRelativePositionRad = 0.0;
   private double turnAbsolutePositionRad = Math.random() * 2.0 * Math.PI;
@@ -37,6 +39,8 @@ public class ModuleIOSim implements ModuleIO {
 
     inputs.drive.positionRads += (driveSim.getAngularVelocityRadPerSec() * Constants.ROBOT_PERIOD);
     inputs.drive.velocityRadsPerSec = driveSim.getAngularVelocityRadPerSec();
+    inputs.driveDistanceMeters = inputs.drive.positionRads * wheelRadius;
+    inputs.driveVelocityMetersPerSec = inputs.drive.velocityRadsPerSec * wheelRadius;
     inputs.drive.appliedPowerVolts = driveAppliedVolts;
     inputs.drive.currentDrawAmps = Math.abs(driveSim.getCurrentDrawAmps());
     inputs.drive.temperatureCelsius = 30.0;

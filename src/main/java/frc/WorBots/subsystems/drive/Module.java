@@ -31,10 +31,6 @@ public class Module {
       new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
   private final TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
-  // Constants
-  /** The radius of the wheels, in meters */
-  private static final double wheelRadius = Units.inchesToMeters(2.0);
-
   /**
    * The minimum speed percentage of the maximum that can be set before angle changes are ignored
    */
@@ -133,7 +129,16 @@ public class Module {
    * @return The position in meters.
    */
   public double getPositionMeters() {
-    return inputs.drive.positionRads * wheelRadius;
+    return inputs.driveDistanceMeters;
+  }
+
+  /**
+   * Gets the current position of the drive motor in radians
+   *
+   * @return The position in radians
+   */
+  public double getPositionRads() {
+    return inputs.drive.positionRads;
   }
 
   /**
@@ -142,7 +147,7 @@ public class Module {
    * @return The velocity in meters per second.
    */
   public double getVelocityMetersPerSec() {
-    return inputs.drive.velocityRadsPerSec * wheelRadius;
+    return inputs.driveVelocityMetersPerSec;
   }
 
   /**

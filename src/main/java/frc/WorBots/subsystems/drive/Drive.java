@@ -28,6 +28,9 @@ import frc.WorBots.util.math.PoseEstimator.*;
 import java.util.List;
 
 public class Drive extends SubsystemBase {
+  // Constants
+  public static final double WHEELBASE = Units.inchesToMeters(10);
+
   private final Module[] modules = new Module[4];
   private ChassisSpeeds setpoint = new ChassisSpeeds();
 
@@ -138,7 +141,7 @@ public class Drive extends SubsystemBase {
         }
       }
 
-      var setpointTwist =
+      final var setpointTwist =
           new Pose2d()
               .log(
                   new Pose2d(
@@ -146,7 +149,7 @@ public class Drive extends SubsystemBase {
                           setpoint.vxMetersPerSecond * Constants.ROBOT_PERIOD,
                           setpoint.vyMetersPerSecond * Constants.ROBOT_PERIOD),
                       new Rotation2d(setpointRadsPerSec * Constants.ROBOT_PERIOD)));
-      var adjustedSpeeds =
+      final var adjustedSpeeds =
           new ChassisSpeeds(
               setpointTwist.dx / Constants.ROBOT_PERIOD,
               setpointTwist.dy / Constants.ROBOT_PERIOD,
@@ -237,6 +240,11 @@ public class Drive extends SubsystemBase {
     poseEstimator.addVisionData(updates);
   }
 
+  /**
+   * Resets the pose estimator to the latest pose from vision, in teleop mode
+   *
+   * @param pose The pose from the vision
+   */
   public void setLastVisionPose(Pose2d pose) {
     if (DriverStation.isTeleop()) {
       this.poseEstimator.resetPose(pose);
@@ -384,6 +392,20 @@ public class Drive extends SubsystemBase {
   }
 
   /**
+   * Gets the distance driven of each of the modules in radians
+   *
+   * @return The distances
+   */
+  public double[] getModuleDistances() {
+    return new double[] {
+      modules[0].getPositionRads(),
+      modules[1].getPositionRads(),
+      modules[2].getPositionRads(),
+      modules[3].getPositionRads()
+    };
+  }
+
+  /**
    * Runs the provided ChassisSpeeds.
    *
    * @param speeds The speeds to be run.
@@ -461,12 +483,11 @@ public class Drive extends SubsystemBase {
    * @return The translations.
    */
   public Translation2d[] getModuleTranslations() {
-    final double distance = Units.inchesToMeters(10);
     return new Translation2d[] {
-      new Translation2d(distance, distance),
-      new Translation2d(distance, -distance),
-      new Translation2d(-distance, distance),
-      new Translation2d(-distance, -distance)
+      new Translation2d(WHEELBASE, WHEELBASE),
+      new Translation2d(WHEELBASE, -WHEELBASE),
+      new Translation2d(-WHEELBASE, WHEELBASE),
+      new Translation2d(-WHEELBASE, -WHEELBASE)
     };
   }
 }

@@ -34,14 +34,19 @@ public class Vision extends SubsystemBase {
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
   private Consumer<Pose2d> lastPoseConsumer = (x) -> {};
   private final Pose3d[] cameraPoses;
-  // How much influence XY data has on the robot pose
+  /* How much influence XY data has on the robot pose */
   private final double xyStdDevCoefficient;
-  // How much influence theta data has on the robot pose
+  /* How much influence theta data has on the robot pose */
   private final double thetaStdDevCoefficient;
   private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
   private static final double ambiguityThreshold = 0.3;
+
+  /** The margin inside the field border to accept vision poses from */
   private static final double fieldBorderMargin = 0.5;
-  private static final double zMargin = 0.75;
+
+  /** The margin in the z-axis from 0m for a pose to be considered valid, in meters */
+  private static final double zMargin = Units.inchesToMeters(20);
+
   private static final double targetLogTimeSecs = 0.1;
 
   private Optional<Pose2d> lastPose = Optional.empty();
@@ -144,15 +149,11 @@ public class Vision extends SubsystemBase {
           continue;
         }
 
-        // Exit if robot pose is off the field
-        if (robotPose3d.getX() < -fieldBorderMargin
-            || robotPose3d.getX() > FieldConstants.fieldLength + fieldBorderMargin
-            || robotPose3d.getY() < -fieldBorderMargin
-            || robotPose3d.getY() > FieldConstants.fieldWidth + fieldBorderMargin
-            || robotPose3d.getZ() < -zMargin
-            || robotPose3d.getZ() > zMargin) {
+        // Exit if the pose is invalid
+        if (!isPoseValid(robotPose3d)) {
           continue;
         }
+
         // Get 2D robot pose
         final Pose2d robotPose = robotPose3d.toPose2d();
 
@@ -223,5 +224,24 @@ public class Vision extends SubsystemBase {
 
   public double getLastPoseTime() {
     return this.lastPoseTime;
+  }
+
+  /**
+   * Gets whether a 3D pose from vision should be considered valid
+   *
+   * @param pose The pose from vision
+   * @return Whether the pose should be used
+   */
+  private static boolean isPoseValid(Pose3d pose) {
+    if (pose.getX() < -fieldBorderMargin
+        || pose.getX() > FieldConstants.fieldLength + fieldBorderMargin
+        || pose.getY() < -fieldBorderMargin
+        || pose.getY() > FieldConstants.fieldWidth + fieldBorderMargin
+        || pose.getZ() < -zMargin
+        || pose.getZ() > zMargin) {
+      return false;
+    }
+
+    return true;
   }
 }

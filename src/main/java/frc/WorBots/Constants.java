@@ -7,6 +7,7 @@
 
 package frc.WorBots;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -14,6 +15,9 @@ import edu.wpi.first.wpilibj.RobotBase;
 public class Constants {
   /** Whether the robot is in competition mode */
   public static final boolean IS_COMP = DriverStation.isFMSAttached() && false;
+
+  /** Whether to enable debugging routines in the auto selector */
+  public static final boolean ENABLE_DEBUG_ROUTINES = true;
 
   /**
    * Gets whether the robot is running in a simulation or is real
@@ -29,4 +33,10 @@ public class Constants {
 
   /** The robot update period in seconds */
   public static final double ROBOT_PERIOD = 0.02;
+
+  /** The width of the robot in meters */
+  public static final double ROBOT_WIDTH = Units.inchesToMeters(26);
+
+  /** The length of the robot in meters */
+  public static final double ROBOT_LENGTH = Units.inchesToMeters(26);
 }

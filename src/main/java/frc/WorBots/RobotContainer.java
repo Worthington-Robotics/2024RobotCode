@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.auto.AutoSelector;
 import frc.WorBots.auto.AutoSelector.*;
 import frc.WorBots.auto.Autos;
+import frc.WorBots.auto.DebugRoutines;
 import frc.WorBots.commands.*;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
@@ -128,6 +129,11 @@ public class RobotContainer {
             .withTimeout(10));
 
     selector.addRoutine("Do Nothing", List.of(), Commands.none());
+
+    if (Constants.ENABLE_DEBUG_ROUTINES) {
+      final DebugRoutines routines = new DebugRoutines(drive, superstructure, intake, shooter);
+      selector.addRoutine("Characterize Odometry", List.of(), routines.characterizeOdometry());
+    }
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose, drive::setLastVisionPose);
     Lights.getInstance()

@@ -25,7 +25,9 @@ public class ModuleIOTalon implements ModuleIO {
   private final TalonFX driveMotor;
   private final TalonFX turnMotor;
   private final CANcoder absoluteEncoder;
+
   private final Rotation2d encoderOffset;
+  private final double wheelRadius;
 
   private final TalonSignalsPositional driveSignals;
   private final TalonSignalsPositional turnSignals;
@@ -38,24 +40,28 @@ public class ModuleIOTalon implements ModuleIO {
         turnMotor = new TalonFX(2, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(3, Constants.SWERVE_CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        wheelRadius = Units.inchesToMeters(2.0);
         break;
       case 1: // Front Right
         driveMotor = new TalonFX(4, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(5, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(6, Constants.SWERVE_CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        wheelRadius = Units.inchesToMeters(2.0);
         break;
       case 2: // Back Left
         driveMotor = new TalonFX(7, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(8, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(9, Constants.SWERVE_CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        wheelRadius = Units.inchesToMeters(2.0);
         break;
       case 3: // Back Right
         driveMotor = new TalonFX(10, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(11, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(12, Constants.SWERVE_CAN_BUS);
         encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        wheelRadius = Units.inchesToMeters(2.0);
         break;
       default:
         throw new RuntimeException("Invalid swerve module index");
@@ -96,6 +102,9 @@ public class ModuleIOTalon implements ModuleIO {
 
     inputs.drive.positionRads *= DRIVE_ROTATIONS_TO_RADIANS;
     inputs.drive.velocityRadsPerSec *= DRIVE_ROTATIONS_TO_RADIANS;
+
+    inputs.driveDistanceMeters = inputs.drive.positionRads * wheelRadius;
+    inputs.driveVelocityMetersPerSec = inputs.drive.velocityRadsPerSec * wheelRadius;
 
     inputs.turnAbsolutePositionRad =
         MathUtil.angleModulus(

@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
+import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -84,37 +85,36 @@ public class PoseEstimator {
    */
   public void addVisionData(List<TimestampedVisionUpdate> visionData) {
     for (var timestampedVisionUpdate : visionData) {
-      var timestamp = timestampedVisionUpdate.timestamp();
-      var visionUpdate =
+      final var timestamp = timestampedVisionUpdate.timestamp();
+      final var visionUpdate =
           new VisionUpdate(timestampedVisionUpdate.pose(), timestampedVisionUpdate.stdDevs());
 
       if (updates.containsKey(timestamp)) {
         // There was already an update at this timestamp, add to it
-        var oldVisionUpdates = updates.get(timestamp).visionUpdates();
+        final var oldVisionUpdates = updates.get(timestamp).visionUpdates();
         oldVisionUpdates.add(visionUpdate);
         oldVisionUpdates.sort(VisionUpdate.compareDescStdDev);
-
       } else {
         // Insert a new update
-        var prevUpdate = updates.floorEntry(timestamp);
-        var nextUpdate = updates.ceilingEntry(timestamp);
+        final var prevUpdate = updates.floorEntry(timestamp);
+        final var nextUpdate = updates.ceilingEntry(timestamp);
         if (prevUpdate == null || nextUpdate == null) {
           // Outside the range of existing data
           return;
         }
 
         // Create partial twists (prev -> vision, vision -> next)
-        var twist0 =
+        final var twist0 =
             GeomUtil.multiplyTwist(
                 nextUpdate.getValue().twist(),
                 (timestamp - prevUpdate.getKey()) / (nextUpdate.getKey() - prevUpdate.getKey()));
-        var twist1 =
+        final var twist1 =
             GeomUtil.multiplyTwist(
                 nextUpdate.getValue().twist(),
                 (nextUpdate.getKey() - timestamp) / (nextUpdate.getKey() - prevUpdate.getKey()));
 
         // Add new pose updates
-        var newVisionUpdates = new ArrayList<VisionUpdate>();
+        final var newVisionUpdates = new ArrayList<VisionUpdate>();
         newVisionUpdates.add(visionUpdate);
         newVisionUpdates.sort(VisionUpdate.compareDescStdDev);
         updates.put(timestamp, new PoseUpdate(twist0, newVisionUpdates));
@@ -183,12 +183,7 @@ public class PoseEstimator {
                 new Twist2d(twistMatrix.get(0, 0), twistMatrix.get(1, 0), twistMatrix.get(2, 0)));
       }
 
-      // Clamp poses off the field
-      pose =
-          new Pose2d(
-              MathUtil.clamp(pose.getX(), 0.0, FieldConstants.fieldLength),
-              MathUtil.clamp(pose.getY(), 0.0, FieldConstants.fieldWidth),
-              pose.getRotation());
+      pose = clampPose(pose);
 
       return pose;
     }
@@ -207,4 +202,24 @@ public class PoseEstimator {
   /** Represents a single vision pose with a timestamp and associated standard deviations. */
   public static record TimestampedVisionUpdate(
       double timestamp, Pose2d pose, Matrix<N3, N1> stdDevs) {}
+
+  /**
+   * Clamps a pose within the bounds of the field
+   *
+   * @param pose The pose to clamp
+   * @return The clamped pose
+   */
+  private static Pose2d clampPose(Pose2d pose) {
+    // Get the shorter dimension of the robot so that we can clamp poses with the
+    // robot inside the wall
+    final double robotSize = Math.min(Constants.ROBOT_WIDTH, Constants.ROBOT_LENGTH) / 2;
+
+    // Clamp poses off the field
+    pose =
+        new Pose2d(
+            MathUtil.clamp(pose.getX(), 0.0 + robotSize, FieldConstants.fieldLength - robotSize),
+            MathUtil.clamp(pose.getY(), 0.0 + robotSize, FieldConstants.fieldWidth - robotSize),
+            pose.getRotation());
+    return pose;
+  }
 }

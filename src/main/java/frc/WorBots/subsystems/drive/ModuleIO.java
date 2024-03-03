@@ -17,6 +17,9 @@ public interface ModuleIO {
     public TalonInputsPositional turn;
     public double turnAbsolutePositionRad = 0.0;
 
+    public double driveDistanceMeters;
+    public double driveVelocityMetersPerSec;
+
     public boolean isConnected = false;
 
     public ModuleIOInputs(int index) {
