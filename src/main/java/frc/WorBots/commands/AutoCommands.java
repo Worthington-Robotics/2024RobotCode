@@ -233,8 +233,8 @@ public class AutoCommands extends Command {
     if (fromCenter) {
       if (wingPosition == 0) {
         var rotation = AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(100)));
-        // We have to turn 180 on the red alliance so that we don't try to intake with the wrong
-        // side of the robot
+        // We have to turn 180 on the red alliance so that we don't try to intake with
+        // the wrong side of the robot
         if (AllianceFlipUtil.shouldFlip()) {
           rotation = rotation.rotateBy(Rotation2d.fromDegrees(180));
         }
@@ -244,15 +244,16 @@ public class AutoCommands extends Command {
                     wingGamePieceLocations[wingPosition].plus(new Transform2d(0.0, 0.0, rotation)),
                     Units.inchesToMeters(-8))));
       } else if (wingPosition == 2) {
+        var rotation = AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(-90)));
+        if (AllianceFlipUtil.shouldFlip()) {
+          rotation = rotation.rotateBy(Rotation2d.fromDegrees(180));
+        }
         waypoints.add(
             Waypoint.fromHolonomicPose(
                 AllianceFlipUtil.addToFlipped(
                     wingGamePieceLocations[wingPosition].plus(
-                        new Transform2d(
-                            0.0,
-                            Units.inchesToMeters(-20),
-                            AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(-90))))),
-                    Units.inchesToMeters(-6))));
+                        new Transform2d(0.0, Units.inchesToMeters(-0), rotation)),
+                    Units.inchesToMeters(-3))));
       } else {
         waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
       }
@@ -574,14 +575,17 @@ public class AutoCommands extends Command {
         () -> responses.get().get(0));
   }
 
-  public Command threePieceCenterWing() {
+  public Command threePieceClose(boolean isRight) {
     final Pose2d startingPose = startingLocations[1];
     var autoShoot1 = autoShoot(startingPose, true, false, true, 0.1);
     System.out.println(autoShoot1.pose().getX());
 
     var intake1 = driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
-    var autoShoot2 = autoShoot(intake1.pose(), false, true, true, 2.0);
-    var intake2 = driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
+    var autoShoot2 = autoShoot(intake1.pose(), false, true, true, 2.2);
+    var intake2 =
+        isRight
+            ? driveAndIntakeWing(autoShoot2.pose(), true, false, 2)
+            : driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
     var autoShoot3 = autoShoot(wingGamePieceLocations[1], false, true, true, 2.0);
     return UtilCommands.namedSequence(
         "Auto Progress",
@@ -594,6 +598,16 @@ public class AutoCommands extends Command {
             Waypoint.fromHolonomicPose(intake2.pose()),
             Waypoint.fromHolonomicPose(wingGamePieceLocations[1])),
         autoShoot3.command());
+  }
+
+  public Command threePieceClose() {
+    return Commands.select(
+        Map.of(
+            AutoQuestionResponse.AMP_SIDE,
+            threePieceClose(false),
+            AutoQuestionResponse.WALL_SIDE,
+            threePieceClose(true)),
+        () -> responses.get().get(0));
   }
 
   public Command threePieceCenterWingOld() {
@@ -686,6 +700,58 @@ public class AutoCommands extends Command {
                 startingPose.plus(new Transform2d(0.9, 0, new Rotation2d())))));
   }
 
+  public Command plow(int startingLocation) {
+    final Pose2d startingPose =
+        new Pose2d(
+            twoPieceStartingLocations[0].getX(),
+            FieldConstants.fieldWidth * (1.0 - 0.065),
+            new Rotation2d());
+    final Pose2d centerPose = centerGamePieceLocations[0];
+    final var intake = new DriveToPose(drive, centerPose);
+    double rv = Units.degreesToRadians(-30);
+    if (AllianceFlipUtil.shouldFlip()) {
+      rv *= -1;
+    }
+    final double rv2 = rv;
+    final var plow =
+        Commands.run(
+                () ->
+                    drive.runVelocity(
+                        ChassisSpeeds.fromFieldRelativeSpeeds(0.0, -2.3, rv2, drive.getRotation())),
+                drive)
+            .raceWith(
+                Commands.waitUntil(() -> drive.getPose().getY() < FieldConstants.midLineY * 1.37));
+    return shooter
+        .setSpeedContinuous(500)
+        .raceWith(
+            UtilCommands.namedSequence("Auto Progress", resetFlipped(startingPose), intake, plow));
+  }
+
+  public Command plow2(int startingLocation) {
+    final Pose2d startingPose =
+        new Pose2d(
+            twoPieceStartingLocations[0].getX(),
+            FieldConstants.fieldWidth * (0.05),
+            new Rotation2d());
+    final Pose2d centerPose = centerGamePieceLocations[0];
+    final var intake = driveAndIntakeCenter2(startingPose, 4);
+    double rv = Units.degreesToRadians(-90);
+    if (AllianceFlipUtil.shouldFlip()) {
+      rv *= -1;
+    }
+    final double rv2 = rv;
+    final var plow =
+        Commands.run(
+                () ->
+                    drive.runVelocity(
+                        ChassisSpeeds.fromFieldRelativeSpeeds(0.0, -1.0, rv2, drive.getRotation())),
+                drive)
+            .raceWith(
+                Commands.waitUntil(() -> drive.getPose().getY() < FieldConstants.midLineY * 1.37));
+    return UtilCommands.namedSequence(
+        "Auto Progress", resetFlipped(startingPose), intake.command(), plow);
+  }
+
   /**
    * Returns the mobility auto, where the robot starts in one of the predefined positions, and then
    * drives forwards 0.9 meters.
@@ -706,5 +772,36 @@ public class AutoCommands extends Command {
 
   public Command pitTest() {
     return new PitTest(drive, superstructure, intake, shooter);
+  }
+
+  private CommandWithPose driveAndIntakeCenter2(Pose2d startingPosition, int centerPosition) {
+    List<Waypoint> waypoints = new ArrayList<>();
+    waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
+    Command handoff = Commands.none();
+    if (centerPosition <= 1) {
+      if (startingPosition.getX() < 4) {
+        // waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      }
+      waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
+    } else if (centerPosition == 2) {
+      if (startingPosition.getX() < 4) {
+        // waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      }
+      waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
+    }
+    if (!shooter.hasGamePiece()) {
+      return new CommandWithPose(
+          UtilCommands.namedSequence(
+              "Intake Center 2 Progress",
+              superstructure.setMode(SuperstructureState.POSE),
+              // superstructure.setPose(Preset.HANDOFF).withTimeout(0.2),
+              path(waypoints)
+                  .alongWith(
+                      Commands.waitUntil(() -> AllianceFlipUtil.apply(drive.getPose().getX()) > 4.5)
+                          .andThen(handoff.withTimeout(2.5)))),
+          centerGamePieceLocations[centerPosition]);
+    } else {
+      return new CommandWithPose(Commands.none(), startingPosition);
+    }
   }
 }

@@ -96,7 +96,12 @@ public class RobotContainer {
         autoCommands.twoPiece());
 
     selector.addRoutine(
-        "Center 3, pickup from center, from left", List.of(), autoCommands.threePieceCenterWing());
+        "Close 3",
+        List.of(
+            new AutoQuestion(
+                "Direction?",
+                List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
+        autoCommands.threePieceClose());
 
     selector.addRoutine(
         "Center 4, pickup from center, from left, from right",
@@ -117,6 +122,9 @@ public class RobotContainer {
         autoCommands.mobility());
 
     selector.addRoutine("Pit Test", List.of(), autoCommands.pitTest());
+
+    selector.addRoutine("Plow", List.of(), autoCommands.plow(0));
+    selector.addRoutine("Plow 2", List.of(), autoCommands.plow2(0));
 
     selector.addRoutine(
         "Drive Straight 10s",
@@ -200,8 +208,8 @@ public class RobotContainer {
     HashMap<String, Command> shootMap = new HashMap<>();
     shootMap.put("amp", shooter.setSpeedContinuous(2250));
     shootMap.put("trap", shooter.setSpeedContinuous(2000));
-    shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(2900));
-    shootMap.put("raw", shooter.setSpeedContinuous(2000));
+    shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(3200));
+    shootMap.put("raw", shooter.setSpeedContinuous(3000));
 
     operator
         .rightTrigger()

@@ -243,5 +243,7 @@ public class AutoSelector extends SubsystemBase {
     WALL_SIDE,
     CENTER,
     AMP_SIDE,
+    LEFT,
+    RIGHT,
   }
 }

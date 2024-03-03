@@ -135,7 +135,8 @@ public class ShooterMath {
 
     final double rpm = calculateShooterRPM(distance);
     final double pivotAngle = calculatePivotAngle(predictedDistance, predictedGoalToRobotAngle);
-    final Rotation2d robotAngle = calculateRobotAngle(predicted, robotSpeeds);
+    // final Rotation2d robotAngle = calculateRobotAngle(predicted, robotSpeeds);
+    final Rotation2d robotAngle = getGoalTheta(robot);
     final ShotConfidence confidence = calculateConfidence(distance, goalToRobotAngle, robotSpeeds);
 
     return new ShotData(rpm, pivotAngle, robotAngle, confidence);

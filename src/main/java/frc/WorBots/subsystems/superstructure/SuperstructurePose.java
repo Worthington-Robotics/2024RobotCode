@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.superstructure;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.util.Units;
 
 /** This class is a simple record of all of the poses that the Superstructure can be in */
 public record SuperstructurePose(Vector<N2> vectorPose) {
@@ -25,7 +26,8 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     START_CLIMB(new SuperstructurePose(VecBuilder.fill(0.26, Superstructure.pivotMaxAngle / 2))),
     CLIMB(new SuperstructurePose(VecBuilder.fill(0.035, Superstructure.pivotMaxAngle / 2))),
     SLIDE(new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.pivotMaxAngle))),
-    SUBWOOFER_SHOOT(new SuperstructurePose(VecBuilder.fill(0.0, 0.498)));
+    SUBWOOFER_SHOOT(
+        new SuperstructurePose(VecBuilder.fill(0.0, 0.498 - Units.degreesToRadians(2))));
 
     public SuperstructurePose pose;
 

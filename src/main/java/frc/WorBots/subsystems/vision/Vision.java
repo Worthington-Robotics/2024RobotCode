@@ -205,6 +205,7 @@ public class Vision extends SubsystemBase {
       if (lastPose.isPresent()) {
         lastPoseConsumer.accept(lastPose.get());
       }
+      // lastPose = Optional.empty();
     }
   }
 

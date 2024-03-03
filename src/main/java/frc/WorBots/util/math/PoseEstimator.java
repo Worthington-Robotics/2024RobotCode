@@ -7,6 +7,7 @@
 
 package frc.WorBots.util.math;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
+import frc.WorBots.FieldConstants;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -180,6 +182,13 @@ public class PoseEstimator {
             pose.exp(
                 new Twist2d(twistMatrix.get(0, 0), twistMatrix.get(1, 0), twistMatrix.get(2, 0)));
       }
+
+      // Clamp poses off the field
+      pose =
+          new Pose2d(
+              MathUtil.clamp(pose.getX(), 0.0, FieldConstants.fieldLength),
+              MathUtil.clamp(pose.getY(), 0.0, FieldConstants.fieldWidth),
+              pose.getRotation());
 
       return pose;
     }

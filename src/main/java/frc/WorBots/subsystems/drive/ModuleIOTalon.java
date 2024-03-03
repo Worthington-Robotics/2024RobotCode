@@ -68,14 +68,14 @@ public class ModuleIOTalon implements ModuleIO {
     turnMotor.setInverted(true);
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-    driveConfig.CurrentLimits.SupplyCurrentLimit = 10;
+    driveConfig.CurrentLimits.SupplyCurrentLimit = 20;
     driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     driveMotor.getConfigurator().apply(driveConfig);
 
-    TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-    turnConfig.CurrentLimits.SupplyCurrentLimit = 10;
-    turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    driveMotor.getConfigurator().apply(turnConfig);
+    // TalonFXConfiguration turnConfig = new TalonFXConfiguration();
+    // turnConfig.CurrentLimits.SupplyCurrentLimit = 45;
+    // turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
+    // turnMotor.getConfigurator().apply(turnConfig);
 
     // Signals
     driveSignals = new TalonSignalsPositional(driveMotor);
