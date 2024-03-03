@@ -93,6 +93,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aa27169b3ab56122fe3afb781f263d369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39e134641b83ee415d0ba2f383536959"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#aa27169b3ab56122fe3afb781f263d369">ShotData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a39e134641b83ee415d0ba2f383536959">calculateShotData</a> (Pose2d robot, ChassisSpeeds robotSpeeds)</td></tr>
 <tr class="separator:a39e134641b83ee415d0ba2f383536959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a543cb5d1009a6954e1bedf6253fd026c"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a543cb5d1009a6954e1bedf6253fd026c">calculatePivotAngle</a> (Pose2d robot)</td></tr>
+<tr class="separator:a543cb5d1009a6954e1bedf6253fd026c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd07f4690141205677d7f7dff52ec844"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#abd07f4690141205677d7f7dff52ec844">calculatePivotAngle</a> (double distance, Rotation2d goalToRobotAngle)</td></tr>
 <tr class="separator:abd07f4690141205677d7f7dff52ec844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac914e617ac4ad77cb4c61b19f52f48ec"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="enumfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath_1_1ShotConfidence.html">ShotConfidence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#ac914e617ac4ad77cb4c61b19f52f48ec">calculateConfidence</a> (Pose2d robot, ChassisSpeeds robotSpeeds)</td></tr>
@@ -226,7 +228,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <a id="abd07f4690141205677d7f7dff52ec844" name="abd07f4690141205677d7f7dff52ec844"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd07f4690141205677d7f7dff52ec844">&#9670;&#160;</a></span>calculatePivotAngle()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abd07f4690141205677d7f7dff52ec844">&#9670;&#160;</a></span>calculatePivotAngle() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -263,6 +265,40 @@ Static Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">distance</td><td>The distance to the goal </td></tr>
     <tr><td class="paramname">goalToRobotAngle</td><td>The goal-to-robot angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The desired fused pivot angle </dd></dl>
+
+</div>
+</div>
+<a id="a543cb5d1009a6954e1bedf6253fd026c" name="a543cb5d1009a6954e1bedf6253fd026c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a543cb5d1009a6954e1bedf6253fd026c">&#9670;&#160;</a></span>calculatePivotAngle() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.ShooterMath.calculatePivotAngle </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>robot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Calculates the desired pivot angle from the robot pose</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">robot</td><td>The robot pose </td></tr>
   </table>
   </dd>
 </dl>

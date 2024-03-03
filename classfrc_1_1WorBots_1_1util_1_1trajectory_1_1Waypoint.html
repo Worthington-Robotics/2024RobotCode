@@ -95,6 +95,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a66edf115e8bf252bacde68fdd00e0db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11a4b9cc75090c5cefbb20d5caa29a16"><td class="memItemLeft" align="right" valign="top">Optional&lt; Rotation2d &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a11a4b9cc75090c5cefbb20d5caa29a16">getHolonomicRotation</a> ()</td></tr>
 <tr class="separator:a11a4b9cc75090c5cefbb20d5caa29a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4de8d8d2f8837a0719653b008e8e2a6"><td class="memItemLeft" align="right" valign="top">Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#af4de8d8d2f8837a0719653b008e8e2a6">getPose</a> ()  throws NoSuchElementException </td></tr>
+<tr class="separator:af4de8d8d2f8837a0719653b008e8e2a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -424,6 +426,33 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Returns the holonomic rotation component of the waypoint (or an empty optional if not specified). </p>
+
+</div>
+</div>
+<a id="af4de8d8d2f8837a0719653b008e8e2a6" name="af4de8d8d2f8837a0719653b008e8e2a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4de8d8d2f8837a0719653b008e8e2a6">&#9670;&#160;</a></span>getPose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Pose2d frc.WorBots.util.trajectory.Waypoint.getPose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> throws NoSuchElementException</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Gets the associated pose for this waypoint. Uses holonomic rotation for rotation, and will throw an exception if no holonomic rotation is present</p>
+<dl class="section return"><dt>Returns</dt><dd>The pose </dd></dl>
 
 </div>
 </div>

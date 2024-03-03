@@ -1,7 +1,7 @@
 var searchData=
 [
   ['adddrivedata_0',['addDriveData',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#afa125c10d77fe311708335cc72ae2076',1,'frc::WorBots::util::math::PoseEstimator']]],
-  ['addroutine_1',['addRoutine',['../classfrc_1_1WorBots_1_1AutoSelector.html#ac59827e55d2cc582c7f749eb2189378d',1,'frc::WorBots::AutoSelector']]],
+  ['addroutine_1',['addRoutine',['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#a09c725cd7b62ced6e7333075c8a03452',1,'frc.WorBots.auto.AutoSelector.addRoutine(String name, List&lt; AutoQuestion &gt; questions, Command command)'],['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#a8348bd302ef959d9d8f0281c7f49a875',1,'frc.WorBots.auto.AutoSelector.addRoutine(AutoRoutine routine)']]],
   ['addtoflipped_2',['addToFlipped',['../classfrc_1_1WorBots_1_1util_1_1math_1_1AllianceFlipUtil.html#ab2de52c1a430c76fd01f14648958a720',1,'frc::WorBots::util::math::AllianceFlipUtil']]],
   ['addvisiondata_3',['addVisionData',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ac21dac7724728e2abf75d1708b0b1e06',1,'frc.WorBots.subsystems.drive.Drive.addVisionData()'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#af5563662e6bc5630a209d1f8853bbf79',1,'frc.WorBots.util.math.PoseEstimator.addVisionData()']]],
   ['ampalign_4',['AmpAlign',['../classfrc_1_1WorBots_1_1commands_1_1AmpAlign.html#a85550c11cdf9ae32492424babb5cff63',1,'frc::WorBots::commands::AmpAlign']]],
@@ -10,12 +10,13 @@ var searchData=
   ['applychassisspeeds_7',['applyChassisSpeeds',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#ab4e5373fce52e6537479230f19faa720',1,'frc::WorBots::util::math::GeomUtil']]],
   ['atgoal_8',['atGoal',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#aad4c1deba286cf9c8fa133ba9304f30c',1,'frc::WorBots::commands::DriveToPose']]],
   ['atreference_9',['atReference',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a13aa1bf6030440849b4e50c86a90b05c',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]],
-  ['autocommands_10',['AutoCommands',['../classfrc_1_1WorBots_1_1commands_1_1AutoCommands.html#a19900e71583e8d9376c368670bdc025b',1,'frc::WorBots::commands::AutoCommands']]],
-  ['autonomousexit_11',['autonomousExit',['../classfrc_1_1WorBots_1_1Robot.html#a4f19dd8f8cc0e6043358596bc7c8ae05',1,'frc::WorBots::Robot']]],
-  ['autonomousinit_12',['autonomousInit',['../classfrc_1_1WorBots_1_1Robot.html#ab6ef326c60ffe7140c843e16963fe6ab',1,'frc::WorBots::Robot']]],
-  ['autonomousperiodic_13',['autonomousPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#af32a66b935d22c1cd1b1c7532630f7f9',1,'frc::WorBots::Robot']]],
-  ['autoquestion_14',['AutoQuestion',['../classfrc_1_1WorBots_1_1AutoSelector.html#a08022ea935002a3fadbe89e1fff38c21',1,'frc::WorBots::AutoSelector']]],
-  ['autoselector_15',['AutoSelector',['../classfrc_1_1WorBots_1_1AutoSelector.html#a1d0889254586fab3549795ddf984dd6d',1,'frc::WorBots::AutoSelector']]],
+  ['autonomousexit_10',['autonomousExit',['../classfrc_1_1WorBots_1_1Robot.html#a4f19dd8f8cc0e6043358596bc7c8ae05',1,'frc::WorBots::Robot']]],
+  ['autonomousinit_11',['autonomousInit',['../classfrc_1_1WorBots_1_1Robot.html#ab6ef326c60ffe7140c843e16963fe6ab',1,'frc::WorBots::Robot']]],
+  ['autonomousperiodic_12',['autonomousPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#af32a66b935d22c1cd1b1c7532630f7f9',1,'frc::WorBots::Robot']]],
+  ['autoquestion_13',['AutoQuestion',['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#a480da3c9874b49bd8c8de336d534f2b9',1,'frc::WorBots::auto::AutoSelector']]],
+  ['autos_14',['Autos',['../classfrc_1_1WorBots_1_1auto_1_1Autos.html#a0d4c4cf0bd327600d0f8964c1955091d',1,'frc::WorBots::auto::Autos']]],
+  ['autoselector_15',['AutoSelector',['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#acecf64a4c493303e4b988374158d9f01',1,'frc::WorBots::auto::AutoSelector']]],
   ['autoshoot_16',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#abab99e8aaf600768540056510cc1b160',1,'frc::WorBots::commands::AutoShoot']]],
-  ['autozero_17',['autoZero',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a4be7bd0ff560a1d42083d2fc774cf672',1,'frc::WorBots::subsystems::superstructure::Superstructure']]]
+  ['autoutil_17',['AutoUtil',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae04e8b6c63b87540feac719ff615764e',1,'frc::WorBots::auto::AutoUtil']]],
+  ['autozero_18',['autoZero',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a4be7bd0ff560a1d42083d2fc774cf672',1,'frc::WorBots::subsystems::superstructure::Superstructure']]]
 ];
