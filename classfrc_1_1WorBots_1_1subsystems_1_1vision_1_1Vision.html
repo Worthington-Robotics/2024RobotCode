@@ -92,8 +92,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaf61233b9c7205b9492f9753db5bc4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07e1ae5e4db59a99dc83dc071e5e893e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html#a07e1ae5e4db59a99dc83dc071e5e893e">periodic</a> ()</td></tr>
 <tr class="separator:a07e1ae5e4db59a99dc83dc071e5e893e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade12660da7663277b5010eb6ce95af9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html#ade12660da7663277b5010eb6ce95af9e">setDataInterfaces</a> (Consumer&lt; List&lt; TimestampedVisionUpdate &gt; &gt; visionConsumer, Supplier&lt; Pose2d &gt; poseSupplier)</td></tr>
-<tr class="separator:ade12660da7663277b5010eb6ce95af9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad01eb5bf43482e71d5876b3e9d4a9fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html#aad01eb5bf43482e71d5876b3e9d4a9fe">setDataInterfaces</a> (Consumer&lt; List&lt; TimestampedVisionUpdate &gt; &gt; visionConsumer, Supplier&lt; Pose2d &gt; poseSupplier, Consumer&lt; Pose2d &gt; foo)</td></tr>
+<tr class="separator:aad01eb5bf43482e71d5876b3e9d4a9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd162835667e8ce1e13d61e92fbe6bf8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html#abd162835667e8ce1e13d61e92fbe6bf8">getLastPoseTime</a> ()</td></tr>
+<tr class="separator:abd162835667e8ce1e13d61e92fbe6bf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This subsystem manages all of the camera inputs from our robot, reads them, decides which ones to use, or throw out, logs them, adds the to the pose estimator, and repeats. </p>
@@ -125,6 +127,31 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="abd162835667e8ce1e13d61e92fbe6bf8" name="abd162835667e8ce1e13d61e92fbe6bf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd162835667e8ce1e13d61e92fbe6bf8">&#9670;&#160;</a></span>getLastPoseTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double frc.WorBots.subsystems.vision.Vision.getLastPoseTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a07e1ae5e4db59a99dc83dc071e5e893e" name="a07e1ae5e4db59a99dc83dc071e5e893e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a07e1ae5e4db59a99dc83dc071e5e893e">&#9670;&#160;</a></span>periodic()</h2>
 
@@ -150,8 +177,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ade12660da7663277b5010eb6ce95af9e" name="ade12660da7663277b5010eb6ce95af9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade12660da7663277b5010eb6ce95af9e">&#9670;&#160;</a></span>setDataInterfaces()</h2>
+<a id="aad01eb5bf43482e71d5876b3e9d4a9fe" name="aad01eb5bf43482e71d5876b3e9d4a9fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad01eb5bf43482e71d5876b3e9d4a9fe">&#9670;&#160;</a></span>setDataInterfaces()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,7 +196,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Supplier&lt; Pose2d &gt;&#160;</td>
-          <td class="paramname"><em>poseSupplier</em>&#160;</td>
+          <td class="paramname"><em>poseSupplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Consumer&lt; Pose2d &gt;&#160;</td>
+          <td class="paramname"><em>foo</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
