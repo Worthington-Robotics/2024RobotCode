@@ -75,6 +75,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">frc.WorBots.subsystems.drive.Drive Class Reference</div></div>
 </div><!--header-->
@@ -128,6 +129,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6a837d7faeade6326bb74e856b1da8ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbb91e64490fccd37c1e6775a0a938bf"><td class="memItemLeft" align="right" valign="top">SwerveModulePosition[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#adbb91e64490fccd37c1e6775a0a938bf">getLastSwerveModulePositions</a> ()</td></tr>
 <tr class="separator:adbb91e64490fccd37c1e6775a0a938bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac106355a3d30a8f69d96008088ce370c"><td class="memItemLeft" align="right" valign="top">double[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ac106355a3d30a8f69d96008088ce370c">getModuleDistances</a> ()</td></tr>
+<tr class="separator:ac106355a3d30a8f69d96008088ce370c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0568920d97a2bfbd3ae1ec61a764e89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89">runVelocity</a> (ChassisSpeeds speeds)</td></tr>
 <tr class="separator:ad0568920d97a2bfbd3ae1ec61a764e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a1a85ec516c2d359da98b2e6b025c46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a4a1a85ec516c2d359da98b2e6b025c46">stop</a> ()</td></tr>
@@ -146,6 +149,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af3ceaa9afaa890329f5e1abcae25eda5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aa66277fb1d314de13ed8a7355ef370"><td class="memItemLeft" align="right" valign="top">Translation2d[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a8aa66277fb1d314de13ed8a7355ef370">getModuleTranslations</a> ()</td></tr>
 <tr class="separator:a8aa66277fb1d314de13ed8a7355ef370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a4331862183e2d82cc57537a394ab469e"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a4331862183e2d82cc57537a394ab469e">WHEELBASE</a> = Units.inchesToMeters(10)</td></tr>
+<tr class="separator:a4331862183e2d82cc57537a394ab469e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa5563426274de3b09bf1187424ae4263" name="aa5563426274de3b09bf1187424ae4263"></a>
@@ -379,6 +387,33 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p >Returns the maximum linear speed (free speed) that the drive train can physically attain.</p>
 <dl class="section return"><dt>Returns</dt><dd>The value in meters per second. </dd></dl>
+
+</div>
+</div>
+<a id="ac106355a3d30a8f69d96008088ce370c" name="ac106355a3d30a8f69d96008088ce370c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac106355a3d30a8f69d96008088ce370c">&#9670;&#160;</a></span>getModuleDistances()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double[] frc.WorBots.subsystems.drive.Drive.getModuleDistances </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Gets the distance driven of each of the modules in radians</p>
+<dl class="section return"><dt>Returns</dt><dd>The distances </dd></dl>
 
 </div>
 </div>
@@ -851,6 +886,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Resets the pose estimator to the latest pose from vision, in teleop mode</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The pose from the vision </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1003,6 +1045,29 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Stops the drive train in an X pattern, locking it in place. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a4331862183e2d82cc57537a394ab469e" name="a4331862183e2d82cc57537a394ab469e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4331862183e2d82cc57537a394ab469e">&#9670;&#160;</a></span>WHEELBASE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final double frc.WorBots.subsystems.drive.Drive.WHEELBASE = Units.inchesToMeters(10)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
