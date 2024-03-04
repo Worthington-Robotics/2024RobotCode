@@ -33,8 +33,6 @@ import java.util.function.Supplier;
 public class Autos {
   // Subsystems
   private final Drive drive;
-  private final Superstructure superstructure;
-  private final Intake intake;
   private final Shooter shooter;
 
   // Supplier for question responses, from the AutoSelector
@@ -50,8 +48,6 @@ public class Autos {
       Shooter shooter,
       Supplier<List<AutoQuestionResponse>> responses) {
     this.drive = drive;
-    this.superstructure = superstructure;
-    this.intake = intake;
     this.shooter = shooter;
 
     this.responses = responses;
@@ -125,14 +121,16 @@ public class Autos {
 
   private Command threePieceClose(boolean isWallSide) {
     final Pose2d startingPose = util.startingLocations[1];
+    // Shoot the piece we start with
     final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 0.1);
 
+    // Move back, intake, and shoot
     final var intake1 = util.driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
-    final var autoShoot2 = util.moveAndShoot(intake1.pose(), false, true, true, 2.2);
-    final var intake2 =
-        isWallSide
-            ? util.driveAndIntakeWing(autoShoot2.pose(), true, false, 2)
-            : util.driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
+    final var autoShoot2 = util.moveAndShoot(intake1.pose(), false, false, true, 0.5);
+
+    // Intake the third piece, then move to the center and shoot it
+    final int thirdPiecePosition = isWallSide ? 2 : 0;
+    final var intake2 = util.driveAndIntakeWing(autoShoot2.pose(), true, false, thirdPiecePosition);
     final var autoShoot3 =
         util.moveAndShoot(util.wingGamePieceLocations[1], false, true, true, 2.0);
     return createSequence(

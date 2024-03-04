@@ -195,4 +195,15 @@ public class GeneralMath {
     Negative,
     Balanced,
   }
+
+  /**
+   * Calculates the moment of inertia of a flywheel
+   *
+   * @param mass The mass of the flywheel in kilograms
+   * @param radius The radius of the flywheel in meters
+   * @return The moment of inertia in jkgm^2
+   */
+  public static double calculateFlywheelMOI(double mass, double radius) {
+    return 0.5 * mass * Math.pow(radius, 2);
+  }
 }

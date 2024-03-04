@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.WorBots.commands.UtilCommands;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.util.debug.Logger;
@@ -379,12 +380,13 @@ public class Superstructure extends SubsystemBase {
    * @return The command, exits when superstructure is at the desired pose.
    */
   public Command setPose(SuperstructurePose.Preset pose) {
-    return this.runOnce(
-            () -> {
-              this.setModeVoid(SuperstructureState.POSE);
-              this.setpoint = pose;
-            })
-        .andThen(Commands.waitUntil(() -> isAtSetpoint()))
+    return UtilCommands.optimalSequence(
+            this.runOnce(
+                () -> {
+                  this.setModeVoid(SuperstructureState.POSE);
+                  this.setpoint = pose;
+                }),
+            Commands.waitUntil(() -> isAtSetpoint()))
         .finallyDo(
             () -> {
               this.setModeVoid(SuperstructureState.POSE);

@@ -141,16 +141,17 @@ public class FieldConstants {
     public static final double subwooferBackLength = Units.inchesToMeters(77.96);
     public static final Translation2d[] regionCorners =
         new Translation2d[] {
-          new Translation2d(subwooferDepth, speakerY + subwooferSideLength / 2),
-          new Translation2d(subwooferDepth, speakerY - subwooferSideLength / 2),
-          new Translation2d(0, speakerY + subwooferBackLength / 2),
-          new Translation2d(0, speakerY - subwooferBackLength / 2),
+          new Translation2d(subwooferDepth, speakerY + subwooferSideLength / 2.0),
+          new Translation2d(subwooferDepth, speakerY - subwooferSideLength / 2.0),
+          new Translation2d(0, speakerY + subwooferBackLength / 2.0),
+          new Translation2d(0, speakerY - subwooferBackLength / 2.0),
         };
     public static final double subwooferBaseHeight = Units.inchesToMeters(8.375);
 
     public static final double openingHeightLower = Units.inchesToMeters(78);
     public static final double openingHeightHigher = Units.inchesToMeters(82.875);
-    public static final double openingHeightCenter = (openingHeightHigher - openingHeightLower) / 2;
+    public static final double openingHeightCenter =
+        (openingHeightHigher - openingHeightLower) / 2.0;
     public static final double openingWidth = Units.inchesToMeters(41.375);
     // Distance from the wall to the end of the opening. Acts as the base of the
     // right triangle formed by the opening. Game manual is wrong and says 1'16"
@@ -158,11 +159,11 @@ public class FieldConstants {
     public static final Translation3d[] openingCorners =
         new Translation3d[] {
           // Back corners
-          new Translation3d(0, speakerY - openingWidth / 2, openingHeightLower),
-          new Translation3d(0, speakerY + openingWidth / 2, openingHeightLower),
+          new Translation3d(0, speakerY - openingWidth / 2.0, openingHeightLower),
+          new Translation3d(0, speakerY + openingWidth / 2.0, openingHeightLower),
           // Front corners
-          new Translation3d(openingDepth, speakerY - openingWidth / 2, openingHeightHigher),
-          new Translation3d(openingDepth, speakerY + openingWidth / 2, openingHeightHigher),
+          new Translation3d(openingDepth, speakerY - openingWidth / 2.0, openingHeightHigher),
+          new Translation3d(openingDepth, speakerY + openingWidth / 2.0, openingHeightHigher),
         };
   }
 
@@ -174,26 +175,26 @@ public class FieldConstants {
     // Midpoint of both source apriltags
     public static final Translation2d center =
         new Translation2d(
-            (15.079471999999997 + 16.185134) / 2,
-            (fieldWidth - 0.24587199999999998 + fieldWidth - 0.883666) / 2);
+            (15.079471999999997 + 16.185134) / 2.0,
+            (fieldWidth - 0.24587199999999998 + fieldWidth - 0.883666) / 2.0);
   }
 
   public static final class Stage {
     public static final double footWidth = Units.inchesToMeters(24.0);
     public static final double trussToTrussDistance = Units.inchesToMeters(85.9);
-    public static final double trussDistanceAtAngle = Units.feetToMeters((Math.sqrt(3) + 1) / 2);
+    public static final double trussDistanceAtAngle = Units.feetToMeters((Math.sqrt(3) + 1) / 2.0);
     public static final double footToFootDistance = trussToTrussDistance + trussDistanceAtAngle;
     // The altitude of the equilateral triangle formed by the feet
-    private static final double temp = footToFootDistance / 2 * Math.sqrt(3);
+    private static final double temp = footToFootDistance / 2.0 * Math.sqrt(3);
 
     public static final Translation2d foot1Center =
-        new Translation2d(Units.inchesToMeters(121.0) + footWidth / 2, fieldWidth / 2);
+        new Translation2d(Units.inchesToMeters(121.0) + footWidth / 2.0, fieldWidth / 2.0);
     public static final Translation2d foot2Center =
-        foot1Center.plus(new Translation2d(temp, footToFootDistance / 2));
+        foot1Center.plus(new Translation2d(temp, footToFootDistance / 2.0));
     public static final Translation2d foot3Center =
         foot1Center.plus(new Translation2d(temp, footToFootDistance / -2));
 
-    public static final Translation2d center = foot1Center.plus(new Translation2d(temp / 2, 0));
+    public static final Translation2d center = foot1Center.plus(new Translation2d(temp / 2.0, 0));
 
     public static final double verticalClearance = Units.inchesToMeters(27.83);
     public static final double trapOpeningBottomHeight = Units.inchesToMeters(56.5);

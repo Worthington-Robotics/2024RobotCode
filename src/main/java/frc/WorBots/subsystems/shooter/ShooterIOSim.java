@@ -11,19 +11,24 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.WorBots.Constants;
+import frc.WorBots.util.math.GeneralMath;
 
 public class ShooterIOSim implements ShooterIO {
   FlywheelSim topFlywheelSim;
   FlywheelSim bottomFlywheelSim;
   FlywheelSim feederWheel;
 
-  static final double FLYWHEEL_MOMENT_OF_INERTIA =
-      0.5 * Units.lbsToKilograms(0.2485) * Math.pow(Units.inchesToMeters(2.0), 2);
+  private static final double FLYWHEEL_MOI =
+      GeneralMath.calculateFlywheelMOI(Units.lbsToKilograms(0.2485), Units.inchesToMeters(2.0));
+
+  private static final double FEEDER_MOI =
+      GeneralMath.calculateFlywheelMOI(
+          Units.lbsToKilograms(0.08), Units.inchesToMeters(2.25 / 2.0));
 
   public ShooterIOSim() {
-    topFlywheelSim = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, FLYWHEEL_MOMENT_OF_INERTIA);
-    bottomFlywheelSim = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, FLYWHEEL_MOMENT_OF_INERTIA);
-    feederWheel = new FlywheelSim(DCMotor.getCIM(1), 100, 2);
+    topFlywheelSim = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, FLYWHEEL_MOI);
+    bottomFlywheelSim = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, FLYWHEEL_MOI);
+    feederWheel = new FlywheelSim(DCMotor.getKrakenX60(1), 1, FEEDER_MOI);
   }
 
   @Override
@@ -46,6 +51,7 @@ public class ShooterIOSim implements ShooterIO {
     topFlywheelSim.update(Constants.ROBOT_PERIOD);
     bottomFlywheelSim.update(Constants.ROBOT_PERIOD);
     feederWheel.update(Constants.ROBOT_PERIOD);
+
     inputs.feederWheel.isConnected = true;
     inputs.feederWheel.velocityRadsPerSec = feederWheel.getAngularVelocityRadPerSec();
     inputs.isConnected = true;

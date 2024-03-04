@@ -357,7 +357,8 @@ public class AutoUtil {
     }
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
-          Commands.sequence(
+          UtilCommands.namedSequence(
+              "Auto Intake Center Progress",
               prepareHandoff(),
               path(waypoints)
                   .command()
@@ -370,29 +371,36 @@ public class AutoUtil {
     }
   }
 
+  /**
+   * Moves to a position and shoots
+   *
+   * @param targetPose The pose to move to, or the pose where the robot is if you don't want to
+   *     drive
+   * @param intakeFirst Whether to first ensure that a game piece is intook
+   * @param driveFirst Whether to drive to the pose first
+   * @param autoTurn Whether to automatically turn towards the goal at the position of the target
+   *     pose
+   * @param timeout The timeout for the drive command
+   * @return
+   */
   public CommandWithPose moveAndShoot(
-      Pose2d startingPose, boolean intakeFirst, boolean driveFirst, double timeout) {
-    return moveAndShoot(startingPose, intakeFirst, driveFirst, false, timeout);
-  }
-
-  public CommandWithPose moveAndShoot(
-      Pose2d startingPose,
+      Pose2d targetPose,
       boolean intakeFirst,
       boolean driveFirst,
       boolean autoTurn,
       double timeout) {
-    var startingWaypoint = Waypoint.fromHolonomicPose(startingPose);
+    var startingWaypoint = Waypoint.fromHolonomicPose(targetPose);
     List<Waypoint> waypoints = new ArrayList<>();
     waypoints.add(startingWaypoint);
     waypoints.add(
         Waypoint.fromHolonomicPose(
-            new Pose2d(startingPose.getTranslation(), ShooterMath.getGoalTheta(startingPose))));
+            new Pose2d(targetPose.getTranslation(), ShooterMath.getGoalTheta(targetPose))));
     final var intakeCommand =
         intakeFirst
             ? new Handoff(intake, superstructure, shooter).withTimeout(0.25)
             : Commands.none();
 
-    Supplier<Waypoint> rotationWaypoint =
+    final Supplier<Waypoint> rotationWaypoint =
         () -> {
           if (!autoTurn) {
             final var pose = AllianceFlipUtil.apply(new Pose2d(4.0, 6.25, new Rotation2d()));
@@ -400,7 +408,7 @@ public class AutoUtil {
                 new Pose2d(pose.getX(), pose.getY(), ShooterMath.getGoalTheta(pose)));
           } else {
             return Waypoint.fromHolonomicPose(
-                new Pose2d(startingPose.getTranslation(), ShooterMath.getGoalTheta(startingPose)));
+                new Pose2d(targetPose.getTranslation(), ShooterMath.getGoalTheta(targetPose)));
           }
         };
     final var driveToPose =
@@ -417,12 +425,12 @@ public class AutoUtil {
     return new CommandWithPose(
         UtilCommands.namedSequence(
             "Autonomous Shoot Progress",
-            reset(startingPose).command().alongWith(intakeCommand),
+            intakeCommand,
             Commands.runOnce(
                 () -> {
                   superstructure.setModeVoid(SuperstructureState.SHOOTING);
-                  shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(startingPose));
-                  superstructure.setShootingAngleRad(ShooterMath.calculatePivotAngle(startingPose));
+                  shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(targetPose));
+                  superstructure.setShootingAngleRad(ShooterMath.calculatePivotAngle(targetPose));
                 },
                 shooter,
                 superstructure),
@@ -469,10 +477,11 @@ public class AutoUtil {
    */
   public CommandWithPose driveOutToCenter(Pose2d currentPose) {
     ArrayList<Waypoint> waypoints = new ArrayList<>();
+    waypoints.add(Waypoint.fromHolonomicPose(currentPose));
 
     final Rotation2d rotation = AllianceFlipUtil.apply(new Rotation2d());
 
-    double x = FieldConstants.midLineX - 2.5;
+    final double x = FieldConstants.midLineX - 2.5;
     double y = FieldConstants.midLineY / 3;
     // Choose the quicker side to go to based on where the robot is
     if (currentPose.getY() > FieldConstants.midLineY) {
