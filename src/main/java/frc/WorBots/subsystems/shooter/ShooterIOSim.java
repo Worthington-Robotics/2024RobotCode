@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.shooter;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.WorBots.Constants;
 
@@ -16,9 +17,12 @@ public class ShooterIOSim implements ShooterIO {
   FlywheelSim bottomFlywheelSim;
   FlywheelSim feederWheel;
 
+  static final double FLYWHEEL_MOMENT_OF_INERTIA =
+      0.5 * Units.lbsToKilograms(0.2485) * Math.pow(Units.inchesToMeters(2.0), 2);
+
   public ShooterIOSim() {
-    topFlywheelSim = new FlywheelSim(DCMotor.getFalcon500(1), 1.0, 0.5);
-    bottomFlywheelSim = new FlywheelSim(DCMotor.getFalcon500(1), 1.0, 0.5);
+    topFlywheelSim = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, FLYWHEEL_MOMENT_OF_INERTIA);
+    bottomFlywheelSim = new FlywheelSim(DCMotor.getKrakenX60(1), 1.0, FLYWHEEL_MOMENT_OF_INERTIA);
     feederWheel = new FlywheelSim(DCMotor.getCIM(1), 100, 2);
   }
 

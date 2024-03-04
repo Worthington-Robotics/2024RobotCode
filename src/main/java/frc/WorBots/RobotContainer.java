@@ -10,6 +10,7 @@ package frc.WorBots;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.auto.AutoSelector;
@@ -27,6 +28,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.*;
 
 public class RobotContainer {
@@ -98,14 +100,14 @@ public class RobotContainer {
         autos.twoPiece());
 
     selector.addRoutine(
-        "Close 3",
+        "Close Three",
         List.of(
             new AutoQuestion(
                 "Direction?",
                 List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
         autos.threePieceClose());
 
-    selector.addRoutine("Long 4", List.of(), autos.fourPieceLong());
+    selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
 
     selector.addRoutine(
         "Mobility",
@@ -117,8 +119,6 @@ public class RobotContainer {
                     AutoQuestionResponse.CENTER,
                     AutoQuestionResponse.WALL_SIDE))),
         autos.mobility());
-
-    selector.addRoutine("Pit Test", List.of(), autos.pitTest());
 
     selector.addRoutine("Plow", List.of(), autos.plow());
 
@@ -133,16 +133,18 @@ public class RobotContainer {
     if (Constants.ENABLE_DEBUG_ROUTINES) {
       final DebugRoutines routines = new DebugRoutines(drive, superstructure, intake, shooter);
       selector.addRoutine("Characterize Odometry", List.of(), routines.characterizeOdometry());
+      selector.addRoutine("Pit Test", List.of(), routines.pitTest());
     }
 
     vision.setDataInterfaces(drive::addVisionData, drive::getPose, drive::setLastVisionPose);
     Lights.getInstance()
         .setDataInterfaces(
-            () -> drive.getPose(),
-            () -> drive.getFieldRelativeSpeeds(),
-            () -> superstructure.inHandoff(),
-            () -> intake.hasGamePiece(),
-            () -> shooter.hasGamePiece());
+            drive::getPose,
+            drive::getFieldRelativeSpeeds,
+            superstructure::inHandoff,
+            intake::hasGamePiece,
+            shooter::hasGamePiece,
+            superstructure::getElevatorPercentageRaised);
     Lights.getInstance()
         .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     bindControls();
@@ -171,7 +173,13 @@ public class RobotContainer {
             new SuperstructureManual(
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading()));
-    driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
+    // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
+    Pose2d ampPose =
+        new Pose2d(
+            FieldConstants.Amp.x,
+            FieldConstants.fieldWidth - Units.inchesToMeters(10),
+            AllianceFlipUtil.flipRotation(Rotation2d.fromDegrees(90)));
+    driver.a().whileTrue(new DriveToPose(drive, ampPose));
     driver
         .povLeft()
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));

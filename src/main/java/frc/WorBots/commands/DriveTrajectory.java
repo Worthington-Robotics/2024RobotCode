@@ -81,13 +81,13 @@ public class DriveTrajectory extends Command {
     this.drive = drive;
     addRequirements(drive);
     if (Constants.getSim()) {
-      maxVelocityMetersPerSec = Units.inchesToMeters(160.0);
-      maxAccelerationMetersPerSec2 = Units.inchesToMeters(105.0);
+      maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
+      maxAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(150.0);
 
-      xController = new PIDController(2.5, 0, 0.0);
-      yController = new PIDController(2.5, 0, 0.0);
-      thetaController = new PIDController(6.0, 0, 0.0);
+      xController = new PIDController(2.7, 0, 0.0);
+      yController = new PIDController(2.7, 0, 0.0);
+      thetaController = new PIDController(6.5, 0, 0.0);
     } else {
       maxVelocityMetersPerSec = Units.inchesToMeters(160.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(105.0);
@@ -111,7 +111,7 @@ public class DriveTrajectory extends Command {
       double startVelocity,
       boolean alertOnFail) {
     // Set up trajectory configuration
-    TrajectoryConfig config =
+    final TrajectoryConfig config =
         new TrajectoryConfig(maxVelocityMetersPerSec, maxAccelerationMetersPerSec2)
             .setKinematics(new SwerveDriveKinematics(drive.getModuleTranslations()))
             .setStartVelocity(startVelocity)
@@ -134,7 +134,7 @@ public class DriveTrajectory extends Command {
   @Override
   public void initialize() {
     // Generate trajectory if supplied
-    if (waypointsSupplier != null || constraintsSupplier != null) {
+    if (waypointsSupplier != null && constraintsSupplier != null) {
       generate(
           waypointsSupplier.get(), constraintsSupplier.get(), startVelocitySupplier.get(), false);
     }
@@ -162,8 +162,8 @@ public class DriveTrajectory extends Command {
     }
 
     // Get setpoint
-    Trajectory.State driveState = customGenerator.getDriveTrajectory().sample(timer.get());
-    RotationSequence.State holonomicRotationState =
+    final Trajectory.State driveState = customGenerator.getDriveTrajectory().sample(timer.get());
+    final RotationSequence.State holonomicRotationState =
         customGenerator.getHolonomicRotationSequence().sample(timer.get());
 
     // Log Setpoint
@@ -175,7 +175,7 @@ public class DriveTrajectory extends Command {
     SmartDashboard.putNumberArray("Traj Errors", customHolonomicDriveController.getErrors());
 
     // Calculate velocity
-    ChassisSpeeds nextDriveState =
+    final ChassisSpeeds nextDriveState =
         customHolonomicDriveController.calculate(
             drive.getPose(), driveState, holonomicRotationState);
     drive.runVelocity(nextDriveState);

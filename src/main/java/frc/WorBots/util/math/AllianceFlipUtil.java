@@ -122,6 +122,18 @@ public class AllianceFlipUtil {
     return new Pose2d(flipped.getX() + unflippedX, flipped.getY(), flipped.getRotation());
   }
 
+  /**
+   * Flips a Rotation2d by 180 degrees on the opposite alliance. Will NOT give the same results as
+   * AllianceFlipUtil.apply(Rotation2d)
+   */
+  public static Rotation2d flipRotation(Rotation2d rotation) {
+    if (shouldFlip()) {
+      return rotation.plus(Rotation2d.fromDegrees(180));
+    } else {
+      return rotation;
+    }
+  }
+
   /** Gets whether alliance-relative x-values should be flipped, for the red side */
   public static boolean shouldFlip() {
     final var alliance = DriverStation.getAlliance();

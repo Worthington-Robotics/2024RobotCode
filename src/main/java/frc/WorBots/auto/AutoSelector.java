@@ -236,7 +236,7 @@ public class AutoSelector extends SubsystemBase {
    * us errors
    */
   private static Command createRoutineCommand(Command command) {
-    return Commands.deadline(command);
+    return command;
   }
 
   /** A named auto routine */

@@ -33,6 +33,7 @@ import frc.WorBots.util.trajectory.Waypoint;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 /** Utility methods, commands, poses, and values for autos to use */
@@ -130,8 +131,22 @@ public class AutoUtil {
           new Pose2d(new Translation2d(2.88, 5.54), new Rotation2d()),
           new Pose2d(new Translation2d(2.50, 3.49), new Rotation2d())
         };
-    betweenZeroAndOne = AllianceFlipUtil.apply(new Pose2d(2.88, 6.28, new Rotation2d()));
-    betweenOneandTwo = AllianceFlipUtil.apply(new Pose2d(2.88, 4.8, new Rotation2d()));
+    betweenZeroAndOne =
+        AllianceFlipUtil.apply(
+            new Pose2d(
+                FieldConstants.GamePieces.wingX,
+                (FieldConstants.GamePieces.wingPieces[0].getY()
+                        + FieldConstants.GamePieces.wingPieces[1].getY())
+                    / 2,
+                new Rotation2d()));
+    betweenOneandTwo =
+        AllianceFlipUtil.apply(
+            new Pose2d(
+                FieldConstants.GamePieces.wingX,
+                (FieldConstants.GamePieces.wingPieces[1].getY()
+                        + FieldConstants.GamePieces.wingPieces[2].getY())
+                    / 2,
+                new Rotation2d()));
     farShootingPose =
         AllianceFlipUtil.apply(
             new Pose2d(
@@ -194,6 +209,33 @@ public class AutoUtil {
   public CommandWithPose driveTo(Pose2d pose) {
     final var driveToPose = new DriveToPose(drive, pose);
     return new CommandWithPose(driveToPose.until(driveToPose::atGoal), pose);
+  }
+
+  /**
+   * Returns a command that prepares the robot for handoff
+   *
+   * @return The command
+   */
+  public Command prepareHandoff() {
+    return superstructure.setPose(Preset.HANDOFF).withTimeout(0.3);
+  }
+
+  /**
+   * Returns a command that runs handoff and intake while the robot is near a pose, then ends when
+   * the robot is far enough away
+   *
+   * @param pose The pose to check for distance to
+   * @param distance The distance in meters to start and stop intaking at
+   * @return The command
+   */
+  public Command intakeWhenNear(Pose2d pose, double distance) {
+    final BooleanSupplier isNearSupplier =
+        () -> (drive.getPose().getTranslation().getDistance(pose.getTranslation()) < distance);
+    final var handoff = new Handoff(intake, superstructure, shooter);
+    return UtilCommands.namedSequence(
+        "Intake When Near Progress",
+        Commands.waitUntil(isNearSupplier),
+        handoff.onlyWhile(isNearSupplier));
   }
 
   /**
@@ -269,14 +311,13 @@ public class AutoUtil {
     } else {
       waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     }
-    var handoff = new Handoff(intake, superstructure, shooter).withTimeout(2.5);
+    final var handoff = new Handoff(intake, superstructure, shooter).withTimeout(2.5);
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           UtilCommands.namedSequence(
               "Auto Intake Wing Progress",
               reset(startingPosition).command(),
-              superstructure.setMode(SuperstructureState.POSE),
-              superstructure.setPose(Preset.HANDOFF).withTimeout(0.3),
+              prepareHandoff(),
               path(waypoints)
                   .command()
                   .alongWith(
@@ -317,8 +358,7 @@ public class AutoUtil {
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           Commands.sequence(
-              superstructure.setMode(SuperstructureState.POSE),
-              superstructure.setPose(Preset.HANDOFF).withTimeout(0.2),
+              prepareHandoff(),
               path(waypoints)
                   .command()
                   .alongWith(
@@ -347,7 +387,7 @@ public class AutoUtil {
     waypoints.add(
         Waypoint.fromHolonomicPose(
             new Pose2d(startingPose.getTranslation(), ShooterMath.getGoalTheta(startingPose))));
-    var intakeCommand =
+    final var intakeCommand =
         intakeFirst
             ? new Handoff(intake, superstructure, shooter).withTimeout(0.25)
             : Commands.none();
@@ -357,48 +397,48 @@ public class AutoUtil {
           if (!autoTurn) {
             final var pose = AllianceFlipUtil.apply(new Pose2d(4.0, 6.25, new Rotation2d()));
             return Waypoint.fromHolonomicPose(
-                new Pose2d(4.0, 6.25, ShooterMath.getGoalTheta(pose)));
+                new Pose2d(pose.getX(), pose.getY(), ShooterMath.getGoalTheta(pose)));
           } else {
             return Waypoint.fromHolonomicPose(
                 new Pose2d(startingPose.getTranslation(), ShooterMath.getGoalTheta(startingPose)));
           }
         };
-    var driveToPose =
-        new DriveToPose(
-            drive,
-            () ->
-                new Pose2d(
-                    rotationWaypoint.get().getTranslation(),
-                    rotationWaypoint.get().getHolonomicRotation().get()));
+    final var driveToPose =
+        driveFirst
+            ? new DriveToPose(
+                    drive,
+                    () ->
+                        new Pose2d(
+                            rotationWaypoint.get().getTranslation(),
+                            rotationWaypoint.get().getHolonomicRotation().get()))
+                .withTimeout(timeout)
+            : Commands.none();
 
     return new CommandWithPose(
         UtilCommands.namedSequence(
             "Autonomous Shoot Progress",
-            reset(startingPose).command(),
-            intakeFirst ? intakeCommand : Commands.none(),
-            superstructure.setMode(SuperstructureState.SHOOTING),
-            Commands.deadline(
-                    driveFirst ? driveToPose.withTimeout(timeout) : Commands.none(),
-                    Commands.run(
-                        () -> {
-                          shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(startingPose));
-                        },
-                        shooter),
-                    Commands.run(
-                        () ->
-                            superstructure.setShootingAngleRad(
-                                ShooterMath.calculatePivotAngle(drive.getPose()))))
-                .andThen(
-                    Commands.waitUntil(
-                        () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint()))
-                .andThen(shooter.setRawFeederVoltsCommand(-2))
-                .andThen(Commands.waitSeconds(0.15).withTimeout(0.15))
-                .andThen(shooter.setRawFeederVoltsCommand(0.0))
-                .andThen(shooter.setSpeed(0.0))
-                .andThen(superstructure.setMode(SuperstructureState.POSE))),
-        new Pose2d(
-            waypoints.get(waypoints.size() - 1).getTranslation(),
-            waypoints.get(waypoints.size() - 1).getHolonomicRotation().get()));
+            reset(startingPose).command().alongWith(intakeCommand),
+            Commands.runOnce(
+                () -> {
+                  superstructure.setModeVoid(SuperstructureState.SHOOTING);
+                  shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(startingPose));
+                  superstructure.setShootingAngleRad(ShooterMath.calculatePivotAngle(startingPose));
+                },
+                shooter,
+                superstructure),
+            driveToPose.alongWith(
+                Commands.waitUntil(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint())),
+            shooter.setRawFeederVoltsCommand(-2),
+            Commands.waitSeconds(0.2).withTimeout(0.2),
+            Commands.runOnce(
+                () -> {
+                  shooter.setRawFeederVolts(0.0);
+                  shooter.spinToSpeedVoid(0.0);
+                  superstructure.setModeVoid(SuperstructureState.POSE);
+                },
+                shooter,
+                superstructure)),
+        waypoints.get(waypoints.size() - 1).getPose());
   }
 
   public Command prepareShooting(Pose2d targetPose) {
@@ -406,21 +446,18 @@ public class AutoUtil {
     final double rpm = shot.rpm();
     final double angle = shot.pivotAngle();
 
-    return superstructure
-        .setPose(Preset.HANDOFF)
-        .withTimeout(0.8)
-        .andThen(
-            new Handoff(intake, superstructure, shooter)
-                .withTimeout(0.3)
-                .andThen(
-                    Commands.parallel(
-                        superstructure.setMode(SuperstructureState.SHOOTING),
-                        Commands.run(
-                            () -> {
-                              shooter.spinToSpeedVoid(rpm);
-                            },
-                            shooter),
-                        Commands.run(() -> superstructure.setShootingAngleRad(angle)))));
+    return UtilCommands.namedSequence(
+        "Prepare Shooting Progress",
+        prepareHandoff().withTimeout(0.8),
+        new Handoff(intake, superstructure, shooter).withTimeout(0.3),
+        Commands.parallel(
+            superstructure.setMode(SuperstructureState.SHOOTING),
+            Commands.runOnce(
+                () -> {
+                  shooter.spinToSpeedVoid(rpm);
+                },
+                shooter),
+            Commands.runOnce(() -> superstructure.setShootingAngleRad(angle))));
   }
 
   /**
@@ -469,6 +506,12 @@ public class AutoUtil {
       y = FieldConstants.fieldWidth - y;
     }
     return new Pose2d(x, y, AllianceFlipUtil.apply(desiredRotation));
+  }
+
+  public Pose2d getAutoShootPose(Pose2d targetPose) {
+    final Rotation2d robotAngle =
+        AllianceFlipUtil.flipRotation(ShooterMath.getGoalTheta(targetPose));
+    return targetPose.plus(new Transform2d(0.0, 0.0, robotAngle));
   }
 
   /** A command with a pose that it will end at */

@@ -18,14 +18,12 @@ import frc.WorBots.FieldConstants;
 import frc.WorBots.auto.AutoSelector.AutoQuestionResponse;
 import frc.WorBots.auto.AutoUtil.CommandWithPose;
 import frc.WorBots.commands.DriveToPose;
-import frc.WorBots.commands.PitTest;
 import frc.WorBots.commands.UtilCommands;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.intake.Intake;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.util.math.AllianceFlipUtil;
-import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.trajectory.Waypoint;
 import java.util.List;
 import java.util.Map;
@@ -152,35 +150,55 @@ public class Autos {
 
   public Command fourPieceLong() {
     final Pose2d startingPose = util.startingLocations[1];
-    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 0.3);
-    final var driveAndIntakeCenter1 = util.driveAndIntakeCenter(util.startingLocations[1], 0);
-    final var robotAngle1 = ShooterMath.getGoalTheta(util.farShootingPose);
-    final var shootPose1 = util.farShootingPose.plus(new Transform2d(0.0, 0.0, robotAngle1));
-    final var move1 = util.driveTo(shootPose1);
-    final var autoShoot2 = util.moveAndShoot(shootPose1, false, false, false, 1.2);
-    final var driveAndIntakeCenter2 = util.driveAndIntakeCenter(autoShoot2.pose(), 1);
-    final Pose2d shootPose2 =
-        AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, -Units.inchesToMeters(30));
-    final var robotAngle2 = ShooterMath.getGoalTheta(shootPose2);
-    // final var wingLine = util.getWingLinePose(driveAndIntakeCenter2.pose(),
-    // Rotation2d.fromDegrees(180));
-    final var move2 =
+    // Starting shot
+    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, false, 0.3);
+
+    // Intake center piece, then shoot from far pose
+    final var path1 =
         util.path(
-            Waypoint.fromHolonomicPose(shootPose2),
-            Waypoint.fromHolonomicPose(shootPose2.plus(new Transform2d(0.0, 0.0, robotAngle2))));
-    final var autoShoot3 = util.moveAndShoot(shootPose2, false, true, true, 1.2);
-    final var driveAndIntakeWing1 = util.driveAndIntakeWing(autoShoot3.pose(), false, true, 0);
-    final var autoShoot4 = util.moveAndShoot(driveAndIntakeWing1.pose(), false, true, true, 1.5);
+            Waypoint.fromHolonomicPose(autoShoot1.pose()),
+            Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
+    final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, false, 1.2);
+
+    // Intake center piece, then drive up to speaker and shoot
+    final var wingLine = util.getWingLinePose(util.centerGamePieceLocations[1], new Rotation2d());
+    final var path2 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot2.pose()),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
+            Waypoint.fromHolonomicPose(wingLine),
+            Waypoint.fromHolonomicPose(
+                util.getAutoShootPose(
+                    AllianceFlipUtil.addToFlipped(
+                        util.betweenZeroAndOne, -Units.inchesToMeters(30)))));
+    final var autoShoot3 = util.moveAndShoot(path2.pose(), false, false, false, 1.2);
+
+    // Move back and intake wing piece, then shoot it
+    final var path3 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot3.pose()),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.wingGamePieceLocations[0])));
+    final var autoShoot4 = util.moveAndShoot(path3.pose(), false, false, false, 3.5);
+
     return createSequence(
         util.reset(startingPose).command(),
         autoShoot1.command(),
-        driveAndIntakeCenter1.command(),
-        Commands.deadline(move1.command(), util.prepareShooting(autoShoot2.pose())),
+        Commands.deadline(
+            path1.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.0))
+                .andThen(util.prepareShooting(path1.pose()))),
         autoShoot2.command(),
-        driveAndIntakeCenter2.command(),
-        Commands.deadline(move2.command(), util.prepareShooting(autoShoot3.pose())),
+        Commands.deadline(
+            path2.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.0))
+                .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
-        driveAndIntakeWing1.command(),
+        Commands.deadline(
+            path3.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.3))),
         autoShoot4.command());
   }
 
@@ -225,10 +243,6 @@ public class Autos {
         .raceWith(createSequence(util.reset(startingPose).command(), intake, plow));
   }
 
-  public Command pitTest() {
-    return new PitTest(drive, superstructure, intake, shooter);
-  }
-
   /**
    * Create the named sequence of commands for the auto
    *
@@ -236,7 +250,7 @@ public class Autos {
    * @return The full auto sequence command
    */
   private Command createSequence(Command... commands) {
-    return UtilCommands.namedSequence("Auto Progress", commands);
+    return UtilCommands.timer("Auto Time", UtilCommands.namedSequence("Auto Progress", commands));
   }
 
   private interface AutoWithStartingLocation {

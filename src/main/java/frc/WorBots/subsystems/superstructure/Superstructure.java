@@ -12,7 +12,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
@@ -286,8 +285,6 @@ public class Superstructure extends SubsystemBase {
    * @param volts The pivot voltage
    */
   private void setPivotVoltage(double volts) {
-    SmartDashboard.putNumber("Superstructure/Raw Pivot Setpoint", volts);
-
     // Do soft limiting, with the dynamic limit in mind
     final double bottomLimit = calculatePivotBottomLimit();
     volts =
@@ -450,6 +447,10 @@ public class Superstructure extends SubsystemBase {
 
   public Preset getCurrentPose() {
     return this.setpoint;
+  }
+
+  public double getElevatorPercentageRaised() {
+    return inputs.elevatorPercentageRaised;
   }
 
   /**

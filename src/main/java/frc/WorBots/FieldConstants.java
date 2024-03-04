@@ -118,6 +118,7 @@ public class FieldConstants {
     public static final double openingEndX = openingStartX + Units.feetToMeters(2);
     public static final Translation3d test =
         new Translation3d(openingStartX, fieldWidth, openingBottomZ);
+    public static final double x = (openingStartX + openingEndX) / 2.0;
 
     public static final double bottomY = fieldWidth;
     public static final double topY = bottomY - Units.inchesToMeters(18);

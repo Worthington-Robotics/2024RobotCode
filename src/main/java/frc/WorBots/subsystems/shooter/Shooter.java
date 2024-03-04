@@ -92,10 +92,10 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       topFlywheelController.pid.setTolerance(120);
       bottomFlywheelController.pid.setTolerance(120);
     } else { // Sim
-      topFlywheelController.setGains(1, 0, 0);
-      bottomFlywheelController.setGains(1, 0, 0);
-      topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0);
-      bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+      topFlywheelController.setGains(0.00050, 0, 0);
+      bottomFlywheelController.setGains(0.00050, 0, 0);
+      topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0.002);
+      bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.002);
       feederWheelController.setGains(1.0, 0.0, 0.0);
       topFlywheelController.pid.setTolerance(120);
       bottomFlywheelController.pid.setTolerance(120);

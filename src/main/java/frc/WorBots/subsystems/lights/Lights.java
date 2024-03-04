@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.lights;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.IntegerPublisher;
@@ -51,6 +52,7 @@ public class Lights extends SubsystemBase {
   private Supplier<Boolean> inHandoff = () -> false;
   private Supplier<Boolean> hasGamePieceBottom = () -> false;
   private Supplier<Boolean> hasGamePieceTop = () -> false;
+  private Supplier<Double> elevatorPercentageRaised = () -> 0.0;
 
   public enum LightsMode {
     Rainbow,
@@ -62,7 +64,8 @@ public class Lights extends SubsystemBase {
     Shooting,
     Delivery,
     RedBlue,
-    Indicator
+    Indicator,
+    Elevator
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -119,6 +122,9 @@ public class Lights extends SubsystemBase {
         break;
       case Indicator:
         solid(1.0, Color.kRed);
+        break;
+      case Elevator:
+        elevator();
         break;
     }
 
@@ -309,10 +315,14 @@ public class Lights extends SubsystemBase {
     }
   }
 
+  private final Debouncer hasGamePieceBottomDebouncer = new Debouncer(0.35);
+  private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.35);
+
   private void delivery() {
     final boolean inHandoff = this.inHandoff.get();
-    final boolean hasGamePieceBottom = this.hasGamePieceBottom.get();
-    final boolean hasGamePieceTop = this.hasGamePieceTop.get();
+    final boolean hasGamePieceBottom =
+        hasGamePieceBottomDebouncer.calculate(this.hasGamePieceBottom.get());
+    final boolean hasGamePieceTop = hasGamePieceTopDebouncer.calculate(this.hasGamePieceTop.get());
     final Color pieceColor = inHandoff ? Color.kOrangeRed : Color.kRed;
     if (hasGamePieceBottom && !hasGamePieceTop) {
       final double time = TimeCache.getInstance().get();
@@ -330,12 +340,26 @@ public class Lights extends SubsystemBase {
     }
   }
 
+  private void elevator() {
+    final double percent = elevatorPercentageRaised.get();
+    solid(1.0, Color.kBlack);
+    solid(percent, Color.kOrangeRed);
+  }
+
+  /**
+   * Sets the mode of the lights
+   *
+   * @param mode The mode to set
+   */
   public void setMode(LightsMode mode) {
-    if (mode.equals(LightsMode.Shooting)) {
-      timer.restart();
-      hasStartedTimer = true;
-    } else {
-      hasStartedTimer = false;
+    // Reset persistent stuff for some modes if this new mode is different
+    if (!mode.equals(this.mode)) {
+      if (mode.equals(LightsMode.Shooting)) {
+        timer.restart();
+        hasStartedTimer = true;
+      } else {
+        hasStartedTimer = false;
+      }
     }
     this.mode = mode;
   }
@@ -345,11 +369,13 @@ public class Lights extends SubsystemBase {
       Supplier<ChassisSpeeds> driveSpeedsSupplier,
       Supplier<Boolean> inHandoff,
       Supplier<Boolean> hasGamePieceBottom,
-      Supplier<Boolean> hasGamePieceTop) {
+      Supplier<Boolean> hasGamePieceTop,
+      Supplier<Double> elevatorPercentageRaised) {
     this.drivePoseSupplier = drivePoseSupplier;
     this.driveSpeedsSupplier = driveSpeedsSupplier;
     this.inHandoff = inHandoff;
     this.hasGamePieceBottom = hasGamePieceBottom;
     this.hasGamePieceTop = hasGamePieceTop;
+    this.elevatorPercentageRaised = elevatorPercentageRaised;
   }
 }

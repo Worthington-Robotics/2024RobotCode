@@ -12,10 +12,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.WorBots.commands.Handoff;
+import frc.WorBots.commands.UtilCommands;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.intake.Intake;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
+import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 
 public class DebugRoutines {
   // Subsystems
@@ -75,4 +78,34 @@ public class DebugRoutines {
 
   private static Rotation2d odometryStartingRotation = new Rotation2d();
   private static double[] odometryStartingPositions = new double[4];
+
+  /** Runs a tests of all systems in the pit */
+  public Command pitTest() {
+    return UtilCommands.namedSequence(
+        "Pit Test Progress",
+        testDrive(),
+        UtilCommands.waitForDriverstationButton(),
+        testSuperstructure(),
+        UtilCommands.waitForDriverstationButton(),
+        testIntake());
+  }
+
+  private Command testDrive() {
+    return Commands.sequence(
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0))).withTimeout(2.0),
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0.0))).withTimeout(2.0));
+  }
+
+  private Command testSuperstructure() {
+    return Commands.sequence(
+        superstructure.setPose(Preset.HANDOFF),
+        UtilCommands.waitForDriverstationButton(),
+        superstructure.setPose(Preset.AMP),
+        UtilCommands.waitForDriverstationButton(),
+        superstructure.setPose(Preset.HANDOFF));
+  }
+
+  private Command testIntake() {
+    return Commands.sequence(new Handoff(intake, superstructure, shooter));
+  }
 }

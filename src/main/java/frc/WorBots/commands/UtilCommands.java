@@ -7,6 +7,7 @@
 
 package frc.WorBots.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -50,5 +51,57 @@ public class UtilCommands {
   public static Command waitForDriverstationButton() {
     return Commands.waitUntil(() -> SmartDashboard.getBoolean("DB/Button 1", false))
         .andThen(() -> SmartDashboard.putBoolean("DB/Button 1", false));
+  }
+
+  /**
+   * Returns a command that times how long the command inside it takes
+   *
+   * @param name The key to put the time in SmartDashboard
+   * @param command The command to time
+   * @return The wrapped command
+   */
+  public static Command timer(String name, Command command) {
+    return new TimedCommand(command, name);
+  }
+
+  public static class TimedCommand extends Command {
+    private Command command;
+    private final Timer timer = new Timer();
+    private final String name;
+
+    public TimedCommand(Command command, String name) {
+      this.command = command;
+      this.name = name;
+    }
+
+    @Override
+    public void initialize() {
+      timer.restart();
+      if (command != null) {
+        command.schedule();
+      }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+      if (interrupted) {
+        command.cancel();
+      }
+      command = null;
+      SmartDashboard.putNumber(name, timer.get());
+    }
+
+    @Override
+    public void execute() {}
+
+    @Override
+    public boolean isFinished() {
+      return command == null || !command.isScheduled();
+    }
+
+    @Override
+    public boolean runsWhenDisabled() {
+      return command.runsWhenDisabled();
+    }
   }
 }
