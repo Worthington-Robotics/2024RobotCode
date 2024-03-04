@@ -55,10 +55,10 @@ public class AutoShoot extends SequentialCommandGroup {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(Units.degreesToRadians(THETA_TOLERANCE));
 
-    Supplier<ShotData> supplier =
+    final Supplier<ShotData> supplier =
         () -> ShooterMath.calculateShotData(drive.getPose(), drive.getFieldRelativeSpeeds());
-    Cache<ShotData> shotSupplier = new Cache<ShotData>(supplier);
-    Supplier<ChassisSpeeds> speedsSupplier =
+    final Cache<ShotData> shotSupplier = new Cache<ShotData>(supplier);
+    final Supplier<ChassisSpeeds> speedsSupplier =
         () -> {
           SmartDashboard.putNumber(
               "Autoshoot Theta Controller Error", thetaController.getPositionError());

@@ -35,8 +35,8 @@ public class DebugRoutines {
   }
 
   /**
-   * A routine that turns the robot in place for a bit to calculate the turn to meters values (wheel
-   * radii) of the wheels
+   * A very nice routine from 6328 that turns the robot in place for a bit to calculate the turn to
+   * meters values (radii) of the wheels
    */
   public Command characterizeOdometry() {
     final double turnSpeed = Units.degreesToRadians(20);
@@ -93,7 +93,8 @@ public class DebugRoutines {
   private Command testDrive() {
     return Commands.sequence(
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0))).withTimeout(2.0),
-        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0.0))).withTimeout(2.0));
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0.0))).withTimeout(2.0),
+        Commands.runOnce(() -> drive.stop()));
   }
 
   private Command testSuperstructure() {

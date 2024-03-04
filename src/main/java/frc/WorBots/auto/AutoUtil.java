@@ -338,6 +338,8 @@ public class AutoUtil {
   /**
    * Drives to the specified game piece in the center of the field and intakes it.
    *
+   * @param startingPosition The position where the robot starts this command
+   * @param centerPosition The game piece index to intake
    * @return The command.
    */
   public CommandWithPose driveAndIntakeCenter(Pose2d startingPosition, int centerPosition) {
@@ -449,6 +451,12 @@ public class AutoUtil {
         waypoints.get(waypoints.size() - 1).getPose());
   }
 
+  /**
+   * Starts preparing the pivot and flywheels for a shot
+   *
+   * @param targetPose The pose where the shot will be taken from
+   * @return The command to run
+   */
   public Command prepareShooting(Pose2d targetPose) {
     final var shot = ShooterMath.calculateShotData(targetPose, new ChassisSpeeds());
     final double rpm = shot.rpm();

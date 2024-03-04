@@ -402,7 +402,7 @@ public class Superstructure extends SubsystemBase {
   public Command setMode(SuperstructureState state) {
     return this.runOnce(
         () -> {
-          this.state = state;
+          setModeVoid(state);
         });
   }
 
@@ -412,6 +412,12 @@ public class Superstructure extends SubsystemBase {
    * @param state The state to be set.
    */
   public void setModeVoid(SuperstructureState state) {
+    if (!state.equals(this.state)) {
+      if (state.equals(SuperstructureState.MANUAL)) {
+        setClimbingVolts(0.0);
+        setManualPivotVolts(0.0);
+      }
+    }
     this.state = state;
   }
 

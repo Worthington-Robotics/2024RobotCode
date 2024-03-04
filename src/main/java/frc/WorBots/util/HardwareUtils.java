@@ -11,10 +11,9 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.BooleanPublisher;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.WorBots.util.debug.DebugValue;
+import frc.WorBots.util.debug.DebugValue.DebugBool;
+import frc.WorBots.util.debug.DebugValue.DebugDouble;
 import frc.WorBots.util.math.GeneralMath;
 
 /** Utility functions for working with hardware devices */
@@ -23,7 +22,7 @@ public class HardwareUtils {
   /** The maximum temperature in celsius that we want to run our motors at */
   public static final double maxMotorTemperature = 80.0;
 
-  public static final double idealBatteryVoltage = 11.9;
+  public static final double idealBatteryVoltage = 12.3;
 
   /**
    * Checks if a time of flight device is connected
@@ -65,12 +64,11 @@ public class HardwareUtils {
 
   /** Base inputs for a TalonFX */
   public static class TalonInputs {
-    protected final NetworkTable table;
-    private final DoublePublisher voltsPub;
-    private final DoublePublisher supplyVoltsPub;
+    private final DebugDouble voltsPub;
+    private final DebugDouble supplyVoltsPub;
     // private final DoublePublisher currentPub;
     // private final DoublePublisher tempPub;
-    private final BooleanPublisher connectedPub;
+    private final DebugBool connectedPub;
 
     public double appliedPowerVolts = 0.0;
     public double supplyVoltage = 0.0;
@@ -79,12 +77,11 @@ public class HardwareUtils {
     public boolean isConnected = false;
 
     public TalonInputs(String table, String subtable) {
-      this.table = NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable);
-      voltsPub = this.table.getDoubleTopic("Applied Voltage").publish();
-      supplyVoltsPub = this.table.getDoubleTopic("Supply Voltage").publish();
+      voltsPub = DebugValue.compDouble(table, subtable + "/Applied Voltage");
+      supplyVoltsPub = DebugValue.compDouble(table, subtable + "/Supply Voltage");
+      connectedPub = DebugValue.compBool(table, subtable + "/Connected");
       // currentPub = this.table.getDoubleTopic("Current Draw").publish();
       // tempPub = this.table.getDoubleTopic("Temp Celsius").publish();
-      connectedPub = this.table.getBooleanTopic("Connected").publish();
     }
 
     public void publish() {
@@ -98,16 +95,16 @@ public class HardwareUtils {
 
   /** Inputs for a TalonFX with position and velocity readings */
   public static class TalonInputsPositional extends TalonInputs {
-    private final DoublePublisher posPub;
-    private final DoublePublisher velPub;
+    private final DebugDouble posPub;
+    private final DebugDouble velPub;
 
     public double positionRads = 0.0;
     public double velocityRadsPerSec = 0.0;
 
     public TalonInputsPositional(String table, String subtable) {
       super(table, subtable);
-      posPub = this.table.getDoubleTopic("Position").publish();
-      velPub = this.table.getDoubleTopic("Velocity").publish();
+      posPub = DebugValue.compDouble(table, subtable + "/Position");
+      velPub = DebugValue.compDouble(table, subtable + "/Velocity");
     }
 
     public void publish() {

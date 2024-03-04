@@ -7,8 +7,10 @@
 
 package frc.WorBots.util.debug;
 
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,7 +40,35 @@ public class DebugValue {
     }
   }
 
+  public static class DebugBool {
+    private BooleanPublisher publisher = null;
+    private BooleanLogEntry logEntry = null;
+
+    public DebugBool(String table, String key, boolean useNT) {
+      if (useNT) {
+        publisher =
+            NetworkTableInstance.getDefault().getTable(table).getBooleanTopic(key).publish();
+      } else {
+        logEntry = new BooleanLogEntry(DataLogManager.getLog(), "/" + table + "/" + key);
+      }
+    }
+
+    public void set(boolean value) {
+      if (publisher == null) {
+        if (logEntry != null) {
+          logEntry.append(value, (long) (Timer.getFPGATimestamp() * 1000000.0));
+        }
+      } else {
+        publisher.set(value);
+      }
+    }
+  }
+
   public static DebugDouble compDouble(String table, String key) {
     return new DebugDouble(table, key, !DriverStation.isFMSAttached());
+  }
+
+  public static DebugBool compBool(String table, String key) {
+    return new DebugBool(table, key, !DriverStation.isFMSAttached());
   }
 }

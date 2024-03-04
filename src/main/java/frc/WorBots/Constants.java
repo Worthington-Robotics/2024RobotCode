@@ -35,8 +35,8 @@ public class Constants {
   public static final double ROBOT_PERIOD = 0.02;
 
   /** The width of the robot in meters */
-  public static final double ROBOT_WIDTH = Units.inchesToMeters(26);
+  public static final double ROBOT_WIDTH = Units.inchesToMeters(28);
 
   /** The length of the robot in meters */
-  public static final double ROBOT_LENGTH = Units.inchesToMeters(26);
+  public static final double ROBOT_LENGTH = Units.inchesToMeters(28);
 }

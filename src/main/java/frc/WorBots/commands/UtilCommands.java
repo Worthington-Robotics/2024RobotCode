@@ -25,10 +25,9 @@ public class UtilCommands {
    * @return The command to run
    */
   public static Command named(Command command, String key) {
-    return command.raceWith(
-        Commands.startEnd(
-            () -> SmartDashboard.putBoolean(key, true),
-            () -> SmartDashboard.putBoolean(key, false)));
+    return Commands.startEnd(
+            () -> SmartDashboard.putBoolean(key, true), () -> SmartDashboard.putBoolean(key, false))
+        .raceWith(command);
   }
 
   /**
@@ -124,8 +123,7 @@ public class UtilCommands {
    * A command composition that runs a list of commands in sequence, with optimal execution. Unlike
    * the normal SequentialCommandGroup, when this command runs a subcommand that is already
    * finished, it will immediately start the next one in the sequence without the usual
-   * CommandScheduler overhead. Note that this may mean commands will not have their execute()
-   * method called, which could be undesireable
+   * CommandScheduler overhead.
    */
   public static class OptimalSequentialCommandGroup extends Command {
     private final List<Command> commands = new ArrayList<>();

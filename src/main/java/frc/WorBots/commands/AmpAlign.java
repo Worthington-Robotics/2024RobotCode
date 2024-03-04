@@ -17,7 +17,7 @@ import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.function.Supplier;
 
-/** Command for teleop that drives the robot using controllers */
+/** Command for teleop that drives the robot to the amp */
 public class AmpAlign extends Command {
   private Drive drive;
   private final DriveController driveController = new DriveController();
