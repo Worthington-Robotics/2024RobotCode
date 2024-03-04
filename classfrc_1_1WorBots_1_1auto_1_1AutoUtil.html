@@ -106,10 +106,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6bc3b64c956d4373ea58d5f1d23d5552"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6b07ab6fc8eac86701edec048620485"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae6b07ab6fc8eac86701edec048620485">driveAndIntakeCenter</a> (Pose2d startingPosition, int centerPosition)</td></tr>
 <tr class="separator:ae6b07ab6fc8eac86701edec048620485"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10ed17b3695dfde89c7bdd41829b48c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a10ed17b3695dfde89c7bdd41829b48c1">moveAndShoot</a> (Pose2d startingPose, boolean intakeFirst, boolean driveFirst, double timeout)</td></tr>
-<tr class="separator:a10ed17b3695dfde89c7bdd41829b48c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a697962918485e108bd80fa4721cb8b58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a697962918485e108bd80fa4721cb8b58">moveAndShoot</a> (Pose2d startingPose, boolean intakeFirst, boolean driveFirst, boolean autoTurn, double timeout)</td></tr>
-<tr class="separator:a697962918485e108bd80fa4721cb8b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c63e69046419168fd537fa38aa6e021"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a8c63e69046419168fd537fa38aa6e021">moveAndShoot</a> (Pose2d targetPose, boolean intakeFirst, boolean driveFirst, boolean autoTurn, double timeout)</td></tr>
+<tr class="separator:a8c63e69046419168fd537fa38aa6e021"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a6b940a25f95b61f91e3cf4274520de"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a4a6b940a25f95b61f91e3cf4274520de">prepareShooting</a> (Pose2d targetPose)</td></tr>
 <tr class="separator:a4a6b940a25f95b61f91e3cf4274520de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd9f43281bac40dfec88f3c6fb319474"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#abd9f43281bac40dfec88f3c6fb319474">driveOutToCenter</a> (Pose2d currentPose)</td></tr>
@@ -506,8 +504,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a697962918485e108bd80fa4721cb8b58" name="a697962918485e108bd80fa4721cb8b58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a697962918485e108bd80fa4721cb8b58">&#9670;&#160;</a></span>moveAndShoot() <span class="overload">[1/2]</span></h2>
+<a id="a8c63e69046419168fd537fa38aa6e021" name="a8c63e69046419168fd537fa38aa6e021"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c63e69046419168fd537fa38aa6e021">&#9670;&#160;</a></span>moveAndShoot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -519,7 +517,7 @@ Public Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a> frc.WorBots.auto.AutoUtil.moveAndShoot </td>
           <td>(</td>
           <td class="paramtype">Pose2d&#160;</td>
-          <td class="paramname"><em>startingPose</em>, </td>
+          <td class="paramname"><em>targetPose</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -557,54 +555,18 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a10ed17b3695dfde89c7bdd41829b48c1" name="a10ed17b3695dfde89c7bdd41829b48c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10ed17b3695dfde89c7bdd41829b48c1">&#9670;&#160;</a></span>moveAndShoot() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a> frc.WorBots.auto.AutoUtil.moveAndShoot </td>
-          <td>(</td>
-          <td class="paramtype">Pose2d&#160;</td>
-          <td class="paramname"><em>startingPose</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boolean&#160;</td>
-          <td class="paramname"><em>intakeFirst</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boolean&#160;</td>
-          <td class="paramname"><em>driveFirst</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>timeout</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p >Moves to a position and shoots</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">targetPose</td><td>The pose to move to, or the pose where the robot is if you don't want to drive </td></tr>
+    <tr><td class="paramname">intakeFirst</td><td>Whether to first ensure that a game piece is intook </td></tr>
+    <tr><td class="paramname">driveFirst</td><td>Whether to drive to the pose first </td></tr>
+    <tr><td class="paramname">autoTurn</td><td>Whether to automatically turn towards the goal at the position of the target pose </td></tr>
+    <tr><td class="paramname">timeout</td><td>The timeout for the drive command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

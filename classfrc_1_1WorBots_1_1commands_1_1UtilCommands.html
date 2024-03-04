@@ -83,6 +83,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>OptimalSequentialCommandGroup</b></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>TimedCommand</b></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -96,6 +98,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ab9dbc0f0055949b533027d5af0209e58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae179bf8b307c4dfeba195065b2367270"><td class="memItemLeft" align="right" valign="top">static Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1UtilCommands.html#ae179bf8b307c4dfeba195065b2367270">timer</a> (String name, Command command)</td></tr>
 <tr class="separator:ae179bf8b307c4dfeba195065b2367270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79aab2d424674e81b015da34ca6a61c9"><td class="memItemLeft" align="right" valign="top">static Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1UtilCommands.html#a79aab2d424674e81b015da34ca6a61c9">optimalSequence</a> (Command... commands)</td></tr>
+<tr class="separator:a79aab2d424674e81b015da34ca6a61c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a82a6715f303ec36cf0f5d17421b9f81c" name="a82a6715f303ec36cf0f5d17421b9f81c"></a>
@@ -181,6 +185,40 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">key</td><td>The SmartDashboard key to use </td></tr>
     <tr><td class="paramname">commands</td><td>The commands to run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The command </dd></dl>
+
+</div>
+</div>
+<a id="a79aab2d424674e81b015da34ca6a61c9" name="a79aab2d424674e81b015da34ca6a61c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79aab2d424674e81b015da34ca6a61c9">&#9670;&#160;</a></span>optimalSequence()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Command frc.WorBots.commands.UtilCommands.optimalSequence </td>
+          <td>(</td>
+          <td class="paramtype">Command...&#160;</td>
+          <td class="paramname"><em>commands</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a command that runs a sequence of commands optimally with no delay</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">commands</td><td>The commands to run in the sequence </td></tr>
   </table>
   </dd>
 </dl>

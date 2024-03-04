@@ -21,6 +21,6 @@ var searchData=
   ['moduleiosim_2ejava_18',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
   ['moduleiotalon_19',['ModuleIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html',1,'frc.WorBots.subsystems.drive.ModuleIOTalon'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html#a33b1af7147a15b90489b088fe2996320',1,'frc.WorBots.subsystems.drive.ModuleIOTalon.ModuleIOTalon()']]],
   ['moduleiotalon_2ejava_20',['ModuleIOTalon.java',['../ModuleIOTalon_8java.html',1,'']]],
-  ['moveandshoot_21',['moveAndShoot',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a10ed17b3695dfde89c7bdd41829b48c1',1,'frc.WorBots.auto.AutoUtil.moveAndShoot(Pose2d startingPose, boolean intakeFirst, boolean driveFirst, double timeout)'],['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a697962918485e108bd80fa4721cb8b58',1,'frc.WorBots.auto.AutoUtil.moveAndShoot(Pose2d startingPose, boolean intakeFirst, boolean driveFirst, boolean autoTurn, double timeout)']]],
+  ['moveandshoot_21',['moveAndShoot',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a8c63e69046419168fd537fa38aa6e021',1,'frc::WorBots::auto::AutoUtil']]],
   ['multiplytwist_22',['multiplyTwist',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a48d44e3aa04122f769fc88a6a661e8c3',1,'frc::WorBots::util::math::GeomUtil']]]
 ];
