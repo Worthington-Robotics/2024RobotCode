@@ -122,17 +122,17 @@ public class Autos {
   private Command threePieceClose(boolean isWallSide) {
     final Pose2d startingPose = util.startingLocations[1];
     // Shoot the piece we start with
-    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 0.1);
+    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, false, 0.1);
 
     // Move back, intake, and shoot
     final var intake1 = util.driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
-    final var autoShoot2 = util.moveAndShoot(intake1.pose(), false, false, true, 0.5);
+    final var autoShoot2 = util.moveAndShoot(intake1.pose(), false, false, false, 0.5);
 
     // Intake the third piece, then move to the center and shoot it
     final int thirdPiecePosition = isWallSide ? 2 : 0;
     final var intake2 = util.driveAndIntakeWing(autoShoot2.pose(), true, false, thirdPiecePosition);
     final var autoShoot3 =
-        util.moveAndShoot(util.wingGamePieceLocations[1], false, true, true, 2.0);
+        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, false, 2.0);
     return createSequence(
         util.reset(startingPose).command(),
         autoShoot1.command(),

@@ -316,20 +316,18 @@ public class AutoUtil {
       return new CommandWithPose(
           UtilCommands.namedSequence(
               "Auto Intake Wing Progress",
-              reset(startingPosition).command(),
               prepareHandoff(),
               path(waypoints)
                   .command()
                   .alongWith(
-                      Commands.waitUntil(
+                      UtilCommands.optimalSequence(
+                          Commands.waitUntil(
                               () -> {
                                 return AllianceFlipUtil.apply(drive.getPose().getX())
                                     >= FieldConstants.StartingZone.endX;
-                              })
-                          .andThen(handoff))),
-          new Pose2d(
-              waypoints.get(waypoints.size() - 1).getTranslation(),
-              waypoints.get(waypoints.size() - 1).getHolonomicRotation().get()));
+                              }),
+                          handoff))),
+          waypoints.get(waypoints.size() - 1).getPose());
     } else {
       return new CommandWithPose(Commands.none(), startingPosition);
     }
@@ -345,18 +343,13 @@ public class AutoUtil {
   public CommandWithPose driveAndIntakeCenter(Pose2d startingPosition, int centerPosition) {
     List<Waypoint> waypoints = new ArrayList<>();
     waypoints.add(Waypoint.fromHolonomicPose(startingPosition));
-    Command handoff = new Handoff(intake, superstructure, shooter);
-    if (centerPosition <= 1) {
-      if (startingPosition.getX() < 4) {
+    final Command handoff = new Handoff(intake, superstructure, shooter);
+    if (centerPosition <= 2) {
+      if (AllianceFlipUtil.apply(startingPosition.getX()) < 4) {
         waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
       }
-      waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
-    } else if (centerPosition == 2) {
-      if (startingPosition.getX() < 4) {
-        waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
-      }
-      waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
     }
+    waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           UtilCommands.namedSequence(
@@ -365,8 +358,10 @@ public class AutoUtil {
               path(waypoints)
                   .command()
                   .alongWith(
-                      Commands.waitUntil(() -> AllianceFlipUtil.apply(drive.getPose().getX()) > 4.5)
-                          .andThen(handoff.withTimeout(2.5)))),
+                      UtilCommands.optimalSequence(
+                          Commands.waitUntil(
+                              () -> AllianceFlipUtil.apply(drive.getPose().getX()) > 4.5),
+                          handoff.withTimeout(2.5)))),
           centerGamePieceLocations[centerPosition]);
     } else {
       return new CommandWithPose(Commands.none(), startingPosition);
@@ -521,6 +516,12 @@ public class AutoUtil {
     return new Pose2d(x, y, AllianceFlipUtil.apply(desiredRotation));
   }
 
+  /**
+   * Gets the robot pose for auto shooting from the specified position
+   *
+   * @param targetPose The pose to shoot from
+   * @return The target pose with the correct rotation to shoot at the goal
+   */
   public Pose2d getAutoShootPose(Pose2d targetPose) {
     final Rotation2d robotAngle =
         AllianceFlipUtil.flipRotation(ShooterMath.getGoalTheta(targetPose));

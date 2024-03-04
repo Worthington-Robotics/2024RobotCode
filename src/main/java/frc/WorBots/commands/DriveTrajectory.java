@@ -83,7 +83,7 @@ public class DriveTrajectory extends Command {
     if (Constants.getSim()) {
       maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
-      maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(150.0);
+      maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(170.0);
 
       xController = new PIDController(2.7, 0, 0.0);
       yController = new PIDController(2.7, 0, 0.0);
@@ -99,7 +99,7 @@ public class DriveTrajectory extends Command {
     }
     customHolonomicDriveController.setTolerance(
         new Pose2d(
-            new Translation2d(Units.inchesToMeters(2), Units.inchesToMeters(2)),
+            new Translation2d(Units.inchesToMeters(1.75), Units.inchesToMeters(1.75)),
             Rotation2d.fromDegrees(1.2)));
     generate(waypoints, constraints, startVelocity, true);
   }
