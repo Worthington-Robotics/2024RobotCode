@@ -27,7 +27,6 @@ import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
-import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.*;
 
@@ -152,7 +151,6 @@ public class RobotContainer {
 
   /** Bind driver controls to commands */
   private void bindControls() {
-    StatusPage.reportStatus(StatusPage.DRIVE_CONTROLLER, driver.getHID().isConnected());
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
@@ -165,14 +163,14 @@ public class RobotContainer {
     driver.leftBumper().onTrue(superstructure.setPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
-    driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
-    driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
+    // driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
+    // driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
     driver
         .povDown()
         .toggleOnTrue(
             new SuperstructureManual(
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
-    driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading()));
+    driver.y().onTrue(Commands.runOnce(drive::resetHeading));
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
     Pose2d ampPose =
         new Pose2d(
