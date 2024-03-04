@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
     AllianceFlipUtil.apply(0.0);
     robotContainer.drive.stop();
     robotContainer.intake.setVolts(0.0);
-    robotContainer.shooter.setRawFlywheelSpeed(0);
+    robotContainer.shooter.stopFlywheels();
     robotContainer.shooter.setRawFeederVolts(0.0);
     robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
     if (Constants.IS_COMP) {
@@ -159,7 +159,7 @@ public class Robot extends TimedRobot {
 
     robotContainer.drive.stop();
     robotContainer.intake.setVolts(0.0);
-    robotContainer.shooter.setRawFlywheelSpeed(0);
+    robotContainer.shooter.stopFlywheels();
     robotContainer.shooter.setRawFeederVolts(0.0);
     robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
 

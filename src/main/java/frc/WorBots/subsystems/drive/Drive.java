@@ -51,7 +51,6 @@ public class Drive extends SubsystemBase {
       new PoseEstimator(VecBuilder.fill(0.003, 0.003, 0.0002));
   private final NetworkTableInstance instance = NetworkTableInstance.getDefault();
   private Twist2d fieldVelocity = new Twist2d();
-  private Translation2d centerOfRotation = new Translation2d();
 
   /** Theta setpoint. Can be null */
   private Rotation2d thetaSetpoint = null;
@@ -122,8 +121,8 @@ public class Drive extends SubsystemBase {
       for (Module module : modules) {
         module.stop();
       }
+      stop();
       removeThetaSetpoint();
-      setpoint = new ChassisSpeeds();
     } else {
       double setpointRadsPerSec = setpoint.omegaRadiansPerSecond;
 
@@ -156,8 +155,7 @@ public class Drive extends SubsystemBase {
               setpointTwist.dtheta / Constants.ROBOT_PERIOD);
       speedSetpointPublisher.set(Logger.chassisSpeedsToArray(adjustedSpeeds));
 
-      SwerveModuleState[] setpointStates =
-          kinematics.toSwerveModuleStates(adjustedSpeeds, centerOfRotation);
+      SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(adjustedSpeeds);
       // Desaturate speeds to ensure we don't go faster than is possible
       SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, getMaxLinearSpeedMetersPerSec());
 
@@ -362,15 +360,6 @@ public class Drive extends SubsystemBase {
   /** Resets the robot heading */
   public void resetHeading() {
     gyroIO.resetHeading();
-  }
-
-  /**
-   * Sets the center of rotation to orbit around.
-   *
-   * @param center The center of rotation.
-   */
-  public void setCenterOfRotation(Translation2d center) {
-    this.centerOfRotation = center;
   }
 
   /**

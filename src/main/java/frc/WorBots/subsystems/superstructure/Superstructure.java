@@ -56,8 +56,6 @@ public class Superstructure extends SubsystemBase {
   private static final double elevatorLimitDistance = 0.25;
   private static final double pivotBackwardLimitDistance = 0.90;
   private static final double pivotForwardLimitDistance = 1.05;
-  private static final double pivotDynamicLimitDistance = 0.0;
-  // private static final double pivotDynamicLimitAvoidanceVolts = 1.2;
   private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
   private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
 
@@ -203,10 +201,8 @@ public class Superstructure extends SubsystemBase {
    * @return The voltage for the pivot
    */
   private double calculatePivot(double setpoint) {
-    // If we are below the dynamic limit, automatically bring the setpoint up
-    final double bottomLimit = calculatePivotBottomLimit();
     // Clamp the setpoint
-    setpoint = MathUtil.clamp(setpoint, bottomLimit, pivotMaxAngle);
+    setpoint = MathUtil.clamp(setpoint, 0.0, pivotMaxAngle);
     final double pivotVoltage =
         pivotController.pid.calculate(getPivotPoseRads(), setpoint) + calculatePivotFeedforward();
 
@@ -217,16 +213,6 @@ public class Superstructure extends SubsystemBase {
     final double adjusted = getPivotPoseRads();
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
     return out;
-  }
-
-  /**
-   * Calculates where the bottom limit of the pivot should be based on elevator position. This is
-   * used to automatically avoid hooking the shooter with the elevator
-   *
-   * @return The bottom limit for the pivot
-   */
-  private double calculatePivotBottomLimit() {
-    return pivotDynamicLimitDistance * inputs.elevatorPercentageRaised;
   }
 
   /**
@@ -286,12 +272,10 @@ public class Superstructure extends SubsystemBase {
    * @param volts The pivot voltage
    */
   private void setPivotVoltage(double volts) {
-    // Do soft limiting, with the dynamic limit in mind
-    final double bottomLimit = calculatePivotBottomLimit();
     volts =
         GeneralMath.softLimitVelocity(
             volts,
-            getPivotPoseRads() - bottomLimit,
+            getPivotPoseRads(),
             6.5,
             pivotMaxAngle,
             pivotBackwardLimitDistance,

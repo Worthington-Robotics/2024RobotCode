@@ -92,7 +92,7 @@ public class AutoShoot extends SequentialCommandGroup {
         Commands.run(
             () -> {
               shotSupplier.update();
-              shooter.spinToSpeedVoid(shotSupplier.get().rpm());
+              shooter.setSpeedVoid(shotSupplier.get().rpm());
               driveController.drive(drive, speedsSupplier.get());
               superstructure.setShootingAngleRad(shotSupplier.get().pivotAngle());
               SmartDashboard.putNumber("Goal Range", ShooterMath.getGoalDistance(drive.getPose()));

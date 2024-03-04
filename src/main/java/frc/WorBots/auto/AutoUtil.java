@@ -431,7 +431,7 @@ public class AutoUtil {
             Commands.runOnce(
                 () -> {
                   superstructure.setModeVoid(SuperstructureState.SHOOTING);
-                  shooter.spinToSpeedVoid(ShooterMath.calculateShooterRPM(targetPose));
+                  shooter.setSpeedVoid(ShooterMath.calculateShooterRPM(targetPose));
                   superstructure.setShootingAngleRad(ShooterMath.calculatePivotAngle(targetPose));
                 },
                 shooter,
@@ -443,7 +443,7 @@ public class AutoUtil {
             Commands.runOnce(
                 () -> {
                   shooter.setRawFeederVolts(0.0);
-                  shooter.spinToSpeedVoid(0.0);
+                  shooter.stopFlywheels();
                   superstructure.setModeVoid(SuperstructureState.POSE);
                 },
                 shooter,
@@ -468,11 +468,7 @@ public class AutoUtil {
         new Handoff(intake, superstructure, shooter).withTimeout(0.3),
         Commands.parallel(
             superstructure.setMode(SuperstructureState.SHOOTING),
-            Commands.runOnce(
-                () -> {
-                  shooter.spinToSpeedVoid(rpm);
-                },
-                shooter),
+            shooter.setSpeed(rpm),
             Commands.runOnce(() -> superstructure.setShootingAngleRad(angle))));
   }
 

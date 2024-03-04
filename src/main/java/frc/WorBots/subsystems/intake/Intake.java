@@ -35,7 +35,6 @@ public class Intake extends SubsystemBase {
   // Constants
   public static final double distanceThreshold = 0.25;
   private static final double intakeVolts = 4.25;
-  private static final double constantForce = 0.0;
   private static final double maxTemperature = 80.0;
 
   /**
@@ -86,38 +85,6 @@ public class Intake extends SubsystemBase {
    */
   public void setVolts(double volts) {
     setpointVolts = volts;
-  }
-
-  /**
-   * A command that runs the intake until a game piece is detected.
-   *
-   * @return The command.
-   */
-  public Command intake() {
-    return this.runOnce(
-            () -> {
-              if (hasGamepiece == true) {
-                setpointVolts = constantForce;
-              } else {
-                setpointVolts = intakeVolts;
-              }
-            })
-        .andThen(Commands.waitUntil(this::hasGamePiece))
-        .finallyDo(
-            () -> {
-              setpointVolts = constantForce;
-            });
-  }
-
-  public Command intakeRaw() {
-    return this.run(
-            () -> {
-              setpointVolts = intakeVolts;
-            })
-        .finallyDo(
-            () -> {
-              setpointVolts = 0.0;
-            });
   }
 
   public Command spitRaw() {

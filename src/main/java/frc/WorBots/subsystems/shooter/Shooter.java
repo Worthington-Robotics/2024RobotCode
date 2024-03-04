@@ -25,7 +25,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   private ShooterIO io;
   private ShooterIOInputs inputs = new ShooterIOInputs();
   private boolean hasGamePiece = false;
-  private boolean shouldIncrement = false;
   private double topFlywheelRPM = 0.0;
   private double bottomFlywheelRPM = 0.0;
   private double feederWheelVolts = 0.0;
@@ -44,14 +43,10 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       shooterTable.getDoubleTopic("Bottom Flywheel Setpoint").publish();
   private DoublePublisher timeOfFlightDistancePub =
       shooterTable.getDoubleTopic("Time of Flight Distance").publish();
-  private BooleanPublisher shouldIncrementPub =
-      shooterTable.getBooleanTopic("Should Increment").publish();
   private BooleanPublisher hasGamePiecePub =
       shooterTable.getBooleanTopic("Has Game Piece").publish();
 
   // Constants
-  private static final double increasePositionRads = 2 * Math.PI;
-
   /** Distance threshold for the ToF */
   private static final double distanceThreshold = 0.075;
 
@@ -114,7 +109,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     topFlywheelSetpointPub.set(topFlywheelRPM);
     bottomFlywheelSetpointPub.set(bottomFlywheelRPM);
     timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
-    shouldIncrementPub.set(shouldIncrement);
     hasGamePiecePub.set(hasGamePiece);
 
     // Update tunables
@@ -160,16 +154,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
       // If we want to move the feeder wheel.
       io.setFeederWheelVoltage(feederWheelVolts);
-      if (shouldIncrement) {
-        io.setFeederWheelVoltage(
-            feederWheelController.pid.calculate(
-                inputs.feederWheel.positionRads,
-                inputs.feederWheel.positionRads + increasePositionRads));
-      } else if (shouldIncrement
-          && feederWheelController.pid
-              .atSetpoint()) { // if we want to move it, and its at the setpoint.
-        shouldIncrement = false;
-      }
     }
 
     inputs.feederWheel.publish();
@@ -193,22 +177,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     return spinToSpeed(supplier.get());
   }
 
-  public Command setSpeed(double rpm) {
-    return this.runOnce(
-        () -> {
-          topFlywheelRPM = rpm;
-          bottomFlywheelRPM = rpm;
-        });
-  }
-
-  public Command setSpeedContinuous(double rpm) {
-    return this.run(
-        () -> {
-          topFlywheelRPM = rpm;
-          bottomFlywheelRPM = rpm;
-        });
-  }
-
   /**
    * A function that spins up the flywheels and returns when at the desired speed
    *
@@ -217,40 +185,26 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return The command, exits when flywheels are up to speed
    */
   public Command spinToSpeed(double topRPM, double bottomRPM) {
+    return this.setSpeed(bottomRPM).alongWith(Commands.waitUntil(this::isAtSetpoint));
+  }
+
+  public void setSpeedVoid(double rpm) {
+    topFlywheelRPM = rpm;
+    bottomFlywheelRPM = rpm;
+  }
+
+  public Command setSpeed(double rpm) {
     return this.runOnce(
-            () -> {
-              topFlywheelRPM = topRPM;
-              bottomFlywheelRPM = bottomRPM;
-            })
-        .alongWith(Commands.waitUntil(this::isAtSetpoint));
+        () -> {
+          setSpeedVoid(rpm);
+        });
   }
 
-  public void spinToSpeedVoid(double rpm) {
-    topFlywheelRPM = rpm;
-    bottomFlywheelRPM = rpm;
-  }
-
-  /**
-   * Spins both sets of flywheels to a speed, and then increments the game piece when it is ready
-   *
-   * @param rpm The RPM to set the flywheels to
-   * @return The command
-   */
-  public Command shootCommand(double rpm) {
-    return this.runOnce(() -> setRawFeederVolts(0.0))
-        .andThen(this.spinToSpeed(rpm, rpm))
-        .andThen(this.run(() -> setRawFeederVolts(1.0)))
-        .andThen(Commands.run(() -> {}))
-        .finallyDo(
-            () -> {
-              setRawFlywheelSpeed(0);
-              setRawFeederVolts(0);
-            });
-  }
-
-  public void setRawFlywheelSpeed(double rpm) {
-    topFlywheelRPM = rpm;
-    bottomFlywheelRPM = rpm;
+  public Command setSpeedContinuous(double rpm) {
+    return this.run(
+        () -> {
+          setSpeedVoid(rpm);
+        });
   }
 
   public void setRawFeederVolts(double volts) {
@@ -265,35 +219,12 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   }
 
   /**
-   * This function increments the game piece forwards to move it into the flywheels.
-   *
-   * @return The command.
-   */
-  public Command incrementGamePiece() {
-    return this.runOnce(
-            () -> {
-              shouldIncrement = true;
-            })
-        .alongWith(Commands.waitUntil(this::hasGamePiece));
-  }
-
-  /**
    * Returns a command that idles the flywheels
    *
    * @return The command to run
    */
   public Command idleCommand() {
     return this.setSpeedContinuous(idleSpeed);
-  }
-
-  public Command runFeederWheel(double volts) {
-    return this.runEnd(
-        () -> {
-          feederWheelVolts = volts;
-        },
-        () -> {
-          feederWheelVolts = 0;
-        });
   }
 
   /**
