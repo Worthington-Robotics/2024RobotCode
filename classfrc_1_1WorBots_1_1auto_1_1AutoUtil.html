@@ -98,6 +98,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8b9e5db49bac79d57cf6fd1ef9894624"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa532616b75ae73095bd329c2ed9ee16e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#aa532616b75ae73095bd329c2ed9ee16e">driveTo</a> (Pose2d pose)</td></tr>
 <tr class="separator:aa532616b75ae73095bd329c2ed9ee16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac015baec00e32f5ecbb3f7894b6754fc"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ac015baec00e32f5ecbb3f7894b6754fc">prepareHandoff</a> ()</td></tr>
+<tr class="separator:ac015baec00e32f5ecbb3f7894b6754fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347f9fd59e8212b3e3aa6ff9d795f152"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a347f9fd59e8212b3e3aa6ff9d795f152">intakeWhenNear</a> (Pose2d pose, double distance)</td></tr>
+<tr class="separator:a347f9fd59e8212b3e3aa6ff9d795f152"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bc3b64c956d4373ea58d5f1d23d5552"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a6bc3b64c956d4373ea58d5f1d23d5552">driveAndIntakeWing</a> (Pose2d startingPosition, boolean fromCenter, boolean wrapToPickup, int wingPosition)</td></tr>
 <tr class="separator:a6bc3b64c956d4373ea58d5f1d23d5552"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6b07ab6fc8eac86701edec048620485"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720">CommandWithPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae6b07ab6fc8eac86701edec048620485">driveAndIntakeCenter</a> (Pose2d startingPosition, int centerPosition)</td></tr>
@@ -112,6 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abd9f43281bac40dfec88f3c6fb319474"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a880a8a054779c523c03ba3c8cad6ac"><td class="memItemLeft" align="right" valign="top">Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a9a880a8a054779c523c03ba3c8cad6ac">getWingLinePose</a> (Pose2d currentPose, Rotation2d desiredRotation)</td></tr>
 <tr class="separator:a9a880a8a054779c523c03ba3c8cad6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af20c6445449d0fb2a244d83a9ded15fc"><td class="memItemLeft" align="right" valign="top">Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#af20c6445449d0fb2a244d83a9ded15fc">getAutoShootPose</a> (Pose2d targetPose)</td></tr>
+<tr class="separator:af20c6445449d0fb2a244d83a9ded15fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -384,6 +390,32 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af20c6445449d0fb2a244d83a9ded15fc" name="af20c6445449d0fb2a244d83a9ded15fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af20c6445449d0fb2a244d83a9ded15fc">&#9670;&#160;</a></span>getAutoShootPose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Pose2d frc.WorBots.auto.AutoUtil.getAutoShootPose </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>targetPose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9a880a8a054779c523c03ba3c8cad6ac" name="a9a880a8a054779c523c03ba3c8cad6ac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9a880a8a054779c523c03ba3c8cad6ac">&#9670;&#160;</a></span>getWingLinePose()</h2>
 
@@ -426,6 +458,51 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The pose </dd></dl>
+
+</div>
+</div>
+<a id="a347f9fd59e8212b3e3aa6ff9d795f152" name="a347f9fd59e8212b3e3aa6ff9d795f152"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a347f9fd59e8212b3e3aa6ff9d795f152">&#9670;&#160;</a></span>intakeWhenNear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.auto.AutoUtil.intakeWhenNear </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a command that runs handoff and intake while the robot is near a pose, then ends when the robot is far enough away</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The pose to check for distance to </td></tr>
+    <tr><td class="paramname">distance</td><td>The distance in meters to start and stop intaking at </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The command </dd></dl>
 
 </div>
 </div>
@@ -625,6 +702,33 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Drives along the specified trajectory. </p>
+
+</div>
+</div>
+<a id="ac015baec00e32f5ecbb3f7894b6754fc" name="ac015baec00e32f5ecbb3f7894b6754fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac015baec00e32f5ecbb3f7894b6754fc">&#9670;&#160;</a></span>prepareHandoff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.auto.AutoUtil.prepareHandoff </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a command that prepares the robot for handoff</p>
+<dl class="section return"><dt>Returns</dt><dd>The command </dd></dl>
 
 </div>
 </div>
