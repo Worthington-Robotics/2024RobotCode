@@ -14,11 +14,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.WorBots.util.debug.*;
-import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.PoseEstimator.TimestampedVisionUpdate;
 import java.util.*;
 import java.util.function.*;
@@ -33,19 +31,58 @@ public class Vision extends SubsystemBase {
 
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
   private Consumer<Pose2d> lastPoseConsumer = (x) -> {};
-  private final Pose3d[] cameraPoses;
-  /* How much influence XY data has on the robot pose */
-  private final double xyStdDevCoefficient;
-  /* How much influence theta data has on the robot pose */
-  private final double thetaStdDevCoefficient;
   private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
-  private static final double ambiguityThreshold = 0.3;
+
+  /** The transforms for the cameras to robot center */
+  private static final Transform3d[] CAMERA_TRANSFORMS =
+      new Transform3d[] {
+        new Transform3d(
+            new Translation3d(
+                Units.inchesToMeters(-11), Units.inchesToMeters(11), Units.inchesToMeters(-9)),
+            new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(90 + 43.745)))),
+        new Transform3d(
+            new Translation3d(
+                Units.inchesToMeters(-11), Units.inchesToMeters(-11), Units.inchesToMeters(-9)),
+            new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))))
+      };
+
+  /** Detection weights for each camera */
+  private static final double[] CAMERA_WEIGHTS = new double[] {1.0, 0.9};
+
+  /** How much influence XY data has on the robot pose */
+  private static final double xyStdDevCoefficient = 0.025;
+
+  /** How much influence theta data has on the robot pose */
+  private static final double thetaStdDevCoefficient = 0.015;
 
   /** The margin inside the field border to accept vision poses from */
   private static final double fieldBorderMargin = 0.5;
 
   /** The margin in the z-axis from 0m for a pose to be considered valid, in meters */
-  private static final double zMargin = Units.inchesToMeters(20);
+  private static final double Z_MARGIN = Units.inchesToMeters(20);
+
+  /** Weights for different tags on the field to be chosen */
+  private static final double[] TAG_WEIGHTS =
+      new double[] {
+        0.95, // Source
+        0.95, // Source
+        1.15, // Speaker
+        1.15, // Speaker
+        1.0, // Amp
+        0.9, // Stage
+        0.9, // Stage
+        0.9, // Stage
+        0.95, // Source
+        0.95, // Source
+        1.15, // Speaker
+        1.15, // Speaker
+        1.0, // Amp
+        0.9, // Stage
+        0.9, // Stage
+        0.9, // Stage
+      };
 
   private static final double targetLogTimeSecs = 0.1;
 
@@ -58,24 +95,6 @@ public class Vision extends SubsystemBase {
     for (int i = 0; i < io.length; i++) {
       inputs[i] = new VisionIOInputs();
     }
-    cameraPoses =
-        new Pose3d[] {
-          new Pose3d(
-              new Translation3d(
-                  Units.inchesToMeters(-11), Units.inchesToMeters(11), Units.inchesToMeters(-9)),
-              new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                  .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(90 + 43.745)))),
-          new Pose3d(
-              new Translation3d(
-                  Units.inchesToMeters(-11), Units.inchesToMeters(-11), Units.inchesToMeters(-9)),
-              new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                  .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))))
-        };
-    if (!Constants.IS_COMP) {
-      SmartDashboard.putNumberArray("Camera Pose 1", Logger.pose3dToArray(cameraPoses[1]));
-    }
-    xyStdDevCoefficient = 0.025;
-    thetaStdDevCoefficient = 0.015;
     StatusPage.reportStatus(StatusPage.VISION_SUBSYSTEM, true);
   }
 
@@ -90,10 +109,10 @@ public class Vision extends SubsystemBase {
     List<Pose3d> allRobotPoses3d = new ArrayList<>();
     List<TimestampedVisionUpdate> visionUpdates = new ArrayList<>();
 
-    for (int index = 0; index < io.length; index++) {
-      for (int frame = 0; frame < inputs[index].timestamps.length; frame++) {
-        final var timestamp = inputs[index].timestamps[frame];
-        final var values = inputs[index].frames[frame];
+    for (int camIndex = 0; camIndex < io.length; camIndex++) {
+      for (int frame = 0; frame < inputs[camIndex].timestamps.length; frame++) {
+        final var timestamp = inputs[camIndex].timestamps[frame];
+        final var values = inputs[camIndex].frames[frame];
 
         if (values.length == 0 || values[0] == 0) {
           continue;
@@ -102,6 +121,7 @@ public class Vision extends SubsystemBase {
         Pose3d cameraPose = null;
         Pose3d robotPose3d = null;
 
+        // Switch based on the number of detections
         switch ((int) values[0]) {
           case 1:
             cameraPose =
@@ -110,7 +130,7 @@ public class Vision extends SubsystemBase {
                     values[3],
                     values[4],
                     new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
-            robotPose3d = cameraPose.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
+            robotPose3d = cameraPose.transformBy(CAMERA_TRANSFORMS[camIndex]);
             break;
           case 2:
             final double error0 = values[1];
@@ -128,16 +148,16 @@ public class Vision extends SubsystemBase {
                     values[11],
                     values[12],
                     new Rotation3d(new Quaternion(values[13], values[14], values[15], values[16])));
-            final Pose3d robotPose3d0 =
-                cameraPose0.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
-            final Pose3d robotPose3d1 =
-                cameraPose1.transformBy(GeomUtil.pose3dToTransform3d(cameraPoses[index]));
+            final Pose3d robotPose3d0 = cameraPose0.transformBy(CAMERA_TRANSFORMS[camIndex]);
+            final Pose3d robotPose3d1 = cameraPose1.transformBy(CAMERA_TRANSFORMS[camIndex]);
 
-            // Select pose using projection errors
-            if (error0 < error1 * ambiguityThreshold) {
+            // Select pose using scores
+            final double score0 = scoreDetection(error0, camIndex, -1);
+            final double score1 = scoreDetection(error1, camIndex, -1);
+            if (score0 < score1) {
               cameraPose = cameraPose0;
               robotPose3d = robotPose3d0;
-            } else if (error1 < error0 * ambiguityThreshold) {
+            } else if (score1 < score0) {
               cameraPose = cameraPose1;
               robotPose3d = robotPose3d1;
             }
@@ -162,7 +182,7 @@ public class Vision extends SubsystemBase {
         for (int i = (values[0] == 1 ? 9 : 17); i < values.length; i++) {
           final int tagId = (int) values[i];
           lastTagDetectionTimes.put(tagId, Timer.getFPGATimestamp());
-          final Optional<Pose3d> tagPose = FieldConstants.aprilTags.getTagPose((int) values[i]);
+          final Optional<Pose3d> tagPose = FieldConstants.aprilTags.getTagPose(tagId);
           if (tagPose.isPresent()) {
             tagPoses.add(tagPose.get());
           }
@@ -237,11 +257,38 @@ public class Vision extends SubsystemBase {
         || pose.getX() > FieldConstants.fieldLength + fieldBorderMargin
         || pose.getY() < -fieldBorderMargin
         || pose.getY() > FieldConstants.fieldWidth + fieldBorderMargin
-        || pose.getZ() < -zMargin
-        || pose.getZ() > zMargin) {
+        || pose.getZ() < -Z_MARGIN
+        || pose.getZ() > Z_MARGIN) {
       return false;
     }
 
     return true;
+  }
+
+  /**
+   * Scores a single tag detection
+   *
+   * @param error The reprojection error of the detection
+   * @param camID The ID of the camera making the detection
+   * @param tagID The ID of the AprilTag (starting from 1). If -1, the tag score will be ignored
+   * @return The score. This value is unitless and relative to other scores only
+   */
+  private static double scoreDetection(double error, int camID, int tagID) {
+    double score = 1.0;
+
+    // A higher error decreases the score
+    score /= error;
+
+    // Weigh based on the camera
+    final double camWeight = CAMERA_WEIGHTS[camID];
+    score *= camWeight;
+
+    // Weigh based on the tag
+    if (tagID > 0) {
+      final double tagWeight = TAG_WEIGHTS[tagID - 1];
+      score *= tagWeight;
+    }
+
+    return score;
   }
 }
