@@ -17,7 +17,7 @@ var searchData=
   ['module_2ejava_14',['Module.java',['../Module_8java.html',1,'']]],
   ['moduleio_15',['ModuleIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIO.html',1,'frc::WorBots::subsystems::drive']]],
   ['moduleio_2ejava_16',['ModuleIO.java',['../ModuleIO_8java.html',1,'']]],
-  ['moduleiosim_17',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc::WorBots::subsystems::drive']]],
+  ['moduleiosim_17',['ModuleIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html',1,'frc.WorBots.subsystems.drive.ModuleIOSim'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html#af8b7e2530d1527533ee611a0c3ce8b21',1,'frc.WorBots.subsystems.drive.ModuleIOSim.ModuleIOSim()']]],
   ['moduleiosim_2ejava_18',['ModuleIOSim.java',['../ModuleIOSim_8java.html',1,'']]],
   ['moduleiotalon_19',['ModuleIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html',1,'frc.WorBots.subsystems.drive.ModuleIOTalon'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html#a33b1af7147a15b90489b088fe2996320',1,'frc.WorBots.subsystems.drive.ModuleIOTalon.ModuleIOTalon()']]],
   ['moduleiotalon_2ejava_20',['ModuleIOTalon.java',['../ModuleIOTalon_8java.html',1,'']]],
