@@ -37,12 +37,12 @@ public class Lights extends SubsystemBase {
   }
 
   public static final int LIGHT_COUNT = 27;
+  private static final int LIGHTS_ID = 9;
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
   private LightsMode mode = LightsMode.RedBlue;
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
-  private final int lightsID = 9;
   private final Timer timer = new Timer();
   private boolean hasStartedTimer = false;
   private Supplier<Boolean> isTargeted = () -> false;
@@ -70,11 +70,13 @@ public class Lights extends SubsystemBase {
 
   /** The lights subsystem, which is rather pretty. */
   private Lights() {
-    leds = new AddressableLED(lightsID);
+    leds = new AddressableLED(LIGHTS_ID);
     io = new AddressableLEDBuffer(LIGHT_COUNT);
     leds.setLength(LIGHT_COUNT);
     leds.start();
-    var table = NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable("Lights");
+
+    final var table =
+        NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable("Lights");
     setModeSub = table.getIntegerTopic("Set Mode").subscribe(-1);
     setModePub = table.getIntegerTopic("Mode Number").publish();
     StatusPage.reportStatus(StatusPage.LIGHTS_SUBSYSTEM, true);

@@ -52,13 +52,13 @@ public class Vision extends SubsystemBase {
   private static final double[] CAMERA_WEIGHTS = new double[] {1.0, 0.9};
 
   /** How much influence XY data has on the robot pose */
-  private static final double xyStdDevCoefficient = 0.025;
+  private static final double XY_STD_DEV_COEFFICIENT = 0.025;
 
   /** How much influence theta data has on the robot pose */
-  private static final double thetaStdDevCoefficient = 0.015;
+  private static final double THETA_STD_DEV_COEFFICIENT = 0.015;
 
   /** The margin inside the field border to accept vision poses from */
-  private static final double fieldBorderMargin = 0.5;
+  private static final double FIELD_BORDER_MARGIN = 0.5;
 
   /** The margin in the z-axis from 0m for a pose to be considered valid, in meters */
   private static final double Z_MARGIN = Units.inchesToMeters(20);
@@ -195,9 +195,10 @@ public class Vision extends SubsystemBase {
         final double avgDistance = totalDistance / tagPoses.size();
 
         // Add to vision updates
-        final double xyStdDev = xyStdDevCoefficient * Math.pow(avgDistance, 2.0) / tagPoses.size();
+        final double xyStdDev =
+            XY_STD_DEV_COEFFICIENT * Math.pow(avgDistance, 2.0) / tagPoses.size();
         final double thetaStdDev =
-            thetaStdDevCoefficient * Math.pow(avgDistance, 2.0) / tagPoses.size();
+            THETA_STD_DEV_COEFFICIENT * Math.pow(avgDistance, 2.0) / tagPoses.size();
         visionUpdates.add(
             new TimestampedVisionUpdate(
                 timestamp, robotPose, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)));
@@ -253,10 +254,10 @@ public class Vision extends SubsystemBase {
    * @return Whether the pose should be used
    */
   private static boolean isPoseValid(Pose3d pose) {
-    if (pose.getX() < -fieldBorderMargin
-        || pose.getX() > FieldConstants.fieldLength + fieldBorderMargin
-        || pose.getY() < -fieldBorderMargin
-        || pose.getY() > FieldConstants.fieldWidth + fieldBorderMargin
+    if (pose.getX() < -FIELD_BORDER_MARGIN
+        || pose.getX() > FieldConstants.fieldLength + FIELD_BORDER_MARGIN
+        || pose.getY() < -FIELD_BORDER_MARGIN
+        || pose.getY() > FieldConstants.fieldWidth + FIELD_BORDER_MARGIN
         || pose.getZ() < -Z_MARGIN
         || pose.getZ() > Z_MARGIN) {
       return false;

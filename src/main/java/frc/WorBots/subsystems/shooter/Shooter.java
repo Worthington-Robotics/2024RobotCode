@@ -48,16 +48,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   // Constants
   /** Distance threshold for the ToF */
-  private static final double distanceThreshold = 0.075;
+  private static final double DISTANCE_THRESHOLD = 0.075;
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
    * instead of violently braking. In volts.
    */
-  private static final double coastDownThreshold = -0.3;
+  private static final double COAST_DOWN_THRESHOLD = -0.3;
 
   /** The default idle speed for the flywheels */
-  private static final double idleSpeed = 500.0;
+  private static final double IDLE_SPEED = 500.0;
 
   private static final String tableName = "Shooter";
 
@@ -117,7 +117,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     feederWheelController.update();
 
     // Check if we have gamepiece
-    hasGamePiece = inputs.timeOfFlightDistanceMeters < distanceThreshold;
+    hasGamePiece = inputs.timeOfFlightDistanceMeters < DISTANCE_THRESHOLD;
 
     if (DriverStation.isDisabled()) { // Set voltages to 0 if we are disabled.
       io.setTopFlywheelVolts(0.0);
@@ -133,7 +133,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         double setpoint =
             topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
                 + topFlywheelFeedForward.calculate(topFlywheelRPM);
-        if (setpoint < coastDownThreshold) {
+        if (setpoint < COAST_DOWN_THRESHOLD) {
           setpoint = 0.0;
         }
         io.setTopFlywheelVolts(setpoint);
@@ -144,7 +144,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         double setpoint =
             bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
                 + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM);
-        if (setpoint < coastDownThreshold) {
+        if (setpoint < COAST_DOWN_THRESHOLD) {
           setpoint = 0.0;
         }
         io.setBottomFlywheelVolts(setpoint);
@@ -224,7 +224,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return The command to run
    */
   public Command idleCommand() {
-    return this.setSpeedContinuous(idleSpeed);
+    return this.setSpeedContinuous(IDLE_SPEED);
   }
 
   /**

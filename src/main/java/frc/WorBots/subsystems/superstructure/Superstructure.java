@@ -8,7 +8,6 @@
 package frc.WorBots.subsystems.superstructure;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.*;
@@ -29,15 +28,11 @@ public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
   private SuperstructureState state = SuperstructureState.DISABLED;
-  private SuperstructureVisualizer visualizer;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
-  private double absoluteZeroOffsetRad = 0.2885;
   private double initZeroPoseRad = 0.0;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
   private Supplier<Double> climbingVolts = () -> 0.0;
   private Supplier<Double> manualPivotVolts = () -> 0.0;
-  private double firstCarriagePositionMeters;
-  private double secondCarriagePositionMeters;
   private boolean hasGottenZeroPosition = false;
 
   private TunableProfiledPIDController pivotController =
@@ -53,20 +48,21 @@ public class Superstructure extends SubsystemBase {
 
   // Constants
   private static final String tableName = "Superstructure";
-  private static final double elevatorLimitDistance = 0.25;
-  private static final double pivotBackwardLimitDistance = 0.90;
-  private static final double pivotForwardLimitDistance = 1.05;
-  private static final double firstCarriageRangeMeters[] = {0.0, Units.inchesToMeters(8.875)};
-  private static final double secondCarriageRangeMeters[] = {0.0, Units.inchesToMeters(11.0)};
+  private static final double ELEVATOR_LIMIT_DISTANCE = 0.25;
+  private static final double PIVOT_BACKWARD_LIMIT_DISTANCE = 0.90;
+  private static final double PIVOT_FORWARD_LIMIT_DISTANCE = 1.05;
+
+  /** The offset for the pivot abs encoder, in radians */
+  private static final double ABSOLUTE_ZERO_OFFSET = 0.2885;
 
   /** The max angle the pivot can go to, in radians */
-  public static final double pivotMaxAngle = 2.91;
+  public static final double PIVOT_MAX_ANGLE = 2.91;
 
   /** The max distance the elevator can go to, in meters */
-  public static final double elevatorMaxMeters = 0.2674420965;
+  public static final double ELEVATOR_MAX_METERS = 0.2674420965;
 
   /** The offset from the zero needed for the pivot to be horizontal */
-  public static final double pivotHorizontalOffset = 0.36368;
+  public static final double PIVOT_HORIZONTAL_OFFSET = 0.36368;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -102,7 +98,6 @@ public class Superstructure extends SubsystemBase {
     }
     pivotController.pid.setTolerance(0.03);
     elevatorController.pid.setTolerance(0.025);
-    visualizer = new SuperstructureVisualizer("Superstructure");
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
 
@@ -118,9 +113,7 @@ public class Superstructure extends SubsystemBase {
     // Log info
     Logger.getInstance().setSuperstructureInputs(inputs);
     Logger.getInstance().setSuperstructureMode(state.name());
-    Logger.getInstance()
-        .setSuperstructurePivotFusedRad(
-            inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad);
+    Logger.getInstance().setSuperstructurePivotFusedRad(getPivotPoseRads());
     Logger.getInstance().setSuperstructureAtSetpoint(isAtSetpoint());
     Logger.getInstance().setSuperstructureInHandoff(inHandoff());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
@@ -129,17 +122,6 @@ public class Superstructure extends SubsystemBase {
     // Update tunables
     pivotController.update();
     elevatorController.update();
-
-    firstCarriagePositionMeters =
-        ((firstCarriageRangeMeters[1] - firstCarriageRangeMeters[0])
-                * inputs.elevatorPercentageRaised)
-            + firstCarriageRangeMeters[0];
-    secondCarriagePositionMeters =
-        (((secondCarriageRangeMeters[1] - secondCarriageRangeMeters[0])
-                    * inputs.elevatorPercentageRaised)
-                + secondCarriageRangeMeters[0])
-            + firstCarriagePositionMeters
-            + Units.inchesToMeters(1.0);
 
     if (DriverStation.isDisabled()) {
       setElevatorVoltageRaw(0.0);
@@ -170,12 +152,12 @@ public class Superstructure extends SubsystemBase {
     inputs.elevator.publish();
     inputs.pivot.publish();
 
-    visualizer.update(
-        VecBuilder.fill(
-            getPivotPoseRads(),
-            firstCarriagePositionMeters,
-            secondCarriagePositionMeters,
-            inputs.elevatorPositionMeters));
+    // visualizer.update(
+    //     VecBuilder.fill(
+    //         getPivotPoseRads(),
+    //         firstCarriagePositionMeters,
+    //         secondCarriagePositionMeters,
+    //         inputs.elevatorPositionMeters));
   }
 
   /**
@@ -186,7 +168,7 @@ public class Superstructure extends SubsystemBase {
    */
   private double calculateElevator(double setpoint) {
     // Clamp the setpoint
-    setpoint = MathUtil.clamp(setpoint, 0.0, elevatorMaxMeters);
+    setpoint = MathUtil.clamp(setpoint, 0.0, ELEVATOR_MAX_METERS);
     final double elevatorVoltage =
         elevatorController.pid.calculate(inputs.elevatorPositionMeters, setpoint)
             + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
@@ -202,7 +184,7 @@ public class Superstructure extends SubsystemBase {
    */
   private double calculatePivot(double setpoint) {
     // Clamp the setpoint
-    setpoint = MathUtil.clamp(setpoint, 0.0, pivotMaxAngle);
+    setpoint = MathUtil.clamp(setpoint, 0.0, PIVOT_MAX_ANGLE);
     final double pivotVoltage =
         pivotController.pid.calculate(getPivotPoseRads(), setpoint) + calculatePivotFeedforward();
 
@@ -241,7 +223,7 @@ public class Superstructure extends SubsystemBase {
     // Do soft limiting
     volts =
         GeneralMath.softLimitVelocity(
-            volts, inputs.elevatorPercentageRaised, 12.0, 1.0, elevatorLimitDistance);
+            volts, inputs.elevatorPercentageRaised, 12.0, 1.0, ELEVATOR_LIMIT_DISTANCE);
 
     // Do hard limiting based on limit switches
     if (inputs.bottomLimitReached && volts < 0.0) {
@@ -277,9 +259,9 @@ public class Superstructure extends SubsystemBase {
             volts,
             getPivotPoseRads(),
             6.5,
-            pivotMaxAngle,
-            pivotBackwardLimitDistance,
-            pivotForwardLimitDistance);
+            PIVOT_MAX_ANGLE,
+            PIVOT_BACKWARD_LIMIT_DISTANCE,
+            PIVOT_FORWARD_LIMIT_DISTANCE);
 
     setPivotVoltageRaw(volts);
   }
@@ -406,15 +388,6 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Gets the first and 2nd carriage positions based on where the percent the elevator is extended.
-   *
-   * @return The two values for each of the carriages.
-   */
-  public double[] getElevatorPositions() {
-    return new double[] {firstCarriagePositionMeters, secondCarriagePositionMeters};
-  }
-
-  /**
    * Gets the height of the shooter in meters
    *
    * @return The shooter height
@@ -434,7 +407,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public double getPivotPoseRads() {
-    return inputs.pivotPositionRelRad + initZeroPoseRad - absoluteZeroOffsetRad;
+    return inputs.pivotPositionRelRad + initZeroPoseRad - ABSOLUTE_ZERO_OFFSET;
   }
 
   public Preset getCurrentPose() {

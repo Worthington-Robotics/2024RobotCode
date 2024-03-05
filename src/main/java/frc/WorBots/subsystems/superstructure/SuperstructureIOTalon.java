@@ -28,8 +28,8 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonSignalsPositional pivotSignals;
 
   // Constants
-  private static final double maxElevationRotations = 158.1 * 1.1;
-  private static final double elevatorGearing = 591.156; // in meter per rotation of 1st carriage
+  private static final double MAX_ELEVATION_ROTATIONS = 158.1 * 1.1;
+  private static final double ELEVATOR_GEARING = 591.156; // in meter per rotation of 1st carriage
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(2);
@@ -71,11 +71,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     elevatorSignals.update(inputs.elevator, elevator);
     pivotSignals.update(inputs.pivot, pivot);
 
-    inputs.elevatorPositionMeters = elevator.getPosition().getValue() / elevatorGearing;
+    inputs.elevatorPositionMeters = elevator.getPosition().getValue() / ELEVATOR_GEARING;
     inputs.elevatorVelocityMetersPerSec =
-        inputs.elevator.velocityRadsPerSec / elevatorGearing / (2 * Math.PI);
+        inputs.elevator.velocityRadsPerSec / ELEVATOR_GEARING / (2 * Math.PI);
     inputs.elevatorPercentageRaised =
-        inputs.elevator.positionRads / maxElevationRotations / (2 * Math.PI);
+        inputs.elevator.positionRads / MAX_ELEVATION_ROTATIONS / (2 * Math.PI);
     inputs.elevatorCurrentAmps = elevator.getStatorCurrent().getValue();
 
     final double pivotSign = (isPivotInverted ? 1.0 : -1.0);

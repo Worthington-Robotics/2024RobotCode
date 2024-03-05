@@ -21,7 +21,7 @@ public class VisionIOCustom implements VisionIO {
   private DoubleArraySubscriber data;
   private DoubleSubscriber subFps;
 
-  private static final double connectionTimeout = 2.0;
+  private static final double CONNECTION_TIMEOUT = 1.5;
 
   public VisionIOCustom(int index) {
     table = defaultInstance.getTable("module" + index);
@@ -51,6 +51,6 @@ public class VisionIOCustom implements VisionIO {
 
     inputs.fps = subFps.get();
     final double lastUpdate = subFps.getLastChange() / 1000000.0;
-    inputs.isConnected = (TimeCache.getInstance().get() - lastUpdate < connectionTimeout);
+    inputs.isConnected = (TimeCache.getInstance().get() - lastUpdate < CONNECTION_TIMEOUT);
   }
 }

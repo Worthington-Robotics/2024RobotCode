@@ -33,9 +33,9 @@ public class Intake extends SubsystemBase {
       intakeTable.getDoubleTopic("Time of Flight Distance").publish();
 
   // Constants
-  public static final double distanceThreshold = 0.25;
-  private static final double intakeVolts = 4.25;
-  private static final double maxTemperature = 80.0;
+  public static final double DISTANCE_THRESHOLD = 0.25;
+  private static final double INTAKE_VOLTS = 4.25;
+  private static final double MAX_TEMP = 80.0;
 
   /**
    * The intake subsystem, responsible for intaking game pieces from the ground and passing them to
@@ -51,15 +51,15 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    hasGamepiece = inputs.timeOfFlightDistanceMeters <= distanceThreshold;
+    hasGamepiece = inputs.timeOfFlightDistanceMeters <= DISTANCE_THRESHOLD;
 
-    if (inputs.motor.temperatureCelsius > maxTemperature || DriverStation.isDisabled()) {
+    if (inputs.motor.temperatureCelsius > MAX_TEMP || DriverStation.isDisabled()) {
       setpointVolts = 0.0;
     }
 
     StatusPage.reportStatus(
         StatusPage.INTAKE_CONNECTED,
-        inputs.isConnected && inputs.motor.temperatureCelsius <= maxTemperature);
+        inputs.isConnected && inputs.motor.temperatureCelsius <= MAX_TEMP);
 
     inputs.motor.publish();
 
@@ -90,7 +90,7 @@ public class Intake extends SubsystemBase {
   public Command spitRaw() {
     return this.run(
             () -> {
-              setpointVolts = -intakeVolts;
+              setpointVolts = -INTAKE_VOLTS;
             })
         .finallyDo(
             () -> {

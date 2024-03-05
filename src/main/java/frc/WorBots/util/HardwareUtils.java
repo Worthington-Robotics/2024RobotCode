@@ -20,9 +20,9 @@ import frc.WorBots.util.math.GeneralMath;
 public class HardwareUtils {
   // Constants
   /** The maximum temperature in celsius that we want to run our motors at */
-  public static final double maxMotorTemperature = 80.0;
+  public static final double MAX_MOTOR_TEMP = 80.0;
 
-  public static final double idealBatteryVoltage = 12.3;
+  public static final double IDEAL_BATTERY_VOLTAGE = 12.3;
 
   /**
    * Checks if a time of flight device is connected
@@ -44,7 +44,7 @@ public class HardwareUtils {
    * @param temp The temperature of the motor in celsius
    */
   public static void setTalonVoltage(TalonFX talon, double volts, double maxVolts, double temp) {
-    if (temp < maxMotorTemperature) {
+    if (temp < MAX_MOTOR_TEMP) {
       volts = GeneralMath.clampMagnitude(volts, maxVolts);
       talon.setVoltage(volts);
     } else {
@@ -144,7 +144,7 @@ public class HardwareUtils {
       inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
       inputs.supplyVoltage = voltsSignal.getValue();
       // inputs.currentDrawAmps = currentSignal.getValue();
-      inputs.isConnected = motor.isAlive() && inputs.temperatureCelsius < maxMotorTemperature;
+      inputs.isConnected = motor.isAlive() && inputs.temperatureCelsius < MAX_MOTOR_TEMP;
     }
 
     /**
