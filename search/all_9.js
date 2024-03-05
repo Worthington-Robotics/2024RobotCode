@@ -1,7 +1,7 @@
 var searchData=
 [
   ['ideal_5fbattery_0',['IDEAL_BATTERY',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a18481ada9ace190c1a7581f8e9ef539c',1,'frc::WorBots::util::debug::StatusPage']]],
-  ['idealbatteryvoltage_1',['idealBatteryVoltage',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#a4140b6d3b462cd734222605c013077ef',1,'frc::WorBots::util::HardwareUtils']]],
+  ['ideal_5fbattery_5fvoltage_1',['IDEAL_BATTERY_VOLTAGE',['../classfrc_1_1WorBots_1_1util_1_1HardwareUtils.html#af5d4e6b3fd4a1e4cfb65bdbf1e3f8304',1,'frc::WorBots::util::HardwareUtils']]],
   ['idlecommand_2',['idleCommand',['../classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a81efb4295285b812aaff8f2e0f75956c',1,'frc::WorBots::subsystems::shooter::Shooter']]],
   ['indicator_3',['Indicator',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#ae8de4219a739dcd38685d5240b2210a1',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['inhandoff_4',['inHandoff',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#aa79f2cc7e73d8634558439691e6d40bc',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],

@@ -11,7 +11,7 @@ var searchData=
   ['disabledexit_8',['disabledExit',['../classfrc_1_1WorBots_1_1Robot.html#ad4485342954c30b7212daf4e7ca93bab',1,'frc::WorBots::Robot']]],
   ['disabledinit_9',['disabledInit',['../classfrc_1_1WorBots_1_1Robot.html#aa3ec1410a9a10954cfccd90b7466eb09',1,'frc::WorBots::Robot']]],
   ['disabledperiodic_10',['disabledPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#aef62d0f148f883f6eaa03d162bfbb26b',1,'frc::WorBots::Robot']]],
-  ['distancethreshold_11',['distanceThreshold',['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1Intake.html#a2e0f89fdce9ff2f19605c4179fca83de',1,'frc::WorBots::subsystems::intake::Intake']]],
+  ['distance_5fthreshold_11',['DISTANCE_THRESHOLD',['../classfrc_1_1WorBots_1_1subsystems_1_1intake_1_1Intake.html#ab14583120f8835931163748dd00ac9c8',1,'frc::WorBots::subsystems::intake::Intake']]],
   ['drive_12',['drive',['../classfrc_1_1WorBots_1_1RobotContainer.html#a16fab27b25cfe8897b38b5f75291c645',1,'frc.WorBots.RobotContainer.drive()'],['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#ac6d641ac928a9f2652e2830440de6949',1,'frc.WorBots.util.control.DriveController.drive()']]],
   ['drive_13',['Drive',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#aa5563426274de3b09bf1187424ae4263',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['drive_14',['drive',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a52572b0fa4ff1c94e412cead5931b94c',1,'frc::WorBots::util::control::DriveController']]],
