@@ -174,9 +174,9 @@ public class RobotContainer {
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
     Pose2d ampPose =
         new Pose2d(
-            FieldConstants.Amp.x,
+            AllianceFlipUtil.apply(FieldConstants.Amp.x),
             FieldConstants.fieldWidth - Units.inchesToMeters(10),
-            AllianceFlipUtil.flipRotation(Rotation2d.fromDegrees(90)));
+            Rotation2d.fromDegrees(90));
     driver.a().whileTrue(new DriveToPose(drive, ampPose));
     driver
         .povLeft()
