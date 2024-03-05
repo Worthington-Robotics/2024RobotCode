@@ -13,14 +13,29 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
+import frc.WorBots.util.debug.TunablePIDController;
+import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 
 public class ModuleIOTalon implements ModuleIO {
-  private static final double DRIVE_ROTATIONS_TO_RADIANS =
-      (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
+  // L3 gear ratio
+  // (https://www.swervedrivespecialties.com/products/mk4i-swerve-module)
+  private static final double DRIVE_GEAR_RATIO = (14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
+
+  private ModuleIOInputs inputs;
+
+  private final SimpleMotorFeedforward driveFeedforward =
+      new SimpleMotorFeedforward(0.18868, 0.12825);
+  private static final TunablePIDGains driveFeedbackGains =
+      new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
+  private final TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
+  private static final TunablePIDGains turnFeedbackGains =
+      new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
+  private final TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
   private final TalonFX driveMotor;
   private final TalonFX turnMotor;
@@ -34,6 +49,12 @@ public class ModuleIOTalon implements ModuleIO {
   private final StatusSignal<Double> turnAbsPosSignal;
 
   public ModuleIOTalon(int index) {
+    driveFeedbackGains.setGains(0.08, 0.0, 0.0);
+    turnFeedbackGains.setGains(6.5, 0.017, 0.0);
+    turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
+
+    inputs = new ModuleIOInputs(index);
+
     switch (index) {
       case 0: // Front Left
         driveMotor = new TalonFX(1, Constants.SWERVE_CAN_BUS);
@@ -95,13 +116,16 @@ public class ModuleIOTalon implements ModuleIO {
     absoluteEncoder.optimizeBusUtilization();
   }
 
-  public void updateInputs(ModuleIOInputs inputs) {
+  public void updateInputs() {
+    driveFeedback.update();
+    turnFeedback.update();
+
     driveSignals.update(inputs.drive, driveMotor);
     turnSignals.update(inputs.turn, turnMotor);
     StatusSignal.refreshAll(turnAbsPosSignal);
 
-    inputs.drive.positionRads *= DRIVE_ROTATIONS_TO_RADIANS;
-    inputs.drive.velocityRadsPerSec *= DRIVE_ROTATIONS_TO_RADIANS;
+    inputs.drive.positionRads *= DRIVE_GEAR_RATIO;
+    inputs.drive.velocityRadsPerSec *= DRIVE_GEAR_RATIO;
 
     inputs.driveDistanceMeters = inputs.drive.positionRads * wheelRadius;
     inputs.driveVelocityMetersPerSec = inputs.drive.velocityRadsPerSec * wheelRadius;
@@ -110,12 +134,31 @@ public class ModuleIOTalon implements ModuleIO {
         MathUtil.angleModulus(
             Units.rotationsToRadians(turnAbsPosSignal.getValue()) - encoderOffset.getRadians());
 
+    inputs.turnPositionErrorRad = turnFeedback.pid.getPositionError();
+
     inputs.isConnected = inputs.turn.isConnected && inputs.drive.isConnected;
+  }
+
+  public ModuleIOInputs getInputs() {
+    return this.inputs;
+  }
+
+  public void setDriveSpeed(double speedMetersPerSecond) {
+    final double velocityRadPerSec = speedMetersPerSecond / wheelRadius;
+    final double driveVolts =
+        driveFeedforward.calculate(velocityRadPerSec)
+            + driveFeedback.pid.calculate(inputs.drive.velocityRadsPerSec, velocityRadPerSec);
+    setDriveVoltage(driveVolts);
+  }
+
+  public void setAngle(double angleRadians) {
+    setTurnVoltage(turnFeedback.pid.calculate(inputs.turnAbsolutePositionRad, angleRadians));
   }
 
   public void setDriveVoltage(double volts) {
     // final double limit =
-    //     (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 6.8 : 9;
+    // (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 6.8 :
+    // 9;
     driveSignals.setTalonVoltage(driveMotor, volts, 11.0);
   }
 

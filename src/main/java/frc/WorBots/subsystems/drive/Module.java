@@ -7,34 +7,19 @@
 
 package frc.WorBots.subsystems.drive;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotBase;
-import frc.WorBots.subsystems.drive.ModuleIO.ModuleIOInputs;
 import frc.WorBots.util.debug.StatusPage;
-import frc.WorBots.util.debug.TunablePIDController;
-import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 
 public class Module {
   private final int index;
   private final ModuleIO io;
-  private final ModuleIOInputs inputs;
   private SwerveModuleState lastSetpoint = new SwerveModuleState();
-
-  private SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-  private static final TunablePIDGains driveFeedbackGains =
-      new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
-  private final TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
-  private static final TunablePIDGains turnFeedbackGains =
-      new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
-  private final TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
 
   /**
    * The minimum speed percentage of the maximum that can be set before angle changes are ignored
    */
-  private static final double antiJitterThreshold = 0.01;
+  private static final double ANTI_JITTER_THRESHOLD = 0.01;
 
   /**
    * This module represents one swerve module, which includes a turn motor, and drive motor.
@@ -45,27 +30,13 @@ public class Module {
   public Module(ModuleIO io, int index) {
     this.io = io;
     this.index = index;
-    this.inputs = new ModuleIOInputs(index);
-
-    if (RobotBase.isReal()) { // Real constants
-      driveFeedforward = new SimpleMotorFeedforward(0.18868, 0.12825);
-      driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-      turnFeedbackGains.setGains(6.5, 0.017, 0.0);
-    } else { // Sim constants
-      driveFeedforward = new SimpleMotorFeedforward(0.116970, 0.133240);
-      driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-      turnFeedbackGains.setGains(9.5, 0.0, 0.0);
-    }
-    turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   public void periodic() {
-    driveFeedback.update();
-    turnFeedback.update();
-    io.updateInputs(inputs);
-    inputs.drive.publish();
-    inputs.turn.publish();
-    StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, inputs.isConnected);
+    io.updateInputs();
+    io.getInputs().drive.publish();
+    io.getInputs().turn.publish();
+    StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, io.getInputs().isConnected);
   }
 
   /**
@@ -75,20 +46,13 @@ public class Module {
    * @param state The desired state.
    */
   public void runState(SwerveModuleState state) {
-    final double velocityRadPerSec = state.speedMetersPerSecond / Units.inchesToMeters(2.0);
-    final double driveVolts =
-        driveFeedforward.calculate(velocityRadPerSec)
-            + driveFeedback.pid.calculate(inputs.drive.velocityRadsPerSec, velocityRadPerSec);
-
     // Perform anti-jitter to prevent module rotations for very small motions
-    if (Math.abs(driveVolts) < 12.0 * antiJitterThreshold) {
+    if (Math.abs(state.speedMetersPerSecond) < 4.5 * ANTI_JITTER_THRESHOLD) {
       state.angle = lastSetpoint.angle;
     }
 
-    io.setTurnVoltage(
-        turnFeedback.pid.calculate(getAngle().getRadians(), state.angle.getRadians()));
-
-    io.setDriveVoltage(driveVolts);
+    io.setAngle(state.angle.getRadians());
+    io.setDriveSpeed(state.speedMetersPerSecond);
 
     lastSetpoint = state;
   }
@@ -103,7 +67,7 @@ public class Module {
     var optimizedState = SwerveModuleState.optimize(state, getAngle());
 
     // Stray module correction
-    optimizedState.speedMetersPerSecond *= Math.cos(turnFeedback.pid.getPositionError());
+    optimizedState.speedMetersPerSecond *= Math.cos(io.getInputs().turnPositionErrorRad);
 
     return optimizedState;
   }
@@ -129,7 +93,7 @@ public class Module {
    * @return The position in meters.
    */
   public double getPositionMeters() {
-    return inputs.driveDistanceMeters;
+    return io.getInputs().driveDistanceMeters;
   }
 
   /**
@@ -138,7 +102,7 @@ public class Module {
    * @return The position in radians
    */
   public double getPositionRads() {
-    return inputs.drive.positionRads;
+    return io.getInputs().drive.positionRads;
   }
 
   /**
@@ -147,7 +111,7 @@ public class Module {
    * @return The velocity in meters per second.
    */
   public double getVelocityMetersPerSec() {
-    return inputs.driveVelocityMetersPerSec;
+    return io.getInputs().driveVelocityMetersPerSec;
   }
 
   /**
@@ -156,6 +120,6 @@ public class Module {
    * @return The angle as a rotation.
    */
   public Rotation2d getAngle() {
-    return new Rotation2d(inputs.turnAbsolutePositionRad);
+    return new Rotation2d(io.getInputs().turnAbsolutePositionRad);
   }
 }

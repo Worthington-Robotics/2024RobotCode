@@ -64,10 +64,10 @@ public class RobotContainer {
       drive =
           new Drive(
               new GyroIOSim(),
-              new ModuleIOSim(),
-              new ModuleIOSim(),
-              new ModuleIOSim(),
-              new ModuleIOSim());
+              new ModuleIOSim(0),
+              new ModuleIOSim(1),
+              new ModuleIOSim(2),
+              new ModuleIOSim(3));
       vision = new Vision(new VisionIOCustom(0));
       superstructure = new Superstructure(new SuperstructureIOSim());
       intake = new Intake(new IntakeIOSim());

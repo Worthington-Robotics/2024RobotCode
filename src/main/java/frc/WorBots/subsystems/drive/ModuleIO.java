@@ -16,6 +16,7 @@ public interface ModuleIO {
 
     public TalonInputsPositional turn;
     public double turnAbsolutePositionRad = 0.0;
+    public double turnPositionErrorRad = 0.0;
 
     public double driveDistanceMeters;
     public double driveVelocityMetersPerSec;
@@ -29,7 +30,16 @@ public interface ModuleIO {
   }
 
   /** Updates the set of loggable inputs. */
-  public default void updateInputs(ModuleIOInputs inputs) {}
+  public default void updateInputs() {}
+
+  /** Gets the set of loggable inputs */
+  public ModuleIOInputs getInputs();
+
+  /** Run the drive motor at the specified speed */
+  public default void setDriveSpeed(double speedMetersPerSecond) {}
+
+  /** Turn the module to an angle */
+  public default void setAngle(double angleRadians) {}
 
   /** Run the drive motor at the specified voltage. */
   public default void setDriveVoltage(double volts) {}
