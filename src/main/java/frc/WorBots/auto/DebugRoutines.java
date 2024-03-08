@@ -87,14 +87,16 @@ public class DebugRoutines {
         UtilCommands.waitForDriverstationButton(),
         testSuperstructure(),
         UtilCommands.waitForDriverstationButton(),
-        testIntake());
+        testIntake(),
+        UtilCommands.waitForDriverstationButton(),
+        testShooter());
   }
 
   private Command testDrive() {
     return Commands.sequence(
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0))).withTimeout(2.0),
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0.0))).withTimeout(2.0),
-        Commands.runOnce(() -> drive.stop()));
+        Commands.runOnce(drive::stop));
   }
 
   private Command testSuperstructure() {
@@ -107,6 +109,16 @@ public class DebugRoutines {
   }
 
   private Command testIntake() {
-    return Commands.sequence(new Handoff(intake, superstructure, shooter));
+    return Commands.sequence(
+        new Handoff(intake, superstructure, shooter).withTimeout(2.5),
+        UtilCommands.waitForDriverstationButton(),
+        intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2).withTimeout(1.3)),
+        superstructure.setPose(Preset.HOME),
+        new Handoff(intake, superstructure, shooter).withTimeout(2.5));
+  }
+
+  private Command testShooter() {
+    return Commands.sequence(
+        shooter.setSpeedContinuous(2000).withTimeout(3.0), shooter.stopFlywheels());
   }
 }
