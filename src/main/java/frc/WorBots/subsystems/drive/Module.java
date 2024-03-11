@@ -36,6 +36,7 @@ public class Module {
     io.updateInputs();
     io.getInputs().drive.publish();
     io.getInputs().turn.publish();
+    // SmartDashboard.putNumber("", ANTI_JITTER_THRESHOLD)
     StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, io.getInputs().isConnected);
   }
 

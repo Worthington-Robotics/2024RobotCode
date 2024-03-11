@@ -98,6 +98,17 @@ public class Intake extends SubsystemBase {
             });
   }
 
+  public Command intakeRaw() {
+    return this.run(
+            () -> {
+              setpointVolts = INTAKE_VOLTS;
+            })
+        .finallyDo(
+            () -> {
+              setpointVolts = 0.0;
+            });
+  }
+
   /**
    * Gets wether or not a game piece is currently held.
    *

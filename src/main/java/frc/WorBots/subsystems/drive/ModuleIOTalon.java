@@ -22,9 +22,11 @@ import frc.WorBots.util.debug.TunablePIDController;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 
 public class ModuleIOTalon implements ModuleIO {
+  private static final double DRIVE_MULTIPLIER = 0.9579;
   // L3 gear ratio
   // (https://www.swervedrivespecialties.com/products/mk4i-swerve-module)
-  private static final double DRIVE_GEAR_RATIO = (14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0);
+  private static final double DRIVE_GEAR_RATIO =
+      (14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0) * DRIVE_MULTIPLIER;
 
   private ModuleIOInputs inputs;
 
@@ -88,11 +90,6 @@ public class ModuleIOTalon implements ModuleIO {
         throw new RuntimeException("Invalid swerve module index");
     }
     // Configure devices
-    driveMotor.setNeutralMode(NeutralModeValue.Brake);
-    turnMotor.setNeutralMode(NeutralModeValue.Brake);
-
-    driveMotor.setInverted(false);
-    turnMotor.setInverted(true);
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
     driveConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -103,6 +100,15 @@ public class ModuleIOTalon implements ModuleIO {
     // turnConfig.CurrentLimits.SupplyCurrentLimit = 45;
     // turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
     // turnMotor.getConfigurator().apply(turnConfig);
+
+    driveMotor.setNeutralMode(NeutralModeValue.Coast);
+    turnMotor.setNeutralMode(NeutralModeValue.Coast);
+
+    driveMotor.setInverted(false);
+    turnMotor.setInverted(true);
+
+    driveMotor.setPosition(0.0);
+    turnMotor.setPosition(0.0);
 
     // Signals
     driveSignals = new TalonSignalsPositional(driveMotor);

@@ -107,6 +107,7 @@ public class RobotContainer {
         autos.threePieceClose());
 
     selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
+    selector.addRoutine("Long Five", List.of(), autos.fivePieceLong());
 
     selector.addRoutine(
         "Mobility",
@@ -161,7 +162,11 @@ public class RobotContainer {
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.leftBumper().onTrue(superstructure.setPose(Preset.STOW));
-    driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
+    // driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
+    driver
+        .rightTrigger()
+        .whileTrue(intake.intakeRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
+        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
     // driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
     // driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));

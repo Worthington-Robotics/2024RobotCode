@@ -82,7 +82,7 @@ public class AutoSelector extends SubsystemBase {
 
   public void addRoutine(AutoRoutine routine) {
     if (routine.questions.size() > MAX_QUESTIONS) {
-      throw new RuntimeException(
+      throw new IllegalArgumentException(
           "Auto routine contained more than " + MAX_QUESTIONS + " questions: " + routine.name);
     }
     names.add(routine.name);

@@ -29,7 +29,7 @@ public class Superstructure extends SubsystemBase {
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
   private SuperstructureState state = SuperstructureState.DISABLED;
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
-  private double initZeroPoseRad = 0.0;
+  private double initZeroPoseRad = ABSOLUTE_ZERO_OFFSET;
   private Supplier<Double> shootingAngleRad = () -> 0.0;
   private Supplier<Double> climbingVolts = () -> 0.0;
   private Supplier<Double> manualPivotVolts = () -> 0.0;
@@ -53,7 +53,10 @@ public class Superstructure extends SubsystemBase {
   private static final double PIVOT_FORWARD_LIMIT_DISTANCE = 1.05;
 
   /** The offset for the pivot abs encoder, in radians */
-  private static final double ABSOLUTE_ZERO_OFFSET = 0.2885;
+  private static final double ABSOLUTE_ZERO_OFFSET = 0.2827;
+
+  /** The minimum value for the absolute encoder */
+  private static final double ABSOLUTE_MIN_VALUE = 0.270;
 
   /** The max angle the pivot can go to, in radians */
   public static final double PIVOT_MAX_ANGLE = 2.91;
@@ -105,9 +108,12 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
-    if (!hasGottenZeroPosition && inputs.pivotPositionAbsRad != 0.0) {
-      initZeroPoseRad = inputs.pivotPositionAbsRad;
-      hasGottenZeroPosition = true;
+    if (!hasGottenZeroPosition) {
+      // If we have an invalid value from the absolute encoder, fallback to the stow position offset
+      if (inputs.pivotPositionAbsRad < ABSOLUTE_MIN_VALUE) {
+        initZeroPoseRad = inputs.pivotPositionAbsRad;
+        hasGottenZeroPosition = true;
+      }
     }
 
     // Log info

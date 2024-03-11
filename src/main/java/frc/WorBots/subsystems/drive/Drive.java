@@ -195,7 +195,7 @@ public class Drive extends SubsystemBase {
     }
 
     var twist = kinematics.toTwist2d(wheelDeltas);
-    var gyroYaw = new Rotation2d(gyroInputs.yawPositionRad);
+    final var gyroYaw = new Rotation2d(gyroInputs.yawPositionRad);
     if (gyroInputs.connected) {
       twist = new Twist2d(twist.dx, twist.dy, gyroYaw.minus(lastGyroYaw).getRadians());
     }

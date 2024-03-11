@@ -154,10 +154,12 @@ public class Vision extends SubsystemBase {
             // Select pose using scores
             final double score0 = scoreDetection(error0, camIndex, -1);
             final double score1 = scoreDetection(error1, camIndex, -1);
-            if (score0 < score1) {
+            SmartDashboard.putNumber("Score 0", score0);
+            SmartDashboard.putNumber("Score 1", score1);
+            if (score0 > score1) {
               cameraPose = cameraPose0;
               robotPose3d = robotPose3d0;
-            } else if (score1 < score0) {
+            } else {
               cameraPose = cameraPose1;
               robotPose3d = robotPose3d1;
             }
@@ -260,8 +262,11 @@ public class Vision extends SubsystemBase {
         || pose.getY() > FieldConstants.fieldWidth + FIELD_BORDER_MARGIN
         || pose.getZ() < -Z_MARGIN
         || pose.getZ() > Z_MARGIN) {
+      SmartDashboard.putNumberArray("Invalid Pose", Logger.pose3dToArray(pose));
+      SmartDashboard.putBoolean("Pose Valid", false);
       return false;
     }
+    SmartDashboard.putBoolean("Pose Valid", true);
 
     return true;
   }
