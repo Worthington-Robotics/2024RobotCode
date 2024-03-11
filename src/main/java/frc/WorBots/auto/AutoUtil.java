@@ -217,7 +217,7 @@ public class AutoUtil {
    * @return The command
    */
   public Command prepareHandoff() {
-    return superstructure.setPose(Preset.HANDOFF).withTimeout(0.3);
+    return superstructure.goToPose(Preset.HANDOFF).withTimeout(0.3);
   }
 
   /**
@@ -433,11 +433,9 @@ public class AutoUtil {
                 superstructure),
             driveToPose.alongWith(
                 Commands.waitUntil(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint())),
-            shooter.setRawFeederVoltsCommand(-2),
-            Commands.waitSeconds(0.2).withTimeout(0.2),
+            shooter.feed().withTimeout(0.2),
             Commands.runOnce(
                 () -> {
-                  shooter.setRawFeederVolts(0.0);
                   shooter.stopFlywheels();
                   superstructure.setModeVoid(SuperstructureState.POSE);
                 },

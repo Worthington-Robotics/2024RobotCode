@@ -161,13 +161,14 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
-    driver.leftBumper().onTrue(superstructure.setPose(Preset.STOW));
-    // driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
+    driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
+    // driver.rightTrigger().whileTrue(new Handoff(intake, superstructure,
+    // shooter));
     driver
         .rightTrigger()
         .whileTrue(intake.intakeRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
-    driver.rightBumper().onTrue(superstructure.setPose(Preset.HANDOFF));
+    driver.rightBumper().onTrue(superstructure.goToPose(Preset.HANDOFF));
     // driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
     // driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
     driver
@@ -186,11 +187,11 @@ public class RobotContainer {
     driver
         .povLeft()
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));
-    operator.b().onTrue(superstructure.setPose(Preset.STOW));
-    operator.y().onTrue(superstructure.setPose(Preset.HANDOFF));
-    operator.a().onTrue(superstructure.setPose(Preset.TRAP));
-    operator.x().onTrue(superstructure.setPose(Preset.AMP));
-    operator.povUp().onTrue(superstructure.setPose(Preset.SUBWOOFER_SHOOT));
+    operator.b().onTrue(superstructure.goToPose(Preset.STOW));
+    operator.y().onTrue(superstructure.goToPose(Preset.HANDOFF));
+    operator.a().onTrue(superstructure.goToPose(Preset.TRAP));
+    operator.x().onTrue(superstructure.goToPose(Preset.AMP));
+    operator.povUp().onTrue(superstructure.goToPose(Preset.SUBWOOFER_SHOOT));
     operator
         .rightBumper()
         .whileTrue(
@@ -210,11 +211,19 @@ public class RobotContainer {
             shooter
                 .spinToSpeed(0.0)
                 .alongWith(
-                    Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery))));
+                    Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery)))
+                .andThen(Commands.waitSeconds(1.0))
+                .andThen(new StowAfterShoot(superstructure)));
     operator
         .leftBumper()
-        .onTrue(shooter.setRawFeederVoltsCommand(-2))
-        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+        .whileTrue(shooter.feed())
+        .onFalse(
+            Commands.waitSeconds(1.0)
+                // We only want the stow after shoot for the feeder button to apply if we are
+                // not in shooting mode, since that should only stow after the targeting is ended,
+                // not when the feeding stops
+                .andThen(
+                    new StowAfterShoot(superstructure).onlyIf(() -> !superstructure.isShooting())));
 
     // Contextual shooting
     HashMap<String, Command> shootMap = new HashMap<>();

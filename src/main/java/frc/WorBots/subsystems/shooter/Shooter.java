@@ -59,6 +59,9 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   /** The default idle speed for the flywheels */
   private static final double IDLE_SPEED = 500.0;
 
+  /** The voltage to run the feeder wheels at when feeding */
+  private static final double FEED_VOLTS = -2.0;
+
   private static final String tableName = "Shooter";
 
   private TunablePIDController topFlywheelController =
@@ -207,15 +210,36 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
         });
   }
 
+  /**
+   * Sets the raw volts of the feeder wheels. Negative voltages feed forward.
+   *
+   * @param volts The volts to set
+   */
   public void setRawFeederVolts(double volts) {
     feederWheelVolts = volts;
   }
 
+  /**
+   * Returns a command that sets the raw volts of the feeder wheels. Does not require the subsystem.
+   *
+   * @param volts The volts to set
+   * @return The command to run
+   */
   public Command setRawFeederVoltsCommand(double volts) {
     return Commands.runOnce(
         () -> {
           feederWheelVolts = volts;
         });
+  }
+
+  /**
+   * Returns a command that feeds the game piece into the shooter and automatically stops the feeder
+   * when the command is interrupted
+   *
+   * @return The command to run
+   */
+  public Command feed() {
+    return Commands.startEnd(() -> feederWheelVolts = FEED_VOLTS, () -> feederWheelVolts = 0.0);
   }
 
   /**
@@ -228,7 +252,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   }
 
   /**
-   * Sets the flwheel desired RPM's to 0.
+   * Sets the flywheel desired RPM's to 0.
    *
    * @return The command.
    */

@@ -101,11 +101,11 @@ public class DebugRoutines {
 
   private Command testSuperstructure() {
     return Commands.sequence(
-        superstructure.setPose(Preset.HANDOFF),
+        superstructure.goToPose(Preset.HANDOFF),
         UtilCommands.waitForDriverstationButton(),
-        superstructure.setPose(Preset.AMP),
+        superstructure.goToPose(Preset.AMP),
         UtilCommands.waitForDriverstationButton(),
-        superstructure.setPose(Preset.HANDOFF));
+        superstructure.goToPose(Preset.HANDOFF));
   }
 
   private Command testIntake() {
@@ -113,7 +113,7 @@ public class DebugRoutines {
         new Handoff(intake, superstructure, shooter).withTimeout(2.5),
         UtilCommands.waitForDriverstationButton(),
         intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2).withTimeout(1.3)),
-        superstructure.setPose(Preset.HOME),
+        superstructure.goToPose(Preset.HOME),
         new Handoff(intake, superstructure, shooter).withTimeout(2.5));
   }
 

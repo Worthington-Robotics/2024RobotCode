@@ -109,7 +109,8 @@ public class Superstructure extends SubsystemBase {
     io.updateInputs(inputs);
 
     if (!hasGottenZeroPosition) {
-      // If we have an invalid value from the absolute encoder, fallback to the stow position offset
+      // If we have an invalid value from the absolute encoder, fallback to the stow
+      // position offset
       if (inputs.pivotPositionAbsRad < ABSOLUTE_MIN_VALUE) {
         initZeroPoseRad = inputs.pivotPositionAbsRad;
         hasGottenZeroPosition = true;
@@ -159,11 +160,11 @@ public class Superstructure extends SubsystemBase {
     inputs.pivot.publish();
 
     // visualizer.update(
-    //     VecBuilder.fill(
-    //         getPivotPoseRads(),
-    //         firstCarriagePositionMeters,
-    //         secondCarriagePositionMeters,
-    //         inputs.elevatorPositionMeters));
+    // VecBuilder.fill(
+    // getPivotPoseRads(),
+    // firstCarriagePositionMeters,
+    // secondCarriagePositionMeters,
+    // inputs.elevatorPositionMeters));
   }
 
   /**
@@ -346,23 +347,33 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Sets the desired pose of the subsystem. Also sets the superstructure to pose mode.
+   * Sets the desired pose of the subsystem and waits for it to get there. Also sets the
+   * superstructure to pose mode.
    *
    * @param pose The desired pose.
    * @return The command, exits when superstructure is at the desired pose.
    */
-  public Command setPose(SuperstructurePose.Preset pose) {
+  public Command goToPose(SuperstructurePose.Preset pose) {
     return UtilCommands.optimalSequence(
             this.runOnce(
                 () -> {
-                  this.setModeVoid(SuperstructureState.POSE);
-                  this.setpoint = pose;
+                  this.setPose(pose);
                 }),
             Commands.waitUntil(() -> isAtSetpoint()))
         .finallyDo(
             () -> {
               this.setModeVoid(SuperstructureState.POSE);
             });
+  }
+
+  /**
+   * Sets the pose of the superstructure to a pose and also sets it to pose mode
+   *
+   * @param pose The pose to set
+   */
+  public void setPose(SuperstructurePose.Preset pose) {
+    this.setModeVoid(SuperstructureState.POSE);
+    this.setpoint = pose;
   }
 
   /**
