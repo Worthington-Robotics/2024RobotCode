@@ -108,6 +108,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a96b69b22739afcabfd1b61e394a2a834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c9dbd6c5e6f37ee420efb296c08ab04"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a4c9dbd6c5e6f37ee420efb296c08ab04">setRawFeederVoltsCommand</a> (double volts)</td></tr>
 <tr class="separator:a4c9dbd6c5e6f37ee420efb296c08ab04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad021267833d3e6843b1f070314ac336e"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#ad021267833d3e6843b1f070314ac336e">feed</a> ()</td></tr>
+<tr class="separator:ad021267833d3e6843b1f070314ac336e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81efb4295285b812aaff8f2e0f75956c"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a81efb4295285b812aaff8f2e0f75956c">idleCommand</a> ()</td></tr>
 <tr class="separator:a81efb4295285b812aaff8f2e0f75956c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a684deb2026d519badb19658583f74391"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1shooter_1_1Shooter.html#a684deb2026d519badb19658583f74391">stopFlywheels</a> ()</td></tr>
@@ -152,6 +154,33 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad021267833d3e6843b1f070314ac336e" name="ad021267833d3e6843b1f070314ac336e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad021267833d3e6843b1f070314ac336e">&#9670;&#160;</a></span>feed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.shooter.Shooter.feed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a command that feeds the game piece into the shooter and automatically stops the feeder when the command is interrupted</p>
+<dl class="section return"><dt>Returns</dt><dd>The command to run </dd></dl>
+
+</div>
+</div>
 <a id="a2fd7e8e5d6f554a1b91e1a00864ad51e" name="a2fd7e8e5d6f554a1b91e1a00864ad51e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2fd7e8e5d6f554a1b91e1a00864ad51e">&#9670;&#160;</a></span>hasGamePiece()</h2>
 
@@ -281,6 +310,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Sets the raw volts of the feeder wheels. Negative voltages feed forward.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">volts</td><td>The volts to set </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -307,6 +343,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Returns a command that sets the raw volts of the feeder wheels. Does not require the subsystem.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">volts</td><td>The volts to set </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The command to run </dd></dl>
 
 </div>
 </div>
@@ -515,7 +559,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Sets the flwheel desired RPM's to 0.</p>
+<p >Sets the flywheel desired RPM's to 0.</p>
 <dl class="section return"><dt>Returns</dt><dd>The command. </dd></dl>
 
 </div>

@@ -27,7 +27,7 @@ var searchData=
   ['getholonomicrotation_24',['getHolonomicRotation',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a11a4b9cc75090c5cefbb20d5caa29a16',1,'frc::WorBots::util::trajectory::Waypoint']]],
   ['getholonomicrotationsequence_25',['getHolonomicRotationSequence',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html#ae5f37cbfd72d2e1e88bc3a5eeb41b2fb',1,'frc::WorBots::util::trajectory::CustomTrajectoryGenerator']]],
   ['getinputs_26',['getInputs',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOTalon.html#ac95a6ad04c8785c380e043df2900aff3',1,'frc.WorBots.subsystems.drive.ModuleIOTalon.getInputs()'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIOSim.html#ac59528c782af8715337ba88260351cab',1,'frc.WorBots.subsystems.drive.ModuleIOSim.getInputs()'],['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1ModuleIO.html#a60748e10b0c20a3a70a0b05ade7a42ea',1,'frc.WorBots.subsystems.drive.ModuleIO.getInputs()']]],
-  ['getinstance_27',['getInstance',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#a6c99eac05135907c3454676411cdea74',1,'frc.WorBots.subsystems.lights.Lights.getInstance()'],['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a9400c12c4eb9fec8a12e9f07c1826462',1,'frc.WorBots.util.debug.StatusPage.getInstance()'],['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#ac9f9043eec0760a68d9941b656243f98',1,'frc.WorBots.util.debug.Logger.getInstance()']]],
+  ['getinstance_27',['getInstance',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#ac9f9043eec0760a68d9941b656243f98',1,'frc.WorBots.util.debug.Logger.getInstance()'],['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a9400c12c4eb9fec8a12e9f07c1826462',1,'frc.WorBots.util.debug.StatusPage.getInstance()'],['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#a6c99eac05135907c3454676411cdea74',1,'frc.WorBots.subsystems.lights.Lights.getInstance()']]],
   ['getlastposetime_28',['getLastPoseTime',['../classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html#abd162835667e8ce1e13d61e92fbe6bf8',1,'frc::WorBots::subsystems::vision::Vision']]],
   ['getlastswervemodulepositions_29',['getLastSwerveModulePositions',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#adbb91e64490fccd37c1e6775a0a938bf',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getlastswervemodulestates_30',['getLastSwerveModuleStates',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a382134737886dbafdde945377f2d9e99',1,'frc::WorBots::subsystems::drive::Drive']]],
@@ -60,11 +60,12 @@ var searchData=
   ['getwinglinepose_57',['getWingLinePose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a9a880a8a054779c523c03ba3c8cad6ac',1,'frc::WorBots::auto::AutoUtil']]],
   ['getyaw_58',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getyawvelocity_59',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['gyroio_60',['GyroIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html',1,'frc::WorBots::subsystems::drive']]],
-  ['gyroio_2ejava_61',['GyroIO.java',['../GyroIO_8java.html',1,'']]],
-  ['gyroiopigeon2_62',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html',1,'frc.WorBots.subsystems.drive.GyroIOPigeon2'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc.WorBots.subsystems.drive.GyroIOPigeon2.GyroIOPigeon2()']]],
-  ['gyroiopigeon2_2ejava_63',['GyroIOPigeon2.java',['../GyroIOPigeon2_8java.html',1,'']]],
-  ['gyroiosim_64',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html',1,'frc.WorBots.subsystems.drive.GyroIOSim'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc.WorBots.subsystems.drive.GyroIOSim.GyroIOSim()']]],
-  ['gyroiosim_2ejava_65',['GyroIOSim.java',['../GyroIOSim_8java.html',1,'']]],
-  ['gyroscope_66',['GYROSCOPE',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#aaccfb2c4db97dbac4ef0853cf01aa166',1,'frc::WorBots::util::debug::StatusPage']]]
+  ['gotopose_60',['goToPose',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#ab6db17b2a219201d63499a5ed664c98e',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
+  ['gyroio_61',['GyroIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html',1,'frc::WorBots::subsystems::drive']]],
+  ['gyroio_2ejava_62',['GyroIO.java',['../GyroIO_8java.html',1,'']]],
+  ['gyroiopigeon2_63',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html',1,'frc.WorBots.subsystems.drive.GyroIOPigeon2'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc.WorBots.subsystems.drive.GyroIOPigeon2.GyroIOPigeon2()']]],
+  ['gyroiopigeon2_2ejava_64',['GyroIOPigeon2.java',['../GyroIOPigeon2_8java.html',1,'']]],
+  ['gyroiosim_65',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html',1,'frc.WorBots.subsystems.drive.GyroIOSim'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc.WorBots.subsystems.drive.GyroIOSim.GyroIOSim()']]],
+  ['gyroiosim_2ejava_66',['GyroIOSim.java',['../GyroIOSim_8java.html',1,'']]],
+  ['gyroscope_67',['GYROSCOPE',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#aaccfb2c4db97dbac4ef0853cf01aa166',1,'frc::WorBots::util::debug::StatusPage']]]
 ];

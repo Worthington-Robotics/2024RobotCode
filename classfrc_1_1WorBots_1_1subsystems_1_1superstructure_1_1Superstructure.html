@@ -113,8 +113,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a70210e055c549aef833a907176f3241f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f66f8ab7bd159729e64bc3af265992d"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a4f66f8ab7bd159729e64bc3af265992d">isAtSetpoint</a> ()</td></tr>
 <tr class="separator:a4f66f8ab7bd159729e64bc3af265992d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0abcf13438578ef266c0a5bbe7c06c13"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a0abcf13438578ef266c0a5bbe7c06c13">setPose</a> (SuperstructurePose.Preset pose)</td></tr>
-<tr class="separator:a0abcf13438578ef266c0a5bbe7c06c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6db17b2a219201d63499a5ed664c98e"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#ab6db17b2a219201d63499a5ed664c98e">goToPose</a> (SuperstructurePose.Preset pose)</td></tr>
+<tr class="separator:ab6db17b2a219201d63499a5ed664c98e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af31bcb2f36c6f4231f9f6b19a3024b87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#af31bcb2f36c6f4231f9f6b19a3024b87">setPose</a> (SuperstructurePose.Preset pose)</td></tr>
+<tr class="separator:af31bcb2f36c6f4231f9f6b19a3024b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b61a3526057908c489a687f9b9a5abb"><td class="memItemLeft" align="right" valign="top">Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a3b61a3526057908c489a687f9b9a5abb">setMode</a> (<a class="el" href="enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html">SuperstructureState</a> state)</td></tr>
 <tr class="separator:a3b61a3526057908c489a687f9b9a5abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ca61ad39fa3c2905c021736f06d9d52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a5ca61ad39fa3c2905c021736f06d9d52">setModeVoid</a> (<a class="el" href="enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html">SuperstructureState</a> state)</td></tr>
@@ -310,6 +312,40 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p >Gets the height of the shooter in meters</p>
 <dl class="section return"><dt>Returns</dt><dd>The shooter height </dd></dl>
+
+</div>
+</div>
+<a id="ab6db17b2a219201d63499a5ed664c98e" name="ab6db17b2a219201d63499a5ed664c98e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6db17b2a219201d63499a5ed664c98e">&#9670;&#160;</a></span>goToPose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Command frc.WorBots.subsystems.superstructure.Superstructure.goToPose </td>
+          <td>(</td>
+          <td class="paramtype">SuperstructurePose.Preset&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Sets the desired pose of the subsystem and waits for it to get there. Also sets the superstructure to pose mode.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>The desired pose. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The command, exits when superstructure is at the desired pose. </dd></dl>
 
 </div>
 </div>
@@ -703,8 +739,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0abcf13438578ef266c0a5bbe7c06c13" name="a0abcf13438578ef266c0a5bbe7c06c13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0abcf13438578ef266c0a5bbe7c06c13">&#9670;&#160;</a></span>setPose()</h2>
+<a id="af31bcb2f36c6f4231f9f6b19a3024b87" name="af31bcb2f36c6f4231f9f6b19a3024b87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af31bcb2f36c6f4231f9f6b19a3024b87">&#9670;&#160;</a></span>setPose()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -713,7 +749,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Command frc.WorBots.subsystems.superstructure.Superstructure.setPose </td>
+          <td class="memname">void frc.WorBots.subsystems.superstructure.Superstructure.setPose </td>
           <td>(</td>
           <td class="paramtype">SuperstructurePose.Preset&#160;</td>
           <td class="paramname"><em>pose</em></td><td>)</td>
@@ -726,14 +762,13 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Sets the desired pose of the subsystem. Also sets the superstructure to pose mode.</p>
+<p >Sets the pose of the superstructure to a pose and also sets it to pose mode</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pose</td><td>The desired pose. </td></tr>
+    <tr><td class="paramname">pose</td><td>The pose to set </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The command, exits when superstructure is at the desired pose. </dd></dl>
 
 </div>
 </div>

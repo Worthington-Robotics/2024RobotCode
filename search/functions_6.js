@@ -56,6 +56,7 @@ var searchData=
   ['getwinglinepose_53',['getWingLinePose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a9a880a8a054779c523c03ba3c8cad6ac',1,'frc::WorBots::auto::AutoUtil']]],
   ['getyaw_54',['getYaw',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a7aafd88de0c970472c8b93da4775fb92',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['getyawvelocity_55',['getYawVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a9d372af826db825ce1efe3457e5ca10c',1,'frc::WorBots::subsystems::drive::Drive']]],
-  ['gyroiopigeon2_56',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
-  ['gyroiosim_57',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
+  ['gotopose_56',['goToPose',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#ab6db17b2a219201d63499a5ed664c98e',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
+  ['gyroiopigeon2_57',['GyroIOPigeon2',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#aed793aef8343236acebe9b719237e3a2',1,'frc::WorBots::subsystems::drive::GyroIOPigeon2']]],
+  ['gyroiosim_58',['GyroIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#ad4cda4b54c8a20709513490c87138e22',1,'frc::WorBots::subsystems::drive::GyroIOSim']]]
 ];
