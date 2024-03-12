@@ -15,6 +15,7 @@ var searchData=
   ['rotationsequence_12',['RotationSequence',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1RotationSequence.html#af98159c2d5edd48369542fda2ce42d97',1,'frc::WorBots::util::trajectory::RotationSequence']]],
   ['rotationtopose_13',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a6d937a21ed822175b7958d7ad5cd0233',1,'frc::WorBots::util::math::GeomUtil']]],
   ['rotationtotransform_14',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1296067ad70179403938c47dc05416c7',1,'frc::WorBots::util::math::GeomUtil']]],
-  ['runstate_15',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['runvelocity_16',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
+  ['run_15',['run',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#af50e205d49accf3e3d02e464abe86c35',1,'frc::WorBots::util::StateMachine']]],
+  ['runstate_16',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['runvelocity_17',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
 ];
