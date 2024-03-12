@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class SuperstructureManual extends Command {
   // Constants
   private static final double DEADBAND = 0.1;
-  private static final double ELEVATOR_VOLTS = 9.5;
+  private static final double ELEVATOR_VOLTS = 6.0;
   private static final double PIVOT_VOLTS = 6.0;
 
   private Supplier<Double> elevatorValue;

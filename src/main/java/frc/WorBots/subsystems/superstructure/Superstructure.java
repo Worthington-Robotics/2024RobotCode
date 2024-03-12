@@ -48,7 +48,7 @@ public class Superstructure extends SubsystemBase {
 
   // Constants
   private static final String tableName = "Superstructure";
-  private static final double ELEVATOR_LIMIT_DISTANCE = 0.25;
+  private static final double ELEVATOR_LIMIT_DISTANCE = 0.28;
   private static final double PIVOT_BACKWARD_LIMIT_DISTANCE = 0.90;
   private static final double PIVOT_FORWARD_LIMIT_DISTANCE = 1.05;
 
