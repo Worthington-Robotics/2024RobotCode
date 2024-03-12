@@ -27,19 +27,36 @@ import java.util.function.Supplier;
 public class Superstructure extends SubsystemBase {
   private SuperstructureIO io;
   private SuperstructureIOInputs inputs = new SuperstructureIOInputs();
+
+  /** The state of the superstructure for different control modes */
   private SuperstructureState state = SuperstructureState.DISABLED;
+
+  /** The current setpoint pose of the superstructure */
   private SuperstructurePose.Preset setpoint = SuperstructurePose.Preset.HOME;
+
+  /** The initial absolute position of the pivot */
   private double initZeroPoseRad = ABSOLUTE_ZERO_OFFSET;
-  private Supplier<Double> shootingAngleRad = () -> 0.0;
-  private Supplier<Double> climbingVolts = () -> 0.0;
-  private Supplier<Double> manualPivotVolts = () -> 0.0;
+
+  /**
+   * Whether we have obtained a zero position reading from the absolute encoder. We only need to do
+   * this once.
+   */
   private boolean hasGottenZeroPosition = false;
 
-  private TunableProfiledPIDController pivotController =
+  /** A supplier for the shooting angle in shooting mode */
+  private Supplier<Double> shootingAngleRad = () -> 0.0;
+
+  /** A supplier for the elevator volts in manual mode */
+  private Supplier<Double> manualElevatorVolts = () -> 0.0;
+
+  /** A supplier for the pivot volts in manual mode */
+  private Supplier<Double> manualPivotVolts = () -> 0.0;
+
+  private final TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
           new TunablePIDGains(tableName, "Pivot Gains"),
           new TunableTrapezoidConstraints(tableName, "Pivot Constraints"));
-  private TunableProfiledPIDController elevatorController =
+  private final TunableProfiledPIDController elevatorController =
       new TunableProfiledPIDController(
           new TunablePIDGains(tableName, "Elevator Gains"),
           new TunableTrapezoidConstraints(tableName, "Elevator Constraints"));
@@ -48,8 +65,14 @@ public class Superstructure extends SubsystemBase {
 
   // Constants
   private static final String tableName = "Superstructure";
+
+  /** Limit distance for the elevator */
   private static final double ELEVATOR_LIMIT_DISTANCE = 0.28;
+
+  /** Limit distance for the pivot in the forward direction */
   private static final double PIVOT_BACKWARD_LIMIT_DISTANCE = 0.90;
+
+  /** Limit distance for the pivot in the backward direction */
   private static final double PIVOT_FORWARD_LIMIT_DISTANCE = 1.05;
 
   /** The offset for the pivot abs encoder, in radians */
@@ -108,6 +131,7 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
 
+    // Get our absolute zero position if we haven't already
     if (!hasGottenZeroPosition) {
       // If we have an invalid value from the absolute encoder, fallback to the stow
       // position offset
@@ -143,10 +167,11 @@ public class Superstructure extends SubsystemBase {
           runPose(setpoint.getElevator(), setpoint.getPivot());
           break;
         case SHOOTING:
+          // Shoot with the elevator at the bottom and the pivot where it needs to be
           runPose(0.0, shootingAngleRad.get());
           break;
         case MANUAL:
-          final double volts = climbingVolts.get();
+          final double volts = manualElevatorVolts.get();
           setElevatorVoltage(volts);
           double pivotVolts = manualPivotVolts.get();
           // pivotVolts += calculatePivotFeedforward();
@@ -158,13 +183,6 @@ public class Superstructure extends SubsystemBase {
 
     inputs.elevator.publish();
     inputs.pivot.publish();
-
-    // visualizer.update(
-    // VecBuilder.fill(
-    // getPivotPoseRads(),
-    // firstCarriagePositionMeters,
-    // secondCarriagePositionMeters,
-    // inputs.elevatorPositionMeters));
   }
 
   /**
@@ -198,6 +216,11 @@ public class Superstructure extends SubsystemBase {
     return pivotVoltage;
   }
 
+  /**
+   * Calculate the feedforward value for the pivot
+   *
+   * @return The feedforward value to be added to the control output
+   */
   private double calculatePivotFeedforward() {
     final double adjusted = getPivotPoseRads();
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
@@ -302,36 +325,36 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Sets the desired voltage for manual climbing.
+   * Sets the desired voltage for manual elevator
    *
-   * @param volts The desired voltage.
+   * @param volts The desired voltage
    */
-  public void setClimbingVolts(double volts) {
-    climbingVolts = () -> volts;
+  public void setManualElevatorVolts(double volts) {
+    manualElevatorVolts = () -> volts;
   }
 
   /**
-   * Sets the desired voltage for manual climbing.
+   * Sets the desired voltage for manual elevator
    *
-   * @param volts The desired voltage.
+   * @param volts The desired voltage
    */
-  public void setClimbingVolts(Supplier<Double> supplier) {
-    climbingVolts = supplier;
+  public void setManualElevatorVolts(Supplier<Double> supplier) {
+    manualElevatorVolts = supplier;
   }
 
   /**
-   * Sets the desired voltage for manual pivoting.
+   * Sets the desired voltage for manual pivoting
    *
-   * @param volts The desired voltage.
+   * @param volts The desired voltage
    */
   public void setManualPivotVolts(double volts) {
     manualPivotVolts = () -> volts;
   }
 
   /**
-   * Sets the desired voltage for manual pivoting.
+   * Sets the desired voltage for manual pivoting
    *
-   * @param volts The desired voltage.
+   * @param volts The desired voltage
    */
   public void setManualPivotVolts(Supplier<Double> supplier) {
     manualPivotVolts = supplier;
@@ -396,8 +419,9 @@ public class Superstructure extends SubsystemBase {
    */
   public void setModeVoid(SuperstructureState state) {
     if (!state.equals(this.state)) {
+      // Zero out manual volts when entering manual mode
       if (state.equals(SuperstructureState.MANUAL)) {
-        setClimbingVolts(0.0);
+        setManualElevatorVolts(0.0);
         setManualPivotVolts(0.0);
       }
     }
@@ -423,14 +447,29 @@ public class Superstructure extends SubsystemBase {
     return this.state == SuperstructureState.POSE && this.setpoint.equals(pose);
   }
 
+  /**
+   * Gets the fused angle of the pivot
+   *
+   * @return The fused angle with absolute and relative readings
+   */
   public double getPivotPoseRads() {
     return inputs.pivotPositionRelRad + initZeroPoseRad - ABSOLUTE_ZERO_OFFSET;
   }
 
+  /**
+   * Gets the current pose preset of the superstructure
+   *
+   * @return The current pose
+   */
   public Preset getCurrentPose() {
     return this.setpoint;
   }
 
+  /**
+   * Gets the percentage that the elevator is raised
+   *
+   * @return The percentage, from 0 to 1
+   */
   public double getElevatorPercentageRaised() {
     return inputs.elevatorPercentageRaised;
   }
@@ -461,23 +500,12 @@ public class Superstructure extends SubsystemBase {
     return this.state == SuperstructureState.SHOOTING;
   }
 
+  /**
+   * Checks if the superstructure is close enough to the handoff pose to be able to handoff
+   *
+   * @return Whether we are near handoff
+   */
   public boolean inHandoff() {
     return this.isNearPose(Preset.HANDOFF, 0.02, Units.degreesToRadians(2.8));
-  }
-
-  /**
-   * Returns a command that will automatically find the elevator zero by moving it into the bottom
-   * limit switch
-   *
-   * @return The command that will auto zero
-   */
-  public Command autoZero() {
-    return this.runEnd(
-            () -> {
-              setElevatorVoltageRaw(-4.0);
-            },
-            () -> setElevatorVoltageRaw(0.0))
-        .onlyWhile(() -> !inputs.bottomLimitReached)
-        .andThen(this.runOnce(() -> io.resetElevator()));
   }
 }

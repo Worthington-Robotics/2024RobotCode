@@ -40,7 +40,7 @@ public class SuperstructureManual extends Command {
   public void execute() {
     double joystick = MathUtil.applyDeadband(elevatorValue.get(), DEADBAND);
     double volts = joystick * ELEVATOR_VOLTS;
-    superstructure.setClimbingVolts(volts);
+    superstructure.setManualElevatorVolts(volts);
     joystick = MathUtil.applyDeadband(pivotValue.get(), DEADBAND);
     volts = joystick * PIVOT_VOLTS;
     superstructure.setManualPivotVolts(volts);
@@ -54,7 +54,7 @@ public class SuperstructureManual extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.setModeVoid(SuperstructureState.DISABLED);
-    superstructure.setClimbingVolts(0.0);
+    superstructure.setManualElevatorVolts(0.0);
     superstructure.setManualPivotVolts(0.0);
   }
 }
