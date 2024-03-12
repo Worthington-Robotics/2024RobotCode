@@ -20,6 +20,7 @@ import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.util.Cache.AllianceCache;
 import frc.WorBots.util.Cache.TimeCache;
+import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
 
@@ -104,6 +105,9 @@ public class Robot extends TimedRobot {
     // Update caches
     TimeCache.getInstance().update();
     AllianceCache.getInstance().update();
+
+    // Update simulator
+    RobotSimulator.getInstance().periodic();
   }
 
   @Override

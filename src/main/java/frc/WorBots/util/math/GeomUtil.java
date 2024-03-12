@@ -191,4 +191,29 @@ public class GeomUtil {
         pose.getY() + speeds.vyMetersPerSecond * period,
         pose.getRotation().plus(Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * period)));
   }
+
+  /**
+   * Checks if pose1's position is near pose2's position
+   *
+   * @param pose1 The first pose
+   * @param pose2 The second pose
+   * @param threshold The distance threshold
+   * @return Whether the distance is <= the threshold
+   */
+  public static boolean isPose2dNear(Pose2d pose1, Pose2d pose2, double threshold) {
+    return isTranslation2dNear(pose1.getTranslation(), pose2.getTranslation(), threshold);
+  }
+
+  /**
+   * Checks if pose1's position is near pose2's position
+   *
+   * @param pose1 The first pose
+   * @param pose2 The second pose
+   * @param threshold The distance threshold
+   * @return Whether the distance is <= the threshold
+   */
+  public static boolean isTranslation2dNear(
+      Translation2d pose1, Translation2d pose2, double threshold) {
+    return pose1.getDistance(pose2) <= threshold;
+  }
 }

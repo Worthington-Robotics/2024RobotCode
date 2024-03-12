@@ -27,6 +27,7 @@ import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
+import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.*;
 
@@ -147,6 +148,8 @@ public class RobotContainer {
             superstructure::getElevatorPercentageRaised);
     Lights.getInstance()
         .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
+    RobotSimulator.getInstance().setDrivePoseInterface(drive::getPose);
+    RobotSimulator.getInstance().setSuperstructure(superstructure);
     bindControls();
   }
 

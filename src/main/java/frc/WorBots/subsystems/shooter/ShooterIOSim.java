@@ -11,6 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.WorBots.Constants;
+import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.math.GeneralMath;
 
 public class ShooterIOSim implements ShooterIO {
@@ -34,16 +35,19 @@ public class ShooterIOSim implements ShooterIO {
   @Override
   public void setBottomFlywheelVolts(double volts) {
     bottomFlywheelSim.setInputVoltage(volts);
+    RobotSimulator.getInstance().setShooterVolts(volts);
   }
 
   @Override
   public void setTopFlywheelVolts(double volts) {
     topFlywheelSim.setInputVoltage(volts);
+    RobotSimulator.getInstance().setShooterVolts(volts);
   }
 
   @Override
   public void setFeederWheelVoltage(double volts) {
     feederWheel.setInputVoltage(volts);
+    RobotSimulator.getInstance().setFeederVolts(volts);
   }
 
   @Override
@@ -58,6 +62,7 @@ public class ShooterIOSim implements ShooterIO {
     inputs.velocityRPMBottom = bottomFlywheelSim.getAngularVelocityRPM();
     inputs.velocityRPMTop = topFlywheelSim.getAngularVelocityRPM();
     inputs.feederWheel.positionRads = 0.0;
-    inputs.timeOfFlightDistanceMeters = (feederWheel.getAngularVelocityRPM() <= 0.01) ? 0.02 : 0.2;
+    inputs.timeOfFlightDistanceMeters =
+        RobotSimulator.getInstance().isIntakeTofTriggered() ? 0.0 : 1000.0;
   }
 }

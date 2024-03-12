@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.intake;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.WorBots.Constants;
+import frc.WorBots.util.RobotSimulator;
 
 public class IntakeIOSim implements IntakeIO {
   FlywheelSim sim;
@@ -24,5 +25,13 @@ public class IntakeIOSim implements IntakeIO {
     inputs.motor.currentDrawAmps = sim.getCurrentDrawAmps();
     inputs.isConnected = true;
     inputs.motor.isConnected = true;
+    inputs.timeOfFlightDistanceMeters =
+        RobotSimulator.getInstance().isIntakeTofTriggered() ? 0.0 : 1000.0;
+  }
+
+  @Override
+  public void setIntakeVoltage(double volts) {
+    sim.setInput(volts);
+    RobotSimulator.getInstance().setIntakeVolts(volts);
   }
 }

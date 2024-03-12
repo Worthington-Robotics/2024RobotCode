@@ -41,6 +41,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       shooterTable.getDoubleTopic("Top Flywheel Setpoint").publish();
   private DoublePublisher bottomFlywheelSetpointPub =
       shooterTable.getDoubleTopic("Bottom Flywheel Setpoint").publish();
+  private DoublePublisher feederWheelSetpointPub =
+      shooterTable.getDoubleTopic("Feeder Setpoint Volts").publish();
   private DoublePublisher timeOfFlightDistancePub =
       shooterTable.getDoubleTopic("Time of Flight Distance").publish();
   private BooleanPublisher hasGamePiecePub =
@@ -126,6 +128,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       io.setTopFlywheelVolts(0.0);
       io.setBottomFlywheelVolts(0.0);
       io.setFeederWheelVoltage(0.0);
+      feederWheelSetpointPub.set(0.0);
       // Clear setpoints
       topFlywheelRPM = 0.0;
       bottomFlywheelRPM = 0.0;
@@ -157,6 +160,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
       // If we want to move the feeder wheel.
       io.setFeederWheelVoltage(feederWheelVolts);
+      feederWheelSetpointPub.set(feederWheelVolts);
     }
 
     inputs.feederWheel.publish();

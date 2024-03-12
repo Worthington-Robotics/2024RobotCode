@@ -23,6 +23,7 @@ import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.intake.Intake;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
+import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.trajectory.Waypoint;
 import java.util.List;
@@ -252,20 +253,20 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.0))
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.5))
                 .andThen(util.prepareShooting(path1.pose()))),
         autoShoot2.command(),
         Commands.deadline(
             path2.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.0))
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.5))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
         Commands.deadline(
-            path3.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.3))),
+            path3.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.5))),
         autoShoot4.command(),
         Commands.deadline(
-            path4.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path4.pose(), 0.3))),
+            path4.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path4.pose(), 0.5))),
         autoShoot5.command());
   }
 
@@ -317,7 +318,11 @@ public class Autos {
    * @return The full auto sequence command
    */
   private Command createSequence(Command... commands) {
-    return UtilCommands.timer("Auto Time", UtilCommands.namedSequence("Auto Progress", commands));
+    return UtilCommands.timer(
+        "Auto Time",
+        UtilCommands.optimalSequence(
+            Commands.runOnce(() -> RobotSimulator.getInstance().loadGamePiece()),
+            UtilCommands.namedSequence("Auto Progress", commands)));
   }
 
   private interface AutoWithStartingLocation {
