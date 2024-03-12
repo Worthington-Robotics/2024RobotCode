@@ -12,7 +12,7 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
-import frc.WorBots.util.Cache.TimeCache;
+import frc.WorBots.util.cache.Cache.TimeCache;
 
 public class VisionIOCustom implements VisionIO {
   private NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();

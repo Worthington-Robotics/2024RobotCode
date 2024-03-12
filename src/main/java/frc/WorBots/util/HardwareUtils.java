@@ -11,6 +11,8 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.util.Units;
+import frc.WorBots.Constants;
+import frc.WorBots.util.cache.CountingCache;
 import frc.WorBots.util.debug.DebugValue;
 import frc.WorBots.util.debug.DebugValue.DebugBool;
 import frc.WorBots.util.debug.DebugValue.DebugDouble;
@@ -117,17 +119,16 @@ public class HardwareUtils {
   /** Base status signals for a TalonFX */
   public abstract static class TalonSignals {
     // private final StatusSignal<Double> tempSignal;
-    private final StatusSignal<Double> voltsSignal;
+    private final OptimalStatusSignal<Double> voltsSignal;
 
     // private final StatusSignal<Double> currentSignal;
 
     public TalonSignals(TalonFX motor) {
       // tempSignal = motor.getDeviceTemp();
-      voltsSignal = motor.getSupplyVoltage();
+      voltsSignal = new OptimalStatusSignal<>(motor.getSupplyVoltage(), 20);
       // currentSignal = motor.getSupplyCurrent();
 
       // tempSignal.setUpdateFrequency(8);
-      voltsSignal.setUpdateFrequency(20);
       // currentSignal.setUpdateFrequency(5);
 
       // For .get calls we need the duty cycle
@@ -135,7 +136,7 @@ public class HardwareUtils {
     }
 
     protected void refresh() {
-      StatusSignal.refreshAll(voltsSignal);
+      // StatusSignal.refreshAll(voltsSignal);
     }
 
     public void update(TalonInputs inputs, TalonFX motor) {
@@ -165,7 +166,8 @@ public class HardwareUtils {
      * @param maxVolts The maximum magnitude for the voltage
      */
     public void setTalonVoltage(TalonFX talon, double volts, double maxVolts) {
-      // HardwareUtils.setTalonVoltage(talon, volts, maxVolts, this.tempSignal.getValue());
+      // HardwareUtils.setTalonVoltage(talon, volts, maxVolts,
+      // this.tempSignal.getValue());
       HardwareUtils.setTalonVoltage(talon, volts, maxVolts, 0.0);
     }
   }
@@ -193,6 +195,39 @@ public class HardwareUtils {
       this.refresh();
       inputs.positionRads = Units.rotationsToRadians(posSignal.getValue());
       inputs.velocityRadsPerSec = Units.rotationsToRadians(velSignal.getValue());
+    }
+  }
+
+  public static class OptimalStatusSignal<T> {
+    private final StatusSignal<T> signal;
+    private final CountingCache<T> cache;
+
+    public OptimalStatusSignal(StatusSignal<T> signal, double frequency) {
+      signal.setUpdateFrequency(frequency);
+      this.signal = signal;
+      // Calculate the count based on the ratio between the signal frequency and robot
+      // period
+      int count = (int) Math.floor(Constants.ROBOT_PERIOD_HZ / frequency);
+      // We don't want to limit periods that are only half as that will just introduce
+      // too much latency
+      if (count <= 2) {
+        count = 0;
+      }
+      this.cache =
+          new CountingCache<>(
+              () -> {
+                this.signal.refresh();
+                return this.signal.getValue();
+              },
+              count);
+    }
+
+    public StatusSignal<T> getSignal() {
+      return this.signal;
+    }
+
+    public T getValue() {
+      return this.cache.get();
     }
   }
 }

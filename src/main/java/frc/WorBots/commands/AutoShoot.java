@@ -19,7 +19,7 @@ import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
-import frc.WorBots.util.Cache;
+import frc.WorBots.util.cache.Cache;
 import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.math.ShooterMath.ShotData;

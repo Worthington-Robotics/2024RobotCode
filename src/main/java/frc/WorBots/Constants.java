@@ -34,6 +34,9 @@ public class Constants {
   /** The robot update period in seconds */
   public static final double ROBOT_PERIOD = 0.02;
 
+  /** The robot update period in Hz */
+  public static final double ROBOT_PERIOD_HZ = 1.0 / ROBOT_PERIOD;
+
   /** The width of the robot in meters */
   public static final double ROBOT_WIDTH = Units.inchesToMeters(28);
 
