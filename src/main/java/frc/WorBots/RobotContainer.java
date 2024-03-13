@@ -162,17 +162,11 @@ public class RobotContainer {
 
     driver
         .leftTrigger()
-        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
+        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
-    // driver
-    // .rightTrigger()
-    // .whileTrue(intake.intakeRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
-    // .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.rightBumper().onTrue(superstructure.goToPose(Preset.HANDOFF));
-    // driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
-    // driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
     driver
         .povDown()
         .toggleOnTrue(
@@ -241,8 +235,6 @@ public class RobotContainer {
             Commands.select(
                 shootMap,
                 () -> {
-                  // final double elevTolerance = 0.02;
-                  // final double pivotTolerance = Units.degreesToRadians(3.2);
                   if (superstructure.isInPose(Preset.AMP)) {
                     return "amp";
                   }

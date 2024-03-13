@@ -112,7 +112,7 @@ public class DebugRoutines {
     return Commands.sequence(
         new Handoff(intake, superstructure, shooter).withTimeout(2.5),
         UtilCommands.waitForDriverstationButton(),
-        intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2).withTimeout(1.3)),
+        intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2).withTimeout(1.3)),
         superstructure.goToPose(Preset.HOME),
         new Handoff(intake, superstructure, shooter).withTimeout(2.5));
   }

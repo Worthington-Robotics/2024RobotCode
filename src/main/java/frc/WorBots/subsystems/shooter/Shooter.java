@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
-   * instead of violently braking. In volts.
+   * instead of violently braking, in volts
    */
   private static final double COAST_DOWN_THRESHOLD = -0.3;
 
@@ -63,20 +63,21 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   private static final double IDLE_SPEED = 500.0;
 
   /** The voltage to run the feeder wheels at when feeding */
-  private static final double FEED_VOLTS = -2.0;
+  private static final double FEED_VOLTS = 2.0;
 
-  private static final double RPM_THRESHOLD = 120.0;
+  /** Error threshold for the shooter wheels, in RPM */
+  private static final double RPM_THRESHOLD = 100.0;
 
   private static final String tableName = "Shooter";
 
-  private TunablePIDController topFlywheelController =
+  private final TunablePIDController topFlywheelController =
       new TunablePIDController(new TunablePIDGains(tableName, "Top Flywheel Gains"));
-  private TunablePIDController bottomFlywheelController =
+  private final TunablePIDController bottomFlywheelController =
       new TunablePIDController(new TunablePIDGains(tableName, "Bottom Flywheel Gains"));
-  private TunablePIDController feederWheelController =
+  private final TunablePIDController feederWheelController =
       new TunablePIDController(new TunablePIDGains(tableName, "Feeder Wheel Gains"));
-  private SimpleMotorFeedforward topFlywheelFeedForward;
-  private SimpleMotorFeedforward bottomFlywheelFeedforward;
+  private final SimpleMotorFeedforward topFlywheelFeedForward;
+  private final SimpleMotorFeedforward bottomFlywheelFeedforward;
 
   /**
    * The shooter subsystem, responsible for shooting into the speaker.
@@ -111,6 +112,9 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   public void periodic() {
     io.updateInputs(inputs);
 
+    // Check if we have gamepiece
+    hasGamePiece = inputs.timeOfFlightDistanceMeters < DISTANCE_THRESHOLD;
+
     // Update logging
     topFlywheelSpeedPub.set(inputs.velocityRPMTop);
     bottomFlywheelSpeedPub.set(inputs.velocityRPMBottom);
@@ -123,9 +127,6 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     topFlywheelController.update();
     bottomFlywheelController.update();
     feederWheelController.update();
-
-    // Check if we have gamepiece
-    hasGamePiece = inputs.timeOfFlightDistanceMeters < DISTANCE_THRESHOLD;
 
     if (DriverStation.isDisabled()) { // Set voltages to 0 if we are disabled.
       io.setTopFlywheelVolts(0.0);

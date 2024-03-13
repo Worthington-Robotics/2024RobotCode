@@ -16,10 +16,10 @@ import edu.wpi.first.math.util.Units;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 
 public class ShooterIOTalon implements ShooterIO {
-  private TalonFX topFlywheel;
-  private TalonFX bottomFlywheel;
-  private TalonFX feederWheel;
-  private TimeOfFlight timeOfFlight;
+  private final TalonFX topFlywheel;
+  private final TalonFX bottomFlywheel;
+  private final TalonFX feederWheel;
+  private final TimeOfFlight timeOfFlight;
 
   private final TalonSignalsPositional topSignals;
   private final TalonSignalsPositional bottomSignals;
@@ -39,7 +39,7 @@ public class ShooterIOTalon implements ShooterIO {
     topFlywheel.setNeutralMode(NeutralModeValue.Coast);
     bottomFlywheel.setNeutralMode(NeutralModeValue.Coast);
     feederWheel.setNeutralMode(NeutralModeValue.Brake);
-    feederWheel.setInverted(true);
+    feederWheel.setInverted(false);
     bottomFlywheel.setInverted(false);
 
     topSignals = new TalonSignalsPositional(topFlywheel);

@@ -190,7 +190,7 @@ public class RobotSimulator {
     private double position = 0.0;
 
     public Optional<State<RobotSimulator>> run(RobotSimulator sim) {
-      position += feederVolts * -1 / 14.0;
+      position += feederVolts / 14.0;
       SmartDashboard.putNumber("Simulator Index Position", position);
       // Spit
       if (position < 0.0) {
