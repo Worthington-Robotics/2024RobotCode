@@ -277,6 +277,10 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return true if is at setpoint, false otherwise.
    */
   public boolean isAtSetpoint() {
+    /*
+     * We check the setpoint manually instead of using the PID because the PID might
+     * not have its setpoint yet
+     */
     return GeneralMath.checkError(inputs.velocityRPMTop, topFlywheelRPM, RPM_THRESHOLD)
         && GeneralMath.checkError(inputs.velocityRPMBottom, bottomFlywheelRPM, RPM_THRESHOLD);
   }

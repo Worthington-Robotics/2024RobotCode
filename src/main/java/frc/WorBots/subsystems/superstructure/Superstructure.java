@@ -93,6 +93,10 @@ public class Superstructure extends SubsystemBase {
   /** The offset from the zero needed for the pivot to be horizontal */
   public static final double PIVOT_HORIZONTAL_OFFSET = 0.36368;
 
+  /** The error threshold for the elevator, in meters */
+  private static final double ELEVATOR_THRESHOLD = 0.025;
+
+  /** THe error threshold for the pivot, in radians */
   private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.75);
 
   /** The states that the superstructure can be in. */
@@ -128,7 +132,7 @@ public class Superstructure extends SubsystemBase {
       elevatorFeedForward = new ElevatorFeedforward(0.1, 0.0, 0.0);
     }
     pivotController.pid.setTolerance(PIVOT_THRESHOLD);
-    elevatorController.pid.setTolerance(0.025);
+    elevatorController.pid.setTolerance(ELEVATOR_THRESHOLD);
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
 
@@ -367,13 +371,50 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Returns whether or not the superstructure is in position.
+   * Returns whether or not the superstructure is in position
    *
-   * @return True if in position, false if not.
+   * @return True if in position, false if not
    */
   public boolean isAtSetpoint() {
-    return elevatorController.pid.atSetpoint()
-        && GeneralMath.checkError(getPivotPoseRads(), shootingAngleRad.get(), PIVOT_THRESHOLD);
+    return isElevatorAtSetpoint() && isPivotAtSetpoint();
+  }
+
+  /**
+   * Checks if the elevator is at it's setpoint
+   *
+   * @return True if the elevator is at the setpoint
+   */
+  public boolean isElevatorAtSetpoint() {
+    double setpoint = 0.0;
+    /*
+     * We check the setpoint manually instead of using the PID because the PID might
+     * not have its setpoint yet
+     */
+    if (isShooting()) {
+      setpoint = 0.0;
+    } else if (isInPoseMode()) {
+      setpoint = this.setpoint.getElevator();
+    }
+    return GeneralMath.checkError(inputs.elevatorPositionMeters, setpoint, ELEVATOR_THRESHOLD);
+  }
+
+  /**
+   * Checks if the pivot is at it's setpoint
+   *
+   * @return True if the pivot is at the setpoint
+   */
+  public boolean isPivotAtSetpoint() {
+    double setpoint = 0.0;
+    /*
+     * We check the setpoint manually instead of using the PID because the PID might
+     * not have its setpoint yet
+     */
+    if (isShooting()) {
+      setpoint = shootingAngleRad.get();
+    } else if (isInPoseMode()) {
+      setpoint = this.setpoint.getPivot();
+    }
+    return GeneralMath.checkError(getPivotPoseRads(), setpoint, PIVOT_THRESHOLD);
   }
 
   /**
@@ -505,6 +546,15 @@ public class Superstructure extends SubsystemBase {
    */
   public boolean isShooting() {
     return this.state == SuperstructureState.SHOOTING;
+  }
+
+  /**
+   * Checks if the superstructure is in pose mode
+   *
+   * @return True if the superstructure is in pose mode
+   */
+  public boolean isInPoseMode() {
+    return this.state == SuperstructureState.POSE;
   }
 
   /**
