@@ -165,12 +165,11 @@ public class RobotContainer {
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
-    // driver.rightTrigger().whileTrue(new Handoff(intake, superstructure,
-    // shooter));
-    driver
-        .rightTrigger()
-        .whileTrue(intake.intakeRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
-        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+    driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
+    // driver
+    // .rightTrigger()
+    // .whileTrue(intake.intakeRaw().alongWith(shooter.setRawFeederVoltsCommand(1.2)))
+    // .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.rightBumper().onTrue(superstructure.goToPose(Preset.HANDOFF));
     // driver.povUp().onTrue(shooter.spinToSpeed(5800)).onFalse(shooter.spinToSpeed(0));
     // driver.povRight().onTrue(shooter.spinToSpeed(2250)).onFalse(shooter.spinToSpeed(0));
@@ -223,7 +222,8 @@ public class RobotContainer {
         .onFalse(
             Commands.waitSeconds(1.0)
                 // We only want the stow after shoot for the feeder button to apply if we are
-                // not in shooting mode, since that should only stow after the targeting is ended,
+                // not in shooting mode, since that should only stow after the targeting is
+                // ended,
                 // not when the feeding stops
                 .andThen(
                     new StowAfterShoot(superstructure).onlyIf(() -> !superstructure.isShooting())));

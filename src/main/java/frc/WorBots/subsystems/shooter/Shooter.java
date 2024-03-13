@@ -19,6 +19,7 @@ import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.debug.TunablePIDController;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.math.GeneralMath;
 import java.util.function.Supplier;
 
 public class Shooter extends SubsystemBase { // 532 rpm/v
@@ -64,6 +65,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
   /** The voltage to run the feeder wheels at when feeding */
   private static final double FEED_VOLTS = -2.0;
 
+  private static final double RPM_THRESHOLD = 120.0;
+
   private static final String tableName = "Shooter";
 
   private TunablePIDController topFlywheelController =
@@ -89,16 +92,16 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
       topFlywheelFeedForward = new SimpleMotorFeedforward(0.0, 0.002);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.002);
       feederWheelController.setGains(0.0, 0.0, 0.0);
-      topFlywheelController.pid.setTolerance(120);
-      bottomFlywheelController.pid.setTolerance(120);
+      topFlywheelController.pid.setTolerance(RPM_THRESHOLD);
+      bottomFlywheelController.pid.setTolerance(RPM_THRESHOLD);
     } else { // Sim
       topFlywheelController.setGains(0.00050, 0, 0);
       bottomFlywheelController.setGains(0.00050, 0, 0);
       topFlywheelFeedForward = new SimpleMotorFeedforward(0, 0.002);
       bottomFlywheelFeedforward = new SimpleMotorFeedforward(0.0, 0.002);
       feederWheelController.setGains(1.0, 0.0, 0.0);
-      topFlywheelController.pid.setTolerance(120);
-      bottomFlywheelController.pid.setTolerance(120);
+      topFlywheelController.pid.setTolerance(RPM_THRESHOLD);
+      bottomFlywheelController.pid.setTolerance(RPM_THRESHOLD);
     }
 
     StatusPage.reportStatus(StatusPage.SHOOTER_SUBSYSTEM, true);
@@ -274,7 +277,8 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
    * @return true if is at setpoint, false otherwise.
    */
   public boolean isAtSetpoint() {
-    return topFlywheelController.pid.atSetpoint() && bottomFlywheelController.pid.atSetpoint();
+    return GeneralMath.checkError(inputs.velocityRPMTop, topFlywheelRPM, RPM_THRESHOLD)
+        && GeneralMath.checkError(inputs.velocityRPMBottom, bottomFlywheelRPM, RPM_THRESHOLD);
   }
 
   /**

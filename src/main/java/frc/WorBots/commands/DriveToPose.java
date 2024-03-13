@@ -63,19 +63,19 @@ public class DriveToPose extends Command {
 
   @Override
   public void initialize() {
-    driveController.setP(2.0);
-    driveController.setD(0.0);
+    driveController.setP(2.4);
+    driveController.setD(0.01);
     driveController.setConstraints(
         new Constraints(
             slowMode ? Units.inchesToMeters(50.0) : Units.inchesToMeters(140.0),
             Units.inchesToMeters(90.0)));
-    driveController.setTolerance(slowMode ? Units.inchesToMeters(2) : Units.inchesToMeters(1.2));
-    thetaController.setP(4.75);
+    driveController.setTolerance(slowMode ? Units.inchesToMeters(2) : Units.inchesToMeters(1.0));
+    thetaController.setP(4.95);
     thetaController.setD(0.05);
     thetaController.setConstraints(
         new Constraints(
-            slowMode ? Units.degreesToRadians(50.0) : Units.degreesToRadians(160.0),
-            Units.degreesToRadians(720.0)));
+            slowMode ? Units.degreesToRadians(50.0) : Units.degreesToRadians(170.0),
+            Units.degreesToRadians(820.0)));
     thetaController.setTolerance(
         slowMode ? Units.degreesToRadians(2.0) : Units.degreesToRadians(1.0));
     // Reset all controllers

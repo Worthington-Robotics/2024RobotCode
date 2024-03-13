@@ -93,6 +93,8 @@ public class Superstructure extends SubsystemBase {
   /** The offset from the zero needed for the pivot to be horizontal */
   public static final double PIVOT_HORIZONTAL_OFFSET = 0.36368;
 
+  private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.75);
+
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
     POSE,
@@ -125,7 +127,7 @@ public class Superstructure extends SubsystemBase {
       elevatorController.setConstraints(1.0, 1.65);
       elevatorFeedForward = new ElevatorFeedforward(0.1, 0.0, 0.0);
     }
-    pivotController.pid.setTolerance(0.03);
+    pivotController.pid.setTolerance(PIVOT_THRESHOLD);
     elevatorController.pid.setTolerance(0.025);
     StatusPage.reportStatus(StatusPage.SUPERSTRUCTURE_SUBSYSTEM, true);
   }
@@ -370,7 +372,8 @@ public class Superstructure extends SubsystemBase {
    * @return True if in position, false if not.
    */
   public boolean isAtSetpoint() {
-    return elevatorController.pid.atSetpoint() && pivotController.pid.atSetpoint();
+    return elevatorController.pid.atSetpoint()
+        && GeneralMath.checkError(getPivotPoseRads(), shootingAngleRad.get(), PIVOT_THRESHOLD);
   }
 
   /**

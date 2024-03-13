@@ -266,7 +266,7 @@ public class AutoUtil {
             Waypoint.fromHolonomicPose(
                 AllianceFlipUtil.addToFlipped(
                     wingGamePieceLocations[wingPosition].plus(new Transform2d(0.0, 0.0, rotation)),
-                    Units.inchesToMeters(-8))));
+                    Units.inchesToMeters(-3))));
       } else if (wingPosition == 2) {
         var rotation = AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(-90)));
         if (AllianceFlipUtil.shouldFlip()) {
@@ -433,7 +433,7 @@ public class AutoUtil {
                 superstructure),
             driveToPose.alongWith(
                 Commands.waitUntil(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint())),
-            shooter.feed().withTimeout(0.2),
+            shooter.feed().withTimeout(0.18),
             Commands.runOnce(
                 () -> {
                   shooter.stopFlywheels();

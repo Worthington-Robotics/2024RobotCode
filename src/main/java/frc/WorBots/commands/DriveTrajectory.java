@@ -89,13 +89,13 @@ public class DriveTrajectory extends Command {
       yController = new PIDController(2.7, 0, 0.0);
       thetaController = new PIDController(6.5, 0, 0.0);
     } else {
-      maxVelocityMetersPerSec = Units.inchesToMeters(160.0);
-      maxAccelerationMetersPerSec2 = Units.inchesToMeters(105.0);
-      maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(150.0);
+      maxVelocityMetersPerSec = Units.inchesToMeters(200.0);
+      maxAccelerationMetersPerSec2 = Units.inchesToMeters(175.0);
+      maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
 
       xController = new PIDController(2.5, 0, 0.0);
       yController = new PIDController(2.5, 0, 0.0);
-      thetaController = new PIDController(5.0, 0, 0.0);
+      thetaController = new PIDController(4.7, 0, 0.0);
     }
     customHolonomicDriveController.setTolerance(
         new Pose2d(

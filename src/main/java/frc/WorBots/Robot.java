@@ -118,12 +118,7 @@ public class Robot extends TimedRobot {
     if (Constants.IS_COMP) {
       Lights.getInstance().setMode(LightsMode.Status);
     } else {
-      // Display red to show whether the shooter has a game piece, for loading
-      if (robotContainer.shooter.hasGamePiece()) {
-        Lights.getInstance().setMode(LightsMode.Delivery);
-      } else {
-        Lights.getInstance().setMode(LightsMode.RedBlue);
-      }
+      Lights.getInstance().setMode(LightsMode.Field);
     }
   }
 

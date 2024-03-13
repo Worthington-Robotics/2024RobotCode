@@ -156,7 +156,10 @@ public class Autos {
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot1.pose()),
-            Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(-24))),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(48))),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
     final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, false, 1.2);
@@ -167,18 +170,23 @@ public class Autos {
             Waypoint.fromHolonomicPose(autoShoot2.pose()),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
             Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(90))),
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(100))),
+            Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     AllianceFlipUtil.addToFlipped(
-                        util.betweenZeroAndOne, -Units.inchesToMeters(30)))));
+                        util.betweenZeroAndOne, -Units.inchesToMeters(35)))));
     final var autoShoot3 = util.moveAndShoot(path2.pose(), false, false, false, 1.2);
 
     // Move back and intake wing piece, then shoot it
     final var path3 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot3.pose()),
-            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.wingGamePieceLocations[0])));
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(
+                    util.getAutoShootPose(util.wingGamePieceLocations[0])
+                        .plus(new Transform2d(0.0, Units.inchesToMeters(10), new Rotation2d())),
+                    Units.inchesToMeters(15))));
     final var autoShoot4 = util.moveAndShoot(path3.pose(), false, false, false, 3.5);
 
     return createSequence(
@@ -196,8 +204,10 @@ public class Autos {
                 .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.0))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
-        Commands.deadline(
-            path3.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.3))),
+        // Parallel so that we don't stop intaking when we get to the piece
+        Commands.parallel(
+            path3.command(),
+            util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.45))),
         autoShoot4.command());
   }
 
@@ -210,6 +220,8 @@ public class Autos {
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot1.pose()),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(-8))),
             Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
@@ -221,18 +233,23 @@ public class Autos {
             Waypoint.fromHolonomicPose(autoShoot2.pose()),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
             Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(90))),
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(100))),
+            Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     AllianceFlipUtil.addToFlipped(
-                        util.betweenZeroAndOne, -Units.inchesToMeters(30)))));
+                        util.betweenZeroAndOne, -Units.inchesToMeters(35)))));
     final var autoShoot3 = util.moveAndShoot(path2.pose(), false, false, false, 1.2);
 
     // Move back and intake wing piece, then shoot it
     final var path3 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot3.pose()),
-            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.wingGamePieceLocations[0])));
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(
+                    util.getAutoShootPose(util.wingGamePieceLocations[0])
+                        .plus(new Transform2d(0.0, Units.inchesToMeters(10), new Rotation2d())),
+                    Units.inchesToMeters(15))));
     final var autoShoot4 = util.moveAndShoot(path3.pose(), false, false, false, 1.5);
 
     final var path4 =
@@ -262,10 +279,11 @@ public class Autos {
                 .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.5))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
-        Commands.deadline(
+        // Parallel so that we don't stop intaking when we get to the piece
+        Commands.parallel(
             path3.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.5))),
         autoShoot4.command(),
-        Commands.deadline(
+        Commands.parallel(
             path4.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path4.pose(), 0.5))),
         autoShoot5.command());
   }

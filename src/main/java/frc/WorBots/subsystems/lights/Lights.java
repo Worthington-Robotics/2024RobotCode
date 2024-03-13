@@ -65,7 +65,8 @@ public class Lights extends SubsystemBase {
     Delivery,
     RedBlue,
     Indicator,
-    Elevator
+    Elevator,
+    Field,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -127,6 +128,15 @@ public class Lights extends SubsystemBase {
         break;
       case Elevator:
         elevator();
+        break;
+      case Field:
+        final boolean hasGamePieceTop =
+            hasGamePieceTopDebouncer.calculate(this.hasGamePieceTop.get());
+        if (hasGamePieceTop) {
+          solid(1.0, Color.kRed);
+        } else {
+          wave(100, Color.kBlue, Color.kRed, 14.0, 1.2, 0.3);
+        }
         break;
     }
 
@@ -317,8 +327,8 @@ public class Lights extends SubsystemBase {
     }
   }
 
-  private final Debouncer hasGamePieceBottomDebouncer = new Debouncer(0.35);
-  private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.35);
+  private final Debouncer hasGamePieceBottomDebouncer = new Debouncer(0.55);
+  private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.55);
 
   private void delivery() {
     final boolean inHandoff = this.inHandoff.get();
