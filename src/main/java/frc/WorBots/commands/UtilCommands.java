@@ -101,7 +101,6 @@ public class UtilCommands {
       if (interrupted) {
         command.cancel();
       }
-      command = null;
       SmartDashboard.putNumber(name, timer.get());
     }
 
