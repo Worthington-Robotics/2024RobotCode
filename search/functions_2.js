@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['cache_0',['Cache',['../classfrc_1_1WorBots_1_1util_1_1Cache.html#a00121eca9641931133045274d7e1c42f',1,'frc::WorBots::util::Cache']]],
+  ['cache_0',['Cache',['../classfrc_1_1WorBots_1_1util_1_1cache_1_1Cache.html#afa5d1a0692314afa931cce9ae71b973d',1,'frc::WorBots::util::cache::Cache']]],
   ['calculate_1',['calculate',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a1e70efeef5bf6ab8ee36385674a5160e',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.calculate(Pose2d currentPose, Pose2d poseRef, double linearVelocityRefMeters, Rotation2d angleRef, double angleVelocityRefRadians)'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a93b64c3cdb1197878e3a391510f2448c',1,'frc.WorBots.util.trajectory.CustomHolonomicDriveController.calculate(Pose2d currentPose, Trajectory.State driveState, RotationSequence.State holonomicRotationState)']]],
   ['calculateconfidence_2',['calculateConfidence',['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#ac914e617ac4ad77cb4c61b19f52f48ec',1,'frc.WorBots.util.math.ShooterMath.calculateConfidence(Pose2d robot, ChassisSpeeds robotSpeeds)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath.html#a35bd4c81f0d36bb20fffa027c74074d5',1,'frc.WorBots.util.math.ShooterMath.calculateConfidence(double distance, Rotation2d goalToRobotAngle, ChassisSpeeds robotSpeeds)']]],
   ['calculateflywheelmoi_3',['calculateFlywheelMOI',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a1df8f6500683025e952833d4aea82d3e',1,'frc::WorBots::util::math::GeneralMath']]],
@@ -16,6 +16,7 @@ var searchData=
   ['commandwithpose_13',['CommandWithPose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720',1,'frc::WorBots::auto::AutoUtil']]],
   ['compbool_14',['compBool',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1DebugValue.html#a916ce18c9fd2e09e8adffd9b5d0f49ba',1,'frc::WorBots::util::debug::DebugValue']]],
   ['compdouble_15',['compDouble',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1DebugValue.html#a3f725d8a42cbcb43d5eaf079258919a3',1,'frc::WorBots::util::debug::DebugValue']]],
-  ['curve_16',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['customholonomicdrivecontroller_17',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
+  ['countingcache_16',['CountingCache',['../classfrc_1_1WorBots_1_1util_1_1cache_1_1CountingCache.html#a92556b689d240c5c3dae9630469b52a6',1,'frc::WorBots::util::cache::CountingCache']]],
+  ['curve_17',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['customholonomicdrivecontroller_18',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
 ];
