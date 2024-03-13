@@ -147,6 +147,66 @@ public class Autos {
         autoShoot3.command());
   }
 
+  public Command fourFromMiddle() {
+    final Pose2d startingPose = util.startingLocations[1];
+    // Starting shot
+    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, false, 0.3);
+
+    // Intake center piece, then shoot from far pose
+    final var path1 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot1.pose()),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(-24))),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(48))),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
+    final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, false, 1.2);
+
+    // Intake center piece, then shoot from far pose
+    final var path2 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot2.pose()),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
+            Waypoint.fromHolonomicPose(
+                util.getWingLinePose(util.centerGamePieceLocations[1], new Rotation2d())),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
+    final var autoShoot3 = util.moveAndShoot(path2.pose(), false, false, false, 1.2);
+
+    // Intake center piece, then shoot from far pose
+    final var path3 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot3.pose()),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[2]),
+            Waypoint.fromHolonomicPose(
+                util.getWingLinePose(util.centerGamePieceLocations[1], new Rotation2d())),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
+    final var autoShoot4 = util.moveAndShoot(path3.pose(), false, false, false, 1.2);
+
+    return createSequence(
+        util.reset(startingPose).command(),
+        autoShoot1.command(),
+        Commands.deadline(
+            path1.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.0))
+                .andThen(util.prepareShooting(path1.pose()))),
+        autoShoot2.command(),
+        Commands.deadline(
+            path2.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.0))
+                .andThen(util.prepareShooting(path2.pose()))),
+        autoShoot3.command(),
+        Commands.deadline(
+            path3.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[2], 1.0))
+                .andThen(util.prepareShooting(path3.pose()))),
+        autoShoot4.command());
+  }
+
   public Command fourPieceLong() {
     final Pose2d startingPose = util.startingLocations[1];
     // Starting shot

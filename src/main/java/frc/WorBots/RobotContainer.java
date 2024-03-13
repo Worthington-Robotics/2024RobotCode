@@ -107,6 +107,7 @@ public class RobotContainer {
                 List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
         autos.threePieceClose());
 
+    selector.addRoutine("Four From Middle", List.of(), autos.fourFromMiddle());
     selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
     selector.addRoutine("Long Five", List.of(), autos.fivePieceLong());
 
