@@ -79,10 +79,13 @@ public class Superstructure extends SubsystemBase {
   private static final double ABSOLUTE_ZERO_OFFSET = 0.2827;
 
   /** The minimum value for the absolute encoder */
-  private static final double ABSOLUTE_MIN_VALUE = 0.270;
+  private static final double ABSOLUTE_MIN_VALUE = 0.265;
+
+  /** The maximum value for the absolute encoder at startup */
+  private static final double ABSOLUTE_MAX_VALUE = 0.9;
 
   /** The max angle the pivot can go to, in radians */
-  public static final double PIVOT_MAX_ANGLE = 2.91;
+  public static final double PIVOT_MAX_ANGLE = 2.71;
 
   /** The max distance the elevator can go to, in meters */
   public static final double ELEVATOR_MAX_METERS = 0.2674420965;
@@ -106,8 +109,8 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(10.0, 0.1, 0);
-      pivotController.setConstraints(10, 8);
+      pivotController.setGains(9.5, 0.11, 0);
+      pivotController.setConstraints(11, 18);
       pivotFeedForward = new ArmFeedforward(0.04, 0.25, 0.01);
 
       elevatorController.setGains(160, 0.2, 0);
@@ -135,7 +138,8 @@ public class Superstructure extends SubsystemBase {
     if (!hasGottenZeroPosition) {
       // If we have an invalid value from the absolute encoder, fallback to the stow
       // position offset
-      if (inputs.pivotPositionAbsRad < ABSOLUTE_MIN_VALUE) {
+      if (inputs.pivotPositionAbsRad >= ABSOLUTE_MIN_VALUE
+          && inputs.pivotPositionAbsRad < ABSOLUTE_MAX_VALUE) {
         initZeroPoseRad = inputs.pivotPositionAbsRad;
         hasGottenZeroPosition = true;
       }

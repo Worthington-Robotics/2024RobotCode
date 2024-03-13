@@ -33,6 +33,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     elevator = new TalonFX(3);
     pivot = new TalonFX(10);
     pivotAbsEncoder = new DutyCycleEncoder(9);
+    /*
+     * If you read the documentation for the encoder and look at the colors of the A
+     * and B channels, then look at the robot, it might seem like they are backwards. However,
+     * if we wire the channels the other way, the encoder value is negative. Keep it how it is.
+     */
     pivotRelEncoder = new Encoder(8, 7);
     pivotRelEncoder.setDistancePerPulse((2 * Math.PI) / 2048);
 
@@ -51,7 +56,7 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   }
 
   public void setElevatorVoltage(double volts) {
-    elevatorSignals.setTalonVoltage(elevator, volts, 6.0);
+    elevatorSignals.setTalonVoltage(elevator, volts, 9.0);
   }
 
   public void setPivotVoltage(double volts) {

@@ -51,8 +51,8 @@ public class ModuleIOTalon implements ModuleIO {
   private final StatusSignal<Double> turnAbsPosSignal;
 
   public ModuleIOTalon(int index) {
-    driveFeedbackGains.setGains(0.08, 0.0, 0.0);
-    turnFeedbackGains.setGains(6.5, 0.017, 0.0);
+    driveFeedbackGains.setGains(0.065, 0.001, 0.0);
+    turnFeedbackGains.setGains(6.05, 0.019, 0.0);
     turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
 
     inputs = new ModuleIOInputs(index);
@@ -101,8 +101,8 @@ public class ModuleIOTalon implements ModuleIO {
     // turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
     // turnMotor.getConfigurator().apply(turnConfig);
 
-    driveMotor.setNeutralMode(NeutralModeValue.Coast);
-    turnMotor.setNeutralMode(NeutralModeValue.Coast);
+    driveMotor.setNeutralMode(NeutralModeValue.Brake);
+    turnMotor.setNeutralMode(NeutralModeValue.Brake);
 
     driveMotor.setInverted(false);
     turnMotor.setInverted(true);
