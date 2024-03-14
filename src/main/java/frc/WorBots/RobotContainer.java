@@ -44,6 +44,8 @@ public class RobotContainer {
   public final CommandXboxController driver = new CommandXboxController(0);
   public final CommandXboxController operator = new CommandXboxController(1);
 
+  private boolean hadGamePieceAtStartOfFeed = false;
+
   /**
    * The robot container houses the joystics, and subsystems of the robot, as well as getting the
    * autonomous command.
@@ -204,24 +206,23 @@ public class RobotContainer {
                           Lights.getInstance().setMode(LightsMode.Shooting);
                         }))
                 .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.DISABLED)))
-        .onFalse(
-            shooter
-                .spinToSpeed(0.0)
-                .alongWith(
-                    Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery)))
-                .andThen(Commands.waitSeconds(1.0))
-                .andThen(new StowAfterShoot(superstructure)));
+        .onFalse(shooter.spinToSpeed(0.0))
+        .onFalse(Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery)))
+        .onFalse(Commands.waitSeconds(0.05).andThen(() -> superstructure.setPose(Preset.STOW)));
     operator
         .leftBumper()
+        .onTrue(Commands.runOnce(() -> hadGamePieceAtStartOfFeed = shooter.hasGamePiece()))
         .whileTrue(shooter.feed())
         .onFalse(
-            Commands.waitSeconds(1.0)
-                // We only want the stow after shoot for the feeder button to apply if we are
-                // not in shooting mode, since that should only stow after the targeting is
-                // ended,
-                // not when the feeding stops
+            Commands.waitSeconds(0.2)
                 .andThen(
-                    new StowAfterShoot(superstructure).onlyIf(() -> !superstructure.isShooting())));
+                    () -> {
+                      if (hadGamePieceAtStartOfFeed
+                          && !shooter.hasGamePiece()
+                          && !intake.hasGamePiece()) {
+                        superstructure.setPose(Preset.STOW);
+                      }
+                    }));
 
     // Contextual shooting
     HashMap<String, Command> shootMap = new HashMap<>();
