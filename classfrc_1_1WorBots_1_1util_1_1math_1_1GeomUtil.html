@@ -116,6 +116,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7fd73196118078186757c312144e5e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6e407e8133c0bb3b54d0f3f85d9ece9"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#ab6e407e8133c0bb3b54d0f3f85d9ece9">isTranslation2dNear</a> (Translation2d pose1, Translation2d pose2, double threshold)</td></tr>
 <tr class="separator:ab6e407e8133c0bb3b54d0f3f85d9ece9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a592f1157d56d67daa35a7eebfa924f2f"><td class="memItemLeft" align="right" valign="top">static ChassisSpeeds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a592f1157d56d67daa35a7eebfa924f2f">driftCorrectChassisSpeeds</a> (ChassisSpeeds speeds, double driftRate)</td></tr>
+<tr class="separator:a592f1157d56d67daa35a7eebfa924f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Geometry utilities for working with translations, rotations, transforms, and poses. </p>
@@ -169,6 +171,51 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The modified pose </dd></dl>
+
+</div>
+</div>
+<a id="a592f1157d56d67daa35a7eebfa924f2f" name="a592f1157d56d67daa35a7eebfa924f2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a592f1157d56d67daa35a7eebfa924f2f">&#9670;&#160;</a></span>driftCorrectChassisSpeeds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ChassisSpeeds frc.WorBots.util.math.GeomUtil.driftCorrectChassisSpeeds </td>
+          <td>(</td>
+          <td class="paramtype">ChassisSpeeds&#160;</td>
+          <td class="paramname"><em>speeds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>driftRate</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Discretizes a ChassisSpeeds with an additional correction for drift</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">speeds</td><td>The desired speeds </td></tr>
+    <tr><td class="paramname">driftRate</td><td>The measured drift rate of the swerve drive, in radians per second </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The discretized and corrected speeds </dd></dl>
 
 </div>
 </div>
