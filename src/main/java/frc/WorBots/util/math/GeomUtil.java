@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.WorBots.Constants;
 
 /** Geometry utilities for working with translations, rotations, transforms, and poses. */
 public class GeomUtil {
@@ -215,5 +216,30 @@ public class GeomUtil {
   public static boolean isTranslation2dNear(
       Translation2d pose1, Translation2d pose2, double threshold) {
     return pose1.getDistance(pose2) <= threshold;
+  }
+
+  /**
+   * Discretizes a ChassisSpeeds with an additional correction for drift
+   *
+   * @param speeds The desired speeds
+   * @param driftRate The measured drift rate of the swerve drive, in radians per second
+   * @return The discretized and corrected speeds
+   */
+  public static ChassisSpeeds driftCorrectChassisSpeeds(ChassisSpeeds speeds, double driftRate) {
+    final double correctedOmega = speeds.omegaRadiansPerSecond + driftRate;
+    final Pose2d futurePose =
+        new Pose2d(
+            speeds.vxMetersPerSecond * Constants.ROBOT_PERIOD,
+            speeds.vyMetersPerSecond * Constants.ROBOT_PERIOD,
+            new Rotation2d(correctedOmega * Constants.ROBOT_PERIOD));
+
+    final Twist2d twistForPose = new Pose2d().log(futurePose);
+
+    final ChassisSpeeds corrected =
+        new ChassisSpeeds(
+            twistForPose.dx / Constants.ROBOT_PERIOD,
+            twistForPose.dy / Constants.ROBOT_PERIOD,
+            twistForPose.dtheta / Constants.ROBOT_PERIOD);
+    return corrected;
   }
 }

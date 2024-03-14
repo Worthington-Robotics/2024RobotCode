@@ -14,10 +14,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.PoseEstimator;
 import frc.WorBots.util.math.PoseEstimator.*;
 import java.util.List;
@@ -25,6 +25,9 @@ import java.util.List;
 public class Drive extends SubsystemBase {
   // Constants
   public static final double WHEELBASE = Units.inchesToMeters(10);
+
+  /** The drift rate of the robot when driving, in radians per second */
+  private static final double DRIFT_RATE = 0.0;
 
   private final Module[] modules = new Module[4];
   private final GyroIO gyroIO;
@@ -35,11 +38,19 @@ public class Drive extends SubsystemBase {
   private final PoseEstimator poseEstimator =
       new PoseEstimator(VecBuilder.fill(0.003, 0.003, 0.0002));
 
-  private ChassisSpeeds setpoint = new ChassisSpeeds();
+  /** The setpoint speeds for the drivetrain */
+  private ChassisSpeeds setpointSpeeds = new ChassisSpeeds();
 
+  /** The last field velocity */
   private Twist2d fieldVelocity = new Twist2d();
+
+  /** The last yaw of the gyro */
   private Rotation2d lastGyroYaw = new Rotation2d();
+
+  /** The last positions of the modules */
   private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
+
+  /** The last setpoint states for the modules */
   private SwerveModuleState[] lastSetpointStates =
       new SwerveModuleState[] {
         new SwerveModuleState(),
@@ -99,27 +110,9 @@ public class Drive extends SubsystemBase {
       }
       stop();
     } else {
-      final double setpointRadsPerSec = setpoint.omegaRadiansPerSecond;
+      speedSetpointPublisher.set(Logger.chassisSpeedsToArray(setpointSpeeds));
 
-      // Calculate our desired momentary twist
-      final var setpointTwist =
-          new Pose2d()
-              .log(
-                  new Pose2d(
-                      new Translation2d(
-                          setpoint.vxMetersPerSecond * Constants.ROBOT_PERIOD,
-                          setpoint.vyMetersPerSecond * Constants.ROBOT_PERIOD),
-                      new Rotation2d(setpointRadsPerSec * Constants.ROBOT_PERIOD)));
-
-      // Convert the twist to ChassisSpeeds in per-second units
-      final var adjustedSpeeds =
-          new ChassisSpeeds(
-              setpointTwist.dx / Constants.ROBOT_PERIOD,
-              setpointTwist.dy / Constants.ROBOT_PERIOD,
-              setpointTwist.dtheta / Constants.ROBOT_PERIOD);
-      speedSetpointPublisher.set(Logger.chassisSpeedsToArray(adjustedSpeeds));
-
-      SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(adjustedSpeeds);
+      SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(setpointSpeeds);
       // Desaturate speeds to ensure we don't go faster than is possible
       SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, getMaxLinearSpeedMetersPerSec());
 
@@ -171,19 +164,21 @@ public class Drive extends SubsystemBase {
     posePublisher.set(Logger.pose2dToArray(getPose()));
 
     // Update field velocity
-    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(measuredStates);
-    Translation2d linearFieldVelocity =
-        new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond)
+    final ChassisSpeeds measuredChassisSpeeds = kinematics.toChassisSpeeds(measuredStates);
+    final Translation2d linearFieldVelocity =
+        new Translation2d(
+                measuredChassisSpeeds.vxMetersPerSecond, measuredChassisSpeeds.vyMetersPerSecond)
             .rotateBy(getRotation());
+
     // Update for simulated gyro
-    gyroIO.setExpectedYawVelocity(chassisSpeeds.omegaRadiansPerSecond);
+    gyroIO.setExpectedYawVelocity(measuredChassisSpeeds.omegaRadiansPerSecond);
     fieldVelocity =
         new Twist2d(
             linearFieldVelocity.getX(),
             linearFieldVelocity.getY(),
             gyroInputs.connected
                 ? gyroInputs.yawVelocityRadPerSec
-                : chassisSpeeds.omegaRadiansPerSecond);
+                : measuredChassisSpeeds.omegaRadiansPerSecond);
   }
 
   /**
@@ -257,7 +252,7 @@ public class Drive extends SubsystemBase {
    * @return The speed of the robot
    */
   public ChassisSpeeds getFieldRelativeSpeeds() {
-    return setpoint;
+    return setpointSpeeds;
   }
 
   /**
@@ -366,7 +361,9 @@ public class Drive extends SubsystemBase {
    * @param speeds The speeds to be run
    */
   public void runVelocity(ChassisSpeeds speeds) {
-    setpoint = speeds;
+    // Adjust the velocity only once here to reduce calculations
+    final ChassisSpeeds adjusted = GeomUtil.driftCorrectChassisSpeeds(speeds, DRIFT_RATE);
+    setpointSpeeds = adjusted;
   }
 
   /** Stops the drive train by clearing the chassis speeds */
