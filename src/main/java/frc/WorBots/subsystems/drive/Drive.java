@@ -84,11 +84,14 @@ public class Drive extends SubsystemBase {
 
   public void periodic() {
     gyroIO.updateInputs(gyroInputs);
-    StatusPage.reportStatus(StatusPage.GYROSCOPE, gyroInputs.connected);
 
     for (Module module : modules) {
       module.periodic();
     }
+    // The timestamp that is closest to when we get our inputs
+    final double inputTimestamp = Timer.getFPGATimestamp();
+
+    StatusPage.reportStatus(StatusPage.GYROSCOPE, gyroInputs.connected);
 
     if (DriverStation.isDisabled()) {
       for (Module module : modules) {
@@ -163,7 +166,7 @@ public class Drive extends SubsystemBase {
       twist.dtheta = gyroYaw.minus(lastGyroYaw).getRadians();
     }
     lastGyroYaw = gyroYaw;
-    poseEstimator.addDriveData(Timer.getFPGATimestamp(), twist);
+    poseEstimator.addDriveData(inputTimestamp, twist);
 
     posePublisher.set(Logger.pose2dToArray(getPose()));
 
