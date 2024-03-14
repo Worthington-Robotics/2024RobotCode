@@ -147,6 +147,41 @@ public class Autos {
         autoShoot3.command());
   }
 
+  public Command fourPieceClose() {
+    final Pose2d startingPose = util.startingLocations[1];
+    // Shoot the piece we start with
+    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, false, 0.1);
+
+    // Move back, intake, and shoot
+    final var intake1 = util.driveAndIntakeWing(autoShoot1.pose(), false, false, 1);
+    final var autoShoot2 = util.moveAndShoot(intake1.pose(), false, false, false, 0.5);
+
+    // Intake the third piece, then move to the center and shoot it
+    final var intake2 = util.driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
+    final var autoShoot3 =
+        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, false, 0.5);
+    final var intake3 = util.driveAndIntakeWing(autoShoot3.pose(), true, false, 2);
+    final var autoShoot4 =
+        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, false, 2.0);
+    return createSequence(
+        util.reset(startingPose).command(),
+        autoShoot1.command(),
+        intake1.command(),
+        autoShoot2.command(),
+        intake2.command(),
+        util.path(
+                Waypoint.fromHolonomicPose(intake2.pose()),
+                Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
+            .command(),
+        autoShoot3.command(),
+        intake3.command(),
+        util.path(
+                Waypoint.fromHolonomicPose(intake3.pose()),
+                Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
+            .command(),
+        autoShoot4.command());
+  }
+
   public Command fourFromMiddle() {
     final Pose2d startingPose = util.startingLocations[1];
     // Starting shot
