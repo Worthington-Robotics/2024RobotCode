@@ -10,13 +10,13 @@ package frc.WorBots.subsystems.vision;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.WorBots.util.debug.*;
+import frc.WorBots.util.math.GeneralMath;
 import frc.WorBots.util.math.PoseEstimator.TimestampedVisionUpdate;
 import java.util.*;
 import java.util.function.*;
@@ -30,32 +30,34 @@ public class Vision extends SubsystemBase {
   private final VisionIOInputs[] inputs;
 
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
-  private Consumer<Pose2d> lastPoseConsumer = (x) -> {};
   private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
+  private int detectionCount = 0;
+
+  private static final Transform3d RIGHT_SWERVE_MODULE_TRANSFORM =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(-11), Units.inchesToMeters(-11), Units.inchesToMeters(-9)),
+          new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+              .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))));
+
+  private static final Transform3d CENTER_TRANSFORM =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(-12.5), Units.inchesToMeters(0), Units.inchesToMeters(-16.0)),
+          new Rotation3d(0.0, Units.degreesToRadians(-20), Units.degreesToRadians(180 - 0.0)));
 
   /** The transforms for the cameras to robot center */
   private static final Transform3d[] CAMERA_TRANSFORMS =
-      new Transform3d[] {
-        new Transform3d(
-            new Translation3d(
-                Units.inchesToMeters(-11), Units.inchesToMeters(11), Units.inchesToMeters(-9)),
-            new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(90 + 43.745)))),
-        new Transform3d(
-            new Translation3d(
-                Units.inchesToMeters(-11), Units.inchesToMeters(-11), Units.inchesToMeters(-9)),
-            new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))))
-      };
+      new Transform3d[] {RIGHT_SWERVE_MODULE_TRANSFORM, CENTER_TRANSFORM};
 
   /** Detection weights for each camera */
-  private static final double[] CAMERA_WEIGHTS = new double[] {1.0, 0.9};
+  private static final double[] CAMERA_WEIGHTS = new double[] {0.9, 1.0};
 
-  /** How much influence XY data has on the robot pose */
-  private static final double XY_STD_DEV_COEFFICIENT = 0.025;
+  /** How much influence XY data has on the robot pose. Smaller values increase influence */
+  private static final double XY_STD_DEV_COEFFICIENT = 0.0004;
 
-  /** How much influence theta data has on the robot pose */
-  private static final double THETA_STD_DEV_COEFFICIENT = 0.015;
+  /** How much influence theta data has on the robot pose. Smaller values increase influence */
+  private static final double THETA_STD_DEV_COEFFICIENT = 0.002;
 
   /** The margin inside the field border to accept vision poses from */
   private static final double FIELD_BORDER_MARGIN = 0.5;
@@ -68,25 +70,24 @@ public class Vision extends SubsystemBase {
       new double[] {
         0.95, // Source
         0.95, // Source
-        1.15, // Speaker
-        1.15, // Speaker
-        1.0, // Amp
-        0.9, // Stage
-        0.9, // Stage
-        0.9, // Stage
+        1.25, // Speaker
+        1.0, // Speaker
+        0.9, // Amp
+        0.8, // Stage
+        0.8, // Stage
+        0.8, // Stage
         0.95, // Source
         0.95, // Source
-        1.15, // Speaker
-        1.15, // Speaker
-        1.0, // Amp
-        0.9, // Stage
-        0.9, // Stage
-        0.9, // Stage
+        1.25, // Speaker
+        1.0, // Speaker
+        0.9, // Amp
+        0.8, // Stage
+        0.8, // Stage
+        0.8, // Stage
       };
 
   private static final double targetLogTimeSecs = 0.1;
 
-  private Optional<Pose2d> lastPose = Optional.empty();
   private double lastPoseTime = 0.0;
 
   public Vision(VisionIO... io) {
@@ -152,8 +153,8 @@ public class Vision extends SubsystemBase {
             final Pose3d robotPose3d1 = cameraPose1.transformBy(CAMERA_TRANSFORMS[camIndex]);
 
             // Select pose using scores
-            final double score0 = scoreDetection(error0, camIndex, -1);
-            final double score1 = scoreDetection(error1, camIndex, -1);
+            final double score0 = scoreDetection(error0, 1.0, camIndex, -1);
+            final double score1 = scoreDetection(error1, 1.0, camIndex, -1);
             SmartDashboard.putNumber("Score 0", score0);
             SmartDashboard.putNumber("Score 1", score1);
             if (score0 > score1) {
@@ -181,31 +182,38 @@ public class Vision extends SubsystemBase {
 
         // Get tag poses and update last detection times
         List<Pose3d> tagPoses = new ArrayList<>();
+        List<Integer> tagIds = new ArrayList<>();
         for (int i = (values[0] == 1 ? 9 : 17); i < values.length; i++) {
           final int tagId = (int) values[i];
+          tagIds.add(tagId);
           lastTagDetectionTimes.put(tagId, Timer.getFPGATimestamp());
           final Optional<Pose3d> tagPose = FieldConstants.aprilTags.getTagPose(tagId);
           if (tagPose.isPresent()) {
             tagPoses.add(tagPose.get());
           }
         }
-        // Calculate average distance to tag
-        double totalDistance = 0.0;
-        for (Pose3d tagPose : tagPoses) {
-          totalDistance += tagPose.getTranslation().getDistance(cameraPose.getTranslation());
+
+        // Calculate average score
+        double averageScore = 0.0;
+        for (int i = 0; i < tagPoses.size(); i++) {
+          final double dist =
+              tagPoses.get(i).getTranslation().getDistance(cameraPose.getTranslation());
+          final double score = scoreDetection(1.0, dist, camIndex, tagIds.get(i));
+          averageScore += score;
         }
-        final double avgDistance = totalDistance / tagPoses.size();
+        averageScore /= tagPoses.size();
+        SmartDashboard.putNumber("Final Detection Score", averageScore);
 
         // Add to vision updates
-        final double xyStdDev =
-            XY_STD_DEV_COEFFICIENT * Math.pow(avgDistance, 2.0) / tagPoses.size();
-        final double thetaStdDev =
-            THETA_STD_DEV_COEFFICIENT * Math.pow(avgDistance, 2.0) / tagPoses.size();
+        final double xyStdDev = XY_STD_DEV_COEFFICIENT / averageScore;
+        final double thetaStdDev = THETA_STD_DEV_COEFFICIENT / averageScore;
         visionUpdates.add(
             new TimestampedVisionUpdate(
                 timestamp, robotPose, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)));
         allRobotPoses.add(robotPose);
         allRobotPoses3d.add(robotPose3d);
+        detectionCount++;
+        SmartDashboard.putNumber("Vision Detection Count", detectionCount);
       }
 
       Logger.getInstance().setRobotPoses(allRobotPoses.toArray(new Pose2d[allRobotPoses.size()]));
@@ -215,21 +223,10 @@ public class Vision extends SubsystemBase {
           allTagPoses.add(FieldConstants.aprilTags.getTagPose(detectionEntry.getKey()).get());
         }
       }
-      if (DriverStation.isTeleop()) {
-        if (allRobotPoses.size() > 0) {
-          lastPose = Optional.of(allRobotPoses.get(0));
-          lastPoseTime = Timer.getFPGATimestamp();
-          SmartDashboard.putNumber("Last Vision Pose Time", lastPoseTime);
-        }
-      }
       Logger.getInstance().setTagPoses(allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
       Logger.getInstance()
           .setRobotPoses3d(allRobotPoses3d.toArray(new Pose3d[allRobotPoses3d.size()]));
       visionConsumer.accept(visionUpdates);
-      if (lastPose.isPresent()) {
-        lastPoseConsumer.accept(lastPose.get());
-      }
-      // lastPose = Optional.empty();
     }
   }
 
@@ -237,12 +234,8 @@ public class Vision extends SubsystemBase {
    * This function accepts the interfaces in and out of the vision system, such as giving out vision
    * updates, and recieving poses.
    */
-  public void setDataInterfaces(
-      Consumer<List<TimestampedVisionUpdate>> visionConsumer,
-      Supplier<Pose2d> poseSupplier,
-      Consumer<Pose2d> foo) {
+  public void setDataInterfaces(Consumer<List<TimestampedVisionUpdate>> visionConsumer) {
     this.visionConsumer = visionConsumer;
-    this.lastPoseConsumer = foo;
   }
 
   public double getLastPoseTime() {
@@ -275,15 +268,19 @@ public class Vision extends SubsystemBase {
    * Scores a single tag detection
    *
    * @param error The reprojection error of the detection
+   * @param distance The distance to the AprilTag
    * @param camID The ID of the camera making the detection
    * @param tagID The ID of the AprilTag (starting from 1). If -1, the tag score will be ignored
    * @return The score. This value is unitless and relative to other scores only
    */
-  private static double scoreDetection(double error, int camID, int tagID) {
+  private static double scoreDetection(double error, double distance, int camID, int tagID) {
     double score = 1.0;
 
     // A higher error decreases the score
     score /= error;
+
+    // A higher distance decreases the score
+    score /= GeneralMath.curve(distance, 2.8);
 
     // Weigh based on the camera
     final double camWeight = CAMERA_WEIGHTS[camID];

@@ -160,7 +160,7 @@ public class GeneralMath {
    * @return The curved value
    */
   public static double curve(double value, double magnitude) {
-    return Math.copySign(Math.abs(Math.pow(value, magnitude)), value);
+    return Math.copySign(Math.pow(value, magnitude), value);
   }
 
   /**

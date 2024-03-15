@@ -141,7 +141,7 @@ public class RobotContainer {
       selector.addRoutine("Pit Test", List.of(), routines.pitTest());
     }
 
-    vision.setDataInterfaces(drive::addVisionData, drive::getPose, drive::setLastVisionPose);
+    vision.setDataInterfaces(drive::addVisionData);
     Lights.getInstance()
         .setDataInterfaces(
             drive::getPose,

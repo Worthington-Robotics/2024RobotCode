@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
     // ==========
 
-    final var dist = Units.metersToFeet(robotContainer.drive.getPose().getX() - 0.3556);
+    final var dist = Units.metersToFeet(robotContainer.drive.getPose().getX() - 0.3556 * 0.0);
     SmartDashboard.putNumber("Drive Distance", dist);
 
     // Update caches

@@ -200,17 +200,6 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Resets the pose estimator to the latest pose from vision, in teleop mode
-   *
-   * @param pose The pose from the vision
-   */
-  public void setLastVisionPose(Pose2d pose) {
-    if (DriverStation.isTeleop()) {
-      this.poseEstimator.resetPose(pose);
-    }
-  }
-
-  /**
    * Returns the maximum linear speed (free speed) that the drive train can physically attain
    *
    * @return The value in meters per second

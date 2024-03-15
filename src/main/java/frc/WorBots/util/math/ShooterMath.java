@@ -85,7 +85,7 @@ public class ShooterMath {
    * multiplied by the robot period to find the period of time over which to apply the robot
    * velocity to the pose to get the expected pose
    */
-  private static final double PREDICTION_FACTOR = 2.0;
+  private static final double PREDICTION_FACTOR = 9.0;
 
   private static final double PREDICTION_DISTANCE_FACTOR = 6.0;
 
