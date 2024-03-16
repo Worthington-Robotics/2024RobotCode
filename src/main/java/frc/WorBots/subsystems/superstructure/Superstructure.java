@@ -94,7 +94,7 @@ public class Superstructure extends SubsystemBase {
   public static final double PIVOT_HORIZONTAL_OFFSET = 0.36368;
 
   /** The error threshold for the elevator, in meters */
-  private static final double ELEVATOR_THRESHOLD = 0.025;
+  private static final double ELEVATOR_THRESHOLD = 0.027;
 
   /** THe error threshold for the pivot, in radians */
   private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.75);
@@ -121,7 +121,7 @@ public class Superstructure extends SubsystemBase {
 
       elevatorController.setGains(160, 0.2, 0);
       elevatorController.setConstraints(2.0, 1.65);
-      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.0, 0.0);
+      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.55, 0.0);
     } else { // Sim
       pivotController.setGains(50, 0.25, 0);
       pivotController.setConstraints(12, 8);
@@ -564,5 +564,14 @@ public class Superstructure extends SubsystemBase {
    */
   public boolean inHandoff() {
     return this.isNearPose(Preset.HANDOFF, 0.02, Units.degreesToRadians(2.8));
+  }
+
+  /**
+   * Checks if the superstructure is close enough to the stow pose
+   *
+   * @return Whether we are near stow
+   */
+  public boolean inStow() {
+    return this.isNearPose(Preset.STOW, 0.015, Units.degreesToRadians(1.9));
   }
 }

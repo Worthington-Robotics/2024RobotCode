@@ -71,7 +71,7 @@ public class AutoShoot extends SequentialCommandGroup {
                   x,
                   y,
                   0.0,
-                  drive.getRotation(),
+                  drive.getYaw(),
                   drive.getMaxLinearSpeedMetersPerSec() / DRIVE_SPEED_REDUCTION);
 
           // Calculate turn

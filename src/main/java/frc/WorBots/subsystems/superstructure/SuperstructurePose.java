@@ -26,7 +26,8 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     CLIMB(new SuperstructurePose(VecBuilder.fill(0.035, Superstructure.PIVOT_MAX_ANGLE / 2))),
     SLIDE(new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.PIVOT_MAX_ANGLE))),
     SUBWOOFER_SHOOT(
-        new SuperstructurePose(VecBuilder.fill(0.0, 0.498 - Units.degreesToRadians(2))));
+        new SuperstructurePose(VecBuilder.fill(0.0, 0.498 - Units.degreesToRadians(2)))),
+    WING_PASS(new SuperstructurePose(VecBuilder.fill(0.0, 0.720)));
 
     public SuperstructurePose pose;
 

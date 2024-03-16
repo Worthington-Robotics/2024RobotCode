@@ -50,6 +50,8 @@ public class Lights extends SubsystemBase {
   private Supplier<Pose2d> drivePoseSupplier = () -> new Pose2d();
   private Supplier<ChassisSpeeds> driveSpeedsSupplier = () -> new ChassisSpeeds();
   private Supplier<Boolean> inHandoff = () -> false;
+  private Supplier<Boolean> inStow = () -> false;
+  private Supplier<Boolean> atShootSetpoint = () -> false;
   private Supplier<Boolean> hasGamePieceBottom = () -> false;
   private Supplier<Boolean> hasGamePieceTop = () -> false;
   private Supplier<Double> elevatorPercentageRaised = () -> 0.0;
@@ -67,6 +69,7 @@ public class Lights extends SubsystemBase {
     Indicator,
     Elevator,
     Field,
+    ShootReady,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -138,6 +141,19 @@ public class Lights extends SubsystemBase {
           wave(100, Color.kBlue, Color.kRed, 14.0, 1.2, 0.3);
         }
         break;
+      case ShootReady:
+        final boolean atShootSetpoint = this.atShootSetpoint.get();
+        final Color color = atShootSetpoint ? Color.kGreen : Color.kOrangeRed;
+        solid(1.0, color);
+        break;
+    }
+
+    // Dim all the LEDs
+    for (int i = 0; i < LIGHT_COUNT; i++) {
+      final Color color = io.getLED(i);
+      final double factor = 0.9;
+      final Color dimmed = new Color(color.red * factor, color.green * factor, color.blue * factor);
+      io.setLED(i, dimmed);
     }
 
     leds.setData(io);
@@ -331,6 +347,7 @@ public class Lights extends SubsystemBase {
   private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.55);
 
   private void delivery() {
+    final boolean inStow = this.inStow.get();
     final boolean inHandoff = this.inHandoff.get();
     final boolean hasGamePieceBottom =
         hasGamePieceBottomDebouncer.calculate(this.hasGamePieceBottom.get());
@@ -346,6 +363,8 @@ public class Lights extends SubsystemBase {
     } else {
       if (inHandoff) {
         solid(1.0, Color.kWhite);
+      } else if (inStow) {
+        solid(1.0, Color.kPurple);
       } else {
         alliance();
       }
@@ -380,12 +399,16 @@ public class Lights extends SubsystemBase {
       Supplier<Pose2d> drivePoseSupplier,
       Supplier<ChassisSpeeds> driveSpeedsSupplier,
       Supplier<Boolean> inHandoff,
+      Supplier<Boolean> inStow,
+      Supplier<Boolean> atShootSetpoint,
       Supplier<Boolean> hasGamePieceBottom,
       Supplier<Boolean> hasGamePieceTop,
       Supplier<Double> elevatorPercentageRaised) {
     this.drivePoseSupplier = drivePoseSupplier;
     this.driveSpeedsSupplier = driveSpeedsSupplier;
     this.inHandoff = inHandoff;
+    this.inStow = inStow;
+    this.atShootSetpoint = atShootSetpoint;
     this.hasGamePieceBottom = hasGamePieceBottom;
     this.hasGamePieceTop = hasGamePieceTop;
     this.elevatorPercentageRaised = elevatorPercentageRaised;

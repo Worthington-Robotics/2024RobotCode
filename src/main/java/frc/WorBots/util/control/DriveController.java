@@ -113,7 +113,9 @@ public class DriveController {
     // Apply deadband
     linearMagnitude = MathUtil.applyDeadband(linearMagnitude, deadband);
     if (linearMagnitude == 0.0) {
-      driveFilter.reset();
+      if (stopTimer.hasElapsed(0.3)) {
+        driveFilter.reset();
+      }
     } else {
       stopTimer.reset();
     }

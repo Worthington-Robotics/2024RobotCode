@@ -147,6 +147,8 @@ public class RobotContainer {
             drive::getPose,
             drive::getFieldRelativeSpeeds,
             superstructure::inHandoff,
+            superstructure::inStow,
+            () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint(),
             intake::hasGamePiece,
             shooter::hasGamePiece,
             superstructure::getElevatorPercentageRaised);
@@ -159,6 +161,11 @@ public class RobotContainer {
 
   /** Bind driver controls to commands */
   private void bindControls() {
+    final Command shootingLightsCommand =
+        Commands.startEnd(
+            () -> Lights.getInstance().setMode(LightsMode.ShootReady),
+            () -> Lights.getInstance().setMode(LightsMode.Delivery));
+
     drive.setDefaultCommand(
         new DriveWithJoysticks(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
@@ -178,7 +185,7 @@ public class RobotContainer {
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
     driver.y().onTrue(Commands.runOnce(drive::resetHeading));
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
-    Pose2d ampPose =
+    final Pose2d ampPose =
         new Pose2d(
             AllianceFlipUtil.apply(FieldConstants.Amp.x),
             FieldConstants.fieldWidth - Units.inchesToMeters(10),
@@ -189,9 +196,17 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));
     operator.b().onTrue(superstructure.goToPose(Preset.STOW));
     operator.y().onTrue(superstructure.goToPose(Preset.HANDOFF));
-    operator.a().onTrue(superstructure.goToPose(Preset.TRAP));
-    operator.x().onTrue(superstructure.goToPose(Preset.AMP));
-    operator.povUp().onTrue(superstructure.goToPose(Preset.SUBWOOFER_SHOOT));
+    operator
+        .a()
+        .whileTrue(
+            new WingPass(
+                drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
+        .whileTrue(shootingLightsCommand);
+    operator.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
+    operator
+        .povUp()
+        .onTrue(superstructure.goToPose(Preset.SUBWOOFER_SHOOT))
+        .whileTrue(shootingLightsCommand);
     operator
         .rightBumper()
         .whileTrue(
@@ -207,7 +222,7 @@ public class RobotContainer {
                           Lights.getInstance().setMode(LightsMode.Shooting);
                         }))
                 .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.DISABLED)))
-        .onFalse(shooter.spinToSpeed(0.0))
+        .onFalse(Commands.runOnce(() -> shooter.idle(), shooter))
         .onFalse(Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery)))
         .onFalse(Commands.waitSeconds(0.05).andThen(() -> superstructure.setPose(Preset.STOW)));
     operator

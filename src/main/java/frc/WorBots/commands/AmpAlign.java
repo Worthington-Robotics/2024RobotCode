@@ -15,6 +15,7 @@ import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.AllianceFlipUtil;
+import frc.WorBots.util.math.GeneralMath;
 import java.util.function.Supplier;
 
 /** Command for teleop that drives the robot to the amp */
@@ -55,11 +56,12 @@ public class AmpAlign extends Command {
 
   @Override
   public void execute() {
-    final double x = drivePID.calculate(drive.getPose().getX());
+    final double x = GeneralMath.clampMagnitude(drivePID.calculate(drive.getPose().getX()), 1.0);
     final double y = ySupplier.get();
-    final double theta = turnPID.calculate(drive.getPose().getRotation().getRadians());
+    final double theta =
+        GeneralMath.clampMagnitude(turnPID.calculate(drive.getYaw().getRadians()), 1.0);
 
-    var speeds =
+    final var speeds =
         driveController.getSpeeds(
             x, y, theta, drive.getPose().getRotation(), drive.getMaxLinearSpeedMetersPerSec());
     // speeds.vxMetersPerSecond = x;

@@ -259,6 +259,11 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
     return this.setSpeedContinuous(IDLE_SPEED);
   }
 
+  /** Idles the flywheels */
+  public void idle() {
+    this.setSpeedVoid(IDLE_SPEED);
+  }
+
   /**
    * Sets the flywheel desired RPM's to 0.
    *
