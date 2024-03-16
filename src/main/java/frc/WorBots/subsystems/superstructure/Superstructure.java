@@ -119,9 +119,9 @@ public class Superstructure extends SubsystemBase {
       pivotController.setConstraints(11, 18);
       pivotFeedForward = new ArmFeedforward(0.04, 0.25, 0.01);
 
-      elevatorController.setGains(160, 0.2, 0);
+      elevatorController.setGains(130, 0.2, 0);
       elevatorController.setConstraints(2.0, 1.65);
-      elevatorFeedForward = new ElevatorFeedforward(0.2, 0.55, 0.0);
+      elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
     } else { // Sim
       pivotController.setGains(50, 0.25, 0);
       pivotController.setConstraints(12, 8);
