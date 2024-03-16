@@ -170,12 +170,25 @@ public class PoseEstimator {
           }
         }
 
+        // Calculate distance
+        // final double distance =
+        //     MathUtil.clamp(
+        //         Math.pow(
+        //             pose.getTranslation().getDistance(visionUpdate.pose().getTranslation()) *
+        // 1.0,
+        //             2.9),
+        //         0.8,
+        //         1.5);
+        double distance = 1.0;
+
         // Calculate twist between current and vision pose
         var visionTwist = pose.log(visionUpdate.pose());
 
         // Multiply by Kalman gain matrix
         var twistMatrix =
-            visionK.times(VecBuilder.fill(visionTwist.dx, visionTwist.dy, visionTwist.dtheta));
+            visionK.times(
+                VecBuilder.fill(
+                    visionTwist.dx * distance, visionTwist.dy * distance, visionTwist.dtheta));
 
         // Apply twist
         pose =

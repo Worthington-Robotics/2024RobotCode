@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.math.GeneralMath;
 
 public class Module {
   private final int index;
@@ -19,7 +20,7 @@ public class Module {
   /**
    * The minimum speed percentage of the maximum that can be set before angle changes are ignored
    */
-  private static final double ANTI_JITTER_THRESHOLD = 0.01;
+  private static final double ANTI_JITTER_THRESHOLD = 0.02;
 
   /**
    * This module represents one swerve module, which includes a turn motor, and drive motor.
@@ -65,7 +66,15 @@ public class Module {
    * @return The optimized state
    */
   public SwerveModuleState optimizeState(SwerveModuleState state) {
-    var optimizedState = SwerveModuleState.optimize(state, getAngle());
+    // var optimizedState = SwerveModuleState.optimize(state, getAngle());
+    var optimizedState = state;
+    // var delta = state.angle.minus(getAngle());
+    final Rotation2d delta = GeneralMath.wrappingAngleDifference(state.angle, getAngle());
+    if (Math.abs(delta.getDegrees()) > 90.0) {
+      optimizedState =
+          new SwerveModuleState(
+              -state.speedMetersPerSecond, state.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
+    }
 
     // Stray module correction
     optimizedState.speedMetersPerSecond *= Math.cos(io.getInputs().turnPositionErrorRad);

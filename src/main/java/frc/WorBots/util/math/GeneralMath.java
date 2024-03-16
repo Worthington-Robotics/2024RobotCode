@@ -206,4 +206,10 @@ public class GeneralMath {
   public static double calculateFlywheelMOI(double mass, double radius) {
     return 0.5 * mass * Math.pow(radius, 2);
   }
+
+  public static Rotation2d wrappingAngleDifference(Rotation2d angle1, Rotation2d angle2) {
+    double diff = Math.abs(angle1.getDegrees() - angle2.getDegrees());
+    if (diff > 180) diff = 360 - diff;
+    return Rotation2d.fromDegrees(diff);
+  }
 }

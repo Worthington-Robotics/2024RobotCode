@@ -23,6 +23,7 @@ import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.AllianceFlipUtil;
+import frc.WorBots.util.math.ShooterMath;
 
 // import edu.wpi.first.math.geometry.Pose2d;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -78,8 +79,8 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     // ==== DISABLE BEFORE COMP ====
-    // final var robotPose = robotContainer.drive.getPose();
-    // final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
+    final var robotPose = robotContainer.drive.getPose();
+    final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
     // final double range = ShooterMath.getGoalDistance(robotPose);
     // SmartDashboard.putNumber("Speaker Range", range);
     // final var goalPose = ShooterMath.getGoal();
@@ -87,8 +88,8 @@ public class Robot extends TimedRobot {
     // var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
     // SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
 
-    // var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
-    // SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
+    var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
+    SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
     // SmartDashboard.putString("Shot Confidence", shotData.confidence().toString());
     // SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
     // final var adjusted = new Pose2d(robotPose.getTranslation(), shotData.robotAngle());

@@ -182,7 +182,7 @@ public class RobotContainer {
         new Pose2d(
             AllianceFlipUtil.apply(FieldConstants.Amp.x),
             FieldConstants.fieldWidth - Units.inchesToMeters(10),
-            Rotation2d.fromDegrees(90));
+            Rotation2d.fromDegrees(270));
     driver.a().whileTrue(new DriveToPose(drive, ampPose));
     driver
         .povLeft()

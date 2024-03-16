@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.PoseEstimator;
 import frc.WorBots.util.math.PoseEstimator.*;
@@ -310,6 +311,10 @@ public class Drive extends SubsystemBase {
   /** Resets the robot heading */
   public void resetHeading() {
     gyroIO.resetHeading();
+    final Pose2d currentPose = poseEstimator.getLatestPose();
+    poseEstimator.resetPose(
+        new Pose2d(
+            currentPose.getX(), currentPose.getY(), AllianceFlipUtil.apply(new Rotation2d())));
   }
 
   /**

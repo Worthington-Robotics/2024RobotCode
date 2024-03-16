@@ -16,6 +16,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.Constants;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 import frc.WorBots.util.debug.TunablePIDController;
@@ -29,6 +30,7 @@ public class ModuleIOTalon implements ModuleIO {
       (14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0) * DRIVE_MULTIPLIER;
 
   private ModuleIOInputs inputs;
+  private final int index;
 
   private final SimpleMotorFeedforward driveFeedforward =
       new SimpleMotorFeedforward(0.18868, 0.12825);
@@ -51,39 +53,40 @@ public class ModuleIOTalon implements ModuleIO {
   private final StatusSignal<Double> turnAbsPosSignal;
 
   public ModuleIOTalon(int index) {
-    driveFeedbackGains.setGains(0.065, 0.001, 0.0);
+    driveFeedbackGains.setGains(0.015, 0.001, 0.0);
     turnFeedbackGains.setGains(6.05, 0.019, 0.0);
     turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
 
     inputs = new ModuleIOInputs(index);
+    this.index = index;
 
     switch (index) {
       case 0: // Front Left
         driveMotor = new TalonFX(1, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(2, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(3, Constants.SWERVE_CAN_BUS);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        encoderOffset = new Rotation2d(2.783 + Units.degreesToRadians(180));
         wheelRadius = Units.inchesToMeters(2.0);
         break;
       case 1: // Front Right
         driveMotor = new TalonFX(4, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(5, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(6, Constants.SWERVE_CAN_BUS);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        encoderOffset = new Rotation2d(0.996 + Units.degreesToRadians(0));
         wheelRadius = Units.inchesToMeters(2.0);
         break;
       case 2: // Back Left
         driveMotor = new TalonFX(7, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(8, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(9, Constants.SWERVE_CAN_BUS);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        encoderOffset = new Rotation2d(2.692 + Units.degreesToRadians(180));
         wheelRadius = Units.inchesToMeters(2.0);
         break;
       case 3: // Back Right
         driveMotor = new TalonFX(10, Constants.SWERVE_CAN_BUS);
         turnMotor = new TalonFX(11, Constants.SWERVE_CAN_BUS);
         absoluteEncoder = new CANcoder(12, Constants.SWERVE_CAN_BUS);
-        encoderOffset = new Rotation2d(Units.degreesToRadians(0.0));
+        encoderOffset = new Rotation2d(0.756 + Units.degreesToRadians(0));
         wheelRadius = Units.inchesToMeters(2.0);
         break;
       default:
@@ -92,14 +95,15 @@ public class ModuleIOTalon implements ModuleIO {
     // Configure devices
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-    driveConfig.CurrentLimits.SupplyCurrentLimit = 20;
+    driveConfig.CurrentLimits.SupplyCurrentLimit = 25;
     driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     driveMotor.getConfigurator().apply(driveConfig);
 
-    // TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-    // turnConfig.CurrentLimits.SupplyCurrentLimit = 45;
-    // turnConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
-    // turnMotor.getConfigurator().apply(turnConfig);
+    TalonFXConfiguration turnConfig = new TalonFXConfiguration();
+    turnMotor.getConfigurator().refresh(turnConfig);
+    turnConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    turnMotor.getConfigurator().apply(turnConfig);
 
     driveMotor.setNeutralMode(NeutralModeValue.Brake);
     turnMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -154,6 +158,7 @@ public class ModuleIOTalon implements ModuleIO {
     final double driveVolts =
         driveFeedforward.calculate(velocityRadPerSec)
             + driveFeedback.pid.calculate(inputs.drive.velocityRadsPerSec, velocityRadPerSec);
+    SmartDashboard.putNumber("Swerve Module Volts " + index, driveVolts);
     setDriveVoltage(driveVolts);
   }
 
