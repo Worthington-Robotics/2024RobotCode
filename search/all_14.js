@@ -5,5 +5,9 @@ var searchData=
   ['waypoint_2ejava_2',['Waypoint.java',['../Waypoint_8java.html',1,'']]],
   ['wheelbase_3',['WHEELBASE',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a4331862183e2d82cc57537a394ab469e',1,'frc::WorBots::subsystems::drive::Drive']]],
   ['winggamepiecelocations_4',['wingGamePieceLocations',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a2fac942fb528ad8c0d1b8a7ce9b5a369',1,'frc::WorBots::auto::AutoUtil']]],
-  ['withintolerance_5',['withinTolerance',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a580d539596c0241044f0ffdc7b0f73c1',1,'frc::WorBots::commands::DriveToPose']]]
+  ['wingpass_5',['WingPass',['../classfrc_1_1WorBots_1_1commands_1_1WingPass.html',1,'frc.WorBots.commands.WingPass'],['../classfrc_1_1WorBots_1_1commands_1_1WingPass.html#a3e326b7ca76d3656b6f33277875eef09',1,'frc.WorBots.commands.WingPass.WingPass()']]],
+  ['wingpass_2ejava_6',['WingPass.java',['../WingPass_8java.html',1,'']]],
+  ['withintolerance_7',['withinTolerance',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a580d539596c0241044f0ffdc7b0f73c1',1,'frc::WorBots::commands::DriveToPose']]],
+  ['withoutdriving_8',['withoutDriving',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#aa600c1661288b55629d9e5488d7473f7',1,'frc::WorBots::commands::DriveToPose']]],
+  ['wrappingangledifference_9',['wrappingAngleDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#aa2498cbd59dc349e5a852997dd7786e0',1,'frc::WorBots::util::math::GeneralMath']]]
 ];
