@@ -22,7 +22,7 @@ import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 import frc.WorBots.util.math.GeneralMath;
 import java.util.function.Supplier;
 
-public class Shooter extends SubsystemBase { // 532 rpm/v
+public class Shooter extends SubsystemBase {
   private ShooterIO io;
   private ShooterIOInputs inputs = new ShooterIOInputs();
   private boolean hasGamePiece = false;
@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase { // 532 rpm/v
 
   // Constants
   /** Distance threshold for the ToF */
-  private static final double DISTANCE_THRESHOLD = 0.075;
+  private static final double DISTANCE_THRESHOLD = 0.077;
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down

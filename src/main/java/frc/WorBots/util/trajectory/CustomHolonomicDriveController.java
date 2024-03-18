@@ -31,6 +31,9 @@ public class CustomHolonomicDriveController {
   private Pose2d m_poseTolerance = new Pose2d();
   private boolean m_enabled = true;
 
+  private final double XY_FF_COEFF = 0.30;
+  private final double THETA_FF_COEFF = 0.48;
+
   private final PIDController m_xController;
   private final PIDController m_yController;
   private final PIDController m_thetaController;
@@ -94,9 +97,9 @@ public class CustomHolonomicDriveController {
       double angleVelocityRefRadians) {
 
     // Calculate feedforward velocities (field-relative).
-    double xFF = linearVelocityRefMeters * poseRef.getRotation().getCos();
-    double yFF = linearVelocityRefMeters * poseRef.getRotation().getSin();
-    double thetaFF = angleVelocityRefRadians;
+    double xFF = linearVelocityRefMeters * poseRef.getRotation().getCos() * XY_FF_COEFF;
+    double yFF = linearVelocityRefMeters * poseRef.getRotation().getSin() * XY_FF_COEFF;
+    double thetaFF = angleVelocityRefRadians * THETA_FF_COEFF;
 
     m_poseError = poseRef.relativeTo(currentPose);
     m_rotationError = angleRef.minus(currentPose.getRotation());

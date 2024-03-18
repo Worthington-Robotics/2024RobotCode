@@ -78,7 +78,7 @@ public class Autos {
 
     // A better spot to shoot from, near the starting position
     final var driveToBetterSpotPose1 =
-        AllianceFlipUtil.addToFlipped(startingPose, Units.inchesToMeters(20));
+        AllianceFlipUtil.addToFlipped(startingPose, Units.inchesToMeters(10));
     final var driveToBetterSpotPose2 =
         AllianceFlipUtil.addToFlipped(startingPose, Units.inchesToMeters(50));
 
@@ -89,31 +89,36 @@ public class Autos {
             ? new CommandWithPose(
                 new DriveToPose(drive, driveToBetterSpotPose1), driveToBetterSpotPose1)
             : new CommandWithPose(Commands.none(), startingPose);
+
     // Shoot the loaded game piece
     final var autoShoot1 =
-        util.moveAndShoot(driveToBetterSpot1.pose(), true, true, true, shootTimeout);
+        util.moveAndShoot(driveToBetterSpot1.pose(), true, false, true, shootTimeout);
+
+    // Turn to the correct direction before moving
+    final var turn1 = util.turnTo(autoShoot1.pose(), AllianceFlipUtil.apply(new Rotation2d()));
 
     // Intake the piece right behind us
-    final var driveIntakeWing1 =
-        util.driveAndIntakeWing(autoShoot1.pose(), false, false, startingLocation);
+    final var intake1 = util.driveAndIntakeWing(turn1.pose(), false, false, startingLocation);
+
     // Drive to the better spot before the second shot for the wall side, so that we
     // don't run into the stage while targeting
     final var driveToBetterSpot2 =
         startingLocation == 2
-            ? new CommandWithPose(
-                new DriveToPose(drive, driveToBetterSpotPose2), driveToBetterSpotPose2)
-            : new CommandWithPose(Commands.none(), driveIntakeWing1.pose());
+            ? util.driveTo(driveToBetterSpotPose2)
+            : new CommandWithPose(Commands.none(), intake1.pose());
+
     // Shoot the second piece
     final var autoShoot2 =
-        util.moveAndShoot(driveToBetterSpot2.pose(), true, true, true, shootTimeout);
+        util.moveAndShoot(driveToBetterSpot2.pose(), true, false, true, shootTimeout);
     return createSequence(
         util.reset(startingPose).command(),
         driveToBetterSpot1.command(),
         autoShoot1.command(),
-        driveIntakeWing1.command(),
+        turn1.command(),
+        intake1.command(),
         driveToBetterSpot2.command(),
         autoShoot2.command(),
-        util.driveOutToCenter(autoShoot2.pose()).command());
+        util.driveOutToCenter(autoShoot2.pose(), false).command());
   }
 
   public Command threePieceClose() {
@@ -140,10 +145,12 @@ public class Autos {
         intake1.command(),
         autoShoot2.command(),
         intake2.command(),
-        util.path(
-                Waypoint.fromHolonomicPose(intake2.pose()),
-                Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
-            .command(),
+        Commands.deadline(
+            util.path(
+                    Waypoint.fromHolonomicPose(intake2.pose()),
+                    Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
+                .command(),
+            util.fullHandoff()),
         autoShoot3.command());
   }
 
@@ -159,26 +166,30 @@ public class Autos {
     // Intake the third piece, then move to the center and shoot it
     final var intake2 = util.driveAndIntakeWing(autoShoot2.pose(), true, false, 0);
     final var autoShoot3 =
-        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, false, 0.5);
+        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, true, 1.0);
     final var intake3 = util.driveAndIntakeWing(autoShoot3.pose(), true, false, 2);
     final var autoShoot4 =
-        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, false, 2.0);
+        util.moveAndShoot(util.wingGamePieceLocations[1], false, false, true, 2.0);
     return createSequence(
         util.reset(startingPose).command(),
         autoShoot1.command(),
         intake1.command(),
         autoShoot2.command(),
         intake2.command(),
-        util.path(
-                Waypoint.fromHolonomicPose(intake2.pose()),
-                Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
-            .command(),
+        Commands.deadline(
+            util.path(
+                    Waypoint.fromHolonomicPose(intake2.pose()),
+                    Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
+                .command(),
+            util.fullHandoff()),
         autoShoot3.command(),
         intake3.command(),
-        util.path(
-                Waypoint.fromHolonomicPose(intake3.pose()),
-                Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
-            .command(),
+        Commands.deadline(
+            util.path(
+                    Waypoint.fromHolonomicPose(intake3.pose()),
+                    Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
+                .command(),
+            util.fullHandoff()),
         autoShoot4.command());
   }
 
@@ -225,19 +236,19 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[0], 1.0))
                 .andThen(util.prepareShooting(path1.pose()))),
         autoShoot2.command(),
         Commands.deadline(
             path2.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[1], 1.0))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
         Commands.deadline(
             path3.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[2], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[2], 1.0))
                 .andThen(util.prepareShooting(path3.pose()))),
         autoShoot4.command());
   }
@@ -251,10 +262,12 @@ public class Autos {
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot1.pose()),
-            Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(-24))),
-            Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(48))),
+            // Waypoint.fromHolonomicPose(
+            //     AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne,
+            // Units.inchesToMeters(-24))),
+            // Waypoint.fromHolonomicPose(
+            //     AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(48))),
+            Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
     final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, false, 1.2);
@@ -290,19 +303,19 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[0], 1.0))
                 .andThen(util.prepareShooting(path1.pose()))),
         autoShoot2.command(),
         Commands.deadline(
             path2.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[1], 1.0))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
         // Parallel so that we don't stop intaking when we get to the piece
         Commands.parallel(
             path3.command(),
-            util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.45))),
+            util.prepareHandoff().andThen(util.intakeWhileNear(path3.pose(), 0.45))),
         autoShoot4.command());
   }
 
@@ -315,8 +328,8 @@ public class Autos {
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot1.pose()),
-            Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(-8))),
+            // Waypoint.fromHolonomicPose(
+            //     AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(-8))),
             Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
@@ -365,21 +378,23 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[0], 1.5))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[0], 1.5))
                 .andThen(util.prepareShooting(path1.pose()))),
         autoShoot2.command(),
         Commands.deadline(
             path2.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[1], 1.5))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[1], 1.5))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
         // Parallel so that we don't stop intaking when we get to the piece
         Commands.parallel(
-            path3.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path3.pose(), 0.5))),
+            path3.command(),
+            util.prepareHandoff().andThen(util.intakeWhileNear(path3.pose(), 0.5))),
         autoShoot4.command(),
         Commands.parallel(
-            path4.command(), util.prepareHandoff().andThen(util.intakeWhenNear(path4.pose(), 0.5))),
+            path4.command(),
+            util.prepareHandoff().andThen(util.intakeWhileNear(path4.pose(), 0.5))),
         autoShoot5.command());
   }
 

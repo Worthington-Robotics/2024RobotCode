@@ -104,6 +104,7 @@ public class ShooterMath {
             {2.197 - GOAL_ADJUSTMENT, 0.93 * 0.8172},
             {2.379 - GOAL_ADJUSTMENT, 0.93 * 0.826},
             {2.600 - GOAL_ADJUSTMENT, 0.99 * 0.85},
+            {2.900 - GOAL_ADJUSTMENT, 0.99 * 0.87},
             {3.24 - GOAL_ADJUSTMENT, 1.05 * 0.948},
             {4.240 - GOAL_ADJUSTMENT, 1.02 * 0.9805},
             {4.305 - GOAL_ADJUSTMENT, 1.02 * 0.9805},

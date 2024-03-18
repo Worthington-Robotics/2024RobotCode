@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
@@ -170,17 +171,12 @@ public class PoseEstimator {
           }
         }
 
-        // Calculate distance
-        // final double distance =
-        //     MathUtil.clamp(
-        //         Math.pow(
-        //             pose.getTranslation().getDistance(visionUpdate.pose().getTranslation()) *
-        // 1.0,
-        //             2.9),
-        //         0.8,
-        //         1.5);
-        double distance = 1.0;
-
+        final double distance =
+            pose.getTranslation().getDistance(visionUpdate.pose().getTranslation());
+        double scaleFactor = 1.0;
+        if (distance < Units.inchesToMeters(3)) {
+          scaleFactor = 0.25;
+        }
         // Calculate twist between current and vision pose
         var visionTwist = pose.log(visionUpdate.pose());
 
@@ -188,7 +184,9 @@ public class PoseEstimator {
         var twistMatrix =
             visionK.times(
                 VecBuilder.fill(
-                    visionTwist.dx * distance, visionTwist.dy * distance, visionTwist.dtheta));
+                    visionTwist.dx * scaleFactor,
+                    visionTwist.dy * scaleFactor,
+                    visionTwist.dtheta));
 
         // Apply twist
         pose =

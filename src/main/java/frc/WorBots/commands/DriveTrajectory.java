@@ -36,7 +36,7 @@ public class DriveTrajectory extends Command {
 
   private PIDController xController = new PIDController(2.5, 0.0, 0.0);
   private PIDController yController = new PIDController(2.5, 0.0, 0.0);
-  private PIDController thetaController = new PIDController(5.0, 0.0, 0.0);
+  private PIDController thetaController = new PIDController(4.5, 0.0, 0.0);
 
   private final CustomHolonomicDriveController customHolonomicDriveController =
       new CustomHolonomicDriveController(xController, yController, thetaController);
@@ -93,14 +93,14 @@ public class DriveTrajectory extends Command {
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(175.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
 
-      xController = new PIDController(2.5, 0, 0.0);
-      yController = new PIDController(2.5, 0, 0.0);
-      thetaController = new PIDController(4.7, 0, 0.0);
+      xController = new PIDController(2.9, 0, 0.0);
+      yController = new PIDController(2.9, 0, 0.0);
+      thetaController = new PIDController(6.4, 0, 0.03);
     }
     customHolonomicDriveController.setTolerance(
         new Pose2d(
             new Translation2d(Units.inchesToMeters(1.75), Units.inchesToMeters(1.75)),
-            Rotation2d.fromDegrees(1.2)));
+            Rotation2d.fromDegrees(1.0)));
     generate(waypoints, constraints, startVelocity, true);
   }
 
@@ -116,17 +116,28 @@ public class DriveTrajectory extends Command {
             .setKinematics(new SwerveDriveKinematics(drive.getModuleTranslations()))
             .setStartVelocity(startVelocity)
             .setEndVelocity(0.0)
-            .addConstraint(
-                new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2))
             .addConstraints(constraints);
+
+    final TrajectoryConfig constrainedConfig =
+        config.addConstraint(
+            new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2));
 
     // Generate trajectory
     customGenerator = new CustomTrajectoryGenerator(); // Reset generator
     try {
-      customGenerator.generate(config, waypoints);
+      customGenerator.generate(constrainedConfig, waypoints);
     } catch (Exception exception) {
-      if (supportedRobot && alertOnFail) {
-        exception.printStackTrace();
+    }
+
+    // Generate unconstrained trajectory if the constrained one fails
+    if (customGenerator.getDriveTrajectory().getTotalTimeSeconds() < 0.05) {
+      customGenerator = new CustomTrajectoryGenerator();
+      try {
+        customGenerator.generate(config, waypoints);
+      } catch (Exception exception) {
+        if (supportedRobot && alertOnFail) {
+          exception.printStackTrace();
+        }
       }
     }
   }

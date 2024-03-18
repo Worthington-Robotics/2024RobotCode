@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
+  private boolean enableDriving;
   private final Supplier<Pose2d> poseSupplier;
 
   private boolean running = false;
@@ -36,6 +37,7 @@ public class DriveToPose extends Command {
   private Translation2d lastSetpointTranslation;
   private double ffMinRadius = 0.02;
   private double ffMaxRadius = 0.06;
+  private double ffScaleFactor = 1.0;
 
   /** Drives to the specified pose under full software control. */
   public DriveToPose(Drive drive, Pose2d pose) {
@@ -56,9 +58,16 @@ public class DriveToPose extends Command {
   public DriveToPose(Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier) {
     this.drive = drive;
     this.slowMode = slowMode;
+    this.enableDriving = true;
     this.poseSupplier = poseSupplier;
     addRequirements(drive);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
+  }
+
+  public static DriveToPose withoutDriving(Drive drive, Supplier<Pose2d> poseSupplier) {
+    var out = new DriveToPose(drive, poseSupplier);
+    out.enableDriving = false;
+    return out;
   }
 
   @Override
@@ -69,8 +78,8 @@ public class DriveToPose extends Command {
         new Constraints(
             slowMode ? Units.inchesToMeters(50.0) : Units.inchesToMeters(140.0),
             Units.inchesToMeters(90.0)));
-    driveController.setTolerance(slowMode ? Units.inchesToMeters(2) : Units.inchesToMeters(1.0));
-    thetaController.setP(4.95);
+    driveController.setTolerance(slowMode ? Units.inchesToMeters(2) : Units.inchesToMeters(3.0));
+    thetaController.setP(4.2);
     thetaController.setD(0.05);
     thetaController.setConstraints(
         new Constraints(
@@ -79,7 +88,7 @@ public class DriveToPose extends Command {
     thetaController.setTolerance(
         slowMode ? Units.degreesToRadians(2.0) : Units.degreesToRadians(1.0));
     // Reset all controllers
-    var currentPose = drive.getPose();
+    final Pose2d currentPose = drive.getPose();
     driveController.reset(
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
         Math.min(
@@ -95,6 +104,7 @@ public class DriveToPose extends Command {
                 .getX()));
     thetaController.reset(currentPose.getRotation().getRadians(), drive.getYawVelocity());
     lastSetpointTranslation = drive.getPose().getTranslation();
+    SmartDashboard.putBoolean("DriveToPose/Enable Driving", enableDriving);
   }
 
   @Override
@@ -102,20 +112,26 @@ public class DriveToPose extends Command {
     running = true;
 
     // Get current and target pose
-    var currentPose = drive.getPose();
-    var targetPose = poseSupplier.get();
+    final Pose2d currentPose = drive.getPose();
+    Pose2d targetPose = poseSupplier.get();
+    if (!enableDriving) {
+      targetPose = new Pose2d(currentPose.getX(), currentPose.getY(), targetPose.getRotation());
+    }
 
     // Calculate drive speed
-    double currentDistance =
+    final double currentDistance =
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
-    double ffScaler =
-        MathUtil.clamp((currentDistance - ffMinRadius) / (ffMaxRadius - ffMinRadius), 0.0, 1.0);
+    final double ffScalar =
+        MathUtil.clamp(
+            (currentDistance - ffMinRadius) / (ffMaxRadius - ffMinRadius) * ffScaleFactor,
+            0.0,
+            1.0);
     driveErrorAbs = currentDistance;
     driveController.reset(
         lastSetpointTranslation.getDistance(targetPose.getTranslation()),
         driveController.getSetpoint().velocity);
     double driveVelocityScalar =
-        driveController.getSetpoint().velocity * ffScaler
+        driveController.getSetpoint().velocity * ffScalar
             + driveController.calculate(driveErrorAbs, 0.0);
     if (currentDistance < driveController.getPositionTolerance()) driveVelocityScalar = 0.0;
     lastSetpointTranslation =
@@ -128,7 +144,7 @@ public class DriveToPose extends Command {
 
     // Calculate theta speed
     double thetaVelocity =
-        thetaController.getSetpoint().velocity * ffScaler
+        thetaController.getSetpoint().velocity * ffScalar
             + thetaController.calculate(
                 currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
     thetaErrorAbs =
@@ -136,15 +152,17 @@ public class DriveToPose extends Command {
     if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
 
     // Command speeds
-    var driveVelocity =
+    final Translation2d driveVelocity =
         new Pose2d(
                 new Translation2d(),
                 currentPose.getTranslation().minus(targetPose.getTranslation()).getAngle())
             .transformBy(GeomUtil.translationToTransform(driveVelocityScalar, 0.0))
             .getTranslation();
-    drive.runVelocity(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            driveVelocity.getX(), driveVelocity.getY(), thetaVelocity, currentPose.getRotation()));
+    final double x = enableDriving ? driveVelocity.getX() : 0.0;
+    final double y = enableDriving ? driveVelocity.getY() : 0.0;
+    final ChassisSpeeds speeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(x, y, thetaVelocity, currentPose.getRotation());
+    drive.runVelocity(speeds);
 
     // Log data
     SmartDashboard.putNumber("DriveToPose/CurrentDistance", currentDistance);
@@ -153,8 +171,7 @@ public class DriveToPose extends Command {
         Logger.pose2dToArray(
             new Pose2d(
                 lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position))));
-    SmartDashboard.putNumberArray(
-        "DriveToPose/DistanceSetopoint", Logger.pose2dToArray(targetPose));
+    SmartDashboard.putNumberArray("DriveToPose/DistanceSetpoint", Logger.pose2dToArray(targetPose));
     // Logger.getInstance().recordOutput("DriveToPose/DistanceMeasured",
     // currentDistance);
     // Logger.getInstance()
@@ -186,7 +203,13 @@ public class DriveToPose extends Command {
 
   /** Checks if the robot is stopped at the final pose. */
   public boolean atGoal() {
-    return running && driveController.atGoal() && thetaController.atGoal();
+    boolean out = running;
+    if (enableDriving) {
+      out &= driveController.atGoal();
+    }
+    out &= thetaController.atGoal();
+    out |= withinTolerance(Units.inchesToMeters(3.0), Rotation2d.fromDegrees(1.0));
+    return out;
   }
 
   /** Checks if the robot pose is within the allowed drive and theta tolerances. */

@@ -150,7 +150,7 @@ public class AutoUtil {
     farShootingPose =
         AllianceFlipUtil.apply(
             new Pose2d(
-                FieldConstants.Wing.endX * 0.85,
+                FieldConstants.Wing.endX * 0.65,
                 FieldConstants.Speaker.speakerY * 1.2,
                 new Rotation2d()));
   }
@@ -192,14 +192,30 @@ public class AutoUtil {
   /** Drives along the specified trajectory. */
   public CommandWithPose path(
       List<Waypoint> waypoints, List<TrajectoryConstraint> extraConstraints) {
+
+    // Remove duplicate waypoints to prevent trajectory errors
+    if (waypoints.size() > 1) {
+      for (int i = 1; i < waypoints.size(); ) {
+        final Waypoint last = waypoints.get(i - 1);
+        if (waypoints.get(i).equals(last)) {
+          waypoints.remove(i);
+        } else {
+          i++;
+        }
+      }
+    }
+
+    // Two-point paths can just be drive to pose commands
     if (waypoints.size() == 2
         && waypoints.get(0).getDriveRotation().isEmpty()
         && waypoints.get(1).getDriveRotation().isEmpty()
         && waypoints.get(0).getTranslation().getDistance(waypoints.get(1).getTranslation()) < 0.5) {
       return driveTo(waypoints.get(1).getPose());
     }
+
     List<TrajectoryConstraint> allConstraints = new ArrayList<>();
     allConstraints.addAll(extraConstraints);
+
     return new CommandWithPose(
         new DriveTrajectory(drive, waypoints, allConstraints, 0.0),
         waypoints.get(waypoints.size() - 1).getPose());
@@ -211,6 +227,13 @@ public class AutoUtil {
     return new CommandWithPose(driveToPose.until(driveToPose::atGoal), pose);
   }
 
+  /** Turns the robot in place to a direction */
+  public CommandWithPose turnTo(Pose2d currentPose, Rotation2d direction) {
+    final Pose2d pose = new Pose2d(currentPose.getX(), currentPose.getY(), direction);
+    final var driveToPose = DriveToPose.withoutDriving(drive, () -> pose);
+    return new CommandWithPose(driveToPose, pose);
+  }
+
   /**
    * Returns a command that prepares the robot for handoff
    *
@@ -218,6 +241,26 @@ public class AutoUtil {
    */
   public Command prepareHandoff() {
     return superstructure.goToPose(Preset.HANDOFF).withTimeout(0.35);
+  }
+
+  public Command fullHandoff() {
+    return prepareHandoff().alongWith(new Handoff(intake, superstructure, shooter));
+  }
+
+  /**
+   * Returns a command that runs handoff and intake while the robot is near a pose, then ends when
+   * the piece is intook
+   *
+   * @param pose The pose to check for distance to
+   * @param distance The distance in meters to start intaking at
+   * @return The command
+   */
+  public Command intakeWhenNear(Pose2d pose, double distance) {
+    final BooleanSupplier isNearSupplier =
+        () -> (drive.getPose().getTranslation().getDistance(pose.getTranslation()) < distance);
+    final var handoff = new Handoff(intake, superstructure, shooter);
+    return UtilCommands.namedSequence(
+        "Intake When Near Progress", Commands.waitUntil(isNearSupplier), handoff);
   }
 
   /**
@@ -228,12 +271,12 @@ public class AutoUtil {
    * @param distance The distance in meters to start and stop intaking at
    * @return The command
    */
-  public Command intakeWhenNear(Pose2d pose, double distance) {
+  public Command intakeWhileNear(Pose2d pose, double distance) {
     final BooleanSupplier isNearSupplier =
         () -> (drive.getPose().getTranslation().getDistance(pose.getTranslation()) < distance);
     final var handoff = new Handoff(intake, superstructure, shooter);
     return UtilCommands.namedSequence(
-        "Intake When Near Progress",
+        "Intake While Near Progress",
         Commands.waitUntil(isNearSupplier),
         handoff.onlyWhile(isNearSupplier));
   }
@@ -265,7 +308,8 @@ public class AutoUtil {
         waypoints.add(
             Waypoint.fromHolonomicPose(
                 AllianceFlipUtil.addToFlipped(
-                    wingGamePieceLocations[wingPosition].plus(new Transform2d(0.0, 0.0, rotation)),
+                    wingGamePieceLocations[wingPosition].plus(
+                        new Transform2d(0.0, Units.inchesToMeters(2.0), rotation)),
                     Units.inchesToMeters(-3))));
       } else if (wingPosition == 2) {
         var rotation = AllianceFlipUtil.apply(new Rotation2d(Units.degreesToRadians(-90)));
@@ -276,7 +320,7 @@ public class AutoUtil {
             Waypoint.fromHolonomicPose(
                 AllianceFlipUtil.addToFlipped(
                     wingGamePieceLocations[wingPosition].plus(
-                        new Transform2d(0.0, Units.inchesToMeters(-0), rotation)),
+                        new Transform2d(0.0, Units.inchesToMeters(-3.0), rotation)),
                     Units.inchesToMeters(-3))));
       } else {
         waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
@@ -311,7 +355,7 @@ public class AutoUtil {
     } else {
       waypoints.add(Waypoint.fromHolonomicPose(wingGamePieceLocations[wingPosition]));
     }
-    final var handoff = new Handoff(intake, superstructure, shooter).withTimeout(2.5);
+    final var handoff = new Handoff(intake, superstructure, shooter).withTimeout(2.0);
     if (!shooter.hasGamePiece()) {
       return new CommandWithPose(
           UtilCommands.namedSequence(
@@ -361,7 +405,7 @@ public class AutoUtil {
                       UtilCommands.optimalSequence(
                           Commands.waitUntil(
                               () -> AllianceFlipUtil.apply(drive.getPose().getX()) > 4.5),
-                          handoff.withTimeout(2.5)))),
+                          handoff.withTimeout(2.0)))),
           centerGamePieceLocations[centerPosition]);
     } else {
       return new CommandWithPose(Commands.none(), startingPosition);
@@ -408,7 +452,8 @@ public class AutoUtil {
                 new Pose2d(targetPose.getTranslation(), ShooterMath.getGoalTheta(targetPose)));
           }
         };
-    final var driveToPose =
+
+    var driveToPose =
         driveFirst
             ? new DriveToPose(
                     drive,
@@ -418,6 +463,17 @@ public class AutoUtil {
                             rotationWaypoint.get().getHolonomicRotation().get()))
                 .withTimeout(timeout)
             : Commands.none();
+
+    if (!driveFirst && autoTurn) {
+      driveToPose =
+          DriveToPose.withoutDriving(
+                  drive,
+                  () ->
+                      new Pose2d(
+                          rotationWaypoint.get().getTranslation(),
+                          rotationWaypoint.get().getHolonomicRotation().get()))
+              .withTimeout(timeout);
+    }
 
     return new CommandWithPose(
         UtilCommands.namedSequence(
@@ -433,6 +489,15 @@ public class AutoUtil {
                 superstructure),
             driveToPose.alongWith(
                 Commands.waitUntil(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint())),
+            Commands.runOnce(
+                () -> {
+                  superstructure.setModeVoid(SuperstructureState.SHOOTING);
+                  shooter.setSpeedVoid(ShooterMath.calculateShooterRPM(drive.getPose()));
+                  superstructure.setShootingAngleRad(
+                      ShooterMath.calculatePivotAngle(drive.getPose()));
+                },
+                shooter,
+                superstructure),
             shooter.feed().withTimeout(0.18),
             Commands.runOnce(
                 () -> {
@@ -472,7 +537,7 @@ public class AutoUtil {
    * @param currentPose The current pose of the robot
    * @return The command to run
    */
-  public CommandWithPose driveOutToCenter(Pose2d currentPose) {
+  public CommandWithPose driveOutToCenter(Pose2d currentPose, boolean isRight) {
     ArrayList<Waypoint> waypoints = new ArrayList<>();
     waypoints.add(Waypoint.fromHolonomicPose(currentPose));
 
@@ -481,9 +546,12 @@ public class AutoUtil {
     final double x = FieldConstants.midLineX - 2.5;
     double y = FieldConstants.midLineY / 3;
     // Choose the quicker side to go to based on where the robot is
-    if (currentPose.getY() > FieldConstants.midLineY) {
+    if (isRight) {
       y = FieldConstants.fieldWidth - y;
-      waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      // If we are behind the wing game pieces go between them
+      if (AllianceFlipUtil.apply(currentPose.getX()) < wingGamePieceLocations[0].getX()) {
+        waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      }
     } else {
       // Create a transitory waypoint so that the robot doesn't go through the stage
       final double transitoryX = x / 4.0;

@@ -41,7 +41,7 @@ public class Handoff extends Command {
     if (superstructure.inHandoff()) {
       if (!shooter.hasGamePiece()) {
         intake.setVolts(MAX_INTAKE_VOLTAGE);
-        shooter.setRawFeederVolts(0.5);
+        shooter.setRawFeederVolts(0.4);
       } else {
         shooter.setRawFeederVolts(0.0);
         intake.setVolts(0.0);
