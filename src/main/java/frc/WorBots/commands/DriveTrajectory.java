@@ -34,9 +34,9 @@ public class DriveTrajectory extends Command {
   private static double maxAccelerationMetersPerSec2;
   private static double maxCentripetalAccelerationMetersPerSec2;
 
-  private PIDController xController = new PIDController(2.5, 0.0, 0.0);
-  private PIDController yController = new PIDController(2.5, 0.0, 0.0);
-  private PIDController thetaController = new PIDController(4.5, 0.0, 0.0);
+  private PIDController xController = new PIDController(2.5, 0.0, 0.0, Constants.ROBOT_PERIOD);
+  private PIDController yController = new PIDController(2.5, 0.0, 0.0, Constants.ROBOT_PERIOD);
+  private PIDController thetaController = new PIDController(4.5, 0.0, 0.0, Constants.ROBOT_PERIOD);
 
   private final CustomHolonomicDriveController customHolonomicDriveController =
       new CustomHolonomicDriveController(xController, yController, thetaController);
@@ -85,18 +85,18 @@ public class DriveTrajectory extends Command {
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(170.0);
 
-      xController = new PIDController(2.7, 0, 0.0);
-      yController = new PIDController(2.7, 0, 0.0);
-      thetaController = new PIDController(6.5, 0, 0.0);
+      xController = new PIDController(2.7, 0, 0.0, Constants.ROBOT_PERIOD);
+      yController = new PIDController(2.7, 0, 0.0, Constants.ROBOT_PERIOD);
+      thetaController = new PIDController(6.5, 0, 0.0, Constants.ROBOT_PERIOD);
       customHolonomicDriveController.setFeedforwardCoefficients(1.0, 1.0);
     } else {
       maxVelocityMetersPerSec = Units.inchesToMeters(200.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(175.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
 
-      xController = new PIDController(2.9, 0, 0.0);
-      yController = new PIDController(2.9, 0, 0.0);
-      thetaController = new PIDController(6.4, 0, 0.03);
+      xController = new PIDController(2.9, 0, 0.0, Constants.ROBOT_PERIOD);
+      yController = new PIDController(2.9, 0, 0.0, Constants.ROBOT_PERIOD);
+      thetaController = new PIDController(6.4, 0, 0.03, Constants.ROBOT_PERIOD);
       customHolonomicDriveController.setFeedforwardCoefficients(0.3, 0.48);
     }
     customHolonomicDriveController.setTolerance(

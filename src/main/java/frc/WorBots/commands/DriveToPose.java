@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.math.GeomUtil;
@@ -29,9 +30,11 @@ public class DriveToPose extends Command {
 
   private boolean running = false;
   private final ProfiledPIDController driveController =
-      new ProfiledPIDController(2.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
+      new ProfiledPIDController(
+          2.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.ROBOT_PERIOD);
   private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(6.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0));
+      new ProfiledPIDController(
+          6.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.ROBOT_PERIOD);
   private double driveErrorAbs;
   private double thetaErrorAbs;
   private Translation2d lastSetpointTranslation;

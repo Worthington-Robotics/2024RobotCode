@@ -61,8 +61,8 @@ public class Robot extends TimedRobot {
           // Simple status updates
           StatusPage.periodic(pdp);
           // StatusPage.reportStatus(
-          //     StatusPage.DRIVER_CAM,
-          //     camera.isConnected() && camera.isEnabled() && camera.isValid());
+          // StatusPage.DRIVER_CAM,
+          // camera.isConnected() && camera.isEnabled() && camera.isValid());
           StatusPage.reportStatus(
               StatusPage.DRIVE_CONTROLLER, robotContainer.driver.getHID().isConnected());
           StatusPage.reportStatus(
@@ -70,13 +70,18 @@ public class Robot extends TimedRobot {
         },
         kDefaultPeriod);
 
+    this.addPeriodic(this::periodicFunction, Constants.ROBOT_PERIOD);
+
     // camera = CameraServer.startAutomaticCapture();
     TimeCache.getInstance().update();
     AllianceCache.getInstance().update();
   }
 
   @Override
-  public void robotPeriodic() {
+  public void robotPeriodic() {}
+
+  /** Periodic function for the robot */
+  private void periodicFunction() {
     CommandScheduler.getInstance().run();
     // ==== DISABLE BEFORE COMP ====
     final var robotPose = robotContainer.drive.getPose();
@@ -84,20 +89,25 @@ public class Robot extends TimedRobot {
     // final double range = ShooterMath.getGoalDistance(robotPose);
     // SmartDashboard.putNumber("Speaker Range", range);
     // final var goalPose = ShooterMath.getGoal();
-    // SmartDashboard.putNumberArray("Goal Pose", Logger.translation2dToArray(goalPose));
+    // SmartDashboard.putNumberArray("Goal Pose",
+    // Logger.translation2dToArray(goalPose));
     // var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
     // SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
 
     var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
     SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
-    // SmartDashboard.putString("Shot Confidence", shotData.confidence().toString());
+    // SmartDashboard.putString("Shot Confidence",
+    // shotData.confidence().toString());
     // SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
-    // final var adjusted = new Pose2d(robotPose.getTranslation(), shotData.robotAngle());
-    // SmartDashboard.putNumberArray("Adjusted Drive Pose", Logger.pose2dToArray(adjusted));
+    // final var adjusted = new Pose2d(robotPose.getTranslation(),
+    // shotData.robotAngle());
+    // SmartDashboard.putNumberArray("Adjusted Drive Pose",
+    // Logger.pose2dToArray(adjusted));
 
     // var nextRobotPose = GeomUtil.applyChassisSpeeds(robotPose, robotSpeeds,
     // Constants.ROBOT_PERIOD);
-    // SmartDashboard.putNumberArray("Next Robot Pose", Logger.pose2dToArray(nextRobotPose));
+    // SmartDashboard.putNumberArray("Next Robot Pose",
+    // Logger.pose2dToArray(nextRobotPose));
     // ==========
 
     final var dist = Units.metersToFeet(robotContainer.drive.getPose().getX() - 0.3556 * 0.0);

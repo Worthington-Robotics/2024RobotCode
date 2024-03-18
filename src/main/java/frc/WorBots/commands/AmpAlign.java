@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.util.control.DriveController;
@@ -27,14 +28,16 @@ public class AmpAlign extends Command {
           1.9,
           0.0,
           0.0,
-          new TrapezoidProfile.Constraints(Units.inchesToMeters(50.0), Units.inchesToMeters(90.0)));
+          new TrapezoidProfile.Constraints(Units.inchesToMeters(50.0), Units.inchesToMeters(90.0)),
+          Constants.ROBOT_PERIOD);
   private final ProfiledPIDController turnPID =
       new ProfiledPIDController(
           4.75,
           0.0,
           0.05,
           new TrapezoidProfile.Constraints(
-              Units.degreesToRadians(50.0), Units.degreesToRadians(720.0)));
+              Units.degreesToRadians(50.0), Units.degreesToRadians(720.0)),
+          Constants.ROBOT_PERIOD);
   private Supplier<Double> ySupplier;
 
   public AmpAlign(Drive drive, Supplier<Double> ySupplier) {

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
@@ -34,7 +35,8 @@ public class WingPass extends Command {
           0.0,
           0.05,
           new TrapezoidProfile.Constraints(
-              Units.degreesToRadians(130.0), Units.degreesToRadians(720.0)));
+              Units.degreesToRadians(130.0), Units.degreesToRadians(720.0)),
+          Constants.ROBOT_PERIOD);
 
   public WingPass(
       Drive drive,
