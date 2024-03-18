@@ -25,7 +25,7 @@ var searchData=
   ['tunabledouble_2ejava_22',['TunableDouble.java',['../TunableDouble_8java.html',1,'']]],
   ['tunablepidcontroller_23',['TunablePIDController',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1TunablePIDController.html',1,'frc.WorBots.util.debug.TunablePIDController'],['../classfrc_1_1WorBots_1_1util_1_1debug_1_1TunablePIDController.html#a8c0e13a28139fea4164817fd0e53be03',1,'frc.WorBots.util.debug.TunablePIDController.TunablePIDController(String table, String name, double kP, double kD, double kI)'],['../classfrc_1_1WorBots_1_1util_1_1debug_1_1TunablePIDController.html#a2499b388d4b002c4c7c8c27e70977914',1,'frc.WorBots.util.debug.TunablePIDController.TunablePIDController(TunablePIDGains gains)']]],
   ['tunablepidcontroller_2ejava_24',['TunablePIDController.java',['../TunablePIDController_8java.html',1,'']]],
-  ['turncurveamount_25',['turnCurveAmount',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#ab4a3f5f0bb21e25f4405465b6bf99136',1,'frc::WorBots::util::control::DriveController']]],
+  ['turn_5fcurve_5famount_25',['TURN_CURVE_AMOUNT',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a7e1322e14eee66363202097a94cfe514',1,'frc::WorBots::util::control::DriveController']]],
   ['turnto_26',['turnTo',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#af73036bbd0fc303b97599f07c9ccf018',1,'frc::WorBots::auto::AutoUtil']]],
   ['twopiece_27',['twoPiece',['../classfrc_1_1WorBots_1_1auto_1_1Autos.html#ac491f7756f93cb83cb25d48ab9f921ff',1,'frc::WorBots::auto::Autos']]],
   ['twopiecestartinglocations_28',['twoPieceStartingLocations',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a27249428739e05b681128f258ec0fd8f',1,'frc::WorBots::auto::AutoUtil']]]

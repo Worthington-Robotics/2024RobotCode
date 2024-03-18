@@ -7,5 +7,5 @@ var searchData=
   ['robot_5fperiod_4',['ROBOT_PERIOD',['../classfrc_1_1WorBots_1_1Constants.html#a8d7df0ea01536d83611d153e50f72f78',1,'frc::WorBots::Constants']]],
   ['robot_5fperiod_5fhz_5',['ROBOT_PERIOD_HZ',['../classfrc_1_1WorBots_1_1Constants.html#a0c8966f0bcd74e69e0273ef9f9de743a',1,'frc::WorBots::Constants']]],
   ['robot_5fwidth_6',['ROBOT_WIDTH',['../classfrc_1_1WorBots_1_1Constants.html#aee75e4cc04ec3696ab988f04b09c7e6c',1,'frc::WorBots::Constants']]],
-  ['rotationalspeed_7',['rotationalSpeed',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a467187eecd3120d492a5487505d64fde',1,'frc::WorBots::util::control::DriveController']]]
+  ['rotational_5fspeed_7',['ROTATIONAL_SPEED',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#aee2f6fe6b0ea6a8b77e4c1aeb78482bc',1,'frc::WorBots::util::control::DriveController']]]
 ];

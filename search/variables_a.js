@@ -8,5 +8,5 @@ var searchData=
   ['medium_5',['MEDIUM',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1ShooterMath_1_1ShotConfidence.html#a42dae9e948892961d25d704602901b34',1,'frc::WorBots::util::math::ShooterMath::ShotConfidence']]],
   ['midlinex_6',['midLineX',['../classfrc_1_1WorBots_1_1FieldConstants.html#a184cc8bee57c49acb3f60742c0d3d06f',1,'frc::WorBots::FieldConstants']]],
   ['midliney_7',['midLineY',['../classfrc_1_1WorBots_1_1FieldConstants.html#a14b9554dfecf859ce4406b032db01b0f',1,'frc::WorBots::FieldConstants']]],
-  ['minimumspeed_8',['minimumSpeed',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a1679a719278983efbb9d08cf2fffb240',1,'frc::WorBots::util::control::DriveController']]]
+  ['minimum_5fspeed_8',['MINIMUM_SPEED',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a20044b22807aa103b3d410de4663307a',1,'frc::WorBots::util::control::DriveController']]]
 ];

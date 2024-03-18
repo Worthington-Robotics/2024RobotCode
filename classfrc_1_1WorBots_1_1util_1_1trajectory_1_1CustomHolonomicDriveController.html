@@ -88,6 +88,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a13aa1bf6030440849b4e50c86a90b05c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d7c960bbacb04d2f31bb3c616e9f400"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a9d7c960bbacb04d2f31bb3c616e9f400">setTolerance</a> (Pose2d tolerance)</td></tr>
 <tr class="separator:a9d7c960bbacb04d2f31bb3c616e9f400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a475062db9d72c9fd8798dc2d3c0983"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a8a475062db9d72c9fd8798dc2d3c0983">setFeedforwardCoefficients</a> (double xyFeedforwardCoefficient, double thetaFeedforwardCoefficient)</td></tr>
+<tr class="separator:a8a475062db9d72c9fd8798dc2d3c0983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e70efeef5bf6ab8ee36385674a5160e"><td class="memItemLeft" align="right" valign="top">ChassisSpeeds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a1e70efeef5bf6ab8ee36385674a5160e">calculate</a> (Pose2d currentPose, Pose2d poseRef, double linearVelocityRefMeters, Rotation2d angleRef, double angleVelocityRefRadians)</td></tr>
 <tr class="separator:a1e70efeef5bf6ab8ee36385674a5160e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93b64c3cdb1197878e3a391510f2448c"><td class="memItemLeft" align="right" valign="top">ChassisSpeeds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a93b64c3cdb1197878e3a391510f2448c">calculate</a> (Pose2d currentPose, Trajectory.State driveState, RotationSequence.State holonomicRotationState)</td></tr>
@@ -351,6 +353,50 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">enabled</td><td>If the controller is enabled or not. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8a475062db9d72c9fd8798dc2d3c0983" name="a8a475062db9d72c9fd8798dc2d3c0983"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a475062db9d72c9fd8798dc2d3c0983">&#9670;&#160;</a></span>setFeedforwardCoefficients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void frc.WorBots.util.trajectory.CustomHolonomicDriveController.setFeedforwardCoefficients </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>xyFeedforwardCoefficient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>thetaFeedforwardCoefficient</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Sets the coefficients for the feedforward component of the drive controller. Useful if your drivetrain is not physically accurate</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xyFeedforwardCoefficient</td><td>The coefficient for the XY feedforward </td></tr>
+    <tr><td class="paramname">thetaFeedforwardCoefficient</td><td>The coefficient for the theta feedforward </td></tr>
   </table>
   </dd>
 </dl>

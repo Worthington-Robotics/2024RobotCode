@@ -23,7 +23,7 @@ var searchData=
   ['robotperiodic_20',['robotPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#ac90c67cbc84575dccfcb0921b8820bf3',1,'frc::WorBots::Robot']]],
   ['robotsimulator_21',['RobotSimulator',['../classfrc_1_1WorBots_1_1util_1_1RobotSimulator.html',1,'frc::WorBots::util']]],
   ['robotsimulator_2ejava_22',['RobotSimulator.java',['../RobotSimulator_8java.html',1,'']]],
-  ['rotationalspeed_23',['rotationalSpeed',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a467187eecd3120d492a5487505d64fde',1,'frc::WorBots::util::control::DriveController']]],
+  ['rotational_5fspeed_23',['ROTATIONAL_SPEED',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#aee2f6fe6b0ea6a8b77e4c1aeb78482bc',1,'frc::WorBots::util::control::DriveController']]],
   ['rotationsequence_24',['RotationSequence',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1RotationSequence.html',1,'frc.WorBots.util.trajectory.RotationSequence'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1RotationSequence.html#af98159c2d5edd48369542fda2ce42d97',1,'frc.WorBots.util.trajectory.RotationSequence.RotationSequence()']]],
   ['rotationsequence_2ejava_25',['RotationSequence.java',['../RotationSequence_8java.html',1,'']]],
   ['rotationtopose_26',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a6d937a21ed822175b7958d7ad5cd0233',1,'frc::WorBots::util::math::GeomUtil']]],
