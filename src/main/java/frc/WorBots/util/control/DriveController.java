@@ -23,39 +23,34 @@ import frc.WorBots.util.math.GeneralMath;
 public class DriveController {
   // Constants
   /** The percentage of the max drive speed that the robot will drive at */
-  public static final double driveSpeedMultiplier = 1.0;
+  public static final double DRIVE_SPEED_MULTIPLIER = 1.0;
 
   /** The max rotational speed in radians per update that the robot will drive at */
-  public static final double rotationalSpeed = 5.0;
+  public static final double ROTATIONAL_SPEED = 5.0;
 
   /** The amount of input deadband to apply */
-  public static final double deadband = 0.1;
+  public static final double DEADBAND = 0.1;
 
   /** The minimum speed output that will make the drive stop */
-  public static final double minimumSpeed = 1e-3;
+  public static final double MINIMUM_SPEED = 1e-3;
 
   /** The amount of curving to apply to the drive inputs */
-  public static final double driveCurveAmount = 2.0;
+  public static final double DRIVE_CURVE_AMOUNT = 2.0;
 
   /** The amount of curving to apply to the turn input */
-  public static final double turnCurveAmount = 2.0;
+  public static final double TURN_CURVE_AMOUNT = 2.0;
 
   /** The amount of time in seconds after which to force brake */
-  public static final double brakeDelay = 0.2;
-
-  /** The amount of time in seconds after which to apply stop locking */
-  public static final double stopLockDelay = 0.5;
+  public static final double BRAKE_DELAY = 0.3;
 
   private static final LinearFilter driveFilter = LinearFilter.movingAverage(10);
   private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
   private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(1);
 
-  private Timer stopLockTimer = new Timer();
   private Timer stopTimer = new Timer();
 
   /** Construct a new DriveController */
   public DriveController() {
-    stopLockTimer.restart();
     stopTimer.restart();
   }
 
@@ -83,12 +78,11 @@ public class DriveController {
    */
   public void drive(Drive drive, ChassisSpeeds speeds) {
     // Send to drive
-    if (Math.abs(speeds.vxMetersPerSecond) < minimumSpeed
-        && Math.abs(speeds.vyMetersPerSecond) < minimumSpeed
-        && Math.abs(speeds.omegaRadiansPerSecond) < minimumSpeed) {
+    if (Math.abs(speeds.vxMetersPerSecond) < MINIMUM_SPEED
+        && Math.abs(speeds.vyMetersPerSecond) < MINIMUM_SPEED
+        && Math.abs(speeds.omegaRadiansPerSecond) < MINIMUM_SPEED) {
       drive.stop();
     } else {
-      stopLockTimer.restart();
       drive.runVelocity(speeds);
     }
   }
@@ -99,7 +93,7 @@ public class DriveController {
    * @param x The desired x velocity, from -1 to 1
    * @param y The desired y velocity, from -1 to 1
    * @param theta The desired rotational velocity, from -1 to 1
-   * @param robotRotation The current absolute rotation of the robot
+   * @param robotRotation The current rotation of the robot relative to the driver station wall
    * @param maxSpeed The maximum speed in m/s that the robot can drive at
    * @return The calculated drive speeds, relative to the field
    */
@@ -108,25 +102,25 @@ public class DriveController {
     // Get direction and magnitude of linear axes
     double linearMagnitude = Math.hypot(x, y);
     SmartDashboard.putNumber("Drive Magnitude", linearMagnitude);
-    Rotation2d linearDirection = new Rotation2d(x, y);
+    final Rotation2d linearDirection = new Rotation2d(x, y);
 
     // Apply deadband
-    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, deadband);
+    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, DEADBAND);
     if (linearMagnitude == 0.0) {
-      if (stopTimer.hasElapsed(0.3)) {
+      if (stopTimer.hasElapsed(BRAKE_DELAY)) {
         driveFilter.reset();
       }
     } else {
       stopTimer.reset();
     }
-    theta = MathUtil.applyDeadband(theta, deadband);
+    theta = MathUtil.applyDeadband(theta, DEADBAND);
     if (theta == 0.0) {
       turnFilter.reset();
     }
 
     // Apply squaring
-    linearMagnitude = GeneralMath.curve(linearMagnitude, driveCurveAmount);
-    theta = GeneralMath.curve(theta, turnCurveAmount);
+    linearMagnitude = GeneralMath.curve(linearMagnitude, DRIVE_CURVE_AMOUNT);
+    theta = GeneralMath.curve(theta, TURN_CURVE_AMOUNT);
 
     // Apply filtering
     linearMagnitude = driveFilter.calculate(linearMagnitude);
@@ -143,19 +137,15 @@ public class DriveController {
     // Convert to meters per second
 
     // Filter max speed to prevent large speed changes
-    final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * driveSpeedMultiplier);
+    final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * DRIVE_SPEED_MULTIPLIER);
     ChassisSpeeds speeds =
         new ChassisSpeeds(
             linearVelocity.getX() * maximumSpeed,
             linearVelocity.getY() * maximumSpeed,
-            theta * rotationalSpeed);
+            theta * ROTATIONAL_SPEED);
 
     // Convert to field relative based on the alliance
-    var driveRotation = robotRotation;
-    // final var alliance = AllianceCache.getInstance().get();
-    // if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-    //   driveRotation = driveRotation.plus(new Rotation2d(Math.PI));
-    // }
+    final var driveRotation = robotRotation;
     speeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
             speeds.vxMetersPerSecond,
@@ -166,7 +156,7 @@ public class DriveController {
   }
 
   public double driveSingleAxis(double axis, double maxSpeed) {
-    final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * driveSpeedMultiplier);
+    final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * DRIVE_SPEED_MULTIPLIER);
     return driveFilter.calculate(axis) * maximumSpeed;
   }
 }

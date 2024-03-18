@@ -39,13 +39,28 @@ import java.util.function.Supplier;
 /** Utility methods, commands, poses, and values for autos to use */
 public class AutoUtil {
   // Constants
+  /** Starting locations for autos on 3 sides of the subwoofer, starting on amp side */
   public final Pose2d[] startingLocations;
+
+  /** Starting locations for two-piece autos behind wing notes, starting on amp side */
   public final Pose2d[] twoPieceStartingLocations;
+
+  /** Adjusted locations of wing game pieces */
   public final Pose2d[] wingGamePieceLocations;
+
+  /** Adjusted locations of center game pieces */
   public final Pose2d[] centerGamePieceLocations;
+
+  /** Positions for shooting from */
   public final Pose2d[] shootingPositions;
+
+  /** Midpoint between the first two wing pieces */
   public final Pose2d betweenZeroAndOne;
+
+  /** Midpoint between the second two wing pieces */
   public final Pose2d betweenOneandTwo;
+
+  /** Far wing pose for shooting from */
   public final Pose2d farShootingPose;
 
   // Subsystems
@@ -227,7 +242,12 @@ public class AutoUtil {
     return new CommandWithPose(driveToPose.until(driveToPose::atGoal), pose);
   }
 
-  /** Turns the robot in place to a direction */
+  /**
+   * Turns the robot in place to a direction
+   *
+   * @param currentPose The current pose of the robot
+   * @param direction The desired direction of the robot
+   */
   public CommandWithPose turnTo(Pose2d currentPose, Rotation2d direction) {
     final Pose2d pose = new Pose2d(currentPose.getX(), currentPose.getY(), direction);
     final var driveToPose = DriveToPose.withoutDriving(drive, () -> pose);
@@ -243,6 +263,7 @@ public class AutoUtil {
     return superstructure.goToPose(Preset.HANDOFF).withTimeout(0.35);
   }
 
+  /** Does handoff and intake at the same time, finishing when the game piece is at the shooter */
   public Command fullHandoff() {
     return prepareHandoff().alongWith(new Handoff(intake, superstructure, shooter));
   }

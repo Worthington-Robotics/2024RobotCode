@@ -30,7 +30,8 @@ import java.util.TreeMap;
  * combination of robot odometry and vision data. Used for both real operation and simulation
  */
 public class PoseEstimator {
-  private static final double historyLengthSecs = 0.3;
+  /** The length of time to keep updates for in seconds */
+  private static final double HISTORY_LENGTH = 0.3;
 
   private Pose2d basePose = new Pose2d();
   private Pose2d latestPose = new Pose2d();
@@ -131,9 +132,8 @@ public class PoseEstimator {
   /** Clears old data and calculates the latest pose. */
   private void update() {
     // Clear old data and update base pose
-    while (updates.size() > 1
-        && updates.firstKey() < Timer.getFPGATimestamp() - historyLengthSecs) {
-      var update = updates.pollFirstEntry();
+    while (updates.size() > 1 && updates.firstKey() < Timer.getFPGATimestamp() - HISTORY_LENGTH) {
+      final var update = updates.pollFirstEntry();
       basePose = update.getValue().apply(basePose, q);
     }
 
@@ -171,6 +171,7 @@ public class PoseEstimator {
           }
         }
 
+        // Scale based on distance
         final double distance =
             pose.getTranslation().getDistance(visionUpdate.pose().getTranslation());
         double scaleFactor = 1.0;

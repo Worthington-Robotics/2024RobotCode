@@ -59,6 +59,12 @@ public class Vision extends SubsystemBase {
   /** How much influence theta data has on the robot pose. Smaller values increase influence */
   private static final double THETA_STD_DEV_COEFFICIENT = 0.002;
 
+  /**
+   * The exponent for the distance scoring formula. Larger values make scores fall off harder with
+   * distance
+   */
+  private static final double DISTANCE_GAIN = 2.8;
+
   /** The margin inside the field border to accept vision poses from */
   private static final double FIELD_BORDER_MARGIN = 0.5;
 
@@ -280,7 +286,7 @@ public class Vision extends SubsystemBase {
     score /= error;
 
     // A higher distance decreases the score
-    score /= GeneralMath.curve(distance, 2.8);
+    score /= GeneralMath.curve(distance, DISTANCE_GAIN);
 
     // Weigh based on the camera
     final double camWeight = CAMERA_WEIGHTS[camID];

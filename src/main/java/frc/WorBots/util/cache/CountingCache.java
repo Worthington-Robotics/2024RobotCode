@@ -9,6 +9,7 @@ package frc.WorBots.util.cache;
 
 import java.util.function.Supplier;
 
+/** A cache that updates automatically after being called a certain number of times */
 public class CountingCache<T> extends Cache<T> {
   private int count = 0;
   private final int maxCount;

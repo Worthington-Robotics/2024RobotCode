@@ -169,7 +169,7 @@ public class CustomTrajectoryGenerator {
       index++;
     }
 
-    // Find holonmic waypoints
+    // Find holonomic waypoints
     TreeMap<Double, Rotation2d> holonomicWaypoints = new TreeMap<>();
     int stateIndex = 0;
     for (int waypointIndex = 0; waypointIndex < driveTranslations.size(); waypointIndex++) {
@@ -198,6 +198,7 @@ public class CustomTrajectoryGenerator {
     holonomicRotationSequence = new RotationSequence(holonomicWaypoints);
   }
 
+  /** Copies a TrajectoryConfig */
   private TrajectoryConfig copyConfig(TrajectoryConfig config) {
     TrajectoryConfig newConfig =
         new TrajectoryConfig(config.getMaxVelocity(), config.getMaxAcceleration());

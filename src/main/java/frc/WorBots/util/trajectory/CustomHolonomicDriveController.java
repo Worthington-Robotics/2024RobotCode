@@ -30,9 +30,8 @@ public class CustomHolonomicDriveController {
   private Rotation2d m_rotationError = new Rotation2d();
   private Pose2d m_poseTolerance = new Pose2d();
   private boolean m_enabled = true;
-
-  private final double XY_FF_COEFF = 0.30;
-  private final double THETA_FF_COEFF = 0.48;
+  private double xyFeedforwardCoefficient = 1.0;
+  private double thetaFeedforwardCoefficient = 1.0;
 
   private final PIDController m_xController;
   private final PIDController m_yController;
@@ -79,6 +78,19 @@ public class CustomHolonomicDriveController {
   }
 
   /**
+   * Sets the coefficients for the feedforward component of the drive controller. Useful if your
+   * drivetrain is not physically accurate
+   *
+   * @param xyFeedforwardCoefficient The coefficient for the XY feedforward
+   * @param thetaFeedforwardCoefficient The coefficient for the theta feedforward
+   */
+  public void setFeedforwardCoefficients(
+      double xyFeedforwardCoefficient, double thetaFeedforwardCoefficient) {
+    this.xyFeedforwardCoefficient = xyFeedforwardCoefficient;
+    this.thetaFeedforwardCoefficient = thetaFeedforwardCoefficient;
+  }
+
+  /**
    * Returns the next output of the holonomic drive controller.
    *
    * @param currentPose The current pose.
@@ -97,9 +109,11 @@ public class CustomHolonomicDriveController {
       double angleVelocityRefRadians) {
 
     // Calculate feedforward velocities (field-relative).
-    double xFF = linearVelocityRefMeters * poseRef.getRotation().getCos() * XY_FF_COEFF;
-    double yFF = linearVelocityRefMeters * poseRef.getRotation().getSin() * XY_FF_COEFF;
-    double thetaFF = angleVelocityRefRadians * THETA_FF_COEFF;
+    double xFF =
+        linearVelocityRefMeters * poseRef.getRotation().getCos() * xyFeedforwardCoefficient;
+    double yFF =
+        linearVelocityRefMeters * poseRef.getRotation().getSin() * xyFeedforwardCoefficient;
+    double thetaFF = angleVelocityRefRadians * thetaFeedforwardCoefficient;
 
     m_poseError = poseRef.relativeTo(currentPose);
     m_rotationError = angleRef.minus(currentPose.getRotation());

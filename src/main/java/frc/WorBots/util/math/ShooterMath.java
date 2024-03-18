@@ -87,6 +87,7 @@ public class ShooterMath {
    */
   private static final double PREDICTION_FACTOR = 9.0;
 
+  /** The amount to adjust the robot pose based on robot velocity and also scaled by goal range */
   private static final double PREDICTION_DISTANCE_FACTOR = 6.0;
 
   /** The amount to adjust the robot angle based on the robot velocity */
