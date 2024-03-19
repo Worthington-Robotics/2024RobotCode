@@ -91,18 +91,13 @@ public class AutoUtil {
           AllianceFlipUtil.apply(
               new Pose2d(
                   new Translation2d(0.69, 4.51), new Rotation2d(Units.degreesToRadians(-60)))),
-          AllianceFlipUtil.apply(new Pose2d(1.44, 6.36, new Rotation2d()))
+          pose(1.44, 6.36)
         };
     wingGamePieceLocations =
         new Pose2d[] {
-          AllianceFlipUtil.apply(
-              new Pose2d(FieldConstants.GamePieces.wingPieces[0], new Rotation2d())),
-          AllianceFlipUtil.apply(
-              new Pose2d(FieldConstants.GamePieces.wingPieces[1], new Rotation2d())),
-          AllianceFlipUtil.apply(
-              new Pose2d(
-                  FieldConstants.GamePieces.wingPieces[2].plus(new Translation2d(-0.25, 0)),
-                  new Rotation2d()))
+          pose(FieldConstants.GamePieces.wingPieces[0]),
+          pose(FieldConstants.GamePieces.wingPieces[1]),
+          pose(FieldConstants.GamePieces.wingPieces[2]).plus(transformX(-0.25)),
         };
     twoPieceStartingLocations =
         new Pose2d[] {
@@ -117,37 +112,15 @@ public class AutoUtil {
         };
     centerGamePieceLocations =
         new Pose2d[] {
-          AllianceFlipUtil.apply(
-              new Pose2d(
-                  FieldConstants.GamePieces.centerPieces[0].plus(
-                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
-                  new Rotation2d())),
-          AllianceFlipUtil.apply(
-              new Pose2d(
-                  FieldConstants.GamePieces.centerPieces[1].plus(
-                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
-                  new Rotation2d())),
-          AllianceFlipUtil.apply(
-              new Pose2d(
-                  FieldConstants.GamePieces.centerPieces[2].plus(
-                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
-                  new Rotation2d())),
-          AllianceFlipUtil.apply(
-              new Pose2d(
-                  FieldConstants.GamePieces.centerPieces[3].plus(
-                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
-                  new Rotation2d())),
-          AllianceFlipUtil.apply(
-              new Pose2d(
-                  FieldConstants.GamePieces.centerPieces[4].plus(
-                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
-                  new Rotation2d())),
+          pose(FieldConstants.GamePieces.centerPieces[0]),
+          pose(FieldConstants.GamePieces.centerPieces[1]),
+          pose(FieldConstants.GamePieces.centerPieces[2]),
+          pose(FieldConstants.GamePieces.centerPieces[3]),
+          pose(FieldConstants.GamePieces.centerPieces[4]),
         };
     shootingPositions =
         new Pose2d[] {
-          new Pose2d(new Translation2d(3.68, 5.80), new Rotation2d()),
-          new Pose2d(new Translation2d(2.88, 5.54), new Rotation2d()),
-          new Pose2d(new Translation2d(2.50, 3.49), new Rotation2d())
+          pose(3.68, 5.80), pose(2.88, 5.54), pose(2.50, 3.49),
         };
     betweenZeroAndOne =
         AllianceFlipUtil.apply(
@@ -165,12 +138,7 @@ public class AutoUtil {
                         + FieldConstants.GamePieces.wingPieces[2].getY())
                     / 2,
                 new Rotation2d()));
-    farShootingPose =
-        AllianceFlipUtil.apply(
-            new Pose2d(
-                FieldConstants.Wing.endX * 0.65,
-                FieldConstants.Speaker.speakerY * 1.2,
-                new Rotation2d()));
+    farShootingPose = pose(FieldConstants.Wing.endX * 0.65, FieldConstants.Speaker.speakerY * 1.2);
     sourceStartingPose =
         AllianceFlipUtil.apply(
             new Pose2d(
@@ -639,6 +607,64 @@ public class AutoUtil {
     final Rotation2d robotAngle =
         AllianceFlipUtil.flipRotation(ShooterMath.getGoalTheta(targetPose));
     return targetPose.plus(new Transform2d(0.0, 0.0, robotAngle));
+  }
+
+  /**
+   * Returns a flipped pose from a translation with zero rotation
+   *
+   * @param translation The translation of the pose
+   * @return The pose
+   */
+  public Pose2d pose(Translation2d translation) {
+    return AllianceFlipUtil.apply(new Pose2d(translation, new Rotation2d()));
+  }
+
+  /**
+   * Returns a flipped pose from x and y components with zero rotation
+   *
+   * @param x The x component
+   * @param y The y component
+   * @return The pose
+   */
+  public Pose2d pose(double x, double y) {
+    return pose(new Translation2d(x, y));
+  }
+
+  /**
+   * Returns a Transform2d with a flipped X component
+   *
+   * @param x The x component
+   * @return The transform
+   */
+  public Transform2d transformX(double x) {
+    if (AllianceFlipUtil.shouldFlip()) {
+      x *= -1;
+    }
+    return new Transform2d(x, 0.0, new Rotation2d());
+  }
+
+  /**
+   * Returns a Transform2d with a Y component
+   *
+   * @param y The y component
+   * @return The transform
+   */
+  public Transform2d transformY(double y) {
+    return new Transform2d(0.0, y, new Rotation2d());
+  }
+
+  /**
+   * Returns a Transform2d with X and Y components
+   *
+   * @param x The x component
+   * @param y The y component
+   * @return The transform
+   */
+  public Transform2d transform(double x, double y) {
+    if (AllianceFlipUtil.shouldFlip()) {
+      x *= -1;
+    }
+    return new Transform2d(x, y, new Rotation2d());
   }
 
   /** A command with a pose that it will end at */

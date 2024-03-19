@@ -297,10 +297,8 @@ public class Autos {
         util.path(
             Waypoint.fromHolonomicPose(autoShoot3.pose()),
             Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(
-                    util.getAutoShootPose(util.wingGamePieceLocations[0])
-                        .plus(new Transform2d(0.0, Units.inchesToMeters(13), new Rotation2d())),
-                    Units.inchesToMeters(18))));
+                util.getAutoShootPose(util.wingGamePieceLocations[0])
+                    .plus(util.transform(Units.inchesToMeters(18), Units.inchesToMeters(13)))));
     final var autoShoot4 = util.moveAndShoot(path3.pose(), false, false, false, 3.5);
 
     return createSequence(
@@ -370,11 +368,7 @@ public class Autos {
     final var path4 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot3.pose()),
-            Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(
-                    util.wingGamePieceLocations[2].plus(
-                        new Transform2d(0.0, Units.inchesToMeters(0.0), new Rotation2d())),
-                    Units.inchesToMeters(0.0))),
+            Waypoint.fromHolonomicPose(util.wingGamePieceLocations[2]),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     AllianceFlipUtil.addToFlipped(
