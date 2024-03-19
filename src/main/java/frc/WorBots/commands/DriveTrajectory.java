@@ -90,18 +90,18 @@ public class DriveTrajectory extends Command {
       thetaController = new PIDController(6.5, 0, 0.0, Constants.ROBOT_PERIOD);
       customHolonomicDriveController.setFeedforwardCoefficients(1.0, 1.0);
     } else {
-      maxVelocityMetersPerSec = Units.inchesToMeters(200.0);
+      maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(175.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
 
-      xController = new PIDController(2.9, 0, 0.0, Constants.ROBOT_PERIOD);
-      yController = new PIDController(2.9, 0, 0.0, Constants.ROBOT_PERIOD);
+      xController = new PIDController(3.3, 0, 0.0, Constants.ROBOT_PERIOD);
+      yController = new PIDController(3.3, 0, 0.0, Constants.ROBOT_PERIOD);
       thetaController = new PIDController(6.4, 0, 0.03, Constants.ROBOT_PERIOD);
-      customHolonomicDriveController.setFeedforwardCoefficients(0.3, 0.48);
+      customHolonomicDriveController.setFeedforwardCoefficients(0.35, 0.48);
     }
     customHolonomicDriveController.setTolerance(
         new Pose2d(
-            new Translation2d(Units.inchesToMeters(1.75), Units.inchesToMeters(1.75)),
+            new Translation2d(Units.inchesToMeters(2.7), Units.inchesToMeters(2.7)),
             Rotation2d.fromDegrees(1.0)));
     generate(waypoints, constraints, startVelocity, true);
   }
@@ -203,6 +203,7 @@ public class DriveTrajectory extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(customGenerator.getDriveTrajectory().getTotalTimeSeconds());
+    return timer.hasElapsed(customGenerator.getDriveTrajectory().getTotalTimeSeconds())
+        && customHolonomicDriveController.atReference();
   }
 }

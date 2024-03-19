@@ -24,10 +24,16 @@ public class Handoff extends Command {
 
   // Constants
   /** Max voltage to run the intake at */
-  private static final double MAX_INTAKE_VOLTAGE = 4.25;
+  private static final double MAX_INTAKE_VOLTAGE = 5.7;
 
   /** The amount to scale the intake power based on ToF distance. Larger values reduce the speed */
   private static final double INTAKE_DISTANCE_SCALING = 0.44;
+
+  /** Amount to multiply the intake voltage by when we are in handoff */
+  private static final double HANDOFF_INTAKE_MULTIPLIER = 1.2;
+
+  /** Voltage for the feeder wheels */
+  private static final double FEEDER_VOLTAGE = 0.5;
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -40,11 +46,11 @@ public class Handoff extends Command {
   public void execute() {
     if (superstructure.inHandoff()) {
       if (!shooter.hasGamePiece()) {
-        intake.setVolts(MAX_INTAKE_VOLTAGE);
-        shooter.setRawFeederVolts(0.4);
+        intake.setVolts(MAX_INTAKE_VOLTAGE * HANDOFF_INTAKE_MULTIPLIER);
+        shooter.setRawFeederVolts(FEEDER_VOLTAGE);
       } else {
-        shooter.setRawFeederVolts(0.0);
         intake.setVolts(0.0);
+        shooter.setRawFeederVolts(0.0);
       }
     } else {
       if (!intake.hasGamePiece()) {

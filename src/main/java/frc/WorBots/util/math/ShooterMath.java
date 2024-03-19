@@ -85,10 +85,10 @@ public class ShooterMath {
    * multiplied by the robot period to find the period of time over which to apply the robot
    * velocity to the pose to get the expected pose
    */
-  private static final double PREDICTION_FACTOR = 9.0;
+  private static final double PREDICTION_FACTOR = 0.0;
 
   /** The amount to adjust the robot pose based on robot velocity and also scaled by goal range */
-  private static final double PREDICTION_DISTANCE_FACTOR = 6.0;
+  private static final double PREDICTION_DISTANCE_FACTOR = 0.0;
 
   /** The amount to adjust the robot angle based on the robot velocity */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_COEFFICIENT = 0.00;
@@ -106,10 +106,11 @@ public class ShooterMath {
             {2.379 - GOAL_ADJUSTMENT, 0.93 * 0.826},
             {2.600 - GOAL_ADJUSTMENT, 0.99 * 0.85},
             {2.900 - GOAL_ADJUSTMENT, 0.99 * 0.87},
-            {3.24 - GOAL_ADJUSTMENT, 1.05 * 0.948},
-            {4.240 - GOAL_ADJUSTMENT, 1.02 * 0.9805},
-            {4.305 - GOAL_ADJUSTMENT, 1.02 * 0.9805},
-            {5.295 - GOAL_ADJUSTMENT, 1.02 * 1.0601},
+            {3.24 - GOAL_ADJUSTMENT, 0.95 * 0.948},
+            {3.43 - GOAL_ADJUSTMENT, 0.97 * 0.948},
+            {4.00 - GOAL_ADJUSTMENT, 0.99 * 0.9805},
+            {4.55 - GOAL_ADJUSTMENT, 1.01 * 0.9805},
+            {5.295 - GOAL_ADJUSTMENT, 0.93 * 1.0601},
             {5.444 - GOAL_ADJUSTMENT, 1.02 * 1.0601}
           });
 

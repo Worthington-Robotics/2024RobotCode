@@ -175,8 +175,8 @@ public class PoseEstimator {
         final double distance =
             pose.getTranslation().getDistance(visionUpdate.pose().getTranslation());
         double scaleFactor = 1.0;
-        if (distance < Units.inchesToMeters(3)) {
-          scaleFactor = 0.25;
+        if (distance < Units.inchesToMeters(4.5)) {
+          scaleFactor = 0.20;
         }
         // Calculate twist between current and vision pose
         var visionTwist = pose.log(visionUpdate.pose());

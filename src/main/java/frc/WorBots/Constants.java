@@ -32,7 +32,7 @@ public class Constants {
   public static final String SWERVE_CAN_BUS = "Swerve";
 
   /** The robot update period in seconds */
-  public static final double ROBOT_PERIOD = 0.02;
+  public static final double ROBOT_PERIOD = 0.01;
 
   /** The robot update period in Hz */
   public static final double ROBOT_PERIOD_HZ = 1.0 / ROBOT_PERIOD;

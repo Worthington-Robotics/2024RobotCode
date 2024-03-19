@@ -117,27 +117,27 @@ public class AutoUtil {
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.GamePieces.centerPieces[0].plus(
-                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
                   new Rotation2d())),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.GamePieces.centerPieces[1].plus(
-                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
                   new Rotation2d())),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.GamePieces.centerPieces[2].plus(
-                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
                   new Rotation2d())),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.GamePieces.centerPieces[3].plus(
-                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
                   new Rotation2d())),
           AllianceFlipUtil.apply(
               new Pose2d(
                   FieldConstants.GamePieces.centerPieces[4].plus(
-                      new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(0.0))),
+                      new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0.0))),
                   new Rotation2d())),
         };
     shootingPositions =
@@ -564,10 +564,10 @@ public class AutoUtil {
 
     final Rotation2d rotation = AllianceFlipUtil.apply(new Rotation2d());
 
-    final double x = FieldConstants.midLineX - 2.5;
+    final double x = FieldConstants.midLineX - 1.2;
     double y = FieldConstants.midLineY / 3;
     // Choose the quicker side to go to based on where the robot is
-    if (isRight) {
+    if (!isRight) {
       y = FieldConstants.fieldWidth - y;
       // If we are behind the wing game pieces go between them
       if (AllianceFlipUtil.apply(currentPose.getX()) < wingGamePieceLocations[0].getX()) {

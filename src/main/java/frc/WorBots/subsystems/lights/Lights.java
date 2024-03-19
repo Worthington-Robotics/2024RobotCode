@@ -377,7 +377,7 @@ public class Lights extends SubsystemBase {
     SmartDashboard.putNumber("Lights/Start of Intake Timer", startOfIntakeTimer.get());
     hadGamePieceBottomBefore = hasGamePieceBottom && !hasGamePieceTop;
 
-    if (hasGamePieceBottom && !hasGamePieceTop) {
+    if (hasGamePieceBottom) {
       final double intakeBlinkInterval = 0.22;
       // Blink green when first intaking
       if (!startOfIntakeTimer.hasElapsed(intakeBlinkInterval * 5)) {

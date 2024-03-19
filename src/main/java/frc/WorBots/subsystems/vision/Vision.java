@@ -57,7 +57,7 @@ public class Vision extends SubsystemBase {
   private static final double XY_STD_DEV_COEFFICIENT = 0.00015;
 
   /** How much influence theta data has on the robot pose. Smaller values increase influence */
-  private static final double THETA_STD_DEV_COEFFICIENT = 0.002;
+  private static final double THETA_STD_DEV_COEFFICIENT = 0.0002;
 
   /**
    * The exponent for the distance scoring formula. Larger values make scores fall off harder with
