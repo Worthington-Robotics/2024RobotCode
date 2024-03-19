@@ -10,13 +10,12 @@ var searchData=
   ['statemachine_7',['StateMachine',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html',1,'frc::WorBots::util']]],
   ['statemachine_3c_20frc_3a_3aworbots_3a_3autil_3a_3arobotsimulator_20_3e_8',['StateMachine&lt; frc::WorBots::util::RobotSimulator &gt;',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html',1,'frc::WorBots::util']]],
   ['statuspage_9',['StatusPage',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html',1,'frc::WorBots::util::debug']]],
-  ['stowaftershoot_10',['StowAfterShoot',['../classfrc_1_1WorBots_1_1commands_1_1StowAfterShoot.html',1,'frc::WorBots::commands']]],
-  ['superstructure_11',['Superstructure',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html',1,'frc::WorBots::subsystems::superstructure']]],
-  ['superstructureio_12',['SuperstructureIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIO.html',1,'frc::WorBots::subsystems::superstructure']]],
-  ['superstructureiosim_13',['SuperstructureIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIOSim.html',1,'frc::WorBots::subsystems::superstructure']]],
-  ['superstructureiotalon_14',['SuperstructureIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIOTalon.html',1,'frc::WorBots::subsystems::superstructure']]],
-  ['superstructuremanual_15',['SuperstructureManual',['../classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html',1,'frc::WorBots::commands']]],
-  ['superstructurestate_16',['SuperstructureState',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
-  ['superstructurevisualizer_17',['SuperstructureVisualizer',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureVisualizer.html',1,'frc::WorBots::subsystems::superstructure']]],
-  ['switchablechooser_18',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1SwitchableChooser.html',1,'frc::WorBots::util::debug']]]
+  ['superstructure_10',['Superstructure',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html',1,'frc::WorBots::subsystems::superstructure']]],
+  ['superstructureio_11',['SuperstructureIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIO.html',1,'frc::WorBots::subsystems::superstructure']]],
+  ['superstructureiosim_12',['SuperstructureIOSim',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIOSim.html',1,'frc::WorBots::subsystems::superstructure']]],
+  ['superstructureiotalon_13',['SuperstructureIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIOTalon.html',1,'frc::WorBots::subsystems::superstructure']]],
+  ['superstructuremanual_14',['SuperstructureManual',['../classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html',1,'frc::WorBots::commands']]],
+  ['superstructurestate_15',['SuperstructureState',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
+  ['superstructurevisualizer_16',['SuperstructureVisualizer',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureVisualizer.html',1,'frc::WorBots::subsystems::superstructure']]],
+  ['switchablechooser_17',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1SwitchableChooser.html',1,'frc::WorBots::util::debug']]]
 ];
