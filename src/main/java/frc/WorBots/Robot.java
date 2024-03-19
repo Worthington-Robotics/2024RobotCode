@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.WorBots.util.MatchTime;
 import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
@@ -138,6 +139,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    MatchTime.getInstance().startAuto();
+
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
@@ -168,6 +171,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    MatchTime.getInstance().startTeleop();
+
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
