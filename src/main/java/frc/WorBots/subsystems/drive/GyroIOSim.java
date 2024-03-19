@@ -11,35 +11,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 
 public class GyroIOSim implements GyroIO {
-  private SimAxis pitchAxis = new SimAxis();
-  private SimAxis rollAxis = new SimAxis();
   private SimAxis yawAxis = new SimAxis();
 
   public GyroIOSim() {}
 
   public void updateInputs(GyroIOInputs inputs) {
-    pitchAxis.update();
-    rollAxis.update();
     yawAxis.update();
-
-    inputs.pitchPositionRad = pitchAxis.angle.getRadians();
-    inputs.pitchVelocityRadPerSec = pitchAxis.velocity;
-
-    inputs.rollPositionRad = rollAxis.angle.getRadians();
-    inputs.rollVelocityRadPerSec = rollAxis.velocity;
 
     inputs.yawPositionRad = yawAxis.angle.getRadians();
     inputs.yawVelocityRadPerSec = yawAxis.velocity;
 
     inputs.connected = true;
-  }
-
-  public void setExpectedPitchVelocity(double vPitch) {
-    pitchAxis.velocity = vPitch;
-  }
-
-  public void setExpectedRollVelocity(double vRoll) {
-    rollAxis.velocity = vRoll;
   }
 
   public void setExpectedYawVelocity(double vYaw) {

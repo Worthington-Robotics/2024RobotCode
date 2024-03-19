@@ -488,15 +488,6 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Gets the height of the shooter in meters
-   *
-   * @return The shooter height
-   */
-  public double getShooterHeightMeters() {
-    return inputs.elevatorPositionMeters + 0.6;
-  }
-
-  /**
    * Checks if the superstructure is following a certain pose
    *
    * @param pose The pose to check

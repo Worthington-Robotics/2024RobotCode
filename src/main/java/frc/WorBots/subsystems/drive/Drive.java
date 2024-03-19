@@ -146,22 +146,25 @@ public class Drive extends SubsystemBase {
     // Update twist
     SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
+      final Module module = modules[i];
       wheelDeltas[i] =
           new SwerveModulePosition(
-              (modules[i].getPositionMeters() - lastModulePositionsMeters[i]),
-              modules[i].getAngle());
-      lastModulePositionsMeters[i] = modules[i].getPositionMeters();
+              (module.getPositionMeters() - lastModulePositionsMeters[i]), module.getAngle());
+      lastModulePositionsMeters[i] = module.getPositionMeters();
     }
 
-    final var twist = kinematics.toTwist2d(wheelDeltas);
-    final var gyroYaw = getYaw();
+    // Do inverse kinematics to get the robot twist
+    final Twist2d twist = kinematics.toTwist2d(wheelDeltas);
+
     // If the gyro is connected, use it's dtheta as it is more accurate
+    final Rotation2d gyroYaw = getYaw();
     if (gyroInputs.connected) {
       twist.dtheta = gyroYaw.minus(lastGyroYaw).getRadians();
     }
     lastGyroYaw = gyroYaw;
-    poseEstimator.addDriveData(inputTimestamp, twist);
 
+    // Add to pose estimator
+    poseEstimator.addDriveData(inputTimestamp, twist);
     posePublisher.set(Logger.pose2dToArray(getPose()));
 
     // Update field velocity
@@ -173,6 +176,8 @@ public class Drive extends SubsystemBase {
 
     // Update for simulated gyro
     gyroIO.setExpectedYawVelocity(measuredChassisSpeeds.omegaRadiansPerSecond);
+
+    // Update field velocity twist
     fieldVelocity =
         new Twist2d(
             linearFieldVelocity.getX(),
@@ -255,48 +260,12 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Gets the current pitch velocity
-   *
-   * @return The pitch velocity in rads per second
-   */
-  public double getPitchVelocity() {
-    return gyroInputs.pitchVelocityRadPerSec;
-  }
-
-  /**
-   * Gets the current roll velocity
-   *
-   * @return The roll velocity in rads per second
-   */
-  public double getRollVelocity() {
-    return gyroInputs.rollVelocityRadPerSec;
-  }
-
-  /**
-   * Gets the current pitch
-   *
-   * @return The pitch as a rotation
-   */
-  public Rotation2d getPitch() {
-    return new Rotation2d(gyroInputs.pitchPositionRad);
-  }
-
-  /**
    * Gets the current yaw
    *
    * @return The yaw as a rotation
    */
   public Rotation2d getYaw() {
     return new Rotation2d(gyroInputs.yawPositionRad);
-  }
-
-  /**
-   * Gets the current roll
-   *
-   * @return The roll as a rotation
-   */
-  public Rotation2d getRoll() {
-    return new Rotation2d(gyroInputs.rollPositionRad);
   }
 
   /**

@@ -17,53 +17,22 @@ import frc.WorBots.Constants;
 public class GyroIOPigeon2 implements GyroIO {
   private final Pigeon2 pigeon;
 
-  private final StatusSignal<Double> tempSignal;
-  private final StatusSignal<Double> pitchSignal;
-  private final StatusSignal<Double> rollSignal;
   private final StatusSignal<Double> yawSignal;
-  private final StatusSignal<Double> pitchVelSignal;
-  private final StatusSignal<Double> rollVelSignal;
   private final StatusSignal<Double> yawVelSignal;
 
   public GyroIOPigeon2() {
     pigeon = new Pigeon2(0, Constants.SWERVE_CAN_BUS);
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
-    tempSignal = pigeon.getTemperature();
-    pitchSignal = pigeon.getPitch();
-    rollSignal = pigeon.getRoll();
     yawSignal = pigeon.getYaw();
-    pitchVelSignal = pigeon.getAngularVelocityYDevice();
-    rollVelSignal = pigeon.getAngularVelocityXWorld();
     yawVelSignal = pigeon.getAngularVelocityZDevice();
-    StatusSignal.setUpdateFrequencyForAll(
-        50,
-        tempSignal,
-        pitchSignal,
-        rollSignal,
-        yawSignal,
-        pitchVelSignal,
-        rollVelSignal,
-        yawVelSignal);
+    StatusSignal.setUpdateFrequencyForAll(100, yawSignal, yawVelSignal);
     pigeon.optimizeBusUtilization();
     pigeon.reset();
   }
 
   public void updateInputs(GyroIOInputs inputs) {
-    StatusSignal.refreshAll(
-        tempSignal,
-        pitchSignal,
-        rollSignal,
-        yawSignal,
-        pitchVelSignal,
-        rollVelSignal,
-        yawVelSignal);
-
-    inputs.connected = tempSignal.getValue() != 0.0;
-    inputs.rollPositionRad = Units.degreesToRadians(rollSignal.getValue());
-    inputs.pitchPositionRad = Units.degreesToRadians(pitchSignal.getValue());
+    inputs.connected = StatusSignal.refreshAll(yawSignal, yawVelSignal).isOK();
     inputs.yawPositionRad = Units.degreesToRadians(yawSignal.getValue());
-    inputs.pitchVelocityRadPerSec = Units.degreesToRadians(pitchVelSignal.getValue());
-    inputs.rollVelocityRadPerSec = Units.degreesToRadians(rollVelSignal.getValue());
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelSignal.getValue());
   }
 

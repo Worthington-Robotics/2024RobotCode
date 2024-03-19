@@ -16,7 +16,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.Constants;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 import frc.WorBots.util.debug.TunablePIDController;
@@ -30,7 +29,6 @@ public class ModuleIOTalon implements ModuleIO {
       (14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0) * DRIVE_MULTIPLIER;
 
   private ModuleIOInputs inputs;
-  private final int index;
 
   private final SimpleMotorFeedforward driveFeedforward =
       new SimpleMotorFeedforward(0.18868, 0.12825);
@@ -58,7 +56,6 @@ public class ModuleIOTalon implements ModuleIO {
     turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
 
     inputs = new ModuleIOInputs(index);
-    this.index = index;
 
     switch (index) {
       case 0: // Front Left
@@ -158,7 +155,6 @@ public class ModuleIOTalon implements ModuleIO {
     final double driveVolts =
         driveFeedforward.calculate(velocityRadPerSec)
             + driveFeedback.pid.calculate(inputs.drive.velocityRadsPerSec, velocityRadPerSec);
-    SmartDashboard.putNumber("Swerve Module Volts " + index, driveVolts);
     setDriveVoltage(driveVolts);
   }
 
