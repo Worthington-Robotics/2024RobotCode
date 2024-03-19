@@ -10,12 +10,15 @@ package frc.WorBots.auto;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.WorBots.commands.Handoff;
 import frc.WorBots.commands.UtilCommands;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.intake.Intake;
+import frc.WorBots.subsystems.lights.Lights;
+import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
@@ -83,42 +86,87 @@ public class DebugRoutines {
   public Command pitTest() {
     return UtilCommands.namedSequence(
         "Pit Test Progress",
+        Commands.runOnce(
+            () -> {
+              Lights.getInstance().setMode(LightsMode.PitTest);
+              pitTestStep = 0;
+            }),
+        waitForNextStep("Drive; Multiple directions"),
         testDrive(),
-        UtilCommands.waitForDriverstationButton(),
+        waitForNextStep("Superstructure; Handoff"),
         testSuperstructure(),
-        UtilCommands.waitForDriverstationButton(),
+        waitForNextStep("Intake; Intake piece"),
         testIntake(),
-        UtilCommands.waitForDriverstationButton(),
+        waitForNextStep("Shooter; Pose + Shoot"),
         testShooter());
   }
 
   private Command testDrive() {
-    return Commands.sequence(
-        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0))).withTimeout(2.0),
-        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0.0))).withTimeout(2.0),
+    return UtilCommands.namedSequence(
+        "Pit Test Drive Progress",
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(2.0, 0.0, 0.0)), drive)
+            .withTimeout(4.0),
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -2.0, 0.0)), drive)
+            .withTimeout(4.0),
         Commands.runOnce(drive::stop));
   }
 
   private Command testSuperstructure() {
-    return Commands.sequence(
+    return UtilCommands.namedSequence(
+        "Pit Test Superstructure Progress",
         superstructure.goToPose(Preset.HANDOFF),
-        UtilCommands.waitForDriverstationButton(),
+        waitForNextStep("Go to amp"),
         superstructure.goToPose(Preset.AMP),
-        UtilCommands.waitForDriverstationButton(),
+        waitForNextStep("Go to handoff"),
         superstructure.goToPose(Preset.HANDOFF));
   }
 
   private Command testIntake() {
-    return Commands.sequence(
-        new Handoff(intake, superstructure, shooter).withTimeout(2.5),
-        UtilCommands.waitForDriverstationButton(),
-        intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2).withTimeout(1.3)),
-        superstructure.goToPose(Preset.HOME),
-        new Handoff(intake, superstructure, shooter).withTimeout(2.5));
+    return UtilCommands.namedSequence(
+        "Pit Test Intake Progress",
+        new Handoff(intake, superstructure, shooter),
+        waitForNextStep("Spit piece"),
+        intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)).withTimeout(0.7),
+        shooter.setRawFeederVoltsCommand(0.0),
+        waitForNextStep("Go to stow + intake"),
+        superstructure.goToPose(Preset.STOW).withTimeout(1.0),
+        new Handoff(intake, superstructure, shooter)
+            .raceWith(Commands.waitUntil(intake::hasGamePiece)),
+        waitForNextStep("Intake to top"),
+        superstructure.goToPose(Preset.HANDOFF),
+        new Handoff(intake, superstructure, shooter));
   }
 
   private Command testShooter() {
-    return Commands.sequence(
-        shooter.setSpeedContinuous(2000).withTimeout(3.0), shooter.stopFlywheels());
+    return UtilCommands.namedSequence(
+        "Pit Test Shooter Progress",
+        superstructure.goToPose(Preset.SUBWOOFER_SHOOT),
+        waitForNextStep("Shoot"),
+        shooter
+            .setSpeedContinuous(900)
+            .alongWith(Commands.waitSeconds(3.0).andThen(shooter.feed()))
+            .until(() -> !shooter.hasGamePiece()),
+        shooter.stopFlywheels(),
+        waitForNextStep("Back to stow"),
+        superstructure.goToPose(Preset.STOW));
   }
+
+  private Command waitForNextStep(String description) {
+    return UtilCommands.optimalSequence(
+        Commands.runOnce(
+            () -> {
+              Lights.getInstance().setPitTestFlashing(true);
+              Lights.getInstance().setPitTestStep(pitTestStep);
+              SmartDashboard.putString("DB/String 0", description);
+            }),
+        UtilCommands.waitForDriverstationButton(),
+        Commands.runOnce(
+            () -> {
+              Lights.getInstance().setPitTestFlashing(false);
+              pitTestStep++;
+              SmartDashboard.putString("DB/String 0", "Running test step...");
+            }));
+  }
+
+  private static int pitTestStep = 0;
 }

@@ -75,7 +75,7 @@ public class RobotSimulator {
     }
 
     indexState.run(this);
-    SmartDashboard.putString("Simulator Index State", indexState.getState().toString());
+    SmartDashboard.putString("Simulator Index State", indexState.getState().getName());
   }
 
   /** Loads a game piece into the robot at the shooter, for the beginning of auto */
@@ -94,7 +94,7 @@ public class RobotSimulator {
       return false;
     }
 
-    return (indexState.isInState(intakeState) && intakeState.atTof());
+    return (indexState.isInState(intakeState.getClass()) && intakeState.atTof());
   }
 
   /** Checks if the shooter TOF is triggered in the simulation */
@@ -103,7 +103,7 @@ public class RobotSimulator {
       return false;
     }
 
-    return (indexState.isInState(shooterState) && shooterState.atTof());
+    return (indexState.isInState(shooterState.getClass()) && shooterState.atTof());
   }
 
   /** State for when there is no note in the system */
@@ -138,7 +138,7 @@ public class RobotSimulator {
       return Optional.empty();
     }
 
-    public String toString() {
+    public String getName() {
       return "Empty";
     }
   }
@@ -178,7 +178,7 @@ public class RobotSimulator {
       return position >= 0.8;
     }
 
-    public String toString() {
+    public String getName() {
       return "Intake";
     }
   }
@@ -220,7 +220,7 @@ public class RobotSimulator {
       return position >= 0.8;
     }
 
-    public String toString() {
+    public String getName() {
       return "Shooter";
     }
   }

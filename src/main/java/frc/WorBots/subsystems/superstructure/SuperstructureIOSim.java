@@ -34,8 +34,8 @@ public class SuperstructureIOSim implements SuperstructureIO {
             112.5,
             SingleJointedArmSim.estimateMOI(Units.inchesToMeters(12), Units.lbsToKilograms(10)),
             Units.inchesToMeters(12),
-            -Math.PI / 6,
-            Math.PI,
+            0.0,
+            Superstructure.PIVOT_MAX_ANGLE,
             true,
             0);
   }

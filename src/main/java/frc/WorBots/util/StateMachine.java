@@ -41,8 +41,10 @@ public class StateMachine<Inputs> {
    * @param state The state to set
    */
   public void setState(State<Inputs> state) {
-    this.state = state;
-    this.state.initialize();
+    if (!state.equals(this.state)) {
+      this.state = state;
+      this.state.initialize();
+    }
   }
 
   /**
@@ -92,6 +94,9 @@ public class StateMachine<Inputs> {
   }
 
   public static interface State<Inputs> {
+    /** Gets the name of the state */
+    public String getName();
+
     /** Initializes the state when the state machine selects it */
     public default void initialize() {}
 

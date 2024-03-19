@@ -115,9 +115,9 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(9.5, 0.11, 0);
+      pivotController.setGains(9.7, 0.11, 0);
       pivotController.setConstraints(11, 18);
-      pivotFeedForward = new ArmFeedforward(0.04, 0.25, 0.01);
+      pivotFeedForward = new ArmFeedforward(0.045, 0.26, 0.01);
 
       elevatorController.setGains(130, 0.2, 0);
       elevatorController.setConstraints(2.0, 1.65);
@@ -232,7 +232,7 @@ public class Superstructure extends SubsystemBase {
    * @return The feedforward value to be added to the control output
    */
   private double calculatePivotFeedforward() {
-    final double adjusted = getPivotPoseRads();
+    final double adjusted = getPivotPoseRads() - PIVOT_HORIZONTAL_OFFSET;
     final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
     return out;
   }
@@ -567,11 +567,13 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Checks if the superstructure is close enough to the stow pose
+   * Checks if the superstructure is close enough to the stow pose or below
    *
    * @return Whether we are near stow
    */
   public boolean inStow() {
-    return this.isNearPose(Preset.STOW, 0.015, Units.degreesToRadians(1.9));
+    final boolean isBelow =
+        inputs.elevatorPositionMeters < 0.01 && getPivotPoseRads() <= Preset.STOW.getPivot();
+    return isBelow || this.isNearPose(Preset.STOW, 0.015, Units.degreesToRadians(1.9));
   }
 }

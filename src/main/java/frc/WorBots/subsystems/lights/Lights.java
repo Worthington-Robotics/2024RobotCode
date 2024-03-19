@@ -55,6 +55,8 @@ public class Lights extends SubsystemBase {
   private Supplier<Boolean> hasGamePieceBottom = () -> false;
   private Supplier<Boolean> hasGamePieceTop = () -> false;
   private Supplier<Double> elevatorPercentageRaised = () -> 0.0;
+  private int pitTestStep = 0;
+  private boolean pitTestFlashing = false;
 
   public enum LightsMode {
     Rainbow,
@@ -70,6 +72,7 @@ public class Lights extends SubsystemBase {
     Elevator,
     Field,
     ShootReady,
+    PitTest,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -145,6 +148,9 @@ public class Lights extends SubsystemBase {
         final boolean atShootSetpoint = this.atShootSetpoint.get();
         final Color color = atShootSetpoint ? Color.kGreen : Color.kOrangeRed;
         solid(1.0, color);
+        break;
+      case PitTest:
+        pitTest();
         break;
     }
 
@@ -284,6 +290,14 @@ public class Lights extends SubsystemBase {
     }
   }
 
+  private void blink(Color color1, Color color2, double interval, double time) {
+    if (time % (interval * 2.0) <= interval) {
+      solid(1.0, color1);
+    } else {
+      solid(1.0, color2);
+    }
+  }
+
   private void alliance() {
     final var alliance = AllianceCache.getInstance().get();
     final boolean isRed = alliance.isPresent() && alliance.get() == Alliance.Red;
@@ -343,38 +357,72 @@ public class Lights extends SubsystemBase {
     }
   }
 
-  private final Debouncer hasGamePieceBottomDebouncer = new Debouncer(0.55);
-  private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.55);
+  private final Debouncer hasGamePieceBottomDebouncer = new Debouncer(0.10);
+  private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.20);
+  private final Timer startOfIntakeTimer = new Timer();
+  private boolean hadGamePieceBottomBefore = false;
 
   private void delivery() {
+    final double time = TimeCache.getInstance().get();
     final boolean inStow = this.inStow.get();
     final boolean inHandoff = this.inHandoff.get();
     final boolean hasGamePieceBottom =
         hasGamePieceBottomDebouncer.calculate(this.hasGamePieceBottom.get());
     final boolean hasGamePieceTop = hasGamePieceTopDebouncer.calculate(this.hasGamePieceTop.get());
-    final Color pieceColor = inHandoff ? Color.kOrangeRed : Color.kRed;
-    if (hasGamePieceBottom && !hasGamePieceTop) {
-      final double time = TimeCache.getInstance().get();
-      final var color = (time % (0.75 / 2.0) < (0.375 / 2.0)) ? Color.kOrangeRed : Color.kBlack;
-      solid(1.0, color);
-    } else if (hasGamePieceTop) {
-      solid(1.0, pieceColor);
-      solid(0.65, Color.kBlack);
-    } else {
-      if (inHandoff) {
-        solid(1.0, Color.kWhite);
-      } else if (inStow) {
-        solid(1.0, Color.kPurple);
-      } else {
-        alliance();
-      }
+
+    // Start beginning of intake timer
+    if (!hadGamePieceBottomBefore && hasGamePieceBottom) {
+      startOfIntakeTimer.restart();
     }
+    SmartDashboard.putNumber("Lights/Start of Intake Timer", startOfIntakeTimer.get());
+    hadGamePieceBottomBefore = hasGamePieceBottom && !hasGamePieceTop;
+
+    if (hasGamePieceBottom && !hasGamePieceTop) {
+      final double intakeBlinkInterval = 0.22;
+      // Blink green when first intaking
+      if (!startOfIntakeTimer.hasElapsed(intakeBlinkInterval * 5)) {
+        SmartDashboard.putNumber("Lights/Intake Blink", startOfIntakeTimer.get());
+        blink(Color.kGreen, Color.kBlack, intakeBlinkInterval, startOfIntakeTimer.get());
+      } else {
+        // Blink to notify a note is still in the intake
+        blink(Color.kOrangeRed, Color.kBlack, intakeBlinkInterval, startOfIntakeTimer.get());
+      }
+      return;
+    }
+
+    // Blink white when in handoff
+    if (inHandoff) {
+      blink(Color.kWhite, Color.kBlack, 0.3, time);
+      return;
+    }
+
+    // Solid orange when piece is in shooter
+    if (hasGamePieceTop) {
+      solid(1.0, Color.kOrangeRed);
+      return;
+    }
+
+    // Purple when in stow
+    if (inStow) {
+      solid(1.0, Color.kPurple);
+      return;
+    }
+
+    // Alliance otherwise
+    alliance();
   }
 
   private void elevator() {
     final double percent = elevatorPercentageRaised.get();
     solid(1.0, Color.kBlack);
     solid(percent, Color.kOrangeRed);
+  }
+
+  private void pitTest() {
+    if (pitTestFlashing) {
+      blink(Color.kOrangeRed, Color.kBlack, 0.25, TimeCache.getInstance().get());
+    }
+    solid(pitTestStep / 10.0, Color.kGreen);
   }
 
   /**
@@ -412,5 +460,13 @@ public class Lights extends SubsystemBase {
     this.hasGamePieceBottom = hasGamePieceBottom;
     this.hasGamePieceTop = hasGamePieceTop;
     this.elevatorPercentageRaised = elevatorPercentageRaised;
+  }
+
+  public void setPitTestStep(int step) {
+    this.pitTestStep = step;
+  }
+
+  public void setPitTestFlashing(boolean flashing) {
+    this.pitTestFlashing = flashing;
   }
 }

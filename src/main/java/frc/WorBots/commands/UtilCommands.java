@@ -53,8 +53,10 @@ public class UtilCommands {
    * @return The command to run
    */
   public static Command waitForDriverstationButton() {
-    return Commands.waitUntil(() -> SmartDashboard.getBoolean("DB/Button 1", false))
-        .andThen(() -> SmartDashboard.putBoolean("DB/Button 1", false));
+    return optimalSequence(
+        Commands.waitUntil(() -> SmartDashboard.getBoolean("DB/Button 1", false)),
+        Commands.runOnce(() -> SmartDashboard.putBoolean("DB/Button 1", false)),
+        Commands.waitUntil(() -> !SmartDashboard.getBoolean("DB/Button 1", true)));
   }
 
   /**
