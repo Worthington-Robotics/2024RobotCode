@@ -10,11 +10,17 @@ package frc.WorBots.subsystems.vision;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanPublisher;
+import edu.wpi.first.networktables.DoubleArrayPublisher;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.IntegerPublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
+import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.debug.*;
 import frc.WorBots.util.math.GeneralMath;
 import frc.WorBots.util.math.PoseEstimator.TimestampedVisionUpdate;
@@ -29,10 +35,16 @@ public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputs[] inputs;
 
+  /** Consumer that receives vision updates out of the subsystem */
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
+
+  /** Times of last detections for tags */
   private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
+
+  /** The amount of detections that have been made */
   private int detectionCount = 0;
 
+  /** Transform for the inward-facing camera on the BR module */
   private static final Transform3d RIGHT_SWERVE_MODULE_TRANSFORM =
       new Transform3d(
           new Translation3d(
@@ -40,6 +52,7 @@ public class Vision extends SubsystemBase {
           new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
               .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180 + 43.745))));
 
+  /** Transform for the center-mounted camera */
   private static final Transform3d CENTER_TRANSFORM =
       new Transform3d(
           new Translation3d(
@@ -57,7 +70,7 @@ public class Vision extends SubsystemBase {
   private static final double XY_STD_DEV_COEFFICIENT = 0.00015;
 
   /** How much influence theta data has on the robot pose. Smaller values increase influence */
-  private static final double THETA_STD_DEV_COEFFICIENT = 0.0002;
+  private static final double THETA_STD_DEV_COEFFICIENT = 0.00025;
 
   /**
    * The exponent for the distance scoring formula. Larger values make scores fall off harder with
@@ -92,9 +105,26 @@ public class Vision extends SubsystemBase {
         0.8, // Stage
       };
 
-  private static final double targetLogTimeSecs = 0.1;
+  /** The amount of time to log tag poses for */
+  private static final double TARGET_LOG_TIME_SECS = 0.1;
 
-  private double lastPoseTime = 0.0;
+  private final NetworkTable visionTable = NetworkTableInstance.getDefault().getTable("Vision");
+  private final DoubleArrayPublisher robotPosesPublisher =
+      visionTable.getDoubleArrayTopic("RobotPoses").publish();
+  private final DoubleArrayPublisher tagsPosesPublisher =
+      visionTable.getDoubleArrayTopic("TagPoses").publish();
+  private final DoubleArrayPublisher robotPoses3dPublisher =
+      visionTable.getDoubleArrayTopic("RobotPoses3d").publish();
+  private final DoublePublisher error0Publisher = visionTable.getDoubleTopic("Error 0").publish();
+  private final DoublePublisher error1Publisher = visionTable.getDoubleTopic("Error 1").publish();
+  private final DoublePublisher finalScorePublisher =
+      visionTable.getDoubleTopic("Final Score").publish();
+  private final BooleanPublisher isPoseValidPublisher =
+      visionTable.getBooleanTopic("Is Pose Valid").publish();
+  private final DoubleArrayPublisher invalidPosePublisher =
+      visionTable.getDoubleArrayTopic("Invalid Pose").publish();
+  private final IntegerPublisher detectionCountPublisher =
+      visionTable.getIntegerTopic("Detection Count").publish();
 
   public Vision(VisionIO... io) {
     this.io = io;
@@ -106,6 +136,7 @@ public class Vision extends SubsystemBase {
   }
 
   public void periodic() {
+    // Update inputs
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
       StatusPage.reportStatus(StatusPage.CAM_PREFIX + i, inputs[i].isConnected);
@@ -117,9 +148,10 @@ public class Vision extends SubsystemBase {
     List<TimestampedVisionUpdate> visionUpdates = new ArrayList<>();
 
     for (int camIndex = 0; camIndex < io.length; camIndex++) {
-      for (int frame = 0; frame < inputs[camIndex].timestamps.length; frame++) {
-        final var timestamp = inputs[camIndex].timestamps[frame];
-        final var values = inputs[camIndex].frames[frame];
+      final VisionIOInputs camInputs = inputs[camIndex];
+      for (int frame = 0; frame < camInputs.timestamps.length; frame++) {
+        final double timestamp = camInputs.timestamps[frame];
+        final double[] values = camInputs.frames[frame];
 
         if (values.length == 0 || values[0] == 0) {
           continue;
@@ -131,46 +163,45 @@ public class Vision extends SubsystemBase {
         // Switch based on the number of detections
         switch ((int) values[0]) {
           case 1:
+            // Multiple tags
             cameraPose =
                 new Pose3d(
                     values[2],
                     values[3],
                     values[4],
                     new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
-            robotPose3d = cameraPose.transformBy(CAMERA_TRANSFORMS[camIndex]);
             break;
           case 2:
+            // One tag that needs to be disambiguated
             final double error0 = values[1];
             final double error1 = values[9];
 
-            final Pose3d cameraPose0 =
-                new Pose3d(
-                    values[2],
-                    values[3],
-                    values[4],
-                    new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
-            final Pose3d cameraPose1 =
-                new Pose3d(
-                    values[10],
-                    values[11],
-                    values[12],
-                    new Rotation3d(new Quaternion(values[13], values[14], values[15], values[16])));
-            final Pose3d robotPose3d0 = cameraPose0.transformBy(CAMERA_TRANSFORMS[camIndex]);
-            final Pose3d robotPose3d1 = cameraPose1.transformBy(CAMERA_TRANSFORMS[camIndex]);
+            error0Publisher.set(error0);
+            error1Publisher.set(error1);
 
-            // Select pose using scores
-            final double score0 = scoreDetection(error0, 1.0, camIndex, -1);
-            final double score1 = scoreDetection(error1, 1.0, camIndex, -1);
-            SmartDashboard.putNumber("Score 0", score0);
-            SmartDashboard.putNumber("Score 1", score1);
-            if (score0 > score1) {
-              cameraPose = cameraPose0;
-              robotPose3d = robotPose3d0;
+            // Select pose using reprojection error
+            if (error0 < error1) {
+              cameraPose =
+                  new Pose3d(
+                      values[2],
+                      values[3],
+                      values[4],
+                      new Rotation3d(new Quaternion(values[5], values[6], values[7], values[8])));
             } else {
-              cameraPose = cameraPose1;
-              robotPose3d = robotPose3d1;
+              cameraPose =
+                  new Pose3d(
+                      values[10],
+                      values[11],
+                      values[12],
+                      new Rotation3d(
+                          new Quaternion(values[13], values[14], values[15], values[16])));
             }
             break;
+        }
+
+        // Set robot pose
+        if (cameraPose != null) {
+          robotPose3d = cameraPose.transformBy(CAMERA_TRANSFORMS[camIndex]);
         }
 
         // Exit if no data
@@ -192,14 +223,16 @@ public class Vision extends SubsystemBase {
         for (int i = (values[0] == 1 ? 9 : 17); i < values.length; i++) {
           final int tagId = (int) values[i];
           tagIds.add(tagId);
+
           lastTagDetectionTimes.put(tagId, Timer.getFPGATimestamp());
+
           final Optional<Pose3d> tagPose = FieldConstants.aprilTags.getTagPose(tagId);
           if (tagPose.isPresent()) {
             tagPoses.add(tagPose.get());
           }
         }
 
-        // Calculate average score
+        // Calculate average score from all tag detections
         double averageScore = 0.0;
         for (int i = 0; i < tagPoses.size(); i++) {
           final double dist =
@@ -208,30 +241,36 @@ public class Vision extends SubsystemBase {
           averageScore += score;
         }
         averageScore /= tagPoses.size();
-        SmartDashboard.putNumber("Final Detection Score", averageScore);
+        finalScorePublisher.set(averageScore);
 
-        // Add to vision updates
+        // Add to vision updates with the calculated standard deviation of the update
         final double xyStdDev = XY_STD_DEV_COEFFICIENT / averageScore;
         final double thetaStdDev = THETA_STD_DEV_COEFFICIENT / averageScore;
         visionUpdates.add(
             new TimestampedVisionUpdate(
                 timestamp, robotPose, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)));
+
         allRobotPoses.add(robotPose);
         allRobotPoses3d.add(robotPose3d);
+
         detectionCount++;
-        SmartDashboard.putNumber("Vision Detection Count", detectionCount);
+        detectionCountPublisher.set(detectionCount);
       }
 
-      Logger.getInstance().setRobotPoses(allRobotPoses.toArray(new Pose2d[allRobotPoses.size()]));
+      // Collect all tag poses
       List<Pose3d> allTagPoses = new ArrayList<>();
       for (Map.Entry<Integer, Double> detectionEntry : lastTagDetectionTimes.entrySet()) {
-        if (Timer.getFPGATimestamp() - detectionEntry.getValue() < targetLogTimeSecs) {
+        if (TimeCache.getInstance().get() - detectionEntry.getValue() < TARGET_LOG_TIME_SECS) {
           allTagPoses.add(FieldConstants.aprilTags.getTagPose(detectionEntry.getKey()).get());
         }
       }
-      Logger.getInstance().setTagPoses(allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
-      Logger.getInstance()
-          .setRobotPoses3d(allRobotPoses3d.toArray(new Pose3d[allRobotPoses3d.size()]));
+
+      // Log poses
+      setRobotPoses(allRobotPoses);
+      setRobotPoses3d(allRobotPoses3d);
+      setTagPoses(allTagPoses);
+
+      // Send vision data to consumer
       visionConsumer.accept(visionUpdates);
     }
   }
@@ -244,28 +283,24 @@ public class Vision extends SubsystemBase {
     this.visionConsumer = visionConsumer;
   }
 
-  public double getLastPoseTime() {
-    return this.lastPoseTime;
-  }
-
   /**
    * Gets whether a 3D pose from vision should be considered valid
    *
    * @param pose The pose from vision
    * @return Whether the pose should be used
    */
-  private static boolean isPoseValid(Pose3d pose) {
+  private boolean isPoseValid(Pose3d pose) {
     if (pose.getX() < -FIELD_BORDER_MARGIN
         || pose.getX() > FieldConstants.fieldLength + FIELD_BORDER_MARGIN
         || pose.getY() < -FIELD_BORDER_MARGIN
         || pose.getY() > FieldConstants.fieldWidth + FIELD_BORDER_MARGIN
         || pose.getZ() < -Z_MARGIN
         || pose.getZ() > Z_MARGIN) {
-      SmartDashboard.putNumberArray("Invalid Pose", Logger.pose3dToArray(pose));
-      SmartDashboard.putBoolean("Pose Valid", false);
+      invalidPosePublisher.set(Logger.pose3dToArray(pose));
+      isPoseValidPublisher.set(false);
       return false;
     }
-    SmartDashboard.putBoolean("Pose Valid", true);
+    isPoseValidPublisher.set(true);
 
     return true;
   }
@@ -299,5 +334,49 @@ public class Vision extends SubsystemBase {
     }
 
     return score;
+  }
+
+  /** Set the robot poses publisher */
+  private void setRobotPoses(List<Pose2d> poses) {
+    double[] data = new double[poses.size() * 3];
+    for (int i = 0; i < poses.size(); i++) {
+      final Pose2d pose = poses.get(i);
+      data[i * 3] = pose.getX();
+      data[i * 3 + 1] = pose.getY();
+      data[i * 3 + 2] = pose.getRotation().getRadians();
+    }
+    robotPosesPublisher.set(data);
+  }
+
+  /** Set the 3D robot poses publisher */
+  private void setRobotPoses3d(List<Pose3d> poses) {
+    double[] data = new double[poses.size() * 7];
+    for (int i = 0; i < poses.size(); i++) {
+      final Pose3d pose = poses.get(i);
+      data[i * 7] = pose.getX();
+      data[i * 7 + 1] = pose.getY();
+      data[i * 7 + 2] = pose.getZ();
+      data[i * 7 + 3] = pose.getRotation().getQuaternion().getW();
+      data[i * 7 + 4] = pose.getRotation().getQuaternion().getX();
+      data[i * 7 + 5] = pose.getRotation().getQuaternion().getY();
+      data[i * 7 + 6] = pose.getRotation().getQuaternion().getZ();
+    }
+    robotPoses3dPublisher.set(data);
+  }
+
+  /** Set the tag poses publisher */
+  private void setTagPoses(List<Pose3d> poses) {
+    double[] data = new double[poses.size() * 7];
+    for (int i = 0; i < poses.size(); i++) {
+      final Pose3d pose = poses.get(i);
+      data[i * 7] = pose.getX();
+      data[i * 7 + 1] = pose.getY();
+      data[i * 7 + 2] = pose.getZ();
+      data[i * 7 + 3] = pose.getRotation().getQuaternion().getW();
+      data[i * 7 + 4] = pose.getRotation().getQuaternion().getX();
+      data[i * 7 + 5] = pose.getRotation().getQuaternion().getY();
+      data[i * 7 + 6] = pose.getRotation().getQuaternion().getZ();
+    }
+    tagsPosesPublisher.set(data);
   }
 }

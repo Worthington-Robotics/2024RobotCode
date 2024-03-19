@@ -43,13 +43,6 @@ public class Logger {
   DoubleArrayPublisher trajectorySetpointPublisher =
       driveTable.getDoubleArrayTopic("Trajectory Setpoint").publish();
 
-  NetworkTable visionTable = defaultInstance.getTable("Vision");
-  DoubleArrayPublisher robotPosesPublisher =
-      visionTable.getDoubleArrayTopic("RobotPoses").publish();
-  DoubleArrayPublisher tagsPosesPublisher = visionTable.getDoubleArrayTopic("TagPoses").publish();
-  DoubleArrayPublisher robotPoses3dPublisher =
-      visionTable.getDoubleArrayTopic("RobotPoses3d").publish();
-
   NetworkTable superstructureTable = defaultInstance.getTable("Superstructure");
   StringPublisher modePublisher = superstructureTable.getStringTopic("Mode").publish();
   DoublePublisher setpointPositionPivot =
@@ -224,44 +217,6 @@ public class Logger {
     return new double[] {
       speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond
     };
-  }
-
-  public void setRobotPoses(Pose2d... value) {
-    double[] data = new double[value.length * 3];
-    for (int i = 0; i < value.length; i++) {
-      data[i * 3] = value[i].getX();
-      data[i * 3 + 1] = value[i].getY();
-      data[i * 3 + 2] = value[i].getRotation().getRadians();
-    }
-    robotPosesPublisher.accept(data);
-  }
-
-  public void setTagPoses(Pose3d... value) {
-    double[] data = new double[value.length * 7];
-    for (int i = 0; i < value.length; i++) {
-      data[i * 7] = value[i].getX();
-      data[i * 7 + 1] = value[i].getY();
-      data[i * 7 + 2] = value[i].getZ();
-      data[i * 7 + 3] = value[i].getRotation().getQuaternion().getW();
-      data[i * 7 + 4] = value[i].getRotation().getQuaternion().getX();
-      data[i * 7 + 5] = value[i].getRotation().getQuaternion().getY();
-      data[i * 7 + 6] = value[i].getRotation().getQuaternion().getZ();
-    }
-    tagsPosesPublisher.accept(data);
-  }
-
-  public void setRobotPoses3d(Pose3d... value) {
-    double[] data = new double[value.length * 7];
-    for (int i = 0; i < value.length; i++) {
-      data[i * 7] = value[i].getX();
-      data[i * 7 + 1] = value[i].getY();
-      data[i * 7 + 2] = value[i].getZ();
-      data[i * 7 + 3] = value[i].getRotation().getQuaternion().getW();
-      data[i * 7 + 4] = value[i].getRotation().getQuaternion().getX();
-      data[i * 7 + 5] = value[i].getRotation().getQuaternion().getY();
-      data[i * 7 + 6] = value[i].getRotation().getQuaternion().getZ();
-    }
-    robotPoses3dPublisher.set(data);
   }
 
   public void setDriveTrajectory(Pose2d... value) {
