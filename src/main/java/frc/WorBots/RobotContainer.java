@@ -24,7 +24,6 @@ import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
-import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.RobotSimulator;
@@ -238,8 +237,7 @@ public class RobotContainer {
                     Commands.runOnce(
                         () -> {
                           Lights.getInstance().setMode(LightsMode.Shooting);
-                        }))
-                .finallyDo(() -> superstructure.setModeVoid(SuperstructureState.DISABLED)))
+                        })))
         .onFalse(Commands.runOnce(() -> shooter.idle(), shooter))
         .onFalse(Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery)))
         .onFalse(Commands.waitSeconds(0.05).andThen(() -> superstructure.setPose(Preset.STOW)));

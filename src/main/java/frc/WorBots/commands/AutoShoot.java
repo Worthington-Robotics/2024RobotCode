@@ -66,7 +66,7 @@ public class AutoShoot extends SequentialCommandGroup {
           final double x = leftXSupplier.get();
           final double y = leftYSupplier.get();
 
-          ChassisSpeeds speeds =
+          final ChassisSpeeds speeds =
               driveController.getSpeeds(
                   x,
                   y,
@@ -76,19 +76,19 @@ public class AutoShoot extends SequentialCommandGroup {
 
           // Calculate turn
           final double setpointAngle = shotSupplier.get().robotAngle().getRadians();
-          double thetaVelocity =
+          final double thetaVelocity =
               thetaController.calculate(robotPose.getRotation().getRadians(), setpointAngle);
-          // double thetaErrorAbs =
-          // Math.abs(robotPose.getRotation().minus(driveAngleSupplier.get()).getRadians());
-          // if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity =
-          // 0.0;
 
           speeds.omegaRadiansPerSecond = thetaVelocity;
 
           return speeds;
         };
     addCommands(
-        superstructure.setMode(SuperstructureState.SHOOTING),
+        Commands.runOnce(
+            () -> {
+              thetaController.reset(drive.getPose().getRotation().getRadians());
+              superstructure.setModeVoid(SuperstructureState.SHOOTING);
+            }),
         Commands.run(
             () -> {
               shotSupplier.update();
@@ -98,11 +98,6 @@ public class AutoShoot extends SequentialCommandGroup {
               SmartDashboard.putNumber("Goal Range", ShooterMath.getGoalDistance(drive.getPose()));
             },
             shooter,
-            drive),
-        Commands.waitUntil(() -> false)
-            .finallyDo(
-                () -> {
-                  superstructure.setModeVoid(SuperstructureState.DISABLED);
-                }));
+            drive));
   }
 }
