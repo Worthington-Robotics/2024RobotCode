@@ -96,8 +96,14 @@ public class Superstructure extends SubsystemBase {
   /** The error threshold for the elevator, in meters */
   private static final double ELEVATOR_THRESHOLD = 0.027;
 
-  /** THe error threshold for the pivot, in radians */
+  /** The error threshold for the pivot, in radians */
   private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.75);
+
+  /** The pivot angle past which anti-oscillation will be applied */
+  private static final double PIVOT_OSCILLATION_START = 1.78;
+
+  /** Multiplier for the pivot PID output when we are in the oscillation range */
+  private static final double PIVOT_OSCILLATION_MULTIPLIER = 1.0;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -220,8 +226,13 @@ public class Superstructure extends SubsystemBase {
   private double calculatePivot(double setpoint) {
     // Clamp the setpoint
     setpoint = MathUtil.clamp(setpoint, 0.0, PIVOT_MAX_ANGLE);
-    final double pivotVoltage =
+    double pivotVoltage =
         pivotController.pid.calculate(getPivotPoseRads(), setpoint) + calculatePivotFeedforward();
+
+    // Anti-oscillation by reducing PID output
+    if (getPivotPoseRads() >= PIVOT_OSCILLATION_START) {
+      pivotVoltage *= PIVOT_OSCILLATION_MULTIPLIER;
+    }
 
     return pivotVoltage;
   }
