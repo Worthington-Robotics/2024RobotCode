@@ -120,6 +120,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a92b085fb6f9b27597f7bf43938fbb196"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a880a8a054779c523c03ba3c8cad6ac"><td class="memItemLeft" align="right" valign="top">Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a9a880a8a054779c523c03ba3c8cad6ac">getWingLinePose</a> (Pose2d currentPose, Rotation2d desiredRotation)</td></tr>
 <tr class="separator:a9a880a8a054779c523c03ba3c8cad6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa81619419d59f35e400b9775c4aaa123"><td class="memItemLeft" align="right" valign="top">Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#aa81619419d59f35e400b9775c4aaa123">getStartingLinePose</a> (Pose2d currentPose, Rotation2d desiredRotation)</td></tr>
+<tr class="separator:aa81619419d59f35e400b9775c4aaa123"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af20c6445449d0fb2a244d83a9ded15fc"><td class="memItemLeft" align="right" valign="top">Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#af20c6445449d0fb2a244d83a9ded15fc">getAutoShootPose</a> (Pose2d targetPose)</td></tr>
 <tr class="separator:af20c6445449d0fb2a244d83a9ded15fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -146,6 +148,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad8e18edc65b9af8a04fd5b45c54003d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae270d33ed25f89143bc30cbc87aaf3fe"><td class="memItemLeft" align="right" valign="top">final Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae270d33ed25f89143bc30cbc87aaf3fe">farShootingPose</a></td></tr>
 <tr class="separator:ae270d33ed25f89143bc30cbc87aaf3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f828465be033d5ed3065a5ad3e9fdb6"><td class="memItemLeft" align="right" valign="top">final Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a8f828465be033d5ed3065a5ad3e9fdb6">sourceStartingPose</a></td></tr>
+<tr class="separator:a8f828465be033d5ed3065a5ad3e9fdb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Utility methods, commands, poses, and values for autos to use </p>
@@ -468,6 +472,51 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The target pose with the correct rotation to shoot at the goal </dd></dl>
+
+</div>
+</div>
+<a id="aa81619419d59f35e400b9775c4aaa123" name="aa81619419d59f35e400b9775c4aaa123"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa81619419d59f35e400b9775c4aaa123">&#9670;&#160;</a></span>getStartingLinePose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Pose2d frc.WorBots.auto.AutoUtil.getStartingLinePose </td>
+          <td>(</td>
+          <td class="paramtype">Pose2d&#160;</td>
+          <td class="paramname"><em>currentPose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>desiredRotation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Get a transitory pose for pathing on the starting line, but on the side that your current pose's y is on</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">currentPose</td><td>The current pose of the robot </td></tr>
+    <tr><td class="paramname">desiredRotation</td><td>The unflipped desired rotation for the pose </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pose </dd></dl>
 
 </div>
 </div>
@@ -1015,6 +1064,21 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >Positions for shooting from </p>
+
+</div>
+</div>
+<a id="a8f828465be033d5ed3065a5ad3e9fdb6" name="a8f828465be033d5ed3065a5ad3e9fdb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f828465be033d5ed3065a5ad3e9fdb6">&#9670;&#160;</a></span>sourceStartingPose</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">final Pose2d frc.WorBots.auto.AutoUtil.sourceStartingPose</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Starting pose against the source wall </p>
 
 </div>
 </div>
