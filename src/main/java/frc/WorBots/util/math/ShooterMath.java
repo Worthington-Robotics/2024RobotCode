@@ -100,18 +100,18 @@ public class ShooterMath {
   private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {1.096 - GOAL_ADJUSTMENT, 0.93 * 0.498},
-            {1.406 - GOAL_ADJUSTMENT, 0.93 * 0.52},
-            {2.197 - GOAL_ADJUSTMENT, 0.93 * 0.8172},
-            {2.379 - GOAL_ADJUSTMENT, 0.93 * 0.826},
-            {2.600 - GOAL_ADJUSTMENT, 0.99 * 0.85},
-            {2.900 - GOAL_ADJUSTMENT, 0.99 * 0.87},
-            {3.24 - GOAL_ADJUSTMENT, 0.95 * 0.948},
-            {3.43 - GOAL_ADJUSTMENT, 0.97 * 0.948},
-            {4.00 - GOAL_ADJUSTMENT, 0.99 * 0.9805},
-            {4.55 - GOAL_ADJUSTMENT, 1.01 * 0.9805},
-            {5.295 - GOAL_ADJUSTMENT, 0.93 * 1.0601},
-            {5.444 - GOAL_ADJUSTMENT, 1.02 * 1.0601}
+            {1.096 - GOAL_ADJUSTMENT, 1.00 * 0.463140},
+            {1.406 - GOAL_ADJUSTMENT, 1.00 * 0.483600},
+            {2.197 - GOAL_ADJUSTMENT, 1.00 * 0.759996},
+            {2.379 - GOAL_ADJUSTMENT, 1.00 * 0.768180},
+            {2.600 - GOAL_ADJUSTMENT, 1.00 * 0.841500},
+            {2.900 - GOAL_ADJUSTMENT, 1.00 * 0.861300},
+            {3.240 - GOAL_ADJUSTMENT, 1.00 * 0.900600},
+            {3.430 - GOAL_ADJUSTMENT, 1.00 * 0.919560},
+            {4.000 - GOAL_ADJUSTMENT, 1.00 * 0.970695},
+            {4.550 - GOAL_ADJUSTMENT, 1.00 * 0.990305},
+            {5.295 - GOAL_ADJUSTMENT, 1.00 * 0.985893},
+            {5.444 - GOAL_ADJUSTMENT, 1.00 * 1.081302}
           });
 
   /** Difference confidence levels for a shot */
