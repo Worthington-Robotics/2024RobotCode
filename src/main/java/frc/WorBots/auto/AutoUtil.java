@@ -63,6 +63,9 @@ public class AutoUtil {
   /** Far wing pose for shooting from */
   public final Pose2d farShootingPose;
 
+  /** Starting pose against the source wall */
+  public final Pose2d sourceStartingPose;
+
   // Subsystems
   private final Drive drive;
   private final Superstructure superstructure;
@@ -168,6 +171,12 @@ public class AutoUtil {
                 FieldConstants.Wing.endX * 0.65,
                 FieldConstants.Speaker.speakerY * 1.2,
                 new Rotation2d()));
+    sourceStartingPose =
+        AllianceFlipUtil.apply(
+            new Pose2d(
+                1.1,
+                0.95,
+                new Rotation2d(Units.degreesToRadians(90.0) - FieldConstants.Source.wallAngle)));
   }
 
   /**
@@ -597,6 +606,23 @@ public class AutoUtil {
   public Pose2d getWingLinePose(Pose2d currentPose, Rotation2d desiredRotation) {
     final double x = AllianceFlipUtil.apply(FieldConstants.Wing.endX);
     double y = FieldConstants.midLineY / 3;
+    if (currentPose.getY() > FieldConstants.midLineY) {
+      y = FieldConstants.fieldWidth - y;
+    }
+    return new Pose2d(x, y, AllianceFlipUtil.apply(desiredRotation));
+  }
+
+  /**
+   * Get a transitory pose for pathing on the starting line, but on the side that your current
+   * pose's y is on
+   *
+   * @param currentPose The current pose of the robot
+   * @param desiredRotation The unflipped desired rotation for the pose
+   * @return The pose
+   */
+  public Pose2d getStartingLinePose(Pose2d currentPose, Rotation2d desiredRotation) {
+    final double x = AllianceFlipUtil.apply(FieldConstants.StartingZone.endX);
+    double y = FieldConstants.midLineY / 1.25;
     if (currentPose.getY() > FieldConstants.midLineY) {
       y = FieldConstants.fieldWidth - y;
     }

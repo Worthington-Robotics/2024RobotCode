@@ -134,6 +134,16 @@ public class AllianceFlipUtil {
     }
   }
 
+  /**
+   * Flips a Pose2d's y component
+   *
+   * @param pose The pose to flip
+   * @return The y-flipped pose
+   */
+  public static Pose2d flipY(Pose2d pose) {
+    return new Pose2d(pose.getX(), FieldConstants.fieldWidth - pose.getY(), pose.getRotation());
+  }
+
   /** Gets whether alliance-relative x-values should be flipped, for the red side */
   public static boolean shouldFlip() {
     final var alliance = DriverStation.getAlliance();
