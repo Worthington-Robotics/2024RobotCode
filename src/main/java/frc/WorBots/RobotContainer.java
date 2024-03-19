@@ -186,6 +186,16 @@ public class RobotContainer {
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     driver.rightBumper().onTrue(superstructure.goToPose(Preset.HANDOFF));
+    // Auto handoff toggle
+    driver
+        .x()
+        .toggleOnTrue(
+            Commands.parallel(
+                new Handoff(intake, superstructure, shooter),
+                Commands.startEnd(
+                    () -> superstructure.setPose(Preset.HANDOFF),
+                    () -> superstructure.setPose(Preset.STOW),
+                    superstructure)));
     driver
         .povDown()
         .toggleOnTrue(
