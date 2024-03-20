@@ -30,5 +30,6 @@ var searchData=
   ['rotationtotransform_27',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1296067ad70179403938c47dc05416c7',1,'frc::WorBots::util::math::GeomUtil']]],
   ['run_28',['run',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#af50e205d49accf3e3d02e464abe86c35',1,'frc::WorBots::util::StateMachine']]],
   ['runstate_29',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['runvelocity_30',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
+  ['runtransitions_30',['runTransitions',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#a661ed6a3f166f6864e59e48ae94f35ea',1,'frc::WorBots::util::StateMachine']]],
+  ['runvelocity_31',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
 ];
