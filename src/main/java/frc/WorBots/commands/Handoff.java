@@ -24,13 +24,13 @@ public class Handoff extends Command {
 
   // Constants
   /** Max voltage to run the intake at */
-  private static final double MAX_INTAKE_VOLTAGE = 5.7;
+  private static final double MAX_INTAKE_VOLTAGE = 4.5;
 
   /** The amount to scale the intake power based on ToF distance. Larger values reduce the speed */
   private static final double INTAKE_DISTANCE_SCALING = 0.44;
 
   /** Amount to multiply the intake voltage by when we are in handoff */
-  private static final double HANDOFF_INTAKE_MULTIPLIER = 1.2;
+  private static final double HANDOFF_INTAKE_MULTIPLIER = 1.5;
 
   /** Voltage for the feeder wheels */
   private static final double FEEDER_VOLTAGE = 0.47;

@@ -23,11 +23,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.util.MatchTime;
+import frc.WorBots.util.StateMachine;
+import frc.WorBots.util.StateMachine.State;
+import frc.WorBots.util.StateMachine.StateTransition;
 import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.math.ShooterMath.ShotConfidence;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class Lights extends SubsystemBase {
@@ -65,11 +69,11 @@ public class Lights extends SubsystemBase {
   /** Debouncer for the top ToF */
   private final Debouncer hasGamePieceTopDebouncer = new Debouncer(0.20);
 
-  /** Timer for when intake starts */
-  private final Timer startOfIntakeTimer = new Timer();
+  /** State of the delivery mode */
+  private final StateMachine<Lights> deliveryState;
 
-  /** Whether we had a game piece in the bottom in the last period */
-  private boolean hadGamePieceBottomBefore = false;
+  /** Timestamp when intaking started */
+  private double startOfIntakeTime = 0.0;
 
   // Data interfaces
   private Supplier<Boolean> isTargeted = () -> false;
@@ -120,6 +124,9 @@ public class Lights extends SubsystemBase {
     setModeSub = table.getIntegerTopic("Set Mode").subscribe(-1);
     setModePub = table.getIntegerTopic("Mode Number").publish();
     StatusPage.reportStatus(StatusPage.LIGHTS_SUBSYSTEM, true);
+
+    // Initialize states
+    deliveryState = new StateMachine<>(defaultState);
   }
 
   public void periodic() {
@@ -177,7 +184,8 @@ public class Lights extends SubsystemBase {
         if (hasGamePieceTop) {
           solid(Color.kRed);
         } else {
-          wave(Color.kBlue, Color.kRed, 14.0, 1.2, 0.3);
+          worbotsBounce();
+          // wave(Color.kBlue, Color.kRed, 14.0, 1.2, 0.3);
         }
         break;
       case ShootReady:
@@ -261,35 +269,6 @@ public class Lights extends SubsystemBase {
     }
   }
 
-  private void bounce(
-      Color c1, Color c2, double cycleLength, double duration, double waveExponent) {
-    double x = (1 - ((TimeCache.getInstance().get() % duration) / duration) * 2.0 * Math.PI);
-    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      if (i == 0) {
-        System.out.println(x);
-      }
-      if (x > -2) {
-        x += xDiffPerLed;
-      } else {
-        x -= xDiffPerLed;
-      }
-      if (i >= 0) {
-        double ratio = (Math.pow(Math.sin(x), waveExponent) + 1.0) / 2.0;
-        if (Double.isNaN(ratio)) {
-          ratio = (-Math.pow(Math.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
-        }
-        if (Double.isNaN(ratio)) {
-          ratio = 0.5;
-        }
-        double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-        double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-        double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-        setLED(i, new Color(red, green, blue));
-      }
-    }
-  }
-
   public void bounce(Color c1, double cycleLength, double duration, double waveExponent) {
     double x = (Math.sin((TimeCache.getInstance().get() % (Math.PI * 2))) + 1) / 2;
     double xDiffPerLed = cycleLength;
@@ -343,6 +322,41 @@ public class Lights extends SubsystemBase {
       solid(color1);
     } else {
       solid(color2);
+    }
+  }
+
+  private void worbotsBounce() {
+    solid(Color.kBlack);
+
+    final double time = 1.0;
+    final double percent =
+        Math.pow(
+            (Math.sin(TimeCache.getInstance().get() % time / time * 2.0 * Math.PI) + 1.0) / 2.0,
+            0.8);
+    final double portion = percent * 0.5;
+    final int width = 6;
+
+    final int index0 = (int) (portion * (LIGHT_COUNT - width * 1.5));
+    final int index1 = index0 + width;
+    final int index2 = LIGHT_COUNT - index0;
+    final int index3 = index2 - width;
+
+    for (int i = index0; i < index1; i++) {
+      setLED(i, Color.kRed);
+      if (i > LIGHT_COUNT * 0.4) {
+        setLED(i, Color.kWhite);
+      } else if (i < 4) {
+        setLED(i, Color.kDarkRed);
+      }
+    }
+
+    for (int i = index3; i < index2; i++) {
+      setLED(i, Color.kBlue);
+      if (i < LIGHT_COUNT * 0.58) {
+        setLED(i, Color.kWhite);
+      } else if (i >= LIGHT_COUNT - 4) {
+        setLED(i, Color.kDarkBlue);
+      }
     }
   }
 
@@ -410,52 +424,178 @@ public class Lights extends SubsystemBase {
   }
 
   private void delivery() {
-    final double time = TimeCache.getInstance().get();
-    final boolean inStow = this.inStow.get();
-    final boolean inHandoff = this.inHandoff.get();
-    final boolean hasGamePieceBottom =
-        hasGamePieceBottomDebouncer.calculate(this.hasGamePieceBottom.get());
-    final boolean hasGamePieceTop = hasGamePieceTopDebouncer.calculate(this.hasGamePieceTop.get());
-
-    // Start beginning of intake timer
-    if (!hadGamePieceBottomBefore && hasGamePieceBottom) {
-      startOfIntakeTimer.restart();
+    deliveryState.run(this);
+    if (inHandoff.get() && !deliveryState.isInState(startOfIntakeState)) {
+      SmartDashboard.putNumber("Fart 2", Timer.getFPGATimestamp());
+      blink(
+          Color.kWhite,
+          Color.kBlack,
+          intakeBlinkInterval,
+          TimeCache.getInstance().get() - startOfIntakeTime);
     }
-    hadGamePieceBottomBefore = hasGamePieceBottom && !hasGamePieceTop;
-
-    if (hasGamePieceBottom) {
-      final double intakeBlinkInterval = 0.22;
-      // Blink green when first intaking
-      if (!startOfIntakeTimer.hasElapsed(intakeBlinkInterval * 5)) {
-        blink(Color.kGreen, Color.kBlack, intakeBlinkInterval, startOfIntakeTimer.get());
-      } else {
-        // Blink to notify a note is still in the intake
-        blink(Color.kOrangeRed, Color.kBlack, intakeBlinkInterval, startOfIntakeTimer.get());
-      }
-      return;
-    }
-
-    // Blink white when in handoff
-    if (inHandoff) {
-      blink(Color.kWhite, Color.kBlack, 0.3, time);
-      return;
-    }
-
-    // Solid orange when piece is in shooter
-    if (hasGamePieceTop) {
-      solid(Color.kOrangeRed);
-      return;
-    }
-
-    // Purple when in stow
-    if (inStow) {
-      solid(Color.kPurple);
-      return;
-    }
-
-    // Alliance otherwise
-    alliance();
+    SmartDashboard.putString("Lights/Delivery State", deliveryState.getState().getName());
   }
+
+  private static final double intakeBlinkInterval = 0.28;
+  private final Timer intakeTimer = new Timer();
+
+  private class IntakeTransition implements StateTransition<Lights> {
+    /** Whether we had a game piece in the bottom in the last period */
+    private boolean hadGamePieceBottomBefore = false;
+
+    public Optional<State<Lights>> getTransition(Lights inputs) {
+      final boolean hasGamePieceBottom =
+          hasGamePieceBottomDebouncer.calculate(Lights.this.hasGamePieceBottom.get());
+      if (!hadGamePieceBottomBefore && hasGamePieceBottom) {
+        return Optional.of(startOfIntakeState);
+      }
+      hadGamePieceBottomBefore =
+          hasGamePieceBottom && !hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get());
+      return Optional.empty();
+    }
+  }
+
+  private final IntakeTransition intakeTransition = new IntakeTransition();
+
+  private class ReadyTransition implements StateTransition<Lights> {
+    public Optional<State<Lights>> getTransition(Lights inputs) {
+      if (hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get())) {
+        return Optional.of(readyState);
+      }
+      return Optional.empty();
+    }
+  }
+
+  private final ReadyTransition readyTransition = new ReadyTransition();
+
+  private class DefaultState extends State<Lights> {
+    public DefaultState() {
+      super(intakeTransition, readyTransition);
+    }
+
+    public String getName() {
+      return "Default";
+    }
+
+    @Override
+    public Optional<State<Lights>> run(Lights input) {
+      if (inStow.get()) {
+        worbotsBounce();
+        return Optional.empty();
+      }
+
+      alliance();
+      return Optional.empty();
+    }
+  }
+
+  private final DefaultState defaultState = new DefaultState();
+
+  private class StartOfIntakeState extends State<Lights> {
+    public String getName() {
+      return "Start of Intake";
+    }
+
+    public void initialize() {
+      startOfIntakeTime = TimeCache.getInstance().get();
+      intakeTimer.restart();
+    }
+
+    @Override
+    public Optional<State<Lights>> run(Lights input) {
+      final double halfInterval = intakeBlinkInterval / 2.0;
+      SmartDashboard.putNumber("Fart", TimeCache.getInstance().get() - startOfIntakeTime);
+      if (TimeCache.getInstance().get() - startOfIntakeTime >= (halfInterval * 6)) {
+        if (hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get())) {
+          return Optional.of(readyState);
+        }
+        return Optional.of(stillInIntakeState);
+      }
+      blink(
+          Color.kGreen,
+          Color.kBlack,
+          halfInterval,
+          TimeCache.getInstance().get() - startOfIntakeTime);
+      return Optional.empty();
+    }
+  }
+
+  private final StartOfIntakeState startOfIntakeState = new StartOfIntakeState();
+
+  private class StillInIntakeState extends State<Lights> {
+    public StillInIntakeState() {
+      super(readyTransition);
+    }
+
+    public String getName() {
+      return "Still in Intake";
+    }
+
+    @Override
+    public Optional<State<Lights>> run(Lights input) {
+      if (!hasGamePieceBottomDebouncer.calculate(hasGamePieceBottom.get())) {
+        return Optional.of(defaultState);
+      }
+      // Blink to notify a note is still in the intake
+      blink(
+          Color.kOrangeRed,
+          Color.kBlack,
+          intakeBlinkInterval,
+          TimeCache.getInstance().get() - startOfIntakeTime);
+      return Optional.empty();
+    }
+  }
+
+  private final StillInIntakeState stillInIntakeState = new StillInIntakeState();
+
+  private class ReadyState extends State<Lights> {
+    public ReadyState() {
+      super();
+    }
+
+    public String getName() {
+      return "Ready";
+    }
+
+    @Override
+    public Optional<State<Lights>> run(Lights input) {
+      solid(Color.kOrangeRed);
+      if (!hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get())
+          && !hasGamePieceBottomDebouncer.calculate(hasGamePieceBottom.get())) {
+        return Optional.of(shotState);
+      }
+      return Optional.empty();
+    }
+  }
+
+  private final ReadyState readyState = new ReadyState();
+
+  private class ShotState extends State<Lights> {
+    private double startTime;
+
+    public String getName() {
+      return "Ready";
+    }
+
+    public void initialize() {
+      startTime = TimeCache.getInstance().get();
+    }
+
+    @Override
+    public Optional<State<Lights>> run(Lights input) {
+      blink(
+          Color.kGreen,
+          Color.kBlack,
+          intakeBlinkInterval,
+          TimeCache.getInstance().get() - startTime);
+      if (TimeCache.getInstance().get() - startTime >= intakeBlinkInterval * 2.0) {
+        return Optional.of(defaultState);
+      }
+      return Optional.empty();
+    }
+  }
+
+  private final ShotState shotState = new ShotState();
 
   private void elevator() {
     final double percent = elevatorPercentageRaised.get();

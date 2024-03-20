@@ -31,6 +31,12 @@ public class StateMachine<Inputs> {
    * @param inputs The inputs for the states to read from
    */
   public void run(Inputs inputs) {
+    final Optional<State<Inputs>> transitionState = state.checkTransitions(inputs);
+    if (transitionState.isPresent()) {
+      this.setState(transitionState.get());
+      return;
+    }
+
     final Optional<State<Inputs>> nextState = state.run(inputs);
     nextState.ifPresent(this::setState);
   }
@@ -90,15 +96,49 @@ public class StateMachine<Inputs> {
    * @return If the state machine is running that specific state
    */
   public boolean isInState(State<Inputs> state) {
-    return getState().equals(state);
+    return getState().getName().equals(state.getName());
   }
 
-  public static interface State<Inputs> {
+  public void runTransitions(StateTransition<Inputs>[] transitions, Inputs inputs) {
+    for (var transition : transitions) {
+      final var newState = transition.getTransition(inputs);
+      if (newState.isPresent()) {
+        setState(newState.get());
+      }
+    }
+  }
+
+  public static class State<Inputs> {
+    protected StateTransition<Inputs>[] transitions;
+
+    @SuppressWarnings("unchecked")
+    public State() {
+      this.transitions = new StateTransition[0];
+    }
+
+    @SafeVarargs
+    public State(StateTransition<Inputs>... transitions) {
+      this.transitions = transitions;
+    }
+
     /** Gets the name of the state */
-    public String getName();
+    public String getName() {
+      return "Unknown State";
+    }
 
     /** Initializes the state when the state machine selects it */
-    public default void initialize() {}
+    public void initialize() {}
+
+    public final Optional<State<Inputs>> checkTransitions(Inputs inputs) {
+      for (StateTransition<Inputs> transition : transitions) {
+        final var result = transition.getTransition(inputs);
+        if (result.isPresent()) {
+          return result;
+        }
+      }
+
+      return Optional.empty();
+    }
 
     /**
      * Runs this state and gets the next action of the state machine from it
@@ -107,11 +147,17 @@ public class StateMachine<Inputs> {
      * @return The next state of the state machine. If empty, will keep using this state without
      *     changing it.
      */
-    public default Optional<State<Inputs>> run(Inputs inputs) {
+    public Optional<State<Inputs>> run(Inputs inputs) {
       return Optional.empty();
     }
 
     /** Finishes the state when the state machine deselects it */
-    public default void finish() {}
+    public void finish() {}
+  }
+
+  public static interface StateTransition<Inputs> {
+    public default Optional<State<Inputs>> getTransition(Inputs inputs) {
+      return Optional.empty();
+    }
   }
 }

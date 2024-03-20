@@ -107,7 +107,7 @@ public class RobotSimulator {
   }
 
   /** State for when there is no note in the system */
-  private final class EmptyState implements State<RobotSimulator> {
+  private final class EmptyState extends State<RobotSimulator> {
     public Optional<State<RobotSimulator>> run(RobotSimulator sim) {
       // If we are intaking
       if (sim.intakeVolts > 0) {
@@ -146,7 +146,7 @@ public class RobotSimulator {
   private final EmptyState emptyState = new EmptyState();
 
   /** State for when there is a note in the intake */
-  private final class IntakeState implements State<RobotSimulator> {
+  private final class IntakeState extends State<RobotSimulator> {
     private double position = 0.0;
 
     public Optional<State<RobotSimulator>> run(RobotSimulator sim) {
@@ -186,7 +186,7 @@ public class RobotSimulator {
   private final IntakeState intakeState = new IntakeState();
 
   /** State for when there is a note in the shooter */
-  private final class ShooterState implements State<RobotSimulator> {
+  private final class ShooterState extends State<RobotSimulator> {
     private double position = 0.0;
 
     public Optional<State<RobotSimulator>> run(RobotSimulator sim) {
