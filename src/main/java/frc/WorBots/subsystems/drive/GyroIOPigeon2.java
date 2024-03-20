@@ -10,6 +10,7 @@ package frc.WorBots.subsystems.drive;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
 
@@ -36,7 +37,8 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelSignal.getValue());
   }
 
-  public void resetHeading() {
+  public void resetHeading(Rotation2d heading) {
     pigeon.reset();
+    pigeon.setYaw(heading.getDegrees());
   }
 }

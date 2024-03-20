@@ -519,7 +519,7 @@ public class Lights extends SubsystemBase {
    * @param color The desired color
    */
   private void setLED(int index, Color color) {
-    if (index > LIGHT_COUNT) {
+    if (index >= LIGHT_COUNT) {
       return;
     }
 
@@ -527,7 +527,7 @@ public class Lights extends SubsystemBase {
   }
 
   private void setHSV(int index, int h, int s, int v) {
-    if (index > LIGHT_COUNT) {
+    if (index >= LIGHT_COUNT) {
       return;
     }
 

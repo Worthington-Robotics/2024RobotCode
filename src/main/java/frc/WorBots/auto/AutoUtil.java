@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.WorBots.FieldConstants;
@@ -63,8 +64,14 @@ public class AutoUtil {
   /** Far wing pose for shooting from */
   public final Pose2d farShootingPose;
 
+  /** Far wing pose for shooting from on the wall side */
+  public final Pose2d wallSideFarShootingPose;
+
   /** Starting pose against the source wall */
   public final Pose2d sourceStartingPose;
+
+  /** Wing midpoint for the wall side */
+  public final Pose2d wallSideCenterpoint;
 
   // Subsystems
   private final Drive drive;
@@ -139,12 +146,18 @@ public class AutoUtil {
                     / 2,
                 new Rotation2d()));
     farShootingPose = pose(FieldConstants.Wing.endX * 0.65, FieldConstants.Speaker.speakerY * 1.2);
+    wallSideFarShootingPose =
+        pose(FieldConstants.StartingZone.endX * 1.15, FieldConstants.fieldWidth * 0.34);
     sourceStartingPose =
         AllianceFlipUtil.apply(
             new Pose2d(
                 1.1,
                 0.95,
                 new Rotation2d(Units.degreesToRadians(90.0) - FieldConstants.Source.wallAngle)));
+    wallSideCenterpoint =
+        pose(
+            (FieldConstants.StartingZone.endX + FieldConstants.Wing.endX) / 2.0,
+            FieldConstants.midLineY * 0.4);
   }
 
   /**
@@ -164,7 +177,16 @@ public class AutoUtil {
    * @return The command to run
    */
   public CommandWithPose reset(Pose2d pose) {
-    return new CommandWithPose(Commands.runOnce(() -> drive.setPose(pose)), pose);
+    return new CommandWithPose(
+        Commands.runOnce(
+            () -> {
+              drive.setPose(pose);
+              // Reset the gyro so teleop works
+              if (RobotBase.isReal()) {
+                drive.resetHeading(pose.getRotation());
+              }
+            }),
+        pose);
   }
 
   /** Drives along the specified trajectory. */
@@ -389,6 +411,11 @@ public class AutoUtil {
     if (centerPosition <= 2) {
       if (AllianceFlipUtil.apply(startingPosition.getX()) < 4) {
         waypoints.add(Waypoint.fromHolonomicPose(betweenZeroAndOne));
+      }
+    } else {
+      if (AllianceFlipUtil.apply(startingPosition.getX()) < 4) {
+        waypoints.add(
+            Waypoint.fromHolonomicPose(getWingLinePose(startingPosition, new Rotation2d())));
       }
     }
     waypoints.add(Waypoint.fromHolonomicPose(centerGamePieceLocations[centerPosition]));
@@ -665,6 +692,16 @@ public class AutoUtil {
       x *= -1;
     }
     return new Transform2d(x, y, new Rotation2d());
+  }
+
+  /**
+   * Returns a Transform2d with an unflipped rotation
+   *
+   * @param rotation The unflipped absolute rotation
+   * @return The transform
+   */
+  public Transform2d transformRotate(Rotation2d rotation) {
+    return new Transform2d(0.0, 0.0, rotation);
   }
 
   /** A command with a pose that it will end at */

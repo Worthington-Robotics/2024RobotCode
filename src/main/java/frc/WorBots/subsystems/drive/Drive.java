@@ -278,12 +278,11 @@ public class Drive extends SubsystemBase {
   }
 
   /** Resets the robot heading */
-  public void resetHeading() {
-    gyroIO.resetHeading();
+  public void resetHeading(Rotation2d heading) {
+    gyroIO.resetHeading(heading);
     final Pose2d currentPose = poseEstimator.getLatestPose();
     poseEstimator.resetPose(
-        new Pose2d(
-            currentPose.getX(), currentPose.getY(), AllianceFlipUtil.apply(new Rotation2d())));
+        new Pose2d(currentPose.getX(), currentPose.getY(), AllianceFlipUtil.apply(heading)));
   }
 
   /**

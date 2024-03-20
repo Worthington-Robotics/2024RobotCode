@@ -111,13 +111,8 @@ public class RobotContainer {
     selector.addRoutine("Close Four", List.of(), autos.fourPieceClose());
     selector.addRoutine("Four From Middle", List.of(), autos.fourFromMiddle());
 
-    selector.addRoutine(
-        "Long Four",
-        List.of(
-            new AutoQuestion(
-                "Direction?",
-                List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
-        autos.fourPieceLong());
+    selector.addRoutine("Long Three Wall Side", List.of(), autos.threePieceLongWallSide());
+    selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
 
     selector.addRoutine("Long Five", List.of(), autos.fivePieceLong());
 
@@ -145,7 +140,8 @@ public class RobotContainer {
     if (Constants.ENABLE_DEBUG_ROUTINES) {
       final DebugRoutines routines = new DebugRoutines(drive, superstructure, intake, shooter);
       selector.addRoutine("Characterize Odometry", List.of(), routines.characterizeOdometry());
-      selector.addRoutine("Pit Test", List.of(), routines.pitTest());
+      selector.addRoutine("Pit Test", List.of(), routines.pitTest(false));
+      selector.addRoutine("Full Pit Test", List.of(), routines.pitTest(true));
     }
 
     vision.setDataInterfaces(drive::addVisionData);
@@ -200,7 +196,7 @@ public class RobotContainer {
         .toggleOnTrue(
             new SuperstructureManual(
                 superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
-    driver.y().onTrue(Commands.runOnce(drive::resetHeading));
+    driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
     final Pose2d ampPose =
         new Pose2d(

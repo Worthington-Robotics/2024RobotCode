@@ -33,7 +33,7 @@ public class Handoff extends Command {
   private static final double HANDOFF_INTAKE_MULTIPLIER = 1.2;
 
   /** Voltage for the feeder wheels */
-  private static final double FEEDER_VOLTAGE = 0.5;
+  private static final double FEEDER_VOLTAGE = 0.47;
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;

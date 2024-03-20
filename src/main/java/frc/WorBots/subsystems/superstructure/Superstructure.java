@@ -99,11 +99,10 @@ public class Superstructure extends SubsystemBase {
   /** The error threshold for the pivot, in radians */
   private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.75);
 
-  /** The pivot angle past which anti-oscillation will be applied */
-  private static final double PIVOT_OSCILLATION_START = 1.78;
+  /** Multiplier for the pivot PID output when we are near the amp pose */
+  private static final double PIVOT_OSCILLATION_MULTIPLIER = 0.05;
 
-  /** Multiplier for the pivot PID output when we are in the oscillation range */
-  private static final double PIVOT_OSCILLATION_MULTIPLIER = 1.0;
+  private static final double PIVOT_OSCILLATION_RANGE = 0.150;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -121,7 +120,7 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(9.7, 0.11, 0);
+      pivotController.setGains(9.6, 0.12, 0);
       pivotController.setConstraints(11, 18);
       pivotFeedForward = new ArmFeedforward(0.045, 0.26, 0.01);
 
@@ -229,8 +228,8 @@ public class Superstructure extends SubsystemBase {
     double pivotVoltage =
         pivotController.pid.calculate(getPivotPoseRads(), setpoint) + calculatePivotFeedforward();
 
-    // Anti-oscillation by reducing PID output
-    if (getPivotPoseRads() >= PIVOT_OSCILLATION_START) {
+    // Anti-oscillation for the amp pose by reducing output
+    if (atAmpPose()) {
       pivotVoltage *= PIVOT_OSCILLATION_MULTIPLIER;
     }
 
@@ -483,6 +482,9 @@ public class Superstructure extends SubsystemBase {
         setManualElevatorVolts(0.0);
         setManualPivotVolts(0.0);
       }
+
+      // Reset controller integral and derivative term
+      pivotController.pid.reset(getPivotPoseRads());
     }
     this.state = state;
   }
@@ -577,5 +579,10 @@ public class Superstructure extends SubsystemBase {
     final boolean isBelow =
         inputs.elevatorPositionMeters < 0.01 && getPivotPoseRads() <= Preset.STOW.getPivot();
     return isBelow || this.isNearPose(Preset.STOW, 0.015, Units.degreesToRadians(1.9));
+  }
+
+  private boolean atAmpPose() {
+    return isInPose(Preset.AMP)
+        && isNearPose(Preset.AMP, ELEVATOR_THRESHOLD, PIVOT_OSCILLATION_RANGE);
   }
 }

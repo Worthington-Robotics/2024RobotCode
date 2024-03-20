@@ -83,13 +83,14 @@ public class DebugRoutines {
   private static double[] odometryStartingPositions = new double[4];
 
   /** Runs a tests of all systems in the pit */
-  public Command pitTest() {
+  public Command pitTest(boolean isFull) {
     return UtilCommands.namedSequence(
         "Pit Test Progress",
         Commands.runOnce(
             () -> {
               Lights.getInstance().setMode(LightsMode.PitTest);
               pitTestStep = 0;
+              isFullPitTest = isFull;
             }),
         waitForNextStep("Drive; Multiple directions"),
         testDrive(),
@@ -105,9 +106,15 @@ public class DebugRoutines {
     return UtilCommands.namedSequence(
         "Pit Test Drive Progress",
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(2.0, 0.0, 0.0)), drive)
-            .withTimeout(4.0),
+            .withTimeout(1.0),
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(-2.0, 0.0, 0.0)), drive)
+            .withTimeout(1.0),
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, 2.0, 0.0)), drive)
+            .withTimeout(1.0),
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -2.0, 0.0)), drive)
-            .withTimeout(4.0),
+            .withTimeout(1.0),
+        Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, 0.0, 2.0)), drive)
+            .withTimeout(1.5),
         Commands.runOnce(drive::stop));
   }
 
@@ -144,7 +151,7 @@ public class DebugRoutines {
         waitForNextStep("Shoot"),
         shooter
             .setSpeedContinuous(900)
-            .alongWith(Commands.waitSeconds(3.0).andThen(shooter.feed()))
+            .alongWith(Commands.waitSeconds(1.4).andThen(shooter.feed()))
             .until(() -> !shooter.hasGamePiece()),
         shooter.stopFlywheels(),
         waitForNextStep("Back to stow"),
@@ -159,7 +166,7 @@ public class DebugRoutines {
               Lights.getInstance().setPitTestStep(pitTestStep);
               SmartDashboard.putString("DB/String 0", description);
             }),
-        UtilCommands.waitForDriverstationButton(),
+        UtilCommands.waitForDriverstationButton().onlyIf(() -> !isFullPitTest),
         Commands.runOnce(
             () -> {
               Lights.getInstance().setPitTestFlashing(false);
@@ -169,4 +176,5 @@ public class DebugRoutines {
   }
 
   private static int pitTestStep = 0;
+  private static boolean isFullPitTest = false;
 }

@@ -28,8 +28,8 @@ public class GyroIOSim implements GyroIO {
     yawAxis.velocity = vYaw;
   }
 
-  public void resetHeading() {
-    yawAxis.angle = new Rotation2d();
+  public void resetHeading(Rotation2d heading) {
+    yawAxis.angle = heading;
   }
 
   /**

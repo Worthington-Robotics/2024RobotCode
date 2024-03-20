@@ -91,7 +91,7 @@ public class DriveTrajectory extends Command {
       customHolonomicDriveController.setFeedforwardCoefficients(1.0, 1.0);
     } else {
       maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
-      maxAccelerationMetersPerSec2 = Units.inchesToMeters(175.0);
+      maxAccelerationMetersPerSec2 = Units.inchesToMeters(600.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
 
       xController = new PIDController(3.3, 0, 0.0, Constants.ROBOT_PERIOD);
@@ -170,7 +170,7 @@ public class DriveTrajectory extends Command {
   @Override
   public void execute() {
     // Exit if trajectory generation failed
-    if (customGenerator.getDriveTrajectory().getStates().size() <= 1) {
+    if (!isTrajectoryValid()) {
       return;
     }
 
@@ -203,7 +203,16 @@ public class DriveTrajectory extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (!isTrajectoryValid()) {
+      return true;
+    }
+
     return timer.hasElapsed(customGenerator.getDriveTrajectory().getTotalTimeSeconds())
         && customHolonomicDriveController.atReference();
+  }
+
+  /** Checks if the held trajectory is valid */
+  private boolean isTrajectoryValid() {
+    return customGenerator.getDriveTrajectory().getStates().size() > 1;
   }
 }

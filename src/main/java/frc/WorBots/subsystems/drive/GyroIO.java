@@ -7,6 +7,8 @@
 
 package frc.WorBots.subsystems.drive;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public interface GyroIO {
   /** The inputs of the gyro */
   public static class GyroIOInputs {
@@ -28,6 +30,6 @@ public interface GyroIO {
    */
   public default void setExpectedYawVelocity(double vYaw) {}
 
-  /** Resets the gyroscope to a heading (yaw) of zero */
-  public default void resetHeading() {}
+  /** Resets the gyroscope to a heading (yaw) */
+  public default void resetHeading(Rotation2d heading) {}
 }
