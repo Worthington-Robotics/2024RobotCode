@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae8c98159038b4ef228f3a8c4b1290a1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae92492671656058c0f5c157cef3ae72f"><td class="memItemLeft" align="right" valign="top">Transform2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae92492671656058c0f5c157cef3ae72f">transform</a> (double x, double y)</td></tr>
 <tr class="separator:ae92492671656058c0f5c157cef3ae72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3367bcb84f011c12e3aeb0920a447ebd"><td class="memItemLeft" align="right" valign="top">Transform2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a3367bcb84f011c12e3aeb0920a447ebd">transformRotate</a> (Rotation2d rotation)</td></tr>
+<tr class="separator:a3367bcb84f011c12e3aeb0920a447ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -158,8 +160,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad8e18edc65b9af8a04fd5b45c54003d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae270d33ed25f89143bc30cbc87aaf3fe"><td class="memItemLeft" align="right" valign="top">final Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae270d33ed25f89143bc30cbc87aaf3fe">farShootingPose</a></td></tr>
 <tr class="separator:ae270d33ed25f89143bc30cbc87aaf3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed6e4e0180cfc96e9f1a046b5d16068"><td class="memItemLeft" align="right" valign="top">final Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a9ed6e4e0180cfc96e9f1a046b5d16068">wallSideFarShootingPose</a></td></tr>
+<tr class="separator:a9ed6e4e0180cfc96e9f1a046b5d16068"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f828465be033d5ed3065a5ad3e9fdb6"><td class="memItemLeft" align="right" valign="top">final Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a8f828465be033d5ed3065a5ad3e9fdb6">sourceStartingPose</a></td></tr>
 <tr class="separator:a8f828465be033d5ed3065a5ad3e9fdb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af365db764c19119056d85f99b24c0563"><td class="memItemLeft" align="right" valign="top">final Pose2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#af365db764c19119056d85f99b24c0563">wallSideCenterpoint</a></td></tr>
+<tr class="separator:af365db764c19119056d85f99b24c0563"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Utility methods, commands, poses, and values for autos to use </p>
@@ -1081,6 +1087,40 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3367bcb84f011c12e3aeb0920a447ebd" name="a3367bcb84f011c12e3aeb0920a447ebd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3367bcb84f011c12e3aeb0920a447ebd">&#9670;&#160;</a></span>transformRotate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transform2d frc.WorBots.auto.AutoUtil.transformRotate </td>
+          <td>(</td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>rotation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Returns a Transform2d with an unflipped rotation</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rotation</td><td>The unflipped absolute rotation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The transform </dd></dl>
+
+</div>
+</div>
 <a id="a57fec5562493ad7d0c4479fcda267172" name="a57fec5562493ad7d0c4479fcda267172"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57fec5562493ad7d0c4479fcda267172">&#9670;&#160;</a></span>transformX()</h2>
 
@@ -1311,6 +1351,36 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >Starting locations for two-piece autos behind wing notes, starting on amp side </p>
+
+</div>
+</div>
+<a id="af365db764c19119056d85f99b24c0563" name="af365db764c19119056d85f99b24c0563"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af365db764c19119056d85f99b24c0563">&#9670;&#160;</a></span>wallSideCenterpoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">final Pose2d frc.WorBots.auto.AutoUtil.wallSideCenterpoint</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Wing midpoint for the wall side </p>
+
+</div>
+</div>
+<a id="a9ed6e4e0180cfc96e9f1a046b5d16068" name="a9ed6e4e0180cfc96e9f1a046b5d16068"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ed6e4e0180cfc96e9f1a046b5d16068">&#9670;&#160;</a></span>wallSideFarShootingPose</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">final Pose2d frc.WorBots.auto.AutoUtil.wallSideFarShootingPose</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Far wing pose for shooting from on the wall side </p>
 
 </div>
 </div>

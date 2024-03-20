@@ -98,14 +98,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad1470e28ab0760f756c3b3e6c8dc217d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70213b49f12f19860704ca8a2a12f651"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#a70213b49f12f19860704ca8a2a12f651">setExpectedYawVelocity</a> (double vYaw)</td></tr>
 <tr class="separator:a70213b49f12f19860704ca8a2a12f651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79b0c220d3380cb9dfcb15daa87a6f38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#a79b0c220d3380cb9dfcb15daa87a6f38">resetHeading</a> ()</td></tr>
-<tr class="separator:a79b0c220d3380cb9dfcb15daa87a6f38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc41bb58f8bfc436a747ee4088386c6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#afc41bb58f8bfc436a747ee4088386c6c">resetHeading</a> (Rotation2d heading)</td></tr>
+<tr class="separator:afc41bb58f8bfc436a747ee4088386c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac8ad87cdbb74124ebc7bf9b86cdcfd1"><td class="memItemLeft" align="right" valign="top">default void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#aac8ad87cdbb74124ebc7bf9b86cdcfd1">updateInputs</a> (GyroIOInputs inputs)</td></tr>
 <tr class="separator:aac8ad87cdbb74124ebc7bf9b86cdcfd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27399aa468e492dff323a18bfca7fc01"><td class="memItemLeft" align="right" valign="top">default void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#a27399aa468e492dff323a18bfca7fc01">setExpectedYawVelocity</a> (double vYaw)</td></tr>
 <tr class="separator:a27399aa468e492dff323a18bfca7fc01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeae1a1dae0e69610cb1504b3c0726030"><td class="memItemLeft" align="right" valign="top">default void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#aeae1a1dae0e69610cb1504b3c0726030">resetHeading</a> ()</td></tr>
-<tr class="separator:aeae1a1dae0e69610cb1504b3c0726030"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3230f1b3225b474ff5d2eda7c5641c24"><td class="memItemLeft" align="right" valign="top">default void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#a3230f1b3225b474ff5d2eda7c5641c24">resetHeading</a> (Rotation2d heading)</td></tr>
+<tr class="separator:a3230f1b3225b474ff5d2eda7c5641c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad4cda4b54c8a20709513490c87138e22" name="ad4cda4b54c8a20709513490c87138e22"></a>
@@ -134,8 +134,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a79b0c220d3380cb9dfcb15daa87a6f38" name="a79b0c220d3380cb9dfcb15daa87a6f38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79b0c220d3380cb9dfcb15daa87a6f38">&#9670;&#160;</a></span>resetHeading()</h2>
+<a id="afc41bb58f8bfc436a747ee4088386c6c" name="afc41bb58f8bfc436a747ee4088386c6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc41bb58f8bfc436a747ee4088386c6c">&#9670;&#160;</a></span>resetHeading()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -146,7 +146,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void frc.WorBots.subsystems.drive.GyroIOSim.resetHeading </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">Rotation2d&#160;</td>
+          <td class="paramname"><em>heading</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -156,9 +157,9 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Resets the gyroscope to a heading (yaw) of zero </p>
+<p >Resets the gyroscope to a heading (yaw) </p>
 
-<p>Implements <a class="el" href="interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#aeae1a1dae0e69610cb1504b3c0726030">frc.WorBots.subsystems.drive.GyroIO</a>.</p>
+<p>Implements <a class="el" href="interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#a3230f1b3225b474ff5d2eda7c5641c24">frc.WorBots.subsystems.drive.GyroIO</a>.</p>
 
 </div>
 </div>
