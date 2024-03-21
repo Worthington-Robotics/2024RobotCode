@@ -183,7 +183,9 @@ public class AutoUtil {
               drive.setPose(pose);
               // Reset the gyro so teleop works
               if (RobotBase.isReal()) {
-                drive.resetHeading(pose.getRotation());
+                // Flip it again because the gyro expects 0 degrees when facing away from the driver
+                // wall
+                drive.resetHeading(AllianceFlipUtil.apply(pose.getRotation()));
               }
             }),
         pose);
