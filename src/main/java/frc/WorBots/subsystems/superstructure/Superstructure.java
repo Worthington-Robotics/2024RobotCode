@@ -102,7 +102,7 @@ public class Superstructure extends SubsystemBase {
   /** Multiplier for the pivot PID output when we are near the amp pose */
   private static final double PIVOT_OSCILLATION_MULTIPLIER = 0.05;
 
-  private static final double PIVOT_OSCILLATION_RANGE = 0.150;
+  private static final double PIVOT_OSCILLATION_RANGE = 0.100;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {
@@ -423,6 +423,10 @@ public class Superstructure extends SubsystemBase {
       setpoint = shootingAngleRad.get();
     } else if (isInPoseMode()) {
       setpoint = this.setpoint.getPivot();
+      // Amp will never reach setpoint due to anti-oscillation
+      if (this.setpoint.equals(Preset.AMP)) {
+        setpoint -= PIVOT_OSCILLATION_RANGE;
+      }
     }
     return GeneralMath.checkError(getPivotPoseRads(), setpoint, PIVOT_THRESHOLD);
   }

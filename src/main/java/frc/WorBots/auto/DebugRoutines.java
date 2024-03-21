@@ -114,7 +114,7 @@ public class DebugRoutines {
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, -2.0, 0.0)), drive)
             .withTimeout(1.0),
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, 0.0, 2.0)), drive)
-            .withTimeout(1.5),
+            .withTimeout(1.0),
         Commands.runOnce(drive::stop));
   }
 
@@ -151,8 +151,9 @@ public class DebugRoutines {
         waitForNextStep("Shoot"),
         shooter
             .setSpeedContinuous(900)
-            .alongWith(Commands.waitSeconds(1.4).andThen(shooter.feed()))
-            .until(() -> !shooter.hasGamePiece()),
+            .alongWith(
+                Commands.waitSeconds(1.4)
+                    .andThen(shooter.feed().until(() -> !shooter.hasGamePiece()))),
         shooter.stopFlywheels(),
         waitForNextStep("Back to stow"),
         superstructure.goToPose(Preset.STOW));
@@ -167,6 +168,7 @@ public class DebugRoutines {
               SmartDashboard.putString("DB/String 0", description);
             }),
         UtilCommands.waitForDriverstationButton().onlyIf(() -> !isFullPitTest),
+        Commands.waitSeconds(0.3).onlyIf(() -> isFullPitTest),
         Commands.runOnce(
             () -> {
               Lights.getInstance().setPitTestFlashing(false);

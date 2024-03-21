@@ -254,7 +254,7 @@ public class RobotContainer {
 
     // Contextual shooting
     HashMap<String, Command> shootMap = new HashMap<>();
-    shootMap.put("amp", shooter.setSpeedContinuous(2250));
+    shootMap.put("amp", shooter.setSpeedContinuous(1750));
     shootMap.put("trap", shooter.setSpeedContinuous(2000));
     shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(3200));
     shootMap.put("raw", shooter.setSpeedContinuous(3000));
