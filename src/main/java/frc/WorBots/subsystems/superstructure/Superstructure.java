@@ -102,7 +102,7 @@ public class Superstructure extends SubsystemBase {
   /** Multiplier for the pivot PID output when we are near the amp pose */
   private static final double PIVOT_OSCILLATION_MULTIPLIER = 0.05;
 
-  private static final double PIVOT_OSCILLATION_RANGE = 0.100;
+  private static final double PIVOT_OSCILLATION_RANGE = 0.05;
 
   /** The states that the superstructure can be in. */
   public enum SuperstructureState {

@@ -296,7 +296,7 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[0], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[0], 1.8))
                 .andThen(util.prepareShooting(path1.pose()))),
         // Slight time delay to ensure full stop
         Commands.waitSeconds(0.1),
@@ -304,7 +304,7 @@ public class Autos {
         Commands.deadline(
             path2.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[1], 1.0))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[1], 1.8))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
         // Parallel so that we don't stop intaking when we get to the piece
@@ -353,7 +353,7 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.2))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.8))
                 .andThen(util.prepareShooting(path1.pose()))),
         // Slight time delay to ensure full stop
         Commands.waitSeconds(0.25),
