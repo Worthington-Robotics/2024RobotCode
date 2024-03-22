@@ -19,6 +19,7 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     AMP(
         new SuperstructurePose(
             VecBuilder.fill(0.06 + Units.inchesToMeters(1), 1.86 + Units.degreesToRadians(2)))),
+    AMP_OLD(new SuperstructurePose(VecBuilder.fill(0.05924, 1.8611))),
     CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
     HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, 0.277))),
     STOW(new SuperstructurePose(VecBuilder.fill(0.0, 0.1))),

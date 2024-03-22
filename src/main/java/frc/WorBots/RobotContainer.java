@@ -215,7 +215,8 @@ public class RobotContainer {
             new WingPass(
                 drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
         .whileTrue(shootingLightsCommand);
-    operator.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
+    operator.x().onTrue(superstructure.goToPose(Preset.AMP_OLD)).whileTrue(shootingLightsCommand);
+    operator.povLeft().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
     operator
         .povUp()
         .onTrue(superstructure.goToPose(Preset.SUBWOOFER_SHOOT))
