@@ -376,9 +376,6 @@ public class Autos {
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot1.pose()),
-            // Waypoint.fromHolonomicPose(
-            // AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne,
-            // Units.inchesToMeters(-8))),
             Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
@@ -414,7 +411,6 @@ public class Autos {
             Waypoint.fromHolonomicPose(autoShoot4.pose()),
             Waypoint.fromHolonomicPose(
                 AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, -Units.inchesToMeters(35))),
-            // Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     util.wingGamePieceLocations[1].plus(
