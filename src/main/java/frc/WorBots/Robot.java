@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
     this.addPeriodic(this::periodicFunction, Constants.ROBOT_PERIOD);
 
-    // camera = CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
     TimeCache.getInstance().update();
     AllianceCache.getInstance().update();
   }

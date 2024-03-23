@@ -188,7 +188,8 @@ public class Autos {
             util.path(
                     Waypoint.fromHolonomicPose(intake3.pose()),
                     Waypoint.fromHolonomicPose(util.wingGamePieceLocations[1]))
-                .command(),
+                .command()
+                .withTimeout(4.5),
             util.fullHandoff()),
         autoShoot4.command());
   }
@@ -265,7 +266,7 @@ public class Autos {
             Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(util.farShootingPose)));
-    final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, false, 2.5);
+    final var autoShoot2 = util.moveAndShoot(path1.pose(), true, false, false, 2.5);
 
     // Intake center piece, then drive up to speaker and shoot
     final var path2 =
@@ -279,7 +280,7 @@ public class Autos {
                 util.getAutoShootPose(
                     AllianceFlipUtil.addToFlipped(
                         util.betweenZeroAndOne, -Units.inchesToMeters(35)))));
-    final var autoShoot3 = util.moveAndShoot(path2.pose(), false, false, false, 2.5);
+    final var autoShoot3 = util.moveAndShoot(path2.pose(), true, false, false, 2.5);
 
     // Move back and intake wing piece, then shoot it
     final var path3 =
@@ -288,7 +289,7 @@ public class Autos {
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(util.wingGamePieceLocations[0])
                     .plus(util.transform(Units.inchesToMeters(18), Units.inchesToMeters(13)))));
-    final var autoShoot4 = util.moveAndShoot(path3.pose(), false, false, true, 2.0);
+    final var autoShoot4 = util.moveAndShoot(path3.pose(), true, false, true, 2.0);
 
     return createSequence(
         util.reset(startingPose).command(),
@@ -345,7 +346,7 @@ public class Autos {
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     inFrontOfStagePiece.plus(util.transformY(Units.inchesToMeters(8))))));
-    final var autoShoot3 = util.moveAndShoot(path2.pose(), false, false, true, 2.5);
+    final var autoShoot3 = util.moveAndShoot(path2.pose(), true, false, true, 2.5);
 
     return createSequence(
         util.reset(startingPose).command(),
@@ -359,7 +360,7 @@ public class Autos {
         Commands.waitSeconds(0.25),
         autoShoot2.command(),
         Commands.deadline(
-            path2.command(),
+            path2.command().withTimeout(2.9),
             util.prepareHandoff()
                 .andThen(util.intakeWhenNear(util.wingGamePieceLocations[2], 1.4))
                 .andThen(util.prepareShooting(path2.pose()))),
