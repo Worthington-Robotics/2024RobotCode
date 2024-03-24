@@ -16,7 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.util.StateMachine.State;
+import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.math.GeomUtil;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -116,13 +119,17 @@ public class RobotSimulator {
           final Pose2d pose = sim.drivePose.get();
           final double threshold = Units.inchesToMeters(20);
 
-          for (Translation2d piecePose : FieldConstants.GamePieces.wingPieces) {
-            if (GeomUtil.isTranslation2dNear(pose.getTranslation(), piecePose, threshold)) {
-              intakeState.setPosition(0.0);
-              return Optional.of(intakeState);
-            }
+          List<Translation2d> piecePoses = new ArrayList<>();
+          for (Translation2d piece : FieldConstants.GamePieces.wingPieces) {
+            piecePoses.add(piece);
+            piecePoses.add(AllianceFlipUtil.apply(piece));
           }
-          for (Translation2d piecePose : FieldConstants.GamePieces.centerPieces) {
+          for (Translation2d piece : FieldConstants.GamePieces.centerPieces) {
+            piecePoses.add(piece);
+            piecePoses.add(AllianceFlipUtil.apply(piece));
+          }
+
+          for (Translation2d piecePose : piecePoses) {
             if (GeomUtil.isTranslation2dNear(pose.getTranslation(), piecePose, threshold)) {
               intakeState.setPosition(0.0);
               return Optional.of(intakeState);
