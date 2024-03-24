@@ -54,7 +54,7 @@ public class AmpAlign extends Command {
     drivePID.setGoal(
         AllianceFlipUtil.apply(
             (FieldConstants.Amp.openingStartX + FieldConstants.Amp.openingEndX) / 2.0));
-    turnPID.setGoal(0);
+    turnPID.setGoal(Units.degreesToRadians(180));
   }
 
   @Override
