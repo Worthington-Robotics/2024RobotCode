@@ -101,9 +101,9 @@ public class ShooterMath {
       new InterpolatingTable(
           new double[][] {
             {1.096 - GOAL_ADJUSTMENT, 1.00 * 0.463140},
-            {1.406 - GOAL_ADJUSTMENT, 1.00 * 0.483600},
+            {1.406 - GOAL_ADJUSTMENT, 1.00 * 0.473600},
             {2.197 - GOAL_ADJUSTMENT, 1.00 * 0.759996},
-            {2.379 - GOAL_ADJUSTMENT, 1.00 * 0.768180},
+            {2.379 - GOAL_ADJUSTMENT, 1.00 * 0.775180},
             {2.600 - GOAL_ADJUSTMENT, 1.00 * 0.841500},
             {2.900 - GOAL_ADJUSTMENT, 1.00 * 0.861300},
             {3.240 - GOAL_ADJUSTMENT, 1.00 * 0.900600},

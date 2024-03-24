@@ -109,6 +109,7 @@ public class RobotContainer {
         autos.threePieceClose());
 
     selector.addRoutine("Close Four", List.of(), autos.fourPieceClose());
+    selector.addRoutine("Close Four Alt", List.of(), autos.fourPieceCloseAlt());
     selector.addRoutine("Four From Middle", List.of(), autos.fourFromMiddle());
 
     selector.addRoutine("Long Three Wall Side", List.of(), autos.threePieceLongWallSide());

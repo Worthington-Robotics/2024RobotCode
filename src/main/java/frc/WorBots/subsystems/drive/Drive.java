@@ -51,6 +51,8 @@ public class Drive extends SubsystemBase {
   /** The last positions of the modules */
   private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
 
+  // public boolean forceStop = false;
+
   /** The last setpoint states for the modules */
   private SwerveModuleState[] lastSetpointStates =
       new SwerveModuleState[] {
@@ -132,6 +134,11 @@ public class Drive extends SubsystemBase {
 
       // Run the states on the modules
       for (int i = 0; i < 4; i++) {
+        // if (!forceStop) {
+        //   modules[i].runState(optimizedStates[i]);
+        // } else {
+        //   modules[i].stop();
+        // }
         modules[i].runState(optimizedStates[i]);
       }
     }

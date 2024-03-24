@@ -104,7 +104,7 @@ public class AutoUtil {
         new Pose2d[] {
           pose(FieldConstants.GamePieces.wingPieces[0]),
           pose(FieldConstants.GamePieces.wingPieces[1]),
-          pose(FieldConstants.GamePieces.wingPieces[2]).plus(transformX(-0.25)),
+          AllianceFlipUtil.addToFlipped(pose(FieldConstants.GamePieces.wingPieces[2]), -0.25)
         };
     twoPieceStartingLocations =
         new Pose2d[] {
@@ -157,7 +157,7 @@ public class AutoUtil {
     wallSideCenterpoint =
         pose(
             (FieldConstants.StartingZone.endX + FieldConstants.Wing.endX) / 2.0,
-            FieldConstants.midLineY * 0.4);
+            FieldConstants.midLineY * 0.35);
   }
 
   /**
@@ -704,6 +704,13 @@ public class AutoUtil {
    */
   public Transform2d transformRotate(Rotation2d rotation) {
     return new Transform2d(0.0, 0.0, rotation);
+  }
+
+  public Pose2d posePlus(Pose2d pose1, Transform2d transform) {
+    return new Pose2d(
+        pose1.getX() + transform.getX(),
+        pose1.getY() + transform.getY(),
+        pose1.getRotation().plus(transform.getRotation()));
   }
 
   /** A command with a pose that it will end at */
