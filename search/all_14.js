@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['waitfordriverstationbutton_0',['waitForDriverstationButton',['../classfrc_1_1WorBots_1_1commands_1_1UtilCommands.html#ab9dbc0f0055949b533027d5af0209e58',1,'frc::WorBots::commands::UtilCommands']]],
+  ['waitfordriverstationbutton_0',['waitForDriverstationButton',['../classfrc_1_1WorBots_1_1util_1_1UtilCommands.html#aaff846ca33f35c1208a58d0b2b84849a',1,'frc::WorBots::util::UtilCommands']]],
   ['wallsidecenterpoint_1',['wallSideCenterpoint',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#af365db764c19119056d85f99b24c0563',1,'frc::WorBots::auto::AutoUtil']]],
   ['wallsidefarshootingpose_2',['wallSideFarShootingPose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a9ed6e4e0180cfc96e9f1a046b5d16068',1,'frc::WorBots::auto::AutoUtil']]],
   ['waypoint_3',['Waypoint',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html',1,'frc.WorBots.util.trajectory.Waypoint'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a8b9c2869747fe02f4c40d06c5f741fe8',1,'frc.WorBots.util.trajectory.Waypoint.Waypoint()'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#a211a1aa180b5a4b0905061eb55cc16bf',1,'frc.WorBots.util.trajectory.Waypoint.Waypoint(Translation2d translation, Rotation2d driveRotation, Rotation2d holonomicRotation)'],['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html#ab3a6e32b001260a52e0aee2220a614a0',1,'frc.WorBots.util.trajectory.Waypoint.Waypoint(Translation2d translation)']]],
