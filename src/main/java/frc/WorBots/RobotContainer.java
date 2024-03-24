@@ -251,19 +251,8 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue(
             new AutoShoot(
-                    superstructure,
-                    drive,
-                    shooter,
-                    () -> -driver.getLeftY(),
-                    () -> -driver.getLeftX())
-                .alongWith(
-                    Commands.runOnce(
-                        () -> {
-                          Lights.getInstance().setMode(LightsMode.Shooting);
-                        })))
-        .onFalse(Commands.runOnce(() -> shooter.idle(), shooter))
-        .onFalse(Commands.runOnce(() -> Lights.getInstance().setMode(LightsMode.Delivery)))
-        .onFalse(Commands.waitSeconds(0.05).andThen(() -> superstructure.setPose(Preset.STOW)));
+                superstructure, drive, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
+        .onFalse(Commands.runOnce(() -> shooter.idle(), shooter));
     // Feeding and auto-stow after feed
     operator
         .leftBumper()

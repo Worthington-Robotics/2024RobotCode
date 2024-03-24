@@ -16,19 +16,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.Drive;
+import frc.WorBots.subsystems.lights.Lights;
+import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
-import frc.WorBots.util.cache.Cache;
+import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.ShooterMath;
 import frc.WorBots.util.math.ShooterMath.ShotData;
 import java.util.function.*;
 
-public class AutoShoot extends SequentialCommandGroup {
+/** Command for automatic speaker targeting during teleop */
+public class AutoShoot extends Command {
   // Constants
+  /** Speed reduction for the driver while in this mode. Higher values reduce their speed more. */
   private static final double DRIVE_SPEED_REDUCTION = 3.0;
-  private static final double THETA_TOLERANCE = 1.3;
+
+  /** Tolerance for the theta controller */
+  private static final double THETA_TOLERANCE = Units.degreesToRadians(1.3);
+
+  private final Drive drive;
+  private final Superstructure superstructure;
+  private final Shooter shooter;
+
+  private final Supplier<Double> leftXSupplier;
+  private final Supplier<Double> leftYSupplier;
+
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
           3.9,
@@ -37,7 +51,8 @@ public class AutoShoot extends SequentialCommandGroup {
           new TrapezoidProfile.Constraints(
               Units.degreesToRadians(150.0), Units.degreesToRadians(700.0)),
           Constants.ROBOT_PERIOD);
-  private DriveController driveController = new DriveController();
+
+  private final DriveController driveController = new DriveController();
 
   /**
    * This command automatically drives to a known safe shooting location and shoots a game piece.
@@ -51,53 +66,68 @@ public class AutoShoot extends SequentialCommandGroup {
       Shooter shooter,
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier) {
+    this.drive = drive;
+    this.superstructure = superstructure;
+    this.shooter = shooter;
     addRequirements(superstructure, drive, shooter);
+    this.leftXSupplier = leftXSupplier;
+    this.leftYSupplier = leftYSupplier;
+
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    thetaController.setTolerance(Units.degreesToRadians(THETA_TOLERANCE));
+    thetaController.setTolerance(THETA_TOLERANCE);
+  }
 
-    final Supplier<ShotData> supplier =
-        () -> ShooterMath.calculateShotData(drive.getPose(), drive.getFieldRelativeSpeeds());
-    final Cache<ShotData> shotSupplier = new Cache<ShotData>(supplier);
-    final Supplier<ChassisSpeeds> speedsSupplier =
-        () -> {
-          SmartDashboard.putNumber(
-              "Autoshoot Theta Controller Error", thetaController.getPositionError());
-          final Pose2d robotPose = drive.getPose();
-          final double x = leftXSupplier.get();
-          final double y = leftYSupplier.get();
+  @Override
+  public void initialize() {
+    thetaController.reset(drive.getPose().getRotation().getRadians());
+    superstructure.setModeVoid(SuperstructureState.SHOOTING);
+    Lights.getInstance().setMode(LightsMode.Shooting);
+  }
 
-          final ChassisSpeeds speeds =
-              driveController.getSpeeds(
-                  x,
-                  y,
-                  0.0,
-                  drive.getYaw(),
-                  drive.getMaxLinearSpeedMetersPerSec() / DRIVE_SPEED_REDUCTION);
+  @Override
+  public void execute() {
+    final Pose2d robotPose = drive.getPose();
 
-          // Calculate turn
-          final double setpointAngle = shotSupplier.get().robotAngle().getRadians();
-          final double thetaVelocity =
-              thetaController.calculate(robotPose.getRotation().getRadians(), setpointAngle);
+    // Run shot
+    final ShotData shot = ShooterMath.calculateShotData(robotPose, drive.getFieldRelativeSpeeds());
+    shooter.setSpeedVoid(shot.rpm());
+    superstructure.setShootingAngleRad(shot.pivotAngle());
 
-          speeds.omegaRadiansPerSecond = thetaVelocity;
+    // Run driving
+    final double x = leftXSupplier.get();
+    final double y = leftYSupplier.get();
 
-          return speeds;
-        };
-    addCommands(
-        Commands.runOnce(
-            () -> {
-              thetaController.reset(drive.getPose().getRotation().getRadians());
-              superstructure.setModeVoid(SuperstructureState.SHOOTING);
-            }),
-        Commands.run(
-            () -> {
-              shotSupplier.update();
-              shooter.setSpeedVoid(shotSupplier.get().rpm());
-              driveController.drive(drive, speedsSupplier.get());
-              superstructure.setShootingAngleRad(shotSupplier.get().pivotAngle());
-              SmartDashboard.putNumber("Goal Range", ShooterMath.getGoalDistance(drive.getPose()));
-            },
-            shooter,
-            drive));
+    final ChassisSpeeds driveSpeeds =
+        driveController.getSpeeds(
+            x,
+            y,
+            0.0,
+            drive.getYaw(),
+            drive.getMaxLinearSpeedMetersPerSec() / DRIVE_SPEED_REDUCTION);
+
+    // Calculate turn
+    final double setpointAngle = shot.robotAngle().getRadians();
+    final double thetaVelocity =
+        thetaController.calculate(robotPose.getRotation().getRadians(), setpointAngle);
+
+    driveSpeeds.omegaRadiansPerSecond = thetaVelocity;
+
+    driveController.drive(drive, driveSpeeds);
+
+    // Output info
+    SmartDashboard.putNumber("Goal Range", ShooterMath.getGoalDistance(drive.getPose()));
+    SmartDashboard.putNumber(
+        "Autoshoot Theta Controller Error", thetaController.getPositionError());
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    superstructure.setPose(Preset.STOW);
+    Lights.getInstance().setMode(LightsMode.Delivery);
   }
 }
