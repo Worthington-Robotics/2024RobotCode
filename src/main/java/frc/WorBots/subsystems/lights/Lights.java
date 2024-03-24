@@ -14,8 +14,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -42,20 +40,13 @@ public class Lights extends SubsystemBase {
   }
 
   // Constants
-  /** The number of LEDs */
-  public static final int LIGHT_COUNT = 27;
-
-  /** The ID of the LEDs */
-  private static final int LIGHTS_ID = 9;
-
   /** The time to wait when targeting before showing green */
   private static final double TARGETING_TIME = 0.5;
 
   /** The number of steps in the pit test */
   private static final int PIT_TEST_STEP_COUNT = 10;
 
-  private final AddressableLED leds;
-  private final AddressableLEDBuffer io;
+  private final LightsIO io;
   private LightsMode mode = LightsMode.RedBlue;
 
   private final IntegerSubscriber setModeSub;
@@ -115,11 +106,7 @@ public class Lights extends SubsystemBase {
 
   /** The lights subsystem, which is rather pretty. */
   private Lights() {
-    // Initialize lights and buffer
-    leds = new AddressableLED(LIGHTS_ID);
-    io = new AddressableLEDBuffer(LIGHT_COUNT);
-    leds.setLength(LIGHT_COUNT);
-    leds.start();
+    io = new LightsIO();
 
     // Initialize NT
     final var table =
@@ -144,7 +131,7 @@ public class Lights extends SubsystemBase {
     // Run the current mode
     switch (mode) {
       case Rainbow:
-        rainbow(50.0, 1.5);
+        LightsUtil.rainbow(io, 50.0, 1.5);
         break;
       case Status:
         status();
@@ -156,10 +143,10 @@ public class Lights extends SubsystemBase {
         matchTime();
         break;
       case Disabled:
-        wave(Color.kBlack, Color.kBlue, 25.0, 2.0, 0.4);
+        LightsUtil.wave(io, Color.kBlack, Color.kBlue, 25.0, 2.0, 0.4);
         break;
       case Claire:
-        wave(Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
+        LightsUtil.wave(io, Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
         break;
       case Shooting:
         shooting();
@@ -173,10 +160,10 @@ public class Lights extends SubsystemBase {
         // var blue = (time % 1.0 > 0.5) ? new Color(0.0, 0.0, 0.4) : Color.kBlue;
         var red = Color.kRed;
         var blue = Color.kBlue;
-        wave(blue, red, 14.0, 1.2, 0.3);
+        LightsUtil.wave(io, blue, red, 14.0, 1.2, 0.3);
         break;
       case Indicator:
-        solid(Color.kRed);
+        LightsUtil.solid(io, Color.kRed);
         break;
       case Elevator:
         elevator();
@@ -185,7 +172,7 @@ public class Lights extends SubsystemBase {
         final boolean hasGamePieceTop =
             hasGamePieceTopDebouncer.calculate(this.hasGamePieceTop.get());
         if (hasGamePieceTop) {
-          solid(Color.kRed);
+          LightsUtil.solid(io, Color.kRed);
         } else {
           worbotsBounce();
           // wave(Color.kBlue, Color.kRed, 14.0, 1.2, 0.3);
@@ -194,98 +181,22 @@ public class Lights extends SubsystemBase {
       case ShootReady:
         final boolean atShootSetpoint = this.atShootSetpoint.get();
         final Color color = atShootSetpoint ? Color.kGreen : Color.kOrangeRed;
-        solid(color);
+        LightsUtil.solid(io, color);
         break;
       case PitTest:
         pitTest();
         break;
     }
 
-    // Dim all the LEDs
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      final Color color = io.getLED(i);
-      final double factor = 0.9;
-      final Color dimmed = new Color(color.red * factor, color.green * factor, color.blue * factor);
-      setLED(i, dimmed);
-    }
-
-    // Set the LEDs
-    leds.setData(io);
+    io.periodic();
   }
 
   public void setTargetedSupplier(Supplier<Boolean> supplier) {
     this.isTargeted = supplier;
   }
 
-  /**
-   * Sets all the lights to a single color
-   *
-   * @param color The color
-   */
-  private void solid(Color color) {
-    solid(color, 1.0);
-  }
-
-  /**
-   * Sets a portion of the lights to a single color
-   *
-   * @param color The color
-   * @param percent The portion (0-1) to set
-   */
-  private void solid(Color color, double percent) {
-    final int count = (int) (LIGHT_COUNT * percent);
-    for (int i = 0; i < count; i++) {
-      setLED(i, color);
-    }
-  }
-
-  private void rainbow(double cycleLength, double duration) {
-    double x = (1 - ((TimeCache.getInstance().get() / duration) % 1.0)) * 180.0;
-    double xDiffPerLed = 180.0 / cycleLength;
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      x += xDiffPerLed;
-      x %= 180.0;
-      if (i >= 0) {
-        setHSV(i, (int) x, 255, 255);
-      }
-    }
-  }
-
-  private void wave(Color c1, Color c2, double cycleLength, double duration, double waveExponent) {
-    double x = (1 - ((TimeCache.getInstance().get() % duration) / duration)) * 2.0 * Math.PI;
-    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      x += xDiffPerLed;
-      if (i >= 0) {
-        double ratio = (Math.pow(Math.sin(x), waveExponent) + 1.0) / 2.0;
-        if (Double.isNaN(ratio)) {
-          ratio = (-Math.pow(Math.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
-        }
-        if (Double.isNaN(ratio)) {
-          ratio = 0.5;
-        }
-        double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-        double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-        double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-        setLED(i, new Color(red, green, blue));
-      }
-    }
-  }
-
-  public void bounce(Color c1, double cycleLength, double duration, double waveExponent) {
-    double x = (Math.sin((TimeCache.getInstance().get() % (Math.PI * 2))) + 1) / 2;
-    double xDiffPerLed = cycleLength;
-    for (int i = 0; i < LIGHT_COUNT; i++) {
-      x -= xDiffPerLed;
-      if (i >= 0) {
-        double red = (c1.red * (x));
-        setLED(i, new Color(red, red, red));
-      }
-    }
-  }
-
   private void status() {
-    final int len = MathUtil.clamp(StatusPage.ALL_SYSTEMS.length, 0, LIGHT_COUNT);
+    final int len = MathUtil.clamp(StatusPage.ALL_SYSTEMS.length, 0, io.getCount());
     for (int i = 0; i < len; i++) {
       final String system = StatusPage.ALL_SYSTEMS[i];
       // Some statuses are not necessarily errors and
@@ -296,19 +207,19 @@ public class Lights extends SubsystemBase {
       }
       final boolean status = StatusPage.getStatus(system);
       if (status) {
-        setLED(i, Color.kGreen);
+        io.setLED(i, Color.kGreen);
       } else {
         if (isWarning) {
-          setLED(i, Color.kOrangeRed);
+          io.setLED(i, Color.kOrangeRed);
         } else {
-          setLED(i, Color.kRed);
+          io.setLED(i, Color.kRed);
         }
       }
     }
 
     // Clear additional lights
-    for (int i = StatusPage.ALL_SYSTEMS.length; i < LIGHT_COUNT; i++) {
-      setLED(i, Color.kBlack);
+    for (int i = StatusPage.ALL_SYSTEMS.length; i < io.getCount(); i++) {
+      io.setLED(i, Color.kBlack);
     }
   }
 
@@ -322,14 +233,14 @@ public class Lights extends SubsystemBase {
    */
   private void blink(Color color1, Color color2, double interval, double time) {
     if (time % (interval * 2.0) <= interval) {
-      solid(color1);
+      LightsUtil.solid(io, color1);
     } else {
-      solid(color2);
+      LightsUtil.solid(io, color2);
     }
   }
 
   private void worbotsBounce() {
-    solid(Color.kBlack);
+    LightsUtil.solid(io, Color.kBlack);
 
     final double time = 1.0;
     final double percent =
@@ -339,26 +250,26 @@ public class Lights extends SubsystemBase {
     final double portion = percent * 0.5;
     final int width = 6;
 
-    final int index0 = (int) (portion * (LIGHT_COUNT - width * 1.5));
+    final int index0 = (int) (portion * (io.getCount() - width * 1.5));
     final int index1 = index0 + width;
-    final int index2 = LIGHT_COUNT - index0;
+    final int index2 = io.getCount() - index0;
     final int index3 = index2 - width;
 
     for (int i = index0; i < index1; i++) {
-      setLED(i, Color.kRed);
-      if (i > LIGHT_COUNT * 0.4) {
-        setLED(i, Color.kWhite);
+      io.setLED(i, Color.kRed);
+      if (i > io.getCount() * 0.4) {
+        io.setLED(i, Color.kWhite);
       } else if (i < 4) {
-        setLED(i, Color.kDarkRed);
+        io.setLED(i, Color.kDarkRed);
       }
     }
 
     for (int i = index3; i < index2; i++) {
-      setLED(i, Color.kBlue);
-      if (i < LIGHT_COUNT * 0.58) {
-        setLED(i, Color.kWhite);
-      } else if (i >= LIGHT_COUNT - 4) {
-        setLED(i, Color.kDarkBlue);
+      io.setLED(i, Color.kBlue);
+      if (i < io.getCount() * 0.58) {
+        io.setLED(i, Color.kWhite);
+      } else if (i >= io.getCount() - 4) {
+        io.setLED(i, Color.kDarkBlue);
       }
     }
   }
@@ -366,7 +277,7 @@ public class Lights extends SubsystemBase {
   private void alliance() {
     final var alliance = AllianceCache.getInstance().get();
     final boolean isRed = alliance.isPresent() && alliance.get() == Alliance.Red;
-    wave(isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
+    LightsUtil.wave(io, isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
   }
 
   private void matchTime() {
@@ -383,28 +294,28 @@ public class Lights extends SubsystemBase {
     }
     final boolean isLittleTimeLeft = ratio <= 0.50;
     final boolean isVeryLittleTimeLeft = ratio <= 0.20;
-    final int lightCount = (int) (ratio * LIGHT_COUNT);
-    for (int i = 0; i < LIGHT_COUNT; i++) {
+    final int lightCount = (int) (ratio * io.getCount());
+    for (int i = 0; i < io.getCount(); i++) {
       // Put a brighter light at the very end
       final int value = (i == lightCount) ? 255 : 180;
 
       if (i <= lightCount) {
         if (isVeryLittleTimeLeft) {
-          setHSV(i, 0, 255, value);
+          io.setHSV(i, 0, 255, value);
         } else if (isLittleTimeLeft) {
-          setHSV(i, 30, 255, value);
+          io.setHSV(i, 30, 255, value);
         } else {
-          setHSV(i, 0, 0, value);
+          io.setHSV(i, 0, 0, value);
         }
       } else {
-        setHSV(i, 0, 0, 0);
+        io.setHSV(i, 0, 0, 0);
       }
     }
   }
 
   private void shooting() {
     if (!targetingTimer.hasElapsed(TARGETING_TIME)) {
-      solid(Color.kOrange);
+      LightsUtil.solid(io, Color.kOrange);
       return;
     }
 
@@ -415,14 +326,14 @@ public class Lights extends SubsystemBase {
     final ShotConfidence confidence = ShooterMath.calculateConfidence(pose, speeds);
 
     if (!targeted || confidence.equals(ShotConfidence.LOW)) {
-      solid(Color.kRed);
+      LightsUtil.solid(io, Color.kRed);
       return;
     }
 
     if (confidence.equals(ShotConfidence.MEDIUM)) {
-      solid(Color.kOrange);
+      LightsUtil.solid(io, Color.kOrange);
     } else if (confidence.equals(ShotConfidence.HIGH)) {
-      solid(Color.kGreen);
+      LightsUtil.solid(io, Color.kGreen);
     }
   }
 
@@ -562,7 +473,7 @@ public class Lights extends SubsystemBase {
 
     @Override
     public Optional<State<Lights>> run(Lights input) {
-      solid(Color.kOrangeRed);
+      LightsUtil.solid(io, Color.kOrangeRed);
       if (!hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get())
           && !hasGamePieceBottomDebouncer.calculate(hasGamePieceBottom.get())) {
         return Optional.of(shotState);
@@ -602,15 +513,15 @@ public class Lights extends SubsystemBase {
 
   private void elevator() {
     final double percent = elevatorPercentageRaised.get();
-    solid(Color.kBlack);
-    solid(Color.kOrangeRed, percent);
+    LightsUtil.solid(io, Color.kBlack);
+    LightsUtil.solid(io, Color.kOrangeRed, percent);
   }
 
   private void pitTest() {
     if (pitTestFlashing) {
       blink(Color.kOrangeRed, Color.kBlack, 0.25, TimeCache.getInstance().get());
     }
-    solid(Color.kGreen, pitTestStep / PIT_TEST_STEP_COUNT);
+    LightsUtil.solid(io, Color.kGreen, pitTestStep / PIT_TEST_STEP_COUNT);
   }
 
   /**
@@ -656,35 +567,5 @@ public class Lights extends SubsystemBase {
   /** Sets whether the lights are flashing in pit test mode */
   public void setPitTestFlashing(boolean flashing) {
     this.pitTestFlashing = flashing;
-  }
-
-  /**
-   * Wrapper function that sets an LED
-   *
-   * @param index The index of the LED
-   * @param color The desired color
-   */
-  private void setLED(int index, Color color) {
-    if (index >= LIGHT_COUNT) {
-      return;
-    }
-
-    io.setLED(index, color);
-  }
-
-  /**
-   * Wrapper function that sets an LED
-   *
-   * @param index The index of the LED
-   * @param h The hue of the LED
-   * @param s The saturation of the LED
-   * @param v The value of LED
-   */
-  private void setHSV(int index, int h, int s, int v) {
-    if (index >= LIGHT_COUNT) {
-      return;
-    }
-
-    io.setHSV(index, index, index, index);
   }
 }
