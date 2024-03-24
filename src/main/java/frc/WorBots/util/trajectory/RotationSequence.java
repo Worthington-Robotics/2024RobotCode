@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 /**
  * Represents a sequence of timed rotations. The position and velocity of the robot is calculated to
- * minimize acceleration.
+ * minimize acceleration. Credit to team 6328.
  */
 public class RotationSequence {
   private final TreeMap<Double, Rotation2d> sequence = new TreeMap<>();

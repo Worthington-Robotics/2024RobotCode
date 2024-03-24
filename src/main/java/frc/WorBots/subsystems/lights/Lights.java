@@ -51,6 +51,9 @@ public class Lights extends SubsystemBase {
   /** The time to wait when targeting before showing green */
   private static final double TARGETING_TIME = 0.5;
 
+  /** The number of steps in the pit test */
+  private static final int PIT_TEST_STEP_COUNT = 10;
+
   private final AddressableLED leds;
   private final AddressableLEDBuffer io;
   private LightsMode mode = LightsMode.RedBlue;
@@ -607,7 +610,7 @@ public class Lights extends SubsystemBase {
     if (pitTestFlashing) {
       blink(Color.kOrangeRed, Color.kBlack, 0.25, TimeCache.getInstance().get());
     }
-    solid(Color.kGreen, pitTestStep / 10.0);
+    solid(Color.kGreen, pitTestStep / PIT_TEST_STEP_COUNT);
   }
 
   /**
@@ -625,6 +628,7 @@ public class Lights extends SubsystemBase {
     this.mode = mode;
   }
 
+  /** Sets data interfaces for subsystems */
   public void setDataInterfaces(
       Supplier<Pose2d> drivePoseSupplier,
       Supplier<ChassisSpeeds> driveSpeedsSupplier,
@@ -644,10 +648,12 @@ public class Lights extends SubsystemBase {
     this.elevatorPercentageRaised = elevatorPercentageRaised;
   }
 
+  /** Sets the current step of the pit test in pit test mode */
   public void setPitTestStep(int step) {
     this.pitTestStep = step;
   }
 
+  /** Sets whether the lights are flashing in pit test mode */
   public void setPitTestFlashing(boolean flashing) {
     this.pitTestFlashing = flashing;
   }
@@ -666,6 +672,14 @@ public class Lights extends SubsystemBase {
     io.setLED(index, color);
   }
 
+  /**
+   * Wrapper function that sets an LED
+   *
+   * @param index The index of the LED
+   * @param h The hue of the LED
+   * @param s The saturation of the LED
+   * @param v The value of LED
+   */
   private void setHSV(int index, int h, int s, int v) {
     if (index >= LIGHT_COUNT) {
       return;

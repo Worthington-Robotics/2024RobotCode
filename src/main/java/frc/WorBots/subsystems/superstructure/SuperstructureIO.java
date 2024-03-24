@@ -17,8 +17,6 @@ public interface SuperstructureIO {
     public double elevatorPositionMeters = 0.0;
     public double elevatorVelocityMetersPerSec = 0.0;
     public double elevatorPercentageRaised = 0.0;
-    public boolean bottomLimitReached = false;
-    public boolean topLimitReached = false;
     public double elevatorCurrentAmps = 0.0;
 
     public TalonInputsPositional pivot = new TalonInputsPositional("Superstructure", "Pivot Motor");

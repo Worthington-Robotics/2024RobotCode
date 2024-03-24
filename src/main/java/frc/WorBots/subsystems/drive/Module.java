@@ -37,7 +37,6 @@ public class Module {
     io.updateInputs();
     io.getInputs().drive.publish();
     io.getInputs().turn.publish();
-    // SmartDashboard.putNumber("", ANTI_JITTER_THRESHOLD)
     StatusPage.reportStatus(StatusPage.SMODULE_PREFIX + index, io.getInputs().isConnected);
   }
 
@@ -66,10 +65,10 @@ public class Module {
    * @return The optimized state
    */
   public SwerveModuleState optimizeState(SwerveModuleState state) {
-    // var optimizedState = SwerveModuleState.optimize(state, getAngle());
-    var optimizedState = state;
-    // var delta = state.angle.minus(getAngle());
+    SwerveModuleState optimizedState = state;
+    // Get the wrapping absolute angle delta
     final Rotation2d delta = GeneralMath.wrappingAngleDifference(state.angle, getAngle());
+    // Turns greater than 90 degrees can just have the module flip its direction
     if (Math.abs(delta.getDegrees()) > 90.0) {
       optimizedState =
           new SwerveModuleState(

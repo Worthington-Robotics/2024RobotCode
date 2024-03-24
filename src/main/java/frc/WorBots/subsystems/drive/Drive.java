@@ -45,13 +45,11 @@ public class Drive extends SubsystemBase {
   /** The last field velocity */
   private Twist2d fieldVelocity = new Twist2d();
 
-  /** The last yaw of the gyro */
+  /** The last yaw of the gyro, used for delta calculation */
   private Rotation2d lastGyroYaw = new Rotation2d();
 
-  /** The last positions of the modules */
+  /** The last positions of the modules, used for delta calculations */
   private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
-
-  // public boolean forceStop = false;
 
   /** The last setpoint states for the modules */
   private SwerveModuleState[] lastSetpointStates =
@@ -134,11 +132,6 @@ public class Drive extends SubsystemBase {
 
       // Run the states on the modules
       for (int i = 0; i < 4; i++) {
-        // if (!forceStop) {
-        //   modules[i].runState(optimizedStates[i]);
-        // } else {
-        //   modules[i].stop();
-        // }
         modules[i].runState(optimizedStates[i]);
       }
     }

@@ -10,12 +10,16 @@ package frc.WorBots.subsystems.superstructure;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanPublisher;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.commands.UtilCommands;
 import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
-import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 import frc.WorBots.util.debug.TunablePIDController.TunableProfiledPIDController;
@@ -54,17 +58,17 @@ public class Superstructure extends SubsystemBase {
 
   private final TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
-          new TunablePIDGains(tableName, "Pivot Gains"),
-          new TunableTrapezoidConstraints(tableName, "Pivot Constraints"));
+          new TunablePIDGains(TABLE_NAME, "Pivot Gains"),
+          new TunableTrapezoidConstraints(TABLE_NAME, "Pivot Constraints"));
   private final TunableProfiledPIDController elevatorController =
       new TunableProfiledPIDController(
-          new TunablePIDGains(tableName, "Elevator Gains"),
-          new TunableTrapezoidConstraints(tableName, "Elevator Constraints"));
+          new TunablePIDGains(TABLE_NAME, "Elevator Gains"),
+          new TunableTrapezoidConstraints(TABLE_NAME, "Elevator Constraints"));
   private ElevatorFeedforward elevatorFeedForward;
   private ArmFeedforward pivotFeedForward;
 
   // Constants
-  private static final String tableName = "Superstructure";
+  private static final String TABLE_NAME = "Superstructure";
 
   /** Limit distance for the elevator */
   private static final double ELEVATOR_LIMIT_DISTANCE = 0.28;
@@ -112,6 +116,38 @@ public class Superstructure extends SubsystemBase {
     DISABLED,
   }
 
+  // Publishers
+
+  private final NetworkTable table = NetworkTableInstance.getDefault().getTable(TABLE_NAME);
+  private final StringPublisher modePub = table.getStringTopic("Mode").publish();
+  private final BooleanPublisher isAtSetpointPub = table.getBooleanTopic("At Setpoint").publish();
+  private final BooleanPublisher inHandoffPub = table.getBooleanTopic("In Handoff").publish();
+
+  private final NetworkTable pivotTable = table.getSubTable("Pivot");
+  private final DoublePublisher pivotPositionRelPub =
+      pivotTable.getDoubleTopic("Position Rad Rel").publish();
+  private final DoublePublisher pivotPositionAbsPub =
+      pivotTable.getDoubleTopic("Position Rad Abs").publish();
+  private final DoublePublisher pivotFusedAngleRadPub =
+      pivotTable.getDoubleTopic("Fused Rad").publish();
+  private final DoublePublisher pivotVelocityPub =
+      pivotTable.getDoubleTopic("Velocity Rad Per Sec").publish();
+  private final DoublePublisher pivotSetpointPub = pivotTable.getDoubleTopic("Setpoint").publish();
+  private final DoublePublisher pivotSetpointVoltagePub =
+      pivotTable.getDoubleTopic("Setpoint Voltage").publish();
+
+  private final NetworkTable elevatorTable = table.getSubTable("Elevator");
+  private final DoublePublisher elevatorPositionRelPub =
+      elevatorTable.getDoubleTopic("Position Meters Rel").publish();
+  private final DoublePublisher elevatorVelocityPub =
+      elevatorTable.getDoubleTopic("Velocity Meters Per Sec").publish();
+  private final DoublePublisher elevatorPercentageRaisedPub =
+      elevatorTable.getDoubleTopic("Percentage Raised").publish();
+  private final DoublePublisher elevatorSetpointPub =
+      elevatorTable.getDoubleTopic("Setpoint").publish();
+  private final DoublePublisher elevatorSetpointVoltagePub =
+      elevatorTable.getDoubleTopic("Setpoint Voltage").publish();
+
   /**
    * Constructs an instance of the superstructure.
    *
@@ -157,11 +193,6 @@ public class Superstructure extends SubsystemBase {
     }
 
     // Log info
-    Logger.getInstance().setSuperstructureInputs(inputs);
-    Logger.getInstance().setSuperstructureMode(state.name());
-    Logger.getInstance().setSuperstructurePivotFusedRad(getPivotPoseRads());
-    Logger.getInstance().setSuperstructureAtSetpoint(isAtSetpoint());
-    Logger.getInstance().setSuperstructureInHandoff(inHandoff());
     StatusPage.reportStatus(StatusPage.PIVOT_CONNECTED, inputs.pivot.isConnected);
     StatusPage.reportStatus(StatusPage.ELEVATOR_CONNECTED, inputs.elevator.isConnected);
 
@@ -196,8 +227,23 @@ public class Superstructure extends SubsystemBase {
       }
     }
 
+    // Publish motor inputs
     inputs.elevator.publish();
     inputs.pivot.publish();
+
+    // Publish inputs
+    pivotPositionRelPub.set(inputs.pivotPositionRelRad);
+    pivotPositionAbsPub.set(inputs.pivotPositionAbsRad);
+    pivotVelocityPub.set(inputs.pivot.velocityRadsPerSec);
+    elevatorPositionRelPub.set(inputs.elevatorPositionMeters);
+    elevatorVelocityPub.set(inputs.elevatorVelocityMetersPerSec);
+    elevatorPercentageRaisedPub.set(inputs.elevatorPercentageRaised);
+
+    // Publish other stuff
+    modePub.set(state.toString());
+    pivotFusedAngleRadPub.set(getPivotPoseRads());
+    isAtSetpointPub.set(isAtSetpoint());
+    inHandoffPub.set(inHandoff());
   }
 
   /**
@@ -254,8 +300,8 @@ public class Superstructure extends SubsystemBase {
    * @param pivotPose The desired pivot angle
    */
   private void runPose(double elevatorPose, double pivotPose) {
-    Logger.getInstance().setSuperstructureElevatorPosSetpoint(elevatorPose);
-    Logger.getInstance().setSuperstructurePivotPosSetpoint(pivotPose);
+    elevatorSetpointPub.set(elevatorPose);
+    pivotSetpointPub.set(pivotPose);
     final double elevatorVoltage = calculateElevator(elevatorPose);
     final double pivotVoltage = calculatePivot(pivotPose);
     setElevatorVoltage(elevatorVoltage);
@@ -268,22 +314,12 @@ public class Superstructure extends SubsystemBase {
    * @param volts The elevator voltage
    */
   private void setElevatorVoltage(double volts) {
-    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
-
     // Do soft limiting
     volts =
         GeneralMath.softLimitVelocity(
             volts, inputs.elevatorPercentageRaised, 12.0, 1.0, ELEVATOR_LIMIT_DISTANCE);
 
-    // Do hard limiting based on limit switches
-    if (inputs.bottomLimitReached && volts < 0.0) {
-      volts = 0.0;
-    }
-    if (inputs.topLimitReached && volts > 0.0) {
-      volts = 0.0;
-    }
-
-    volts = MathUtil.clamp(volts, -12, 12);
+    volts = GeneralMath.clampMagnitude(volts, 12.0);
 
     setElevatorVoltageRaw(volts);
   }
@@ -295,7 +331,7 @@ public class Superstructure extends SubsystemBase {
    */
   private void setElevatorVoltageRaw(double volts) {
     io.setElevatorVoltage(volts);
-    Logger.getInstance().setSuperstructureElevatorVoltageSetpoint(volts);
+    elevatorSetpointVoltagePub.set(volts);
   }
 
   /**
@@ -323,7 +359,7 @@ public class Superstructure extends SubsystemBase {
    */
   private void setPivotVoltageRaw(double volts) {
     io.setPivotVoltage(volts);
-    Logger.getInstance().setSuperstructurePivotVoltageSetpoint(volts);
+    pivotSetpointVoltagePub.set(volts);
   }
 
   /**

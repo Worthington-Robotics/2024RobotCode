@@ -33,8 +33,13 @@ public class Intake extends SubsystemBase {
       intakeTable.getDoubleTopic("Time of Flight Distance").publish();
 
   // Constants
+  /** Distance threshold for the time of flight to say it has a game piece */
   public static final double DISTANCE_THRESHOLD = 0.245;
+
+  /** Voltage for intaking */
   private static final double INTAKE_VOLTS = 4.25;
+
+  /** Max temperature for the intake motor */
   private static final double MAX_TEMP = 80.0;
 
   /**
@@ -61,10 +66,10 @@ public class Intake extends SubsystemBase {
         StatusPage.INTAKE_CONNECTED,
         inputs.isConnected && inputs.motor.temperatureCelsius <= MAX_TEMP);
 
-    inputs.motor.publish();
-
     io.setIntakeVoltage(setpointVolts);
 
+    // Publish data
+    inputs.motor.publish();
     setpointPub.set(setpointVolts);
     hasGamePiecePub.set(hasGamepiece);
     timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);

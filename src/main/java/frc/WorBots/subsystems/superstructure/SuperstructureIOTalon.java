@@ -25,9 +25,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final TalonSignalsPositional pivotSignals;
 
   // Constants
+  /** Max number of encoder rotations that the elevator can safely extend */
   private static final double MAX_ELEVATION_ROTATIONS = (158.1 * 0.97) / 3.0;
-  private static final double ELEVATOR_GEARING =
-      591.156 / 3.0; // In meter per revolution of the encoder
+
+  /** Gearing ratio for the elevator, in meters per encoder rotation */
+  private static final double ELEVATOR_GEARING = 591.156 / 3.0;
 
   public SuperstructureIOTalon() {
     elevator = new TalonFX(3);

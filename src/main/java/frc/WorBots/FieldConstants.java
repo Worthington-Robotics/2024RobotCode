@@ -21,8 +21,8 @@ import java.io.IOException;
  * <p>Values are sourced from the layout diagram, field element drawings, AprilTag positions, and
  * physical measurements
  *
- * <p>Units are in meters and radians. Some measurements in the field manual are incorrect,
- * reference drawings
+ * <p>Units are in meters and radians. Some measurements in the field manual are often incorrect,
+ * and the part drawings should be referenced
  */
 public class FieldConstants {
   public static final boolean isWPIField = false;

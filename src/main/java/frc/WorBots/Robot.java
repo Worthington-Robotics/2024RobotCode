@@ -23,7 +23,6 @@ import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
-import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.math.ShooterMath;
 
 // import edu.wpi.first.math.geometry.Pose2d;
@@ -74,6 +73,8 @@ public class Robot extends TimedRobot {
     this.addPeriodic(this::periodicFunction, Constants.ROBOT_PERIOD);
 
     // CameraServer.startAutomaticCapture();
+
+    // Ensure caches are updated at the beginning
     TimeCache.getInstance().update();
     AllianceCache.getInstance().update();
   }
@@ -141,17 +142,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     MatchTime.getInstance().startAuto();
 
+    // Run the autonomous command
     autonomousCommand = robotContainer.getAutonomousCommand();
-
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
-    AllianceFlipUtil.apply(0.0);
-    robotContainer.drive.stop();
-    robotContainer.intake.setVolts(0.0);
-    robotContainer.shooter.stopFlywheels();
-    robotContainer.shooter.setRawFeederVolts(0.0);
-    robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
+
+    stopSubsystems();
+
     if (Constants.IS_COMP) {
       Lights.getInstance().setMode(LightsMode.Alliance);
     } else {
@@ -177,11 +175,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    robotContainer.drive.stop();
-    robotContainer.intake.setVolts(0.0);
-    robotContainer.shooter.stopFlywheels();
-    robotContainer.shooter.setRawFeederVolts(0.0);
-    robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
+    stopSubsystems();
 
     Lights.getInstance().setMode(LightsMode.Delivery);
   }
@@ -202,4 +196,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testExit() {}
+
+  @Override
+  public void simulationPeriodic() {}
+
+  /** Stops subsystems for robot state changes */
+  private void stopSubsystems() {
+    robotContainer.drive.stop();
+    robotContainer.intake.setVolts(0.0);
+    robotContainer.shooter.stopFlywheels();
+    robotContainer.shooter.setRawFeederVolts(0.0);
+    robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
+  }
 }

@@ -31,22 +31,20 @@ public class Shooter extends SubsystemBase {
   private double feederWheelVolts = 0.0;
 
   // Logging classes
-  private static final String shooterTableName = "Shooter";
-  private NetworkTableInstance instance = NetworkTableInstance.getDefault();
-  private NetworkTable shooterTable = instance.getTable(shooterTableName);
-  private DoublePublisher topFlywheelSpeedPub =
+  private final NetworkTable shooterTable = NetworkTableInstance.getDefault().getTable(TABLE_NAME);
+  private final DoublePublisher topFlywheelSpeedPub =
       shooterTable.getDoubleTopic("Top Flywheel RPM").publish();
-  private DoublePublisher bottomFlywheelSpeedPub =
+  private final DoublePublisher bottomFlywheelSpeedPub =
       shooterTable.getDoubleTopic("Bottom Flywheel RPM").publish();
-  private DoublePublisher topFlywheelSetpointPub =
+  private final DoublePublisher topFlywheelSetpointPub =
       shooterTable.getDoubleTopic("Top Flywheel Setpoint").publish();
-  private DoublePublisher bottomFlywheelSetpointPub =
+  private final DoublePublisher bottomFlywheelSetpointPub =
       shooterTable.getDoubleTopic("Bottom Flywheel Setpoint").publish();
-  private DoublePublisher feederWheelSetpointPub =
+  private final DoublePublisher feederWheelSetpointPub =
       shooterTable.getDoubleTopic("Feeder Setpoint Volts").publish();
-  private DoublePublisher timeOfFlightDistancePub =
+  private final DoublePublisher timeOfFlightDistancePub =
       shooterTable.getDoubleTopic("Time of Flight Distance").publish();
-  private BooleanPublisher hasGamePiecePub =
+  private final BooleanPublisher hasGamePiecePub =
       shooterTable.getBooleanTopic("Has Game Piece").publish();
 
   // Constants
@@ -68,14 +66,14 @@ public class Shooter extends SubsystemBase {
   /** Error threshold for the shooter wheels, in RPM */
   private static final double RPM_THRESHOLD = 100.0;
 
-  private static final String tableName = "Shooter";
+  private static final String TABLE_NAME = "Shooter";
 
   private final TunablePIDController topFlywheelController =
-      new TunablePIDController(new TunablePIDGains(tableName, "Top Flywheel Gains"));
+      new TunablePIDController(new TunablePIDGains(TABLE_NAME, "Top Flywheel Gains"));
   private final TunablePIDController bottomFlywheelController =
-      new TunablePIDController(new TunablePIDGains(tableName, "Bottom Flywheel Gains"));
+      new TunablePIDController(new TunablePIDGains(TABLE_NAME, "Bottom Flywheel Gains"));
   private final TunablePIDController feederWheelController =
-      new TunablePIDController(new TunablePIDGains(tableName, "Feeder Wheel Gains"));
+      new TunablePIDController(new TunablePIDGains(TABLE_NAME, "Feeder Wheel Gains"));
   private final SimpleMotorFeedforward topFlywheelFeedForward;
   private final SimpleMotorFeedforward bottomFlywheelFeedforward;
 
@@ -167,6 +165,7 @@ public class Shooter extends SubsystemBase {
       feederWheelSetpointPub.set(feederWheelVolts);
     }
 
+    // Publish data
     inputs.feederWheel.publish();
     inputs.top.publish();
     inputs.bottom.publish();
@@ -199,11 +198,13 @@ public class Shooter extends SubsystemBase {
     return this.setSpeed(bottomRPM).alongWith(Commands.waitUntil(this::isAtSetpoint));
   }
 
+  /** Sets the speed of both flywheels */
   public void setSpeedVoid(double rpm) {
     topFlywheelRPM = rpm;
     bottomFlywheelRPM = rpm;
   }
 
+  /** Returns a command that sets the speed of both flywheels once */
   public Command setSpeed(double rpm) {
     return this.runOnce(
         () -> {
@@ -211,6 +212,7 @@ public class Shooter extends SubsystemBase {
         });
   }
 
+  /** Retusn a command that sets the speed of both flywheels continuously */
   public Command setSpeedContinuous(double rpm) {
     return this.run(
         () -> {

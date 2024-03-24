@@ -15,7 +15,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-/** A trajectory waypoint, including a translation and optional drive/holonomic rotations. */
+/**
+ * A trajectory waypoint, including a translation and optional drive/holonomic rotations. Credit to
+ * team 6328.
+ */
 public class Waypoint {
   private final Translation2d translation;
   private final Rotation2d driveRotation;

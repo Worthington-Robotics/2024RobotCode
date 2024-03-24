@@ -22,16 +22,25 @@ import frc.WorBots.FieldConstants;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
 /**
  * A class to estimate the absolute position and rotation of the robot on the field using a
- * combination of robot odometry and vision data. Used for both real operation and simulation
+ * combination of robot odometry and vision data. Used for both real operation and simulation.
+ *
+ * <p>Credit to team 6328.
  */
 public class PoseEstimator {
   /** The length of time to keep updates for in seconds */
   private static final double HISTORY_LENGTH = 0.3;
+
+  /** Vision pose distance threshold under which to apply anti-jitter */
+  private static final double ANTI_JITTER_THRESHOLD = Units.inchesToMeters(4.5);
+
+  /** The amount of anti-jitter to apply. Lower values increase the effect. */
+  private static final double ANTI_JITTER_FACTOR = 0.20;
 
   private Pose2d basePose = new Pose2d();
   private Pose2d latestPose = new Pose2d();
@@ -86,37 +95,36 @@ public class PoseEstimator {
    * @param visionData A list of timestamped vision updates
    */
   public void addVisionData(List<TimestampedVisionUpdate> visionData) {
-    for (var timestampedVisionUpdate : visionData) {
-      final var timestamp = timestampedVisionUpdate.timestamp();
-      final var visionUpdate =
+    for (TimestampedVisionUpdate timestampedVisionUpdate : visionData) {
+      final double timestamp = timestampedVisionUpdate.timestamp();
+      final VisionUpdate visionUpdate =
           new VisionUpdate(timestampedVisionUpdate.pose(), timestampedVisionUpdate.stdDevs());
 
       if (updates.containsKey(timestamp)) {
         // There was already an update at this timestamp, add to it
-        final var oldVisionUpdates = updates.get(timestamp).visionUpdates();
+        final ArrayList<VisionUpdate> oldVisionUpdates = updates.get(timestamp).visionUpdates();
         oldVisionUpdates.add(visionUpdate);
         oldVisionUpdates.sort(VisionUpdate.compareDescStdDev);
       } else {
         // Insert a new update
-        final var prevUpdate = updates.floorEntry(timestamp);
-        final var nextUpdate = updates.ceilingEntry(timestamp);
+        final Entry<Double, PoseUpdate> prevUpdate = updates.floorEntry(timestamp);
+        final Entry<Double, PoseUpdate> nextUpdate = updates.ceilingEntry(timestamp);
         if (prevUpdate == null || nextUpdate == null) {
           // Outside the range of existing data
           return;
         }
 
         // Create partial twists (prev -> vision, vision -> next)
-        final var twist0 =
+        final double dt = (nextUpdate.getKey() - prevUpdate.getKey());
+        final Twist2d twist0 =
             GeomUtil.multiplyTwist(
-                nextUpdate.getValue().twist(),
-                (timestamp - prevUpdate.getKey()) / (nextUpdate.getKey() - prevUpdate.getKey()));
-        final var twist1 =
+                nextUpdate.getValue().twist(), (timestamp - prevUpdate.getKey()) / dt);
+        final Twist2d twist1 =
             GeomUtil.multiplyTwist(
-                nextUpdate.getValue().twist(),
-                (nextUpdate.getKey() - timestamp) / (nextUpdate.getKey() - prevUpdate.getKey()));
+                nextUpdate.getValue().twist(), (nextUpdate.getKey() - timestamp) / dt);
 
         // Add new pose updates
-        final var newVisionUpdates = new ArrayList<VisionUpdate>();
+        final ArrayList<VisionUpdate> newVisionUpdates = new ArrayList<VisionUpdate>();
         newVisionUpdates.add(visionUpdate);
         newVisionUpdates.sort(VisionUpdate.compareDescStdDev);
         updates.put(timestamp, new PoseUpdate(twist0, newVisionUpdates));
@@ -133,13 +141,13 @@ public class PoseEstimator {
   private void update() {
     // Clear old data and update base pose
     while (updates.size() > 1 && updates.firstKey() < Timer.getFPGATimestamp() - HISTORY_LENGTH) {
-      final var update = updates.pollFirstEntry();
+      final Entry<Double, PoseUpdate> update = updates.pollFirstEntry();
       basePose = update.getValue().apply(basePose, q);
     }
 
     // Update latest pose
     latestPose = basePose;
-    for (var updateEntry : updates.entrySet()) {
+    for (Entry<Double, PoseUpdate> updateEntry : updates.entrySet()) {
       latestPose = updateEntry.getValue().apply(latestPose, q);
     }
   }
@@ -151,10 +159,10 @@ public class PoseEstimator {
   private static record PoseUpdate(Twist2d twist, ArrayList<VisionUpdate> visionUpdates) {
     public Pose2d apply(Pose2d lastPose, Matrix<N3, N1> q) {
       // Apply drive twist
-      var pose = lastPose.exp(twist);
+      Pose2d pose = lastPose.exp(twist);
 
       // Apply vision updates
-      for (var visionUpdate : visionUpdates) {
+      for (VisionUpdate visionUpdate : visionUpdates) {
         // Calculate Kalman gains based on std devs
         // (https://github.com/wpilibsuite/allwpilib/blob/main/wpimath/src/main/java/edu/wpi/first/math/estimator/)
         Matrix<N3, N3> visionK = new Matrix<>(Nat.N3(), Nat.N3());
@@ -171,30 +179,32 @@ public class PoseEstimator {
           }
         }
 
-        // Scale based on distance
+        // Scale twists that are within a distance down to reduce jitter
         final double distance =
             pose.getTranslation().getDistance(visionUpdate.pose().getTranslation());
         double scaleFactor = 1.0;
-        if (distance < Units.inchesToMeters(4.5)) {
-          scaleFactor = 0.20;
+        if (distance < ANTI_JITTER_THRESHOLD) {
+          scaleFactor = ANTI_JITTER_FACTOR;
         }
+
         // Calculate twist between current and vision pose
-        var visionTwist = pose.log(visionUpdate.pose());
+        final Twist2d visionTwist = pose.log(visionUpdate.pose());
 
         // Multiply by Kalman gain matrix
-        var twistMatrix =
+        final Matrix<N3, N1> twistMatrix =
             visionK.times(
                 VecBuilder.fill(
                     visionTwist.dx * scaleFactor,
                     visionTwist.dy * scaleFactor,
                     visionTwist.dtheta));
 
-        // Apply twist
+        // Apply twist to the current pose
         pose =
             pose.exp(
                 new Twist2d(twistMatrix.get(0, 0), twistMatrix.get(1, 0), twistMatrix.get(2, 0)));
       }
 
+      // Clamp the pose within the field bounds
       pose = clampPose(pose);
 
       return pose;

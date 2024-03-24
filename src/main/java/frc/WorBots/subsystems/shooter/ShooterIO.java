@@ -14,13 +14,15 @@ public interface ShooterIO {
   public static class ShooterIOInputs {
     boolean isConnected = false;
 
-    public TalonInputsPositional top = new TalonInputsPositional("Shooter", "Top Motor");
+    public final TalonInputsPositional top = new TalonInputsPositional("Shooter", "Top Motor");
     public double velocityRPMTop = 0;
 
-    public TalonInputsPositional bottom = new TalonInputsPositional("Shooter", "Bottom Motor");
+    public final TalonInputsPositional bottom =
+        new TalonInputsPositional("Shooter", "Bottom Motor");
     public double velocityRPMBottom = 0;
 
-    public TalonInputsPositional feederWheel = new TalonInputsPositional("Shooter", "Feeder Motor");
+    public final TalonInputsPositional feederWheel =
+        new TalonInputsPositional("Shooter", "Feeder Motor");
 
     public double timeOfFlightDistanceMeters = 0.0;
   }

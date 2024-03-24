@@ -20,7 +20,10 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-/** Generator for creating a drive trajectory and rotation sequence from a series of waypoints. */
+/**
+ * Generator for creating a drive trajectory and rotation sequence from a series of waypoints.
+ * Credit to team 6328.
+ */
 public class CustomTrajectoryGenerator {
   private Trajectory driveTrajectory = new Trajectory(List.of(new Trajectory.State()));
   private RotationSequence holonomicRotationSequence = new RotationSequence(new TreeMap<>());

@@ -18,7 +18,10 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.WorBots.Constants;
 
-/** Geometry utilities for working with translations, rotations, transforms, and poses. */
+/**
+ * Geometry utilities for working with translations, rotations, transforms, and poses. Partial
+ * credit to team 6328.
+ */
 public class GeomUtil {
   /**
    * Creates a pure translating transform

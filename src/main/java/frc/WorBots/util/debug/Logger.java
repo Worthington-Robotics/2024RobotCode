@@ -14,14 +14,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
-import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StringPublisher;
 import frc.WorBots.Constants;
-import frc.WorBots.subsystems.superstructure.SuperstructureIO.SuperstructureIOInputs;
 import frc.WorBots.util.trajectory.RotationSequence;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,48 +32,13 @@ public class Logger {
     return instance;
   }
 
-  NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+  private final NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
 
-  NetworkTable driveTable = defaultInstance.getTable("Drive");
-  DoubleArrayPublisher trajectoryPublisher = driveTable.getDoubleArrayTopic("Trajectory").publish();
-  DoubleArrayPublisher trajectorySetpointPublisher =
+  private final NetworkTable driveTable = defaultInstance.getTable("Drive");
+  private final DoubleArrayPublisher trajectoryPublisher =
+      driveTable.getDoubleArrayTopic("Trajectory").publish();
+  private final DoubleArrayPublisher trajectorySetpointPublisher =
       driveTable.getDoubleArrayTopic("Trajectory Setpoint").publish();
-
-  NetworkTable superstructureTable = defaultInstance.getTable("Superstructure");
-  StringPublisher modePublisher = superstructureTable.getStringTopic("Mode").publish();
-  DoublePublisher setpointPositionPivot =
-      superstructureTable.getDoubleTopic("Pivot Setpoint Rad").publish();
-  DoublePublisher setpointPositionElevator =
-      superstructureTable.getDoubleTopic("Elevator Setpoint Meters").publish();
-  DoublePublisher setpointVoltagePivot =
-      superstructureTable.getDoubleTopic("Pivot Setpoint Voltage").publish();
-  DoublePublisher setpointVoltageElevator =
-      superstructureTable.getDoubleTopic("Elevator Setpoint Voltage").publish();
-  DoubleArrayPublisher pose3dPublisher =
-      superstructureTable.getDoubleArrayTopic("3d Poses").publish();
-  BooleanPublisher isAtSetpointPublisher =
-      superstructureTable.getBooleanTopic("At Setpoint").publish();
-  BooleanPublisher inHandoffPublisher = superstructureTable.getBooleanTopic("In Handoff").publish();
-
-  NetworkTable pivotTable = superstructureTable.getSubTable("Pivot");
-  DoublePublisher pivotPositionRel = pivotTable.getDoubleTopic("Position Rad Rel").publish();
-  DoublePublisher pivotPositionAbs = pivotTable.getDoubleTopic("Position Rad Abs").publish();
-  DoublePublisher pivotFusedAngleRad = pivotTable.getDoubleTopic("Fused Rad").publish();
-  DoublePublisher pivotVelocity = pivotTable.getDoubleTopic("Velocity Rad Per Sec").publish();
-  DoublePublisher pivotVoltage = pivotTable.getDoubleTopic("Voltage Applied").publish();
-  DoublePublisher pivotTemp = pivotTable.getDoubleTopic("Temp Celsius").publish();
-
-  NetworkTable elevatorTable = superstructureTable.getSubTable("Elevator");
-  DoublePublisher elevatorPositionRel =
-      elevatorTable.getDoubleTopic("Position Meters Rel").publish();
-  DoublePublisher elevatorPositionAbs =
-      elevatorTable.getDoubleTopic("Position Meters Abs").publish();
-  DoublePublisher elevatorVelocity =
-      elevatorTable.getDoubleTopic("Velocity Meters Per Sec").publish();
-  DoublePublisher elevatorVoltage = elevatorTable.getDoubleTopic("Voltage Applied").publish();
-  DoublePublisher elevatorTemp = elevatorTable.getDoubleTopic("Temp Celsius").publish();
-  DoublePublisher elevatorPercentageRaised =
-      elevatorTable.getDoubleTopic("Percentage Raised").publish();
 
   public void logPose3d(String tableName, String topicName, Pose3d pose) {
     NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
@@ -237,78 +198,5 @@ public class Logger {
       data[i * 3 + 2] = value[i].getRotation().getRadians();
     }
     trajectorySetpointPublisher.set(data);
-  }
-
-  public void setSuperstructureInputs(SuperstructureIOInputs inputs) {
-    pivotPositionRel.set(inputs.pivotPositionRelRad);
-    pivotPositionAbs.set(inputs.pivotPositionAbsRad);
-    pivotVelocity.set(inputs.pivot.velocityRadsPerSec);
-    pivotVoltage.set(inputs.pivot.appliedPowerVolts);
-    pivotTemp.set(inputs.pivot.temperatureCelsius);
-    elevatorPositionRel.set(inputs.elevatorPositionMeters);
-    elevatorPositionAbs.set(0.0);
-    elevatorVelocity.set(inputs.elevatorVelocityMetersPerSec);
-    elevatorVoltage.set(inputs.elevator.appliedPowerVolts);
-    elevatorTemp.set(inputs.elevator.temperatureCelsius);
-    elevatorPercentageRaised.set(inputs.elevatorPercentageRaised);
-  }
-
-  public void setSuperstructureSetpoints(
-      String mode,
-      double pivotPos,
-      double elevatorPos,
-      double pivotVoltage,
-      double elevatorVoltage) {
-    modePublisher.set(mode);
-    setpointPositionElevator.set(elevatorPos);
-    setpointPositionPivot.set(pivotPos);
-    setpointVoltageElevator.set(elevatorVoltage);
-    setpointVoltagePivot.set(pivotVoltage);
-  }
-
-  public void setSuperstructureMode(String mode) {
-    modePublisher.set(mode);
-  }
-
-  public void setSuperstructurePivotFusedRad(double value) {
-    pivotFusedAngleRad.set(value);
-  }
-
-  public void setSuperstructurePivotPosSetpoint(double value) {
-    setpointPositionPivot.set(value);
-  }
-
-  public void setSuperstructureElevatorPosSetpoint(double value) {
-    setpointPositionElevator.set(value);
-  }
-
-  public void setSuperstructureElevatorVoltageSetpoint(double value) {
-    setpointVoltageElevator.set(value);
-  }
-
-  public void setSuperstructurePivotVoltageSetpoint(double value) {
-    setpointVoltagePivot.set(value);
-  }
-
-  public void setSuperstructurePoses3d(Pose3d... value) {
-    double[] data = new double[value.length * 7];
-    for (int i = 0; i < value.length; i++) {
-      data[i * 7] = value[i].getX();
-      data[i * 7 + 1] = value[i].getY();
-      data[i * 7 + 2] = value[i].getZ();
-      data[i * 7 + 3] = value[i].getRotation().getQuaternion().getW();
-      data[i * 7 + 4] = value[i].getRotation().getQuaternion().getX();
-      data[i * 7 + 5] = value[i].getRotation().getQuaternion().getY();
-      data[i * 7 + 6] = value[i].getRotation().getQuaternion().getZ();
-    }
-    pose3dPublisher.set(data);
-  }
-
-  public void setSuperstructureAtSetpoint(boolean value) {
-    isAtSetpointPublisher.set(value);
-  }
-
-  public void setSuperstructureInHandoff(boolean value) {
-    inHandoffPublisher.set(value);
   }
 }

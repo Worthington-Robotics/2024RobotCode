@@ -12,15 +12,17 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
+import edu.wpi.first.networktables.TimestampedDoubleArray;
 import frc.WorBots.util.cache.Cache.TimeCache;
 
 public class VisionIOCustom implements VisionIO {
-  private NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
-  private NetworkTable table;
-  private NetworkTable subTable;
-  private DoubleArraySubscriber data;
-  private DoubleSubscriber subFps;
+  private final NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
+  private final NetworkTable table;
+  private final NetworkTable subTable;
+  private final DoubleArraySubscriber data;
+  private final DoubleSubscriber subFps;
 
+  /** NT connection timeout after which to report a disconnect */
   private static final double CONNECTION_TIMEOUT = 1.5;
 
   public VisionIOCustom(int index) {
@@ -38,7 +40,7 @@ public class VisionIOCustom implements VisionIO {
   }
 
   public void updateInputs(VisionIOInputs inputs) {
-    var frame = data.readQueue();
+    TimestampedDoubleArray[] frame = data.readQueue();
     int length = frame.length;
 
     inputs.timestamps = new double[length];

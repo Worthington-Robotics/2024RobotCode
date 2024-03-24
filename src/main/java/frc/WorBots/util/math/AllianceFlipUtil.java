@@ -20,6 +20,8 @@ import frc.WorBots.util.trajectory.RotationSequence;
  * Utility functions for flipping from the blue to red alliance. By default, all translations and
  * poses in {@link FieldConstants} are stored with the origin at the rightmost point on the blue
  * alliance wall.
+ *
+ * <p>Partial credit to team 6328.
  */
 public class AllianceFlipUtil {
   /**

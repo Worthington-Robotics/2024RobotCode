@@ -23,6 +23,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
  * sideways, and one profiled PID controller for the angular direction. Because the heading dynamics
  * are decoupled from translations, users can specify a custom heading that the drivetrain should
  * point toward. This heading reference is profiled for smoothness.
+ *
+ * <p>Credit to team 6328.
  */
 @SuppressWarnings("MemberName")
 public class CustomHolonomicDriveController {

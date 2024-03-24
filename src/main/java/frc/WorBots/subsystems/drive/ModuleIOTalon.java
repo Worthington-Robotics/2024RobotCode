@@ -163,9 +163,6 @@ public class ModuleIOTalon implements ModuleIO {
   }
 
   public void setDriveVoltage(double volts) {
-    // final double limit =
-    // (driveSignals.getSupplyVoltage() < HardwareUtils.idealBatteryVoltage) ? 6.8 :
-    // 9;
     driveSignals.setTalonVoltage(driveMotor, volts, 11.0);
   }
 

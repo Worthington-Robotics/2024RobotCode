@@ -15,18 +15,20 @@ import edu.wpi.first.math.util.Units;
 /** This class is a simple record of all of the poses that the Superstructure can be in */
 public record SuperstructurePose(Vector<N2> vectorPose) {
   public static enum Preset {
+    /** Absolute zero position */
     HOME(new SuperstructurePose(VecBuilder.fill(0, 0))),
+    /** Pose for scoring in the amp */
     AMP(
         new SuperstructurePose(
             VecBuilder.fill(0.06 + Units.inchesToMeters(1), 1.86 + Units.degreesToRadians(2)))),
-    AMP_OLD(new SuperstructurePose(VecBuilder.fill(0.05924, 1.8611))),
-    CENTER(new SuperstructurePose(VecBuilder.fill(0.15, 0.0))),
+    /** Handoff position from intake to shooter */
     HANDOFF(new SuperstructurePose(VecBuilder.fill(0.0, 0.277))),
+    /** Stow position for going under the stage. Not quite at zero so that it is faster to reach */
     STOW(new SuperstructurePose(VecBuilder.fill(0.0, 0.1))),
-    TRAP(new SuperstructurePose(VecBuilder.fill(0.25, 0.2421))),
-    SLIDE(new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.PIVOT_MAX_ANGLE))),
+    /** Setpoint shot for the speaker right up against the subwoofer */
     SUBWOOFER_SHOOT(
         new SuperstructurePose(VecBuilder.fill(0.0, 0.498 - Units.degreesToRadians(2)))),
+    /** Wing pass over the stage */
     WING_PASS(new SuperstructurePose(VecBuilder.fill(0.0, 0.720)));
 
     public SuperstructurePose pose;
