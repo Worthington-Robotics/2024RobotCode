@@ -51,26 +51,17 @@ public class Drive extends SubsystemBase {
   /** The last positions of the modules, used for delta calculations */
   private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
 
-  /** The last setpoint states for the modules */
-  private SwerveModuleState[] lastSetpointStates =
-      new SwerveModuleState[] {
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState()
-      };
-
   private final NetworkTableInstance instance = NetworkTableInstance.getDefault();
-  private static final String driveTableName = "Drive";
-  private final NetworkTable driveTable = instance.getTable(driveTableName);
+  private static final String TABLE_NAME = "Drive";
+  private final NetworkTable driveTable = instance.getTable(TABLE_NAME);
   private final DoubleArrayPublisher speedSetpointPublisher =
       driveTable.getDoubleArrayTopic("Speed Setpoint").publish();
   private final DoubleArrayPublisher setpointPublisher =
-      driveTable.getDoubleArrayTopic("Setpoint").publish();
+      driveTable.getDoubleArrayTopic("Module Setpoints").publish();
   private final DoubleArrayPublisher optimizedPublisher =
-      driveTable.getDoubleArrayTopic("Optimized").publish();
+      driveTable.getDoubleArrayTopic("Optimized Module Setpoints").publish();
   private final DoubleArrayPublisher measuredPublisher =
-      driveTable.getDoubleArrayTopic("Measured").publish();
+      driveTable.getDoubleArrayTopic("Measured Module States").publish();
   private final DoubleArrayPublisher posePublisher =
       driveTable.getDoubleArrayTopic("Pose Estimator").publish();
 
@@ -97,27 +88,30 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     gyroIO.updateInputs(gyroInputs);
 
+    // Update modules
     for (Module module : modules) {
       module.periodic();
     }
-    // The timestamp that is closest to when we get our inputs
-    final double inputTimestamp = Timer.getFPGATimestamp();
 
+    updateOdometry(Timer.getFPGATimestamp());
+
+    speedSetpointPublisher.set(Logger.chassisSpeedsToArray(setpointSpeeds));
     StatusPage.reportStatus(StatusPage.GYROSCOPE, gyroInputs.connected);
 
+    drive();
+  }
+
+  /** Drives the drivetrain at the setpoint speeds */
+  private void drive() {
     if (DriverStation.isDisabled()) {
       for (Module module : modules) {
         module.stop();
       }
       stop();
     } else {
-      speedSetpointPublisher.set(Logger.chassisSpeedsToArray(setpointSpeeds));
-
       SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(setpointSpeeds);
       // Desaturate speeds to ensure we don't go faster than is possible
       SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, getMaxLinearSpeedMetersPerSec());
-
-      lastSetpointStates = setpointStates;
 
       setpointPublisher.set(Logger.statesToArray(setpointStates));
 
@@ -126,8 +120,6 @@ public class Drive extends SubsystemBase {
         optimizedStates[i] = modules[i].optimizeState(setpointStates[i]);
       }
 
-      // Desaturate the states again
-      SwerveDriveKinematics.desaturateWheelSpeeds(optimizedStates, getMaxLinearSpeedMetersPerSec());
       optimizedPublisher.set(Logger.statesToArray(optimizedStates));
 
       // Run the states on the modules
@@ -135,7 +127,14 @@ public class Drive extends SubsystemBase {
         modules[i].runState(optimizedStates[i]);
       }
     }
+  }
 
+  /**
+   * Updates drivetrain odometry
+   *
+   * @param timestamp The timestamp when the odometry data was received
+   */
+  private void updateOdometry(double timestamp) {
     // Get measured states from modules
     SwerveModuleState[] measuredStates = new SwerveModuleState[4];
     for (int i = 0; i < 4; i++) {
@@ -164,7 +163,7 @@ public class Drive extends SubsystemBase {
     lastGyroYaw = gyroYaw;
 
     // Add to pose estimator
-    poseEstimator.addDriveData(inputTimestamp, twist);
+    poseEstimator.addDriveData(timestamp, twist);
     posePublisher.set(Logger.pose2dToArray(getPose()));
 
     // Update field velocity
@@ -188,30 +187,12 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Gets the last swerve module states
-   *
-   * @return The last measured swerve module states
-   */
-  public SwerveModuleState[] getLastSwerveModuleStates() {
-    return lastSetpointStates;
-  }
-
-  /**
    * Adds vision data to the drive subsystem
    *
    * @param updates The vision updates to be added
    */
   public void addVisionData(List<TimestampedVisionUpdate> updates) {
     poseEstimator.addVisionData(updates);
-  }
-
-  /**
-   * Returns the maximum linear speed (free speed) that the drive train can physically attain
-   *
-   * @return The value in meters per second
-   */
-  public double getMaxLinearSpeedMetersPerSec() {
-    return 4.5;
   }
 
   /**
@@ -277,30 +258,16 @@ public class Drive extends SubsystemBase {
     poseEstimator.resetPose(pose);
   }
 
-  /** Resets the robot heading */
+  /**
+   * Resets the robot heading
+   *
+   * @param heading The heading to reset to
+   */
   public void resetHeading(Rotation2d heading) {
     gyroIO.resetHeading(heading);
     final Pose2d currentPose = poseEstimator.getLatestPose();
     poseEstimator.resetPose(
         new Pose2d(currentPose.getX(), currentPose.getY(), AllianceFlipUtil.apply(heading)));
-  }
-
-  /**
-   * Gets the most recent swerve module positions
-   *
-   * @return The positions
-   */
-  public SwerveModulePosition[] getLastSwerveModulePositions() {
-    return new SwerveModulePosition[] {
-      new SwerveModulePosition(
-          lastSetpointStates[0].speedMetersPerSecond, lastSetpointStates[0].angle),
-      new SwerveModulePosition(
-          lastSetpointStates[1].speedMetersPerSecond, lastSetpointStates[1].angle),
-      new SwerveModulePosition(
-          lastSetpointStates[2].speedMetersPerSecond, lastSetpointStates[2].angle),
-      new SwerveModulePosition(
-          lastSetpointStates[3].speedMetersPerSecond, lastSetpointStates[3].angle)
-    };
   }
 
   /**
@@ -333,16 +300,6 @@ public class Drive extends SubsystemBase {
     runVelocity(new ChassisSpeeds());
   }
 
-  /** Stops the drive train in an X pattern, locking it in place */
-  public void stopWithLock() {
-    stop();
-    for (int i = 0; i < 4; i++) {
-      lastSetpointStates[i] =
-          new SwerveModuleState(
-              lastSetpointStates[i].speedMetersPerSecond, getModuleTranslations()[i].getAngle());
-    }
-  }
-
   /**
    * Gets the module translations relative to the robot's center
    *
@@ -355,5 +312,14 @@ public class Drive extends SubsystemBase {
       new Translation2d(-WHEELBASE, WHEELBASE),
       new Translation2d(-WHEELBASE, -WHEELBASE)
     };
+  }
+
+  /**
+   * Returns the maximum linear speed (free speed) that the drive train can physically attain
+   *
+   * @return The value in meters per second
+   */
+  public double getMaxLinearSpeedMetersPerSec() {
+    return 4.5;
   }
 }
