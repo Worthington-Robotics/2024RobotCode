@@ -85,22 +85,26 @@ public class DebugRoutines {
 
   /** Runs a tests of all systems in the pit */
   public Command pitTest(boolean isFull) {
-    return UtilCommands.namedSequence(
-        "Pit Test Progress",
-        Commands.runOnce(
-            () -> {
-              Lights.getInstance().setMode(LightsMode.PitTest);
-              pitTestStep = 0;
-              isFullPitTest = isFull;
-            }),
-        waitForNextStep("Drive; Multiple directions"),
-        testDrive(),
-        waitForNextStep("Superstructure; Handoff"),
-        testSuperstructure(),
-        waitForNextStep("Intake; Intake piece"),
-        testIntake(),
-        waitForNextStep("Shooter; Pose + Shoot"),
-        testShooter());
+    final Command command =
+        UtilCommands.namedSequence(
+            "Pit Test Progress",
+            Commands.runOnce(
+                () -> {
+                  Lights.getInstance().setMode(LightsMode.PitTest);
+                  pitTestStep = 0;
+                  isFullPitTest = isFull;
+                }),
+            waitForNextStep("Drive; Multiple directions"),
+            testDrive(),
+            waitForNextStep("Superstructure; Handoff"),
+            testSuperstructure(),
+            waitForNextStep("Intake; Intake piece"),
+            testIntake(),
+            waitForNextStep("Shooter; Pose + Shoot"),
+            testShooter());
+
+    Lights.getInstance().setPitTestStepCount(pitTestStepCount);
+    return command;
   }
 
   private Command testDrive() {
@@ -167,6 +171,8 @@ public class DebugRoutines {
    * @return The command
    */
   private Command waitForNextStep(String description) {
+    pitTestStepCount++;
+
     return UtilCommands.optimalSequence(
         Commands.runOnce(
             () -> {
@@ -186,6 +192,9 @@ public class DebugRoutines {
 
   /** The current step of the pit test */
   private static int pitTestStep = 0;
+
+  /** Number of steps in the pit test */
+  private static int pitTestStepCount = 0;
 
   /** Whether to run through the whole pit test without waiting */
   private static boolean isFullPitTest = false;

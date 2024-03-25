@@ -41,9 +41,6 @@ public class Lights extends SubsystemBase {
   /** The time to wait when targeting before showing green */
   private static final double TARGETING_TIME = 0.5;
 
-  /** The number of steps in the pit test */
-  private static final int PIT_TEST_STEP_COUNT = 10;
-
   private static final ColorSequence LAVA_COLORS =
       new ColorSequence(Color.kBlack, Color.kDarkBlue, Color.kBlue, Color.kRed);
 
@@ -96,6 +93,9 @@ public class Lights extends SubsystemBase {
 
   /** Step in the pit test */
   private int pitTestStep = 0;
+
+  /** Amount of steps in the pit test */
+  private int pitTestStepCount = 0;
 
   /** Whether the pit test mode is flashing */
   private boolean pitTestFlashing = false;
@@ -448,7 +448,7 @@ public class Lights extends SubsystemBase {
     if (pitTestFlashing) {
       LightsUtil.blink(io, Color.kOrangeRed, Color.kBlack, 0.25, TimeCache.getInstance().get());
     }
-    LightsUtil.solid(io, Color.kGreen, pitTestStep / PIT_TEST_STEP_COUNT);
+    LightsUtil.solid(io, Color.kGreen, pitTestStep / (pitTestStepCount - 1));
   }
 
   /**
@@ -489,6 +489,11 @@ public class Lights extends SubsystemBase {
   /** Sets the current step of the pit test in pit test mode */
   public void setPitTestStep(int step) {
     this.pitTestStep = step;
+  }
+
+  /** Sets the number of steps in the pit test */
+  public void setPitTestStepCount(int count) {
+    this.pitTestStepCount = count;
   }
 
   /** Sets whether the lights are flashing in pit test mode */
