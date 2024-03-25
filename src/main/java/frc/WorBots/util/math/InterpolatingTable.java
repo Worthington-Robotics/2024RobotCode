@@ -45,13 +45,13 @@ public class InterpolatingTable {
       return table[table.length - 1][1];
     }
 
-    double high_y = table[index][1];
-    double high_x = table[index][0];
+    final double high_y = table[index][1];
+    final double high_x = table[index][0];
     if ((high_x == x) || (index == 0)) {
       return high_y;
     }
-    double low_y = table[index - 1][1];
-    double low_x = table[index - 1][0];
+    final double low_y = table[index - 1][1];
+    final double low_x = table[index - 1][0];
 
     return (low_y + (x - low_x) * (high_y - low_y) / (high_x - low_x));
   }

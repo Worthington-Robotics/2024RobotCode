@@ -220,9 +220,8 @@ public class GeneralMath {
   }
 
   public static Rotation2d wrappingAngleDifference(Rotation2d angle1, Rotation2d angle2) {
-    double diff = Math.abs(angle1.getDegrees() - angle2.getDegrees());
-    if (diff > 180) diff = 360 - diff;
-    return Rotation2d.fromDegrees(diff);
+    return Rotation2d.fromDegrees(
+        wrappingDifference(angle1.getDegrees(), angle2.getDegrees(), 360));
   }
 
   public static double wrappingDifference(double val1, double val2, double range) {
