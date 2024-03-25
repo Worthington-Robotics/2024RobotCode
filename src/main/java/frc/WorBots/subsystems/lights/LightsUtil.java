@@ -8,10 +8,16 @@
 package frc.WorBots.subsystems.lights;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.WorBots.util.MatchTime;
+import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.math.GeneralMath;
+import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.InterpolatingTable;
+import frc.WorBots.util.math.TrigLookup;
 
 /** Utility functions and mode classes for the control of the lights */
 public class LightsUtil {
@@ -42,7 +48,7 @@ public class LightsUtil {
   /** Make a rainbow pattern */
   public static void rainbow(LightsIO io, double cycleLength, double duration) {
     double x = (1 - ((TimeCache.getInstance().get() / duration) % 1.0)) * 180.0;
-    double xDiffPerLed = 180.0 / cycleLength;
+    final double xDiffPerLed = 180.0 / cycleLength;
     for (int i = 0; i < io.getCount(); i++) {
       x += xDiffPerLed;
       x %= 180.0;
@@ -56,13 +62,13 @@ public class LightsUtil {
   public static void wave(
       LightsIO io, ColorSequence colors, double cycleLength, double duration, double waveExponent) {
     double x = (1 - ((TimeCache.getInstance().get() % duration) / duration)) * 2.0 * Math.PI;
-    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
+    final double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < io.getCount(); i++) {
       x += xDiffPerLed;
       if (i >= 0) {
-        double ratio = (Math.pow(Math.sin(x), waveExponent) + 1.0) / 2.0;
+        double ratio = (Math.pow(TrigLookup.sin(x), waveExponent) + 1.0) / 2.0;
         if (Double.isNaN(ratio)) {
-          ratio = (-Math.pow(Math.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
+          ratio = (-Math.pow(TrigLookup.sin(x + Math.PI), waveExponent) + 1.0) / 2.0;
         }
         if (Double.isNaN(ratio)) {
           ratio = 0.5;
@@ -99,6 +105,110 @@ public class LightsUtil {
       } else {
         final Color color = colors.sample(pos);
         io.setLED(i, color);
+      }
+    }
+  }
+
+  /**
+   * Blinks the LEDs in a two-color pattern
+   *
+   * @param io The lights
+   * @param color1 The first color, comes first in the blink
+   * @param color2 The second color
+   * @param interval The interval in seconds between each color change
+   * @param time The current time or relative time from a timer in seconds
+   */
+  public static void blink(LightsIO io, Color color1, Color color2, double interval, double time) {
+    if (time % (interval * 2.0) <= interval) {
+      LightsUtil.solid(io, color1);
+    } else {
+      LightsUtil.solid(io, color2);
+    }
+  }
+
+  /** Does a red-blue bounce pattern that meets with white at the middle */
+  public static void worbotsBounce(LightsIO io) {
+    LightsUtil.solid(io, Color.kBlack);
+
+    // Calculate the components of the bounce
+    final double time = 1.0;
+    final double sin = TrigLookup.sin(TimeCache.getInstance().get() % time / time * GeomUtil.PI2);
+    final double percent = Math.pow((sin + 1.0) / 2.0, 0.8);
+    final double portion = percent * 0.5;
+    final int width = 6;
+
+    // Indices of the first bouncer
+    final int index0 = (int) (portion * (io.getCount() - width * 1.5));
+    final int index1 = index0 + width;
+
+    // Indices of the second bouncer
+    final int index2 = io.getCount() - index0;
+    final int index3 = index2 - width;
+
+    // Draw the first bouncer
+    for (int i = index0; i < index1; i++) {
+      io.setLED(i, Color.kRed);
+      if (i > io.getCount() * 0.4) {
+        io.setLED(i, Color.kWhite);
+      } else if (i < 4) {
+        io.setLED(i, Color.kDarkRed);
+      }
+    }
+
+    // Draw the second bouncer
+    for (int i = index3; i < index2; i++) {
+      io.setLED(i, Color.kBlue);
+      if (i < io.getCount() * 0.58) {
+        io.setLED(i, Color.kWhite);
+      } else if (i >= io.getCount() - 4) {
+        io.setLED(i, Color.kDarkBlue);
+      }
+    }
+  }
+
+  private static final ColorSequence ALLIANCE_COLOR_SEQUENCE_RED =
+      new ColorSequence(Color.kRed, Color.kBlack);
+  private static final ColorSequence ALLIANCE_COLOR_SEQUENCE_BLUE =
+      new ColorSequence(Color.kBlue, Color.kBlack);
+
+  /** Does a wave based on the alliance */
+  public static void alliance(LightsIO io) {
+    final var alliance = AllianceCache.getInstance().get();
+    final boolean isRed = alliance.isPresent() && alliance.get() == Alliance.Red;
+    final ColorSequence colors = isRed ? ALLIANCE_COLOR_SEQUENCE_RED : ALLIANCE_COLOR_SEQUENCE_BLUE;
+    LightsUtil.wave(io, colors, 25.0, 2.0, 0.4);
+  }
+
+  /** Shows the time remaining in the current match period */
+  public static void matchTime(LightsIO io) {
+    final double autoSeconds = 15.0;
+    final double teleopSeconds = 135.0;
+    final double remaining = MatchTime.getInstance().getTimeRemaining();
+    double ratio = remaining;
+    if (DriverStation.isAutonomous()) {
+      ratio /= autoSeconds;
+    } else if (DriverStation.isTeleop()) {
+      ratio /= teleopSeconds;
+    } else {
+      ratio = 1.0;
+    }
+    final boolean isLittleTimeLeft = ratio <= 0.50;
+    final boolean isVeryLittleTimeLeft = ratio <= 0.20;
+    final int lightCount = (int) (ratio * io.getCount());
+    for (int i = 0; i < io.getCount(); i++) {
+      // Put a brighter light at the very end
+      final int value = (i == lightCount) ? 255 : 180;
+
+      if (i <= lightCount) {
+        if (isVeryLittleTimeLeft) {
+          io.setHSV(i, 0, 255, value);
+        } else if (isLittleTimeLeft) {
+          io.setHSV(i, 25, 255, value);
+        } else {
+          io.setHSV(i, 0, 0, value);
+        }
+      } else {
+        io.setHSV(i, 0, 0, 0);
       }
     }
   }

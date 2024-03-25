@@ -24,6 +24,9 @@ import frc.WorBots.Constants;
  * <p>Modified from team 6328.
  */
 public class GeomUtil {
+  /** 2pi */
+  public static final double PI2 = 2 * Math.PI;
+
   /**
    * Creates a pure translating transform
    *
