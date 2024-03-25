@@ -163,10 +163,10 @@ public class ModuleIOTalon implements ModuleIO {
   }
 
   public void setDriveVoltage(double volts) {
-    driveSignals.setTalonVoltage(driveMotor, volts, 11.0);
+    driveSignals.setVoltage(driveMotor, volts, 11.0);
   }
 
   public void setTurnVoltage(double volts) {
-    turnSignals.setTalonVoltage(turnMotor, volts, 11.0);
+    turnSignals.setVoltage(turnMotor, volts, 11.0);
   }
 }

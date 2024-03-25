@@ -69,8 +69,6 @@ public class HardwareUtils {
   public static class TalonInputs {
     private final DebugDouble voltsPub;
     private final DebugDouble supplyVoltsPub;
-    // private final DoublePublisher currentPub;
-    // private final DoublePublisher tempPub;
     private final DebugBool connectedPub;
 
     public double appliedPowerVolts = 0.0;
@@ -83,15 +81,11 @@ public class HardwareUtils {
       voltsPub = DebugValue.compDouble(table, subtable + "/Applied Voltage");
       supplyVoltsPub = DebugValue.compDouble(table, subtable + "/Supply Voltage");
       connectedPub = DebugValue.compBool(table, subtable + "/Connected");
-      // currentPub = this.table.getDoubleTopic("Current Draw").publish();
-      // tempPub = this.table.getDoubleTopic("Temp Celsius").publish();
     }
 
     public void publish() {
       voltsPub.set(appliedPowerVolts);
       supplyVoltsPub.set(supplyVoltage);
-      // currentPub.set(currentDrawAmps);
-      // tempPub.set(temperatureCelsius);
       connectedPub.set(isConnected);
     }
   }
@@ -119,44 +113,22 @@ public class HardwareUtils {
 
   /** Base status signals for a TalonFX */
   public abstract static class TalonSignals {
-    // private final StatusSignal<Double> tempSignal;
     private final OptimalStatusSignal<Double> voltsSignal;
 
-    // private final StatusSignal<Double> currentSignal;
-
     public TalonSignals(TalonFX motor) {
-      // tempSignal = motor.getDeviceTemp();
       voltsSignal = new OptimalStatusSignal<>(motor.getSupplyVoltage(), 20);
-      // currentSignal = motor.getSupplyCurrent();
-
-      // tempSignal.setUpdateFrequency(8);
-      // currentSignal.setUpdateFrequency(5);
 
       // For .get calls we need the duty cycle
       motor.getDutyCycle().setUpdateFrequency(50);
     }
 
-    protected void refresh() {
-      // StatusSignal.refreshAll(voltsSignal);
-    }
+    protected void refresh() {}
 
     public void update(TalonInputs inputs, TalonFX motor) {
       refresh();
-      // inputs.temperatureCelsius = tempSignal.getValue();
       inputs.appliedPowerVolts = voltsSignal.getValue() * motor.get();
       inputs.supplyVoltage = voltsSignal.getValue();
-      // inputs.currentDrawAmps = currentSignal.getValue();
-      inputs.isConnected = motor.isAlive() && inputs.temperatureCelsius < MAX_MOTOR_TEMP;
-    }
-
-    /**
-     * Gets the motor supply voltage
-     *
-     * @return The supply voltage
-     */
-    public double getSupplyVoltage() {
-      // return voltsSignal.getValue();
-      return 0.0;
+      inputs.isConnected = voltsSignal.isOK && inputs.temperatureCelsius < MAX_MOTOR_TEMP;
     }
 
     /**
@@ -166,9 +138,7 @@ public class HardwareUtils {
      * @param volts The voltage to set
      * @param maxVolts The maximum magnitude for the voltage
      */
-    public void setTalonVoltage(TalonFX talon, double volts, double maxVolts) {
-      // HardwareUtils.setTalonVoltage(talon, volts, maxVolts,
-      // this.tempSignal.getValue());
+    public void setVoltage(TalonFX talon, double volts, double maxVolts) {
       HardwareUtils.setTalonVoltage(talon, volts, maxVolts, 0.0);
     }
   }
@@ -202,6 +172,7 @@ public class HardwareUtils {
   public static class OptimalStatusSignal<T> {
     private final StatusSignal<T> signal;
     private final CountingCache<T> cache;
+    private boolean isOK = false;
 
     public OptimalStatusSignal(StatusSignal<T> signal, double frequency) {
       signal.setUpdateFrequency(frequency);
@@ -217,7 +188,7 @@ public class HardwareUtils {
       this.cache =
           new CountingCache<>(
               () -> {
-                this.signal.refresh();
+                this.isOK = StatusSignal.refreshAll(this.signal).isOK();
                 return this.signal.getValue();
               },
               count);
@@ -229,6 +200,10 @@ public class HardwareUtils {
 
     public T getValue() {
       return this.cache.get();
+    }
+
+    public boolean isOK() {
+      return this.isOK;
     }
   }
 

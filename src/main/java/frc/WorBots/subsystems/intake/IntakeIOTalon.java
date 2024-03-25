@@ -43,6 +43,6 @@ public class IntakeIOTalon implements IntakeIO {
 
   @Override
   public void setIntakeVoltage(double volts) {
-    motorSignals.setTalonVoltage(intakeMotor, volts, 10);
+    motorSignals.setVoltage(intakeMotor, volts, 10);
   }
 }
