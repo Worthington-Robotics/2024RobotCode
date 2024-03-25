@@ -148,8 +148,8 @@ public class RobotContainer {
     if (Constants.ENABLE_DEBUG_ROUTINES) {
       final DebugRoutines routines = new DebugRoutines(drive, superstructure, intake, shooter);
       selector.addRoutine("Characterize Odometry", List.of(), routines.characterizeOdometry());
-      selector.addRoutine("Pit Test", List.of(), routines.pitTest(false));
-      selector.addRoutine("Full Pit Test", List.of(), routines.pitTest(true));
+      selector.addRoutine("Pit Test", List.of(), routines.pitTest(false, vision));
+      selector.addRoutine("Full Pit Test", List.of(), routines.pitTest(true, vision));
     }
   }
 

@@ -21,6 +21,7 @@ import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
+import frc.WorBots.subsystems.vision.Vision;
 import frc.WorBots.util.UtilCommands;
 
 /** Debugging, test, and characterization routines */
@@ -84,7 +85,7 @@ public class DebugRoutines {
   private static double[] odometryStartingPositions = new double[4];
 
   /** Runs a tests of all systems in the pit */
-  public Command pitTest(boolean isFull) {
+  public Command pitTest(boolean isFull, Vision vision) {
     final Command command =
         UtilCommands.namedSequence(
             "Pit Test Progress",
@@ -101,7 +102,9 @@ public class DebugRoutines {
             waitForNextStep("Intake; Intake piece"),
             testIntake(),
             waitForNextStep("Shooter; Pose + Shoot"),
-            testShooter());
+            testShooter(),
+            waitForNextStep("Vision; Check for tag"),
+            testVision(vision));
 
     Lights.getInstance().setPitTestStepCount(pitTestStepCount);
     return command;
@@ -162,6 +165,10 @@ public class DebugRoutines {
         shooter.stopFlywheels(),
         waitForNextStep("Back to stow"),
         superstructure.goToPose(Preset.STOW));
+  }
+
+  private Command testVision(Vision vision) {
+    return Commands.waitUntil(() -> vision.canSeeTag());
   }
 
   /**

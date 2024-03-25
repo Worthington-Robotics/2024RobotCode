@@ -46,6 +46,9 @@ public class Vision extends SubsystemBase {
   /** The amount of detections that have been made */
   private int detectionCount = 0;
 
+  /** Whether the vision has seen a tag very recently */
+  private boolean seesTag = false;
+
   /** Transform for the inward-facing camera on the BR module */
   private static final Transform3d RIGHT_SWERVE_MODULE_TRANSFORM =
       new Transform3d(
@@ -144,6 +147,8 @@ public class Vision extends SubsystemBase {
       StatusPage.reportStatus(StatusPage.CAM_PREFIX + i, inputs[i].isConnected);
     }
 
+    seesTag = false;
+
     // Loop over instances
     List<Pose2d> allRobotPoses = new ArrayList<>();
     List<Pose3d> allRobotPoses3d = new ArrayList<>();
@@ -216,6 +221,8 @@ public class Vision extends SubsystemBase {
           continue;
         }
 
+        seesTag = true;
+
         // Get 2D robot pose
         final Pose2d robotPose = robotPose3d.toPose2d();
 
@@ -259,11 +266,12 @@ public class Vision extends SubsystemBase {
         detectionCountPublisher.set(detectionCount);
       }
 
-      // Collect all tag poses
+      // Collect all tag poses, log them, and update whether we have seen a tag
       List<Pose3d> allTagPoses = new ArrayList<>();
       for (Map.Entry<Integer, Double> detectionEntry : lastTagDetectionTimes.entrySet()) {
         if (TimeCache.getInstance().get() - detectionEntry.getValue() < TARGET_LOG_TIME_SECS) {
           allTagPoses.add(FieldConstants.aprilTags.getTagPose(detectionEntry.getKey()).get());
+          seesTag = true;
         }
       }
 
@@ -283,6 +291,11 @@ public class Vision extends SubsystemBase {
    */
   public void setDataInterfaces(Consumer<List<TimestampedVisionUpdate>> visionConsumer) {
     this.visionConsumer = visionConsumer;
+  }
+
+  /** Checks if the vision can currently see a tag */
+  public boolean canSeeTag() {
+    return seesTag;
   }
 
   /**
