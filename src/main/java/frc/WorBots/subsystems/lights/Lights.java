@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.WorBots.subsystems.lights.LightsUtil.ColorSequence;
+import frc.WorBots.subsystems.lights.LightsUtil.Lava;
 import frc.WorBots.util.MatchTime;
 import frc.WorBots.util.StateMachine;
 import frc.WorBots.util.StateMachine.State;
@@ -69,6 +71,9 @@ public class Lights extends SubsystemBase {
   /** Timestamp when intaking started */
   private double startOfIntakeTime = 0.0;
 
+  /** Lava mode state */
+  private final Lava lava = new Lava();
+
   // Data interfaces
   private Supplier<Boolean> isTargeted = () -> false;
   private Supplier<Pose2d> drivePoseSupplier = () -> new Pose2d();
@@ -102,6 +107,7 @@ public class Lights extends SubsystemBase {
     Field,
     ShootReady,
     PitTest,
+    Lava,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -185,6 +191,11 @@ public class Lights extends SubsystemBase {
         break;
       case PitTest:
         pitTest();
+        break;
+      case Lava:
+        final ColorSequence colors =
+            new ColorSequence(Color.kBlack, Color.kDarkBlue, Color.kBlue, Color.kRed);
+        lava.run(io, colors);
         break;
     }
 

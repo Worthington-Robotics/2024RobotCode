@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
     if (Constants.IS_COMP) {
       Lights.getInstance().setMode(LightsMode.Status);
     } else {
-      Lights.getInstance().setMode(LightsMode.Field);
+      Lights.getInstance().setMode(LightsMode.Lava);
     }
   }
 

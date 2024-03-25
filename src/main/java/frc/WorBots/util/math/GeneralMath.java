@@ -113,6 +113,18 @@ public class GeneralMath {
   }
 
   /**
+   * Gets a value within a range based off of a scalar position
+   *
+   * @param value The scalar position in the range, from 0 to 1
+   * @param min The minimum value of the range
+   * @param max The maximum value of the range
+   * @return The scaled value
+   */
+  public static double scale(double value, double min, double max) {
+    return min + value * (max - min);
+  }
+
+  /**
    * Clamps the magnitude of a value to a maximum only, but in both negative and positive
    * directions. The sign of the input will be retained.
    *
@@ -211,5 +223,13 @@ public class GeneralMath {
     double diff = Math.abs(angle1.getDegrees() - angle2.getDegrees());
     if (diff > 180) diff = 360 - diff;
     return Rotation2d.fromDegrees(diff);
+  }
+
+  public static double wrappingDifference(double val1, double val2, double range) {
+    double diff = Math.abs(val1 - val2);
+    if (diff > range / 2) {
+      diff = range - diff;
+    }
+    return diff;
   }
 }
