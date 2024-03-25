@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ntutil_0',['NTUtil',['../classfrc_1_1WorBots_1_1util_1_1NTUtil.html',1,'frc::WorBots::util']]]
+  ['poseestimator_0',['PoseEstimator',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html',1,'frc::WorBots::util::math']]]
 ];

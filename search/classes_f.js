@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['vision_0',['Vision',['../classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html',1,'frc::WorBots::subsystems::vision']]],
-  ['visionio_1',['VisionIO',['../interfacefrc_1_1WorBots_1_1subsystems_1_1vision_1_1VisionIO.html',1,'frc::WorBots::subsystems::vision']]],
-  ['visioniocustom_2',['VisionIOCustom',['../classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1VisionIOCustom.html',1,'frc::WorBots::subsystems::vision']]]
+  ['waypoint_0',['Waypoint',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1Waypoint.html',1,'frc::WorBots::util::trajectory']]],
+  ['wingpass_1',['WingPass',['../classfrc_1_1WorBots_1_1commands_1_1WingPass.html',1,'frc::WorBots::commands']]]
 ];

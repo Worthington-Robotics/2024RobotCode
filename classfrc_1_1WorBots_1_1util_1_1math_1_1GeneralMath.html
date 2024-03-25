@@ -96,6 +96,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a9e8eeb3c5900db783403b8a811301cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b229c953ac7e0cf76cd812c2ebabc8a"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a4b229c953ac7e0cf76cd812c2ebabc8a">scale</a> (double value, double min, double max)</td></tr>
 <tr class="separator:a4b229c953ac7e0cf76cd812c2ebabc8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37d4cd376d67265ef214da31dbb29ea3"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a37d4cd376d67265ef214da31dbb29ea3">rescale</a> (double value, double min1, double max1, double min2, double max2)</td></tr>
+<tr class="separator:a37d4cd376d67265ef214da31dbb29ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb993c9673a372f36f7b635335dc6715"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715">clampMagnitude</a> (double value, double max)</td></tr>
 <tr class="separator:afb993c9673a372f36f7b635335dc6715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f6433f94444df9fe20a9772d5ae51d4"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a5f6433f94444df9fe20a9772d5ae51d4">checkError</a> (double measurement, double goal, double margin)</td></tr>
@@ -400,6 +402,72 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a37d4cd376d67265ef214da31dbb29ea3" name="a37d4cd376d67265ef214da31dbb29ea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37d4cd376d67265ef214da31dbb29ea3">&#9670;&#160;</a></span>rescale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.GeneralMath.rescale </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>min1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>min2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Rescales a value within one range to its equivalent position in another range</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value within the first range </td></tr>
+    <tr><td class="paramname">min1</td><td>The minimum value of the first range </td></tr>
+    <tr><td class="paramname">max1</td><td>The maximum value of the first range </td></tr>
+    <tr><td class="paramname">min2</td><td>The minimum value of the second range </td></tr>
+    <tr><td class="paramname">max2</td><td>The maximum value of the second range </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The rescaled value within the second range </dd></dl>
+
+</div>
+</div>
 <a id="a4b229c953ac7e0cf76cd812c2ebabc8a" name="a4b229c953ac7e0cf76cd812c2ebabc8a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4b229c953ac7e0cf76cd812c2ebabc8a">&#9670;&#160;</a></span>scale()</h2>
 
@@ -676,6 +744,15 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Computes the absolute difference between two rotations in the -180 to 180 range</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle1</td><td>The first angle. Must be within the range. </td></tr>
+    <tr><td class="paramname">angle2</td><td>The second angle. Must be within the range. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The absolute difference, bounded between -pi to pi </dd></dl>
 
 </div>
 </div>
@@ -718,6 +795,16 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Computes the absolute difference between two values in a wrapping range from 0-range</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">val1</td><td>The first value. Must be within the range. </td></tr>
+    <tr><td class="paramname">val2</td><td>The second value. Must be within the range. </td></tr>
+    <tr><td class="paramname">range</td><td>The size of the range </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The absolute difference, bounded between 0 to (range / 2) </dd></dl>
 
 </div>
 </div>
