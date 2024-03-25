@@ -74,12 +74,20 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">frc.WorBots.subsystems.lights.LightsUtil Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>ColorSequence</b></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>Lava</b></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af6c065d3fb5093ab3e92b725067856d1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#af6c065d3fb5093ab3e92b725067856d1">solid</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a> io, Color color)</td></tr>
@@ -92,6 +100,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ae47b90c0c1d4f3f73699ae783eb9f7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86a9fbd1727596b0e20fa8612d0bb496"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a86a9fbd1727596b0e20fa8612d0bb496">bounce</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a> io, Color c1, double cycleLength, double duration, double waveExponent)</td></tr>
 <tr class="separator:a86a9fbd1727596b0e20fa8612d0bb496"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84db4ef68d98ac12c9e2f8b0d780edb9"><td class="memItemLeft" align="right" valign="top">static Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a84db4ef68d98ac12c9e2f8b0d780edb9">colorLerp</a> (Color c1, Color c2, double t)</td></tr>
+<tr class="separator:a84db4ef68d98ac12c9e2f8b0d780edb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Utility functions and mode classes for the control of the lights </p>
@@ -148,6 +158,58 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Make a bouncing pattern </p>
+
+</div>
+</div>
+<a id="a84db4ef68d98ac12c9e2f8b0d780edb9" name="a84db4ef68d98ac12c9e2f8b0d780edb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84db4ef68d98ac12c9e2f8b0d780edb9">&#9670;&#160;</a></span>colorLerp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Color frc.WorBots.subsystems.lights.LightsUtil.colorLerp </td>
+          <td>(</td>
+          <td class="paramtype">Color&#160;</td>
+          <td class="paramname"><em>c1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color&#160;</td>
+          <td class="paramname"><em>c2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Does a linear interpolation between two colors</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c1</td><td>The first color </td></tr>
+    <tr><td class="paramname">c2</td><td>The second color </td></tr>
+    <tr><td class="paramname">t</td><td>The scalar interpolation factor, from 0 to 1 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

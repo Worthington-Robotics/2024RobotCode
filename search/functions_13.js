@@ -6,5 +6,6 @@ var searchData=
   ['wingpass_3',['WingPass',['../classfrc_1_1WorBots_1_1commands_1_1WingPass.html#a3e326b7ca76d3656b6f33277875eef09',1,'frc::WorBots::commands::WingPass']]],
   ['withintolerance_4',['withinTolerance',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a580d539596c0241044f0ffdc7b0f73c1',1,'frc::WorBots::commands::DriveToPose']]],
   ['withoutdriving_5',['withoutDriving',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#aa600c1661288b55629d9e5488d7473f7',1,'frc::WorBots::commands::DriveToPose']]],
-  ['wrappingangledifference_6',['wrappingAngleDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#aa2498cbd59dc349e5a852997dd7786e0',1,'frc::WorBots::util::math::GeneralMath']]]
+  ['wrappingangledifference_6',['wrappingAngleDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#aa2498cbd59dc349e5a852997dd7786e0',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['wrappingdifference_7',['wrappingDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#ab649e4def36fba6aed7f0d3144e64e37',1,'frc::WorBots::util::math::GeneralMath']]]
 ];
