@@ -126,6 +126,43 @@ public class LightsUtil {
     }
   }
 
+  /**
+   * Does a ripple effect over time
+   *
+   * @param io The lights
+   * @param colors The colors to use
+   * @param speed The speed multiplier of the effect. Negative values can be used to run it in
+   *     reverse.
+   * @param scale The scale multiplier of the effect
+   * @param intensity The intensity multiplier of the effect
+   * @param offset The offset from center of the effect. Zero is exact center of the strip.
+   */
+  public static void ripple(
+      LightsIO io,
+      ColorSequence colors,
+      double speed,
+      double scale,
+      double intensity,
+      double offset) {
+    final double time = TimeCache.getInstance().get() * speed;
+    for (int i = 0; i < io.getCount(); i++) {
+      // Get the offset scalar position
+      double scalarPosition = (double) i / io.getCount() - 0.5 - offset;
+      // Mirror the effect
+      if (scalarPosition < -offset) {
+        scalarPosition *= -1;
+      }
+      // Prevent ugly looking output at small x values
+      scalarPosition = MathUtil.clamp(scalarPosition, 0.05, 1.0);
+      // Scale the x
+      scalarPosition /= scale;
+      scalarPosition *= io.getCount();
+
+      final double value = Math.abs(TrigLookup.sin(scalarPosition - time) / scalarPosition);
+      io.setLED(i, colors.sample(value * 0.3 * intensity));
+    }
+  }
+
   /** Does a red-blue bounce pattern that meets with white at the middle */
   public static void worbotsBounce(LightsIO io) {
     LightsUtil.solid(io, Color.kBlack);
