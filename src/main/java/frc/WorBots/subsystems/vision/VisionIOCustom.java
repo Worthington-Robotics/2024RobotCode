@@ -15,6 +15,7 @@ import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import frc.WorBots.util.cache.Cache.TimeCache;
 
+/** Partial credit to team 6328. */
 public class VisionIOCustom implements VisionIO {
   private final NetworkTableInstance defaultInstance = NetworkTableInstance.getDefault();
   private final NetworkTable table;

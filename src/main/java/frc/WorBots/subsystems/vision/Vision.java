@@ -31,7 +31,7 @@ import java.util.function.*;
  * This subsystem manages all of the camera inputs from our robot, reads them, decides which ones to
  * use, or throw out, logs them, adds the to the pose estimator, and repeats.
  *
- * <p>Credit to team 6328.
+ * <p>Modified from team 6328.
  */
 public class Vision extends SubsystemBase {
   private final VisionIO[] io;

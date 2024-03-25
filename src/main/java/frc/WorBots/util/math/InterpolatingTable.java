@@ -21,7 +21,7 @@ public class InterpolatingTable {
    *
    * @param table Must be an array of arrays with two doubles. The first double is the input, and
    *     the second double is the output for that sample. The list of samples must also be arranged
-   *     with the inputs in ascending order
+   *     with the inputs in ascending order. The table must be at least one sample large.
    */
   public InterpolatingTable(double[][] table) {
     this.table = table;
@@ -53,6 +53,6 @@ public class InterpolatingTable {
     final double low_y = table[index - 1][1];
     final double low_x = table[index - 1][0];
 
-    return (low_y + (x - low_x) * (high_y - low_y) / (high_x - low_x));
+    return GeneralMath.rescale(x, low_x, high_x, low_y, high_y);
   }
 }

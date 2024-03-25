@@ -39,7 +39,6 @@ public class IntakeIOTalon implements IntakeIO {
     inputs.isConnected = inputs.motor.isConnected;
 
     inputs.timeOfFlightDistanceMeters = tofFilter.calculate(timeOfFlight.getRange()) / 1000;
-    // inputs.isConnected &= DeviceUtils.getTimeOfFlightStatus(timeOfFlight);
   }
 
   @Override

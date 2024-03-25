@@ -26,8 +26,8 @@ public class WingPass extends Command {
   private final Superstructure superstructure;
   private final Shooter shooter;
   private final DriveController driveController = new DriveController();
-  private Supplier<Double> leftXSupplier;
-  private Supplier<Double> leftYSupplier;
+  private final Supplier<Double> leftXSupplier;
+  private final Supplier<Double> leftYSupplier;
 
   private final ProfiledPIDController turnPID =
       new ProfiledPIDController(

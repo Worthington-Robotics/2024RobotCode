@@ -169,8 +169,4 @@ public class ModuleIOTalon implements ModuleIO {
   public void setTurnVoltage(double volts) {
     turnSignals.setTalonVoltage(turnMotor, volts, 11.0);
   }
-
-  public void setDriveBrakeMode(boolean enable) {}
-
-  public void setTurnBrakeMode(boolean enable) {}
 }

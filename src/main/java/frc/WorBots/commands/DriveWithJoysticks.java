@@ -14,11 +14,11 @@ import java.util.function.Supplier;
 
 /** Command for teleop that drives the robot using controllers */
 public class DriveWithJoysticks extends Command {
-  private Drive drive;
+  private final Drive drive;
   private final DriveController driveController = new DriveController();
-  private Supplier<Double> leftXSupplier;
-  private Supplier<Double> leftYSupplier;
-  private Supplier<Double> rightYSupplier;
+  private final Supplier<Double> leftXSupplier;
+  private final Supplier<Double> leftYSupplier;
+  private final Supplier<Double> rightYSupplier;
 
   public DriveWithJoysticks(
       Drive drive,

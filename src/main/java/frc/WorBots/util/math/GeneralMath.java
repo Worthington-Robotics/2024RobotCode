@@ -88,7 +88,7 @@ public class GeneralMath {
       // Right boundary check
       final double rightBound = maxPosition - forwardLimitDistance;
       if (position > rightBound) {
-        // Get the reciprocal because we want the slope to go the other way
+        // Get the inverse because we want the slope to go the other way
         final double scalar = 1 - getScalarPosition(position, rightBound, maxPosition);
         final double clamp = clampMagnitude(velocity, maxVelocity * scalar);
         return clamp;
@@ -122,6 +122,20 @@ public class GeneralMath {
    */
   public static double scale(double value, double min, double max) {
     return min + value * (max - min);
+  }
+
+  /**
+   * Rescales a value within one range to its equivalent position in another range
+   *
+   * @param value The value within the first range
+   * @param min1 The minimum value of the first range
+   * @param max1 The maximum value of the first range
+   * @param min2 The minimum value of the second range
+   * @param max2 The maximum value of the second range
+   * @return The rescaled value within the second range
+   */
+  public static double rescale(double value, double min1, double max1, double min2, double max2) {
+    return scale(getScalarPosition(value, min1, max1), min2, max2);
   }
 
   /**
@@ -219,11 +233,26 @@ public class GeneralMath {
     return 0.5 * mass * Math.pow(radius, 2);
   }
 
+  /**
+   * Computes the absolute difference between two rotations in the -180 to 180 range
+   *
+   * @param angle1 The first angle. Must be within the range.
+   * @param angle2 The second angle. Must be within the range.
+   * @return The absolute difference, bounded between -pi to pi
+   */
   public static Rotation2d wrappingAngleDifference(Rotation2d angle1, Rotation2d angle2) {
     return Rotation2d.fromDegrees(
         wrappingDifference(angle1.getDegrees(), angle2.getDegrees(), 360));
   }
 
+  /**
+   * Computes the absolute difference between two values in a wrapping range from 0-range
+   *
+   * @param val1 The first value. Must be within the range.
+   * @param val2 The second value. Must be within the range.
+   * @param range The size of the range
+   * @return The absolute difference, bounded between 0 to (range / 2)
+   */
   public static double wrappingDifference(double val1, double val2, double range) {
     double diff = Math.abs(val1 - val2);
     if (diff > range / 2) {

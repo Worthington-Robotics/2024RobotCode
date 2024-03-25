@@ -22,6 +22,7 @@ import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.math.GeomUtil;
 import java.util.function.Supplier;
 
+/** Command that drives to a pose on the field. Credit to team 6328. */
 public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;

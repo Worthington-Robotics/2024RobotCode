@@ -19,7 +19,11 @@ import frc.WorBots.util.debug.StatusPage;
 public class Intake extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputs inputs = new IntakeIOInputs();
+
+  /** Setpoint voltage for the intake */
   private double setpointVolts = 0.0;
+
+  /** Whether a game piece is in the intake */
   private boolean hasGamepiece = false;
 
   // Publishers
@@ -92,21 +96,15 @@ public class Intake extends SubsystemBase {
     setpointVolts = volts;
   }
 
+  /**
+   * Returns a command that spits the game piece
+   *
+   * @return The command
+   */
   public Command spitRaw() {
     return this.run(
             () -> {
               setpointVolts = -INTAKE_VOLTS;
-            })
-        .finallyDo(
-            () -> {
-              setpointVolts = 0.0;
-            });
-  }
-
-  public Command intakeRaw() {
-    return this.run(
-            () -> {
-              setpointVolts = INTAKE_VOLTS;
             })
         .finallyDo(
             () -> {

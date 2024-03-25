@@ -23,6 +23,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.util.UtilCommands;
 
+/** Debugging, test, and characterization routines */
 public class DebugRoutines {
   // Subsystems
   private final Drive drive;
@@ -159,6 +160,12 @@ public class DebugRoutines {
         superstructure.goToPose(Preset.STOW));
   }
 
+  /**
+   * Returns a command for the pit test that waits for the next step
+   *
+   * @param description A very short description of what the step does
+   * @return The command
+   */
   private Command waitForNextStep(String description) {
     return UtilCommands.optimalSequence(
         Commands.runOnce(
@@ -177,6 +184,9 @@ public class DebugRoutines {
             }));
   }
 
+  /** The current step of the pit test */
   private static int pitTestStep = 0;
+
+  /** Whether to run through the whole pit test without waiting */
   private static boolean isFullPitTest = false;
 }

@@ -99,6 +99,12 @@ public class StateMachine<Inputs> {
     return getState().getName().equals(state.getName());
   }
 
+  /**
+   * Explicitly runs a set of transitions on the state machine
+   *
+   * @param transitions The transitions to run
+   * @param inputs The inputs for the states
+   */
   public void runTransitions(StateTransition<Inputs>[] transitions, Inputs inputs) {
     for (var transition : transitions) {
       final var newState = transition.getTransition(inputs);
@@ -129,6 +135,7 @@ public class StateMachine<Inputs> {
     /** Initializes the state when the state machine selects it */
     public void initialize() {}
 
+    /** Checks the transitions of the state */
     public final Optional<State<Inputs>> checkTransitions(Inputs inputs) {
       for (StateTransition<Inputs> transition : transitions) {
         final var result = transition.getTransition(inputs);
@@ -155,6 +162,10 @@ public class StateMachine<Inputs> {
     public void finish() {}
   }
 
+  /**
+   * A transition behavior to another state that can be attached to states to share the same
+   * behavior between them
+   */
   public static interface StateTransition<Inputs> {
     public default Optional<State<Inputs>> getTransition(Inputs inputs) {
       return Optional.empty();

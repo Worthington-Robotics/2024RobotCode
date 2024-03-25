@@ -10,6 +10,10 @@ package frc.WorBots.util;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
+/**
+ * A wrapper utility that gets the time remaining in the current match period, even if no FMS is
+ * attached
+ */
 public class MatchTime {
   private static MatchTime instance = new MatchTime();
 

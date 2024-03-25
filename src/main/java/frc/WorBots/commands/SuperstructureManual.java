@@ -13,15 +13,21 @@ import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
 
+/** Command for manual control of the elevator and pivot using joysticks */
 public class SuperstructureManual extends Command {
   // Constants
+  /** Joystick deadband */
   private static final double DEADBAND = 0.1;
+
+  /** Voltage multiplier for the elevator */
   private static final double ELEVATOR_VOLTS = 8.0;
+
+  /** Voltage multiplier for the pivot */
   private static final double PIVOT_VOLTS = 6.0;
 
-  private Supplier<Double> elevatorValue;
-  private Supplier<Double> pivotValue;
-  private Superstructure superstructure;
+  private final Supplier<Double> elevatorValue;
+  private final Supplier<Double> pivotValue;
+  private final Superstructure superstructure;
 
   public SuperstructureManual(
       Superstructure superstructure, Supplier<Double> elevatorValue, Supplier<Double> pivotValue) {

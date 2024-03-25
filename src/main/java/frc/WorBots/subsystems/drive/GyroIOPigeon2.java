@@ -37,6 +37,7 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelSignal.getValue());
   }
 
+  @Override
   public void resetHeading(Rotation2d heading) {
     pigeon.reset();
     // If the desired heading is zero, then it is already reset

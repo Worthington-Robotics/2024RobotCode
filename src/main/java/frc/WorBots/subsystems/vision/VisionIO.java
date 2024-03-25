@@ -8,7 +8,6 @@
 package frc.WorBots.subsystems.vision;
 
 public interface VisionIO {
-  /** The inputs from the Orange Pi's running our 2024 Vision code. */
   public static class VisionIOInputs {
     public double[][] frames = new double[][] {};
     public double timestamps[] = new double[] {};

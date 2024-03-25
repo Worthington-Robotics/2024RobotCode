@@ -28,6 +28,7 @@ import frc.WorBots.util.trajectory.*;
 import java.util.List;
 import java.util.function.Supplier;
 
+/** Command that drives along a custom holonomic trajectory. Credit to team 6328. */
 public class DriveTrajectory extends Command {
   private static boolean supportedRobot = true;
   private static double maxVelocityMetersPerSec;

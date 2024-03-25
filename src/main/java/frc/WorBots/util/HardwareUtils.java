@@ -10,6 +10,7 @@ package frc.WorBots.util;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
+import edu.wpi.first.hal.PowerDistributionFaults;
 import edu.wpi.first.math.util.Units;
 import frc.WorBots.Constants;
 import frc.WorBots.util.cache.CountingCache;
@@ -229,5 +230,41 @@ public class HardwareUtils {
     public T getValue() {
       return this.cache.get();
     }
+  }
+
+  /**
+   * Checks if a PDP has any breaker faults
+   *
+   * @param faults The faults from the PDP
+   * @return Whether the PDP has any faults
+   */
+  public static boolean pdpHasBreakerFault(PowerDistributionFaults faults) {
+    final boolean breakerFault =
+        faults.Channel0BreakerFault
+            || faults.Channel1BreakerFault
+            || faults.Channel2BreakerFault
+            || faults.Channel3BreakerFault
+            || faults.Channel4BreakerFault
+            || faults.Channel5BreakerFault
+            || faults.Channel6BreakerFault
+            || faults.Channel7BreakerFault
+            || faults.Channel8BreakerFault
+            || faults.Channel9BreakerFault
+            || faults.Channel10BreakerFault
+            || faults.Channel11BreakerFault
+            || faults.Channel12BreakerFault
+            || faults.Channel13BreakerFault
+            || faults.Channel14BreakerFault
+            || faults.Channel15BreakerFault
+            || faults.Channel16BreakerFault
+            || faults.Channel17BreakerFault
+            || faults.Channel18BreakerFault
+            || faults.Channel19BreakerFault
+            || faults.Channel20BreakerFault
+            || faults.Channel21BreakerFault
+            || faults.Channel22BreakerFault
+            || faults.Channel23BreakerFault;
+
+    return breakerFault;
   }
 }

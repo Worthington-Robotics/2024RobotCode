@@ -21,7 +21,7 @@ import frc.WorBots.util.trajectory.RotationSequence;
  * poses in {@link FieldConstants} are stored with the origin at the rightmost point on the blue
  * alliance wall.
  *
- * <p>Partial credit to team 6328.
+ * <p>Modified from team 6328.
  */
 public class AllianceFlipUtil {
   /**
@@ -149,7 +149,6 @@ public class AllianceFlipUtil {
   /** Gets whether alliance-relative x-values should be flipped, for the red side */
   public static boolean shouldFlip() {
     final var alliance = DriverStation.getAlliance();
-    // final var alliance = AllianceCache.getInstance().get();
     return alliance.isPresent() && alliance.get() == Alliance.Red;
   }
 }

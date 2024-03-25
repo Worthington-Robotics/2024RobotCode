@@ -24,10 +24,12 @@ public class GyroIOSim implements GyroIO {
     inputs.connected = true;
   }
 
+  @Override
   public void setExpectedYawVelocity(double vYaw) {
     yawAxis.velocity = vYaw;
   }
 
+  @Override
   public void resetHeading(Rotation2d heading) {
     yawAxis.angle = heading;
   }

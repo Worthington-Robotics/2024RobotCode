@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/** Global simulator for robot functions */
 public class RobotSimulator {
   private static RobotSimulator instance = new RobotSimulator();
 

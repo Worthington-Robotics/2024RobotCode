@@ -174,7 +174,7 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * A function that spins up the flywheels and returns when at the desired speed
+   * A command that spins up the flywheels and returns when at the desired speed
    *
    * @param topRPM The desired RPM for both flywheels
    * @return The command, exits when flywheels are up to speed

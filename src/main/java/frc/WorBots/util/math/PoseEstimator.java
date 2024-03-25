@@ -30,7 +30,7 @@ import java.util.TreeMap;
  * A class to estimate the absolute position and rotation of the robot on the field using a
  * combination of robot odometry and vision data. Used for both real operation and simulation.
  *
- * <p>Credit to team 6328.
+ * <p>Modified from team 6328.
  */
 public class PoseEstimator {
   /** The length of time to keep updates for in seconds */

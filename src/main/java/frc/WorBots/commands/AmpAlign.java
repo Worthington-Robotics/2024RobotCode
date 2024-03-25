@@ -38,7 +38,7 @@ public class AmpAlign extends Command {
           new TrapezoidProfile.Constraints(
               Units.degreesToRadians(50.0), Units.degreesToRadians(720.0)),
           Constants.ROBOT_PERIOD);
-  private Supplier<Double> ySupplier;
+  private final Supplier<Double> ySupplier;
 
   public AmpAlign(Drive drive, Supplier<Double> ySupplier) {
     addRequirements(drive);
