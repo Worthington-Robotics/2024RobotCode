@@ -104,6 +104,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a698124d1fdc64be075a41dd30a3b33f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a968a5afab2db6208a44bf0e31cbfa4a5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a968a5afab2db6208a44bf0e31cbfa4a5">blink</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a> io, Color color1, Color color2, double interval, double time)</td></tr>
 <tr class="separator:a968a5afab2db6208a44bf0e31cbfa4a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a968ef41bcca3e44ce79bde3177491c17"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a968ef41bcca3e44ce79bde3177491c17">ripple</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a> io, ColorSequence colors, double speed, double scale, double intensity, double offset)</td></tr>
+<tr class="separator:a968ef41bcca3e44ce79bde3177491c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2beb6b279564b18a32f854a154a28b9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#ac2beb6b279564b18a32f854a154a28b9">worbotsBounce</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a> io)</td></tr>
 <tr class="separator:ac2beb6b279564b18a32f854a154a28b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bc1b7d805e5369314bed498d9201543"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a6bc1b7d805e5369314bed498d9201543">alliance</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a> io)</td></tr>
@@ -425,6 +427,78 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Make a rainbow pattern </p>
+
+</div>
+</div>
+<a id="a968ef41bcca3e44ce79bde3177491c17" name="a968ef41bcca3e44ce79bde3177491c17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a968ef41bcca3e44ce79bde3177491c17">&#9670;&#160;</a></span>ripple()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void frc.WorBots.subsystems.lights.LightsUtil.ripple </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsIO.html">LightsIO</a>&#160;</td>
+          <td class="paramname"><em>io</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ColorSequence&#160;</td>
+          <td class="paramname"><em>colors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>speed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>scale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>intensity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Does a ripple effect over time</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">io</td><td>The lights </td></tr>
+    <tr><td class="paramname">colors</td><td>The colors to use </td></tr>
+    <tr><td class="paramname">speed</td><td>The speed multiplier of the effect. Negative values can be used to run it in reverse. </td></tr>
+    <tr><td class="paramname">scale</td><td>The scale multiplier of the effect </td></tr>
+    <tr><td class="paramname">intensity</td><td>The intensity multiplier of the effect </td></tr>
+    <tr><td class="paramname">offset</td><td>The offset from center of the effect. Zero is exact center of the strip. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
