@@ -89,6 +89,22 @@ public class LightsUtil {
     }
   }
 
+  /** Creates a flame with the specified height */
+  public static void flame(LightsIO io, double height, ColorSequence colors) {
+    final double flicker = 0.25;
+    final double scale = height * (1.0 - flicker) + Math.random() * flicker;
+    for (int i = 0; i < io.getCount(); i++) {
+      final double scalarPosition = (double) i / io.getCount();
+      final double pos = scalarPosition / scale;
+      if (pos > 1.0) {
+        io.setLED(i, Color.kBlack);
+      } else {
+        final Color color = colors.sample(pos);
+        io.setLED(i, color);
+      }
+    }
+  }
+
   /** State for a two-color morphing lava pattern */
   public static class Lava {
     /** The speed at which the bubbles move */

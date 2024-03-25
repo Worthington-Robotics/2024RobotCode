@@ -48,6 +48,19 @@ public class Lights extends SubsystemBase {
   /** The number of steps in the pit test */
   private static final int PIT_TEST_STEP_COUNT = 10;
 
+  private static final ColorSequence LAVA_COLORS =
+      new ColorSequence(Color.kBlack, Color.kDarkBlue, Color.kBlue, Color.kRed);
+
+  private static final ColorSequence FLAME_COLORS =
+      new ColorSequence(
+          Color.kCadetBlue,
+          Color.kBlue,
+          Color.kIndigo,
+          Color.kRed,
+          Color.kRed,
+          Color.kRed,
+          Color.kBlack);
+
   private final LightsIO io;
   private LightsMode mode = LightsMode.RedBlue;
 
@@ -108,6 +121,7 @@ public class Lights extends SubsystemBase {
     ShootReady,
     PitTest,
     Lava,
+    Flame,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -193,9 +207,10 @@ public class Lights extends SubsystemBase {
         pitTest();
         break;
       case Lava:
-        final ColorSequence colors =
-            new ColorSequence(Color.kBlack, Color.kDarkBlue, Color.kBlue, Color.kRed);
-        lava.run(io, colors);
+        lava.run(io, LAVA_COLORS);
+        break;
+      case Flame:
+        LightsUtil.flame(io, 0.95, FLAME_COLORS);
         break;
     }
 
