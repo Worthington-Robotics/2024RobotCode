@@ -76,7 +76,7 @@ public class LightsIO {
       return;
     }
 
-    buffer.setHSV(index, index, index, index);
+    buffer.setHSV(index, h, s, v);
   }
 
   /** Gets the number of LEDs in the strip */

@@ -110,7 +110,6 @@ public class Lights extends SubsystemBase {
     Status,
     Alliance,
     MatchTime,
-    Disabled,
     Claire,
     Shooting,
     Delivery,
@@ -162,11 +161,8 @@ public class Lights extends SubsystemBase {
       case MatchTime:
         matchTime();
         break;
-      case Disabled:
-        LightsUtil.wave(io, Color.kBlack, Color.kBlue, 25.0, 2.0, 0.4);
-        break;
       case Claire:
-        LightsUtil.wave(io, Color.kPurple, Color.kBlack, 25.0, 2.0, 0.4);
+        LightsUtil.wave(io, new ColorSequence(Color.kPurple, Color.kBlack), 25.0, 2.0, 0.4);
         break;
       case Shooting:
         shooting();
@@ -175,12 +171,8 @@ public class Lights extends SubsystemBase {
         delivery();
         break;
       case RedBlue:
-        // final double time = Timer.getFPGATimestamp();
-        // var red = (time % 1.0 < 0.5) ? new Color(0.4, 0.0, 0.0) : Color.kRed;
-        // var blue = (time % 1.0 > 0.5) ? new Color(0.0, 0.0, 0.4) : Color.kBlue;
-        var red = Color.kRed;
-        var blue = Color.kBlue;
-        LightsUtil.wave(io, blue, red, 14.0, 1.2, 0.3);
+        LightsUtil.wave(
+            io, new ColorSequence(Color.kRed, Color.kBlack, Color.kBlue), 14.0, 1.2, 0.3);
         break;
       case Indicator:
         LightsUtil.solid(io, Color.kRed);
@@ -303,17 +295,18 @@ public class Lights extends SubsystemBase {
   private void alliance() {
     final var alliance = AllianceCache.getInstance().get();
     final boolean isRed = alliance.isPresent() && alliance.get() == Alliance.Red;
-    LightsUtil.wave(io, isRed ? Color.kRed : Color.kBlue, Color.kBlack, 25.0, 2.0, 0.4);
+    final ColorSequence colors = new ColorSequence(isRed ? Color.kRed : Color.kBlue, Color.kBlack);
+    LightsUtil.wave(io, colors, 25.0, 2.0, 0.4);
   }
 
   private void matchTime() {
     final double autoSeconds = 15.0;
     final double teleopSeconds = 135.0;
-    final double remaining = MatchTime.getInstance().getTime();
+    final double remaining = MatchTime.getInstance().getTimeRemaining();
     double ratio = remaining;
-    if (DriverStation.isAutonomousEnabled()) {
+    if (DriverStation.isAutonomous()) {
       ratio /= autoSeconds;
-    } else if (DriverStation.isTeleopEnabled()) {
+    } else if (DriverStation.isTeleop()) {
       ratio /= teleopSeconds;
     } else {
       ratio = 1.0;
@@ -329,7 +322,7 @@ public class Lights extends SubsystemBase {
         if (isVeryLittleTimeLeft) {
           io.setHSV(i, 0, 255, value);
         } else if (isLittleTimeLeft) {
-          io.setHSV(i, 30, 255, value);
+          io.setHSV(i, 25, 255, value);
         } else {
           io.setHSV(i, 0, 0, value);
         }

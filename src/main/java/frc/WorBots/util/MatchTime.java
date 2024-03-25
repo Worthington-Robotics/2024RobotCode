@@ -17,21 +17,30 @@ public class MatchTime {
     return instance;
   }
 
-  private final Timer timer = new Timer();
+  /** The time when the current section was started */
+  private double startTime = 0.0;
 
+  /** Amount of time that this section (auto or teleop) will take */
+  private double sectionTime = 0.0;
+
+  /** Starts the timer in teleop */
   public void startTeleop() {
-    timer.restart();
+    startTime = Timer.getFPGATimestamp();
+    sectionTime = 135.0;
   }
 
+  /** Starts the timer in auto */
   public void startAuto() {
-    timer.restart();
+    startTime = Timer.getFPGATimestamp();
+    sectionTime = 15.0;
   }
 
-  public double getTime() {
+  /** Gets the amount of time remaining in the current match period (auto or teleop) */
+  public double getTimeRemaining() {
     if (DriverStation.isFMSAttached()) {
       return DriverStation.getMatchTime();
     }
 
-    return timer.get();
+    return sectionTime - (Timer.getFPGATimestamp() - startTime);
   }
 }

@@ -52,9 +52,9 @@ public class LightsUtil {
     }
   }
 
-  /** Make a two-color wave pattern */
+  /** Make a multicolor wave pattern */
   public static void wave(
-      LightsIO io, Color c1, Color c2, double cycleLength, double duration, double waveExponent) {
+      LightsIO io, ColorSequence colors, double cycleLength, double duration, double waveExponent) {
     double x = (1 - ((TimeCache.getInstance().get() % duration) / duration)) * 2.0 * Math.PI;
     double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
     for (int i = 0; i < io.getCount(); i++) {
@@ -67,10 +67,8 @@ public class LightsUtil {
         if (Double.isNaN(ratio)) {
           ratio = 0.5;
         }
-        double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-        double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-        double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-        io.setLED(i, new Color(red, green, blue));
+        final Color color = colors.sample(ratio);
+        io.setLED(i, color);
       }
     }
   }
