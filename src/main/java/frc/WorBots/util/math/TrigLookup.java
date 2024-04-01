@@ -32,7 +32,10 @@ public class TrigLookup {
    */
   public static double sin(double radians) {
     radians = MathUtil.inputModulus(radians, 0, GeomUtil.PI2);
-    final int index = (int) (radians / GeomUtil.PI2 * RESOLUTION);
+    int index = (int) (radians / GeomUtil.PI2 * RESOLUTION);
+    if (index >= RESOLUTION) {
+      index = RESOLUTION - 1;
+    }
     return sinTable[index];
   }
 

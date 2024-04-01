@@ -88,8 +88,8 @@ public class Robot extends TimedRobot {
     // ==== DISABLE BEFORE COMP ====
     final var robotPose = robotContainer.drive.getPose();
     final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
-    // final double range = ShooterMath.getGoalDistance(robotPose);
-    // SmartDashboard.putNumber("Speaker Range", range);
+    final double range = ShooterMath.getGoalDistance(robotPose);
+    SmartDashboard.putNumber("Speaker Range", range);
     // final var goalPose = ShooterMath.getGoal();
     // SmartDashboard.putNumberArray("Goal Pose",
     // Logger.translation2dToArray(goalPose));
@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
     if (Constants.IS_COMP) {
       Lights.getInstance().setMode(LightsMode.Status);
     } else {
-      Lights.getInstance().setMode(LightsMode.Ripple);
+      Lights.getInstance().setMode(LightsMode.Flame);
     }
   }
 

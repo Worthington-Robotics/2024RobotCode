@@ -8,6 +8,7 @@
 package frc.WorBots.subsystems.lights;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
@@ -93,10 +94,13 @@ public class LightsUtil {
     }
   }
 
+  private static final LinearFilter flameFilter = LinearFilter.movingAverage(5);
+
   /** Creates a flame with the specified height */
   public static void flame(LightsIO io, double height, ColorSequence colors) {
-    final double flicker = 0.25;
-    final double scale = height * (1.0 - flicker) + Math.random() * flicker;
+    final double flicker = 0.55;
+    final double flickerAmount = flameFilter.calculate(Math.random() * flicker);
+    final double scale = height * (1.0 - flicker) + flickerAmount;
     for (int i = 0; i < io.getCount(); i++) {
       final double scalarPosition = (double) i / io.getCount();
       final double pos = scalarPosition / scale;

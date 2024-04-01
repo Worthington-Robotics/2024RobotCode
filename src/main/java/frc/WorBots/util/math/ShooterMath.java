@@ -72,7 +72,7 @@ public class ShooterMath {
 
   /** The amount to move the pivot down for side shots */
   private static final TunableDouble SIDE_SHOT_PIVOT_COEFFICIENT =
-      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.022);
+      new TunableDouble("Tuning", "Shooting", "Side Pivot Coeff", 0.0);
 
   /** The amount to adjust the robot angle for side shots */
   private static final TunableDouble SIDE_SHOT_ROBOT_ANGLE_COEFFICIENT =
@@ -96,6 +96,8 @@ public class ShooterMath {
   /** The amount to increase robot angle momentum compensation by depending on the range */
   private static final double ROBOT_ANGLE_MOMENTUM_COMP_RANGE_AMOUNT = 0.000;
 
+  private static final double ROBOT_ANGLE_OFFSET = Units.degreesToRadians(2.5);
+
   /** Distance -> pivot angle */
   private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
@@ -109,9 +111,13 @@ public class ShooterMath {
             {3.240 - GOAL_ADJUSTMENT, 1.00 * 0.900600},
             {3.430 - GOAL_ADJUSTMENT, 1.00 * 0.919560},
             {4.000 - GOAL_ADJUSTMENT, 1.00 * 0.970695},
-            {4.550 - GOAL_ADJUSTMENT, 1.00 * 0.990305},
-            {5.295 - GOAL_ADJUSTMENT, 1.00 * 0.985893},
-            {5.444 - GOAL_ADJUSTMENT, 1.00 * 1.081302}
+            {4.25 - GOAL_ADJUSTMENT, 1.00 * 0.978},
+            {4.550 - GOAL_ADJUSTMENT, 1.00 * 0.998},
+            {4.75 - GOAL_ADJUSTMENT, 1.00 * 1.0128},
+            {5.000 - GOAL_ADJUSTMENT, 1.00 * 1.02},
+            {5.295 - GOAL_ADJUSTMENT, 1.00 * 1.028},
+            {5.444 - GOAL_ADJUSTMENT, 1.00 * 1.05},
+            {5.8 - GOAL_ADJUSTMENT, 1.00 * 1.023}
           });
 
   /** Difference confidence levels for a shot */
@@ -363,7 +369,7 @@ public class ShooterMath {
   public static Rotation2d getGoalTheta(Pose2d robot) {
     final var goal = getGoal();
     final double angle = Math.atan2(robot.getY() - goal.getY(), robot.getX() - goal.getX());
-    return new Rotation2d(angle);
+    return new Rotation2d(angle + ROBOT_ANGLE_OFFSET);
   }
 
   /**
