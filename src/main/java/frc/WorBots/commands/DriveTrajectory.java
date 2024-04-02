@@ -33,7 +33,7 @@ public class DriveTrajectory extends Command {
   private static boolean supportedRobot = true;
   private static double maxVelocityMetersPerSec;
   private static double maxAccelerationMetersPerSec2;
-  private static double maxDecelerationMetersPerSec2;
+  // private static double maxDecelerationMetersPerSec2;
   private static double maxCentripetalAccelerationMetersPerSec2;
 
   private PIDController xController = new PIDController(2.5, 0.0, 0.0, Constants.ROBOT_PERIOD);
@@ -85,7 +85,7 @@ public class DriveTrajectory extends Command {
     if (Constants.getSim()) {
       maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
-      maxDecelerationMetersPerSec2 = Units.inchesToMeters(155.0);
+      // maxDecelerationMetersPerSec2 = Units.inchesToMeters(155.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(170.0);
 
       xController = new PIDController(2.7, 0, 0.0, Constants.ROBOT_PERIOD);
@@ -94,8 +94,8 @@ public class DriveTrajectory extends Command {
       customHolonomicDriveController.setFeedforwardCoefficients(1.0, 1.0);
     } else {
       maxVelocityMetersPerSec = Units.inchesToMeters(100.0);
-      maxAccelerationMetersPerSec2 = Units.inchesToMeters(300.0);
-      maxDecelerationMetersPerSec2 = Units.inchesToMeters(600.0);
+      maxAccelerationMetersPerSec2 = Units.inchesToMeters(600.0);
+      // maxDecelerationMetersPerSec2 = Units.inchesToMeters(600.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(130.0);
 
       xController = new PIDController(8.9, 0, 0.0, Constants.ROBOT_PERIOD);
@@ -118,7 +118,7 @@ public class DriveTrajectory extends Command {
       boolean alertOnFail) {
     // Set up trajectory configuration
     final TrajectoryConfig config =
-        new TrajectoryConfig(maxVelocityMetersPerSec, maxDecelerationMetersPerSec2)
+        new TrajectoryConfig(maxVelocityMetersPerSec, maxAccelerationMetersPerSec2)
             .setKinematics(new SwerveDriveKinematics(drive.getModuleTranslations()))
             .setStartVelocity(startVelocity)
             .setEndVelocity(0.0)
@@ -127,10 +127,7 @@ public class DriveTrajectory extends Command {
     final TrajectoryConfig constrainedConfig =
         config
             .addConstraint(
-                new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2))
-            .addConstraint(
-                new MaxAccelerationConstraint(
-                    maxAccelerationMetersPerSec2, maxDecelerationMetersPerSec2));
+                new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2));
 
     // Generate trajectory
     customGenerator = new CustomTrajectoryGenerator(); // Reset generator
