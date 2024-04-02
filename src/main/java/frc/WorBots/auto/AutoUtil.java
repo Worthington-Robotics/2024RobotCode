@@ -73,6 +73,9 @@ public class AutoUtil {
   /** Wing midpoint for the wall side */
   public final Pose2d wallSideCenterpoint;
 
+  /** Wing midpoint for the amp side */
+  public final Pose2d ampSideCenterpoint;
+
   // Subsystems
   private final Drive drive;
   private final Superstructure superstructure;
@@ -158,6 +161,11 @@ public class AutoUtil {
         pose(
             (FieldConstants.StartingZone.endX + FieldConstants.Wing.endX) / 2.0,
             FieldConstants.midLineY * 0.35);
+
+    ampSideCenterpoint =
+        pose(
+            (FieldConstants.StartingZone.endX + FieldConstants.Wing.endX) / 2.0,
+            FieldConstants.midLineY * 1.60);
   }
 
   /**

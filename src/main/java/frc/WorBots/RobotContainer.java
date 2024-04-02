@@ -124,6 +124,8 @@ public class RobotContainer {
 
     selector.addRoutine("Long Five", List.of(), autos.fivePieceLong());
 
+    selector.addRoutine("Amp Side Line", List.of(), autos.ampLine());
+
     selector.addRoutine(
         "Mobility",
         List.of(

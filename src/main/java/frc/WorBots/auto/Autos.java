@@ -500,6 +500,50 @@ public class Autos {
         autoShoot5.command());
   }
 
+  public Command ampLine() {
+    final Pose2d startingPose = util.twoPieceStartingLocations[0];
+
+    // Drive to the better spot before the first shot for a more accurate shot
+    final var drive1 =
+        util.driveTo(AllianceFlipUtil.addToFlipped(startingPose, Units.inchesToMeters(10)));
+
+    // Shoot the loaded game piece
+    final var shoot1 = util.moveAndShoot(drive1.pose(), true, false, true, 2.5);
+
+    // Turn to the correct direction before moving
+    final var turn1 = util.turnTo(shoot1.pose(), AllianceFlipUtil.apply(new Rotation2d()));
+
+    // Intake the piece right behind us
+    final var intake1 = util.driveAndIntakeWing(turn1.pose(), false, false, 0);
+
+    // Shoot the second piece
+    final var shoot2 = util.moveAndShoot(intake1.pose(), true, false, true, 2.5);
+
+    // Drive and intake the center piece, then move back
+    final var path1 =
+        util.path(
+            Waypoint.fromHolonomicPose(shoot2.pose()),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
+            Waypoint.fromHolonomicPose(util.ampSideCenterpoint),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(util.wingGamePieceLocations[0])));
+
+    // Make the final shot
+    final var shoot3 = util.moveAndShoot(path1.pose(), false, false, true, 2.5);
+
+    return createSequence(
+        util.reset(startingPose).command(),
+        drive1.command(),
+        shoot1.command(),
+        turn1.command(),
+        intake1.command(),
+        shoot2.command(),
+        Commands.parallel(
+            path1.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[0], 1.0))),
+        shoot3.command());
+  }
+
   public Command mobility() {
     return selectFromStartingLocation(this::mobility);
   }
