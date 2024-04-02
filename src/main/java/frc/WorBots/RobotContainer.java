@@ -85,16 +85,23 @@ public class RobotContainer {
     selector = new AutoSelector("Auto Selector 2");
     final Autos autos = new Autos(drive, superstructure, intake, shooter, selector::getResponses);
 
+    // Order by how often we use them
+
+    selector.addRoutine("Close Four", List.of(), autos.fourPieceClose());
+    selector.addRoutine("Close Four Alt", List.of(), autos.fourPieceCloseAlt());
+
+    selector.addRoutine("Long Three Wall Side", List.of(), autos.threePieceLongWallSide());
+    selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
+
+    selector.addRoutine("Amp Side Line", List.of(), autos.ampLine());
+
     selector.addRoutine(
-        "One Piece",
+        "Close Three",
         List.of(
             new AutoQuestion(
-                "Starting Location?",
-                List.of(
-                    AutoQuestionResponse.AMP_SIDE,
-                    AutoQuestionResponse.CENTER,
-                    AutoQuestionResponse.WALL_SIDE))),
-        autos.onePiece());
+                "Direction?",
+                List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
+        autos.threePieceClose());
 
     selector.addRoutine(
         "Two Piece",
@@ -108,23 +115,19 @@ public class RobotContainer {
         autos.twoPiece());
 
     selector.addRoutine(
-        "Close Three",
+        "One Piece",
         List.of(
             new AutoQuestion(
-                "Direction?",
-                List.of(AutoQuestionResponse.AMP_SIDE, AutoQuestionResponse.WALL_SIDE))),
-        autos.threePieceClose());
+                "Starting Location?",
+                List.of(
+                    AutoQuestionResponse.AMP_SIDE,
+                    AutoQuestionResponse.CENTER,
+                    AutoQuestionResponse.WALL_SIDE))),
+        autos.onePiece());
 
-    selector.addRoutine("Close Four", List.of(), autos.fourPieceClose());
-    selector.addRoutine("Close Four Alt", List.of(), autos.fourPieceCloseAlt());
     selector.addRoutine("Four From Middle", List.of(), autos.fourFromMiddle());
 
-    selector.addRoutine("Long Three Wall Side", List.of(), autos.threePieceLongWallSide());
-    selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
-
     selector.addRoutine("Long Five", List.of(), autos.fivePieceLong());
-
-    selector.addRoutine("Amp Side Line", List.of(), autos.ampLine());
 
     selector.addRoutine(
         "Mobility",
