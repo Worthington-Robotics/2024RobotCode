@@ -46,9 +46,14 @@ public class Lights extends SubsystemBase {
 
   private static final ColorSequence FLAME_COLORS =
       new ColorSequence(
+          Color.kWhite,
           Color.kCadetBlue,
           Color.kBlue,
+          Color.kBlue,
           Color.kIndigo,
+          Color.kIndigo,
+          Color.kRed,
+          Color.kRed,
           Color.kRed,
           Color.kRed,
           Color.kRed,

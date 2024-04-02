@@ -33,6 +33,7 @@ public class DriveTrajectory extends Command {
   private static boolean supportedRobot = true;
   private static double maxVelocityMetersPerSec;
   private static double maxAccelerationMetersPerSec2;
+  private static double maxDecelerationMetersPerSec2;
   private static double maxCentripetalAccelerationMetersPerSec2;
 
   private PIDController xController = new PIDController(2.5, 0.0, 0.0, Constants.ROBOT_PERIOD);
@@ -84,6 +85,7 @@ public class DriveTrajectory extends Command {
     if (Constants.getSim()) {
       maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
+      maxDecelerationMetersPerSec2 = Units.inchesToMeters(155.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(170.0);
 
       xController = new PIDController(2.7, 0, 0.0, Constants.ROBOT_PERIOD);
@@ -91,14 +93,15 @@ public class DriveTrajectory extends Command {
       thetaController = new PIDController(6.5, 0, 0.0, Constants.ROBOT_PERIOD);
       customHolonomicDriveController.setFeedforwardCoefficients(1.0, 1.0);
     } else {
-      maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
-      maxAccelerationMetersPerSec2 = Units.inchesToMeters(600.0);
-      maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
+      maxVelocityMetersPerSec = Units.inchesToMeters(100.0);
+      maxAccelerationMetersPerSec2 = Units.inchesToMeters(300.0);
+      maxDecelerationMetersPerSec2 = Units.inchesToMeters(600.0);
+      maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(130.0);
 
-      xController = new PIDController(3.3, 0, 0.0, Constants.ROBOT_PERIOD);
-      yController = new PIDController(3.3, 0, 0.0, Constants.ROBOT_PERIOD);
+      xController = new PIDController(8.9, 0, 0.0, Constants.ROBOT_PERIOD);
+      yController = new PIDController(8.9, 0, 0.0, Constants.ROBOT_PERIOD);
       thetaController = new PIDController(6.4, 0, 0.03, Constants.ROBOT_PERIOD);
-      customHolonomicDriveController.setFeedforwardCoefficients(0.35, 0.48);
+      customHolonomicDriveController.setFeedforwardCoefficients(1.0, 0.48);
     }
     customHolonomicDriveController.setTolerance(
         new Pose2d(
@@ -115,15 +118,19 @@ public class DriveTrajectory extends Command {
       boolean alertOnFail) {
     // Set up trajectory configuration
     final TrajectoryConfig config =
-        new TrajectoryConfig(maxVelocityMetersPerSec, maxAccelerationMetersPerSec2)
+        new TrajectoryConfig(maxVelocityMetersPerSec, maxDecelerationMetersPerSec2)
             .setKinematics(new SwerveDriveKinematics(drive.getModuleTranslations()))
             .setStartVelocity(startVelocity)
             .setEndVelocity(0.0)
             .addConstraints(constraints);
 
     final TrajectoryConfig constrainedConfig =
-        config.addConstraint(
-            new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2));
+        config
+            .addConstraint(
+                new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2))
+            .addConstraint(
+                new MaxAccelerationConstraint(
+                    maxAccelerationMetersPerSec2, maxDecelerationMetersPerSec2));
 
     // Generate trajectory
     customGenerator = new CustomTrajectoryGenerator(); // Reset generator

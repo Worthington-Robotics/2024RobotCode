@@ -314,7 +314,7 @@ public class Autos {
             Waypoint.fromHolonomicPose(autoShoot2.pose()),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
             Waypoint.fromHolonomicPose(
-                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(100))),
+                AllianceFlipUtil.addToFlipped(util.betweenZeroAndOne, Units.inchesToMeters(120))),
             Waypoint.fromHolonomicPose(util.betweenZeroAndOne),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
@@ -373,17 +373,19 @@ public class Autos {
             Waypoint.fromHolonomicPose(util.getWingLinePose(autoShoot1.pose(), new Rotation2d())),
             Waypoint.fromHolonomicPose(
                 util.posePlus(
-                    util.centerGamePieceLocations[3],
+                    util.posePlus(
+                        util.centerGamePieceLocations[3],
+                        util.transformY(Units.inchesToMeters(5.0))),
                     util.transformRotate(
                         AllianceFlipUtil.flipRotation(
-                            AllianceFlipUtil.apply(Rotation2d.fromDegrees(80)))))),
+                            AllianceFlipUtil.apply(Rotation2d.fromDegrees(75)))))),
             Waypoint.fromHolonomicPose(
-                util.posePlus(util.wallSideCenterpoint, util.transform(1.3, 0.3))),
+                util.posePlus(util.wallSideCenterpoint, util.transform(1.3, 0.1))),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     util.posePlus(
                         inFrontOfStagePiece,
-                        util.transform(Units.inchesToMeters(90.0), Units.inchesToMeters(-50.0))))));
+                        util.transform(Units.inchesToMeters(40.0), Units.inchesToMeters(-55.0))))));
     final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, true, 2.5);
 
     // Intake stage piece, then shoot from close

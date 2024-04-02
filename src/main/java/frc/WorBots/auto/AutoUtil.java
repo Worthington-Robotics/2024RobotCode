@@ -261,7 +261,7 @@ public class AutoUtil {
    * @return The command
    */
   public Command prepareHandoff() {
-    return superstructure.goToPose(Preset.HANDOFF).withTimeout(0.35);
+    return superstructure.goToPose(Preset.HANDOFF).withTimeout(1.4);
   }
 
   /** Does handoff and intake at the same time, finishing when the game piece is at the shooter */
