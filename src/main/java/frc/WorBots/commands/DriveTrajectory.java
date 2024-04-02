@@ -93,7 +93,7 @@ public class DriveTrajectory extends Command {
       thetaController = new PIDController(6.5, 0, 0.0, Constants.ROBOT_PERIOD);
       customHolonomicDriveController.setFeedforwardCoefficients(1.0, 1.0);
     } else {
-      maxVelocityMetersPerSec = Units.inchesToMeters(100.0);
+      maxVelocityMetersPerSec = Units.inchesToMeters(160.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(600.0);
       // maxDecelerationMetersPerSec2 = Units.inchesToMeters(600.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(130.0);
@@ -125,9 +125,8 @@ public class DriveTrajectory extends Command {
             .addConstraints(constraints);
 
     final TrajectoryConfig constrainedConfig =
-        config
-            .addConstraint(
-                new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2));
+        config.addConstraint(
+            new CentripetalAccelerationConstraint(maxCentripetalAccelerationMetersPerSec2));
 
     // Generate trajectory
     customGenerator = new CustomTrajectoryGenerator(); // Reset generator
