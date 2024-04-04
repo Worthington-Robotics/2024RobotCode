@@ -202,7 +202,7 @@ public class RobotContainer {
     driver
         .x()
         .toggleOnTrue(
-            Commands.parallel(
+            Commands.deadline(
                 new Handoff(intake, superstructure, shooter),
                 Commands.startEnd(
                     () -> superstructure.setPose(Preset.HANDOFF),
