@@ -111,14 +111,17 @@ public class ShooterMath {
             {2.900 - GOAL_ADJUSTMENT, 1.00 * 0.861300},
             {3.240 - GOAL_ADJUSTMENT, 1.00 * 0.900600},
             {3.430 - GOAL_ADJUSTMENT, 1.00 * 0.919560},
+            {3.750 - GOAL_ADJUSTMENT, 1.00 * 0.950000},
             {4.000 - GOAL_ADJUSTMENT, 1.00 * 0.970695},
-            {4.25 - GOAL_ADJUSTMENT, 1.00 * 0.978},
-            {4.550 - GOAL_ADJUSTMENT, 1.00 * 0.998},
-            {4.75 - GOAL_ADJUSTMENT, 1.00 * 1.0128},
-            {5.000 - GOAL_ADJUSTMENT, 1.00 * 1.02},
-            {5.295 - GOAL_ADJUSTMENT, 1.00 * 1.028},
-            {5.444 - GOAL_ADJUSTMENT, 1.00 * 1.05},
-            {5.8 - GOAL_ADJUSTMENT, 1.00 * 1.023}
+            {4.250 - GOAL_ADJUSTMENT, 1.00 * 0.978000},
+            {4.550 - GOAL_ADJUSTMENT, 1.00 * 0.998000},
+            {4.750 - GOAL_ADJUSTMENT, 1.00 * 1.012800},
+            {5.000 - GOAL_ADJUSTMENT, 1.00 * 1.020000},
+            {5.295 - GOAL_ADJUSTMENT, 1.00 * 1.026000},
+            {5.444 - GOAL_ADJUSTMENT, 1.00 * 1.030000},
+            {5.800 - GOAL_ADJUSTMENT, 1.00 * 1.027000},
+            {6.000 - GOAL_ADJUSTMENT, 1.00 * 1.024000},
+            {6.250 - GOAL_ADJUSTMENT, 1.00 * 1.020000},
           });
 
   /** Difference confidence levels for a shot */
