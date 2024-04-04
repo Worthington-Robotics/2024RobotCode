@@ -55,14 +55,14 @@ public class WingPass extends Command {
 
   @Override
   public void initialize() {
-    double goal = Units.degreesToRadians(160 + 180);
+    double goal = Units.degreesToRadians(147 + 180);
     if (AllianceFlipUtil.shouldFlip()) {
       goal *= -1;
     }
     turnPID.setGoal(goal);
 
     superstructure.setPose(Preset.WING_PASS);
-    shooter.setSpeedVoid(3500);
+    shooter.setSpeedVoid(3200);
   }
 
   @Override
