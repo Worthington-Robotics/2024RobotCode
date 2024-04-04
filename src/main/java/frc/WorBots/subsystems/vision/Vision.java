@@ -87,7 +87,7 @@ public class Vision extends SubsystemBase {
   private static final double FIELD_BORDER_MARGIN = 0.5;
 
   /** The margin in the z-axis from 0m for a pose to be considered valid, in meters */
-  private static final double Z_MARGIN = Units.inchesToMeters(20);
+  private static final double Z_MARGIN = Units.inchesToMeters(26);
 
   /** Weights for different tags on the field to be chosen */
   private static final double[] TAG_WEIGHTS =
