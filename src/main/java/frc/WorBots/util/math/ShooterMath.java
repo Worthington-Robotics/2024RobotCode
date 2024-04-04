@@ -104,7 +104,7 @@ public class ShooterMath {
           new double[][] {
             {1.096 - GOAL_ADJUSTMENT, 1.00 * 0.463140},
             {1.406 - GOAL_ADJUSTMENT, 1.00 * 0.495600},
-            {1.750 - GOAL_ADJUSTMENT, 1.00 * 0.647000},
+            {1.750 - GOAL_ADJUSTMENT, 1.00 * 0.652000},
             {2.197 - GOAL_ADJUSTMENT, 1.00 * 0.759996},
             {2.379 - GOAL_ADJUSTMENT, 1.00 * 0.775180},
             {2.600 - GOAL_ADJUSTMENT, 1.00 * 0.841500},
