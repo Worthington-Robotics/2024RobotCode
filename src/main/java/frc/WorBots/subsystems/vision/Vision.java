@@ -274,6 +274,7 @@ public class Vision extends SubsystemBase {
           seesTag = true;
         }
       }
+      seesTag = true;
 
       // Log poses
       setRobotPoses(allRobotPoses);
