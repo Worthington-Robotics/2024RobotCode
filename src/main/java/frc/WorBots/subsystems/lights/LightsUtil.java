@@ -94,7 +94,7 @@ public class LightsUtil {
     }
   }
 
-  private static final LinearFilter flameFilter = LinearFilter.movingAverage(4);
+  private static final LinearFilter flameFilter = LinearFilter.movingAverage(5);
 
   /** Creates a flame with the specified height */
   public static void flame(LightsIO io, double height, ColorSequence colors) {
