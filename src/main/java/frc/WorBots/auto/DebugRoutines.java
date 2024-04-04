@@ -86,6 +86,7 @@ public class DebugRoutines {
 
   /** Runs a tests of all systems in the pit */
   public Command pitTest(boolean isFull, Vision vision) {
+    pitTestStepCount = 0;
     final Command command =
         UtilCommands.namedSequence(
             "Pit Test Progress",

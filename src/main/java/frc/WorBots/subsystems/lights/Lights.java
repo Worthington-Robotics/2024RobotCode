@@ -44,7 +44,7 @@ public class Lights extends SubsystemBase {
   private static final ColorSequence LAVA_COLORS =
       new ColorSequence(Color.kBlack, Color.kDarkBlue, Color.kBlue, Color.kRed);
 
-  private static final ColorSequence FLAME_COLORS =
+  private static final ColorSequence WORBOTS_FLAME_COLORS =
       new ColorSequence(
           Color.kWhite,
           Color.kCadetBlue,
@@ -58,6 +58,9 @@ public class Lights extends SubsystemBase {
           Color.kRed,
           Color.kRed,
           Color.kBlack);
+
+  private static final ColorSequence FLAME_COLORS =
+      new ColorSequence(Color.kCadetBlue, Color.kOrangeRed, Color.kRed);
 
   private final LightsIO io;
   private LightsMode mode = LightsMode.RedBlue;
@@ -121,8 +124,9 @@ public class Lights extends SubsystemBase {
     ShootReady,
     PitTest,
     Lava,
-    Flame,
+    WorbotsFlame,
     Ripple,
+    Flame,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -202,11 +206,14 @@ public class Lights extends SubsystemBase {
       case Lava:
         lava.run(io, LAVA_COLORS);
         break;
-      case Flame:
-        LightsUtil.flame(io, 0.95, FLAME_COLORS);
+      case WorbotsFlame:
+        LightsUtil.flame(io, 0.95, WORBOTS_FLAME_COLORS);
         break;
       case Ripple:
         LightsUtil.ripple(io, LAVA_COLORS, 5.0, 2.0, 7.0, 0.0);
+        break;
+      case Flame:
+        LightsUtil.flame(io, 0.95, FLAME_COLORS);
         break;
     }
 
@@ -457,7 +464,7 @@ public class Lights extends SubsystemBase {
     if (pitTestFlashing) {
       LightsUtil.blink(io, Color.kOrangeRed, Color.kBlack, 0.25, TimeCache.getInstance().get());
     }
-    LightsUtil.solid(io, Color.kGreen, pitTestStep / (pitTestStepCount - 1));
+    LightsUtil.solid(io, Color.kGreen, (double) pitTestStep / (double) (pitTestStepCount - 1));
   }
 
   /**
@@ -503,6 +510,7 @@ public class Lights extends SubsystemBase {
   /** Sets the number of steps in the pit test */
   public void setPitTestStepCount(int count) {
     this.pitTestStepCount = count;
+    SmartDashboard.putNumber("Lights/Pit Test Count", count);
   }
 
   /** Sets whether the lights are flashing in pit test mode */
