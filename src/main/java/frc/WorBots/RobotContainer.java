@@ -245,6 +245,13 @@ public class RobotContainer {
             new WingPass(
                 drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
         .whileTrue(shootingLightsCommand);
+    // Flea flick indicator
+    operator
+        .leftTrigger()
+        .toggleOnTrue(
+            Commands.startEnd(
+                () -> Lights.getInstance().setMode(LightsMode.Claire),
+                () -> Lights.getInstance().setMode(LightsMode.Delivery)));
     // Amp preset
     operator.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
     // Setpoint shot

@@ -168,7 +168,7 @@ public class Lights extends SubsystemBase {
         LightsUtil.matchTime(io);
         break;
       case Claire:
-        LightsUtil.wave(io, new ColorSequence(Color.kPurple, Color.kBlack), 25.0, 2.0, 0.4);
+        LightsUtil.solid(io, Color.kPurple);
         break;
       case Shooting:
         shooting();
