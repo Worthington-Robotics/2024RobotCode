@@ -360,8 +360,13 @@ public class Autos {
 
   public Command threePieceLongWallSide() {
     final Pose2d startingPose = util.twoPieceStartingLocations[2];
+    // Move for starting shot
+    final var move1 =
+        util.driveTo(
+            util.posePlus(
+                startingPose, util.transform(Units.inchesToMeters(32), Units.inchesToMeters(10))));
     // Starting shot
-    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 2.8);
+    final var autoShoot1 = util.moveAndShoot(move1.pose(), true, false, true, 2.8);
 
     final Pose2d inFrontOfStagePiece =
         AllianceFlipUtil.addToFlipped(util.wingGamePieceLocations[2], Units.inchesToMeters(-60));
@@ -370,17 +375,16 @@ public class Autos {
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(autoShoot1.pose()),
-            Waypoint.fromHolonomicPose(util.getWingLinePose(autoShoot1.pose(), new Rotation2d())),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.wallSideCenterpoint, -0.60)),
             Waypoint.fromHolonomicPose(
                 util.posePlus(
                     util.posePlus(
                         util.centerGamePieceLocations[3],
-                        util.transformY(Units.inchesToMeters(5.0))),
-                    util.transformRotate(
-                        AllianceFlipUtil.flipRotation(
-                            AllianceFlipUtil.apply(Rotation2d.fromDegrees(75)))))),
+                        util.transform(Units.inchesToMeters(15), Units.inchesToMeters(5.0))),
+                    util.transformRotate(Rotation2d.fromDegrees(-55)))),
             Waypoint.fromHolonomicPose(
-                util.posePlus(util.wallSideCenterpoint, util.transform(1.3, 0.1))),
+                util.posePlus(util.wallSideCenterpoint, util.transform(1.3, -0.20))),
             Waypoint.fromHolonomicPose(
                 util.getAutoShootPose(
                     util.posePlus(
@@ -412,11 +416,12 @@ public class Autos {
 
     return createSequence(
         util.reset(startingPose).command(),
+        move1.command(),
         autoShoot1.command(),
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.8))
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 2.2))
                 .andThen(util.prepareShooting(path1.pose()))),
         // Slight time delay to ensure full stop
         Commands.waitSeconds(0.25),

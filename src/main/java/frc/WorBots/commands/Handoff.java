@@ -24,7 +24,7 @@ public class Handoff extends Command {
 
   // Constants
   /** Max voltage to run the intake at */
-  private static final double MAX_INTAKE_VOLTAGE = 6.24;
+  private static final double MAX_INTAKE_VOLTAGE = 6.45;
 
   /** The amount to scale the intake power based on ToF distance. Larger values reduce the speed */
   private static final double INTAKE_DISTANCE_SCALING = 0.44;
