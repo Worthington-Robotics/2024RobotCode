@@ -358,7 +358,7 @@ public class Autos {
         autoShoot4.command());
   }
 
-  public CommandWithPose threePieceLongWallSide() {
+  public Command threePieceLongWallSide() {
     final Pose2d startingPose = util.twoPieceStartingLocations[2];
     // Starting shot
     final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 2.8);
@@ -410,26 +410,24 @@ public class Autos {
             Waypoint.fromHolonomicPose(util.wallSideCenterpoint),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[4]));
 
-    return new CommandWithPose(
-        createSequence(
-            util.reset(startingPose).command(),
-            autoShoot1.command(),
-            Commands.deadline(
-                path1.command(),
-                util.prepareHandoff()
-                    .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.8))
-                    .andThen(util.prepareShooting(path1.pose()))),
-            // Slight time delay to ensure full stop
-            Commands.waitSeconds(0.25),
-            autoShoot2.command(),
-            Commands.deadline(
-                path2.command().withTimeout(4.3),
-                util.prepareHandoff()
-                    .andThen(util.intakeWhenNear(util.wingGamePieceLocations[2], 1.4))
-                    .andThen(util.prepareShooting(path2.pose()))),
-            autoShoot3.command(),
-            Commands.parallel(path3.command(), util.fullHandoff())),
-        path3.pose());
+    return createSequence(
+        util.reset(startingPose).command(),
+        autoShoot1.command(),
+        Commands.deadline(
+            path1.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.8))
+                .andThen(util.prepareShooting(path1.pose()))),
+        // Slight time delay to ensure full stop
+        Commands.waitSeconds(0.25),
+        autoShoot2.command(),
+        Commands.deadline(
+            path2.command().withTimeout(4.3),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.wingGamePieceLocations[2], 1.4))
+                .andThen(util.prepareShooting(path2.pose()))),
+        autoShoot3.command(),
+        Commands.parallel(path3.command(), util.fullHandoff()));
   }
 
   public Command fourPieceLongWallSide() {
