@@ -385,7 +385,7 @@ public class Autos {
                 util.getAutoShootPose(
                     util.posePlus(
                         inFrontOfStagePiece,
-                        util.transform(Units.inchesToMeters(40.0), Units.inchesToMeters(-55.0))))));
+                        util.transform(Units.inchesToMeters(40.0), Units.inchesToMeters(-45.0))))));
     final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, true, 2.5);
 
     // Intake stage piece, then shoot from close
@@ -404,6 +404,12 @@ public class Autos {
                     util.posePlus(inFrontOfStagePiece, util.transformY(Units.inchesToMeters(8))))));
     final var autoShoot3 = util.moveAndShoot(path2.pose(), true, false, true, 2.5);
 
+    final var path3 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot3.pose()),
+            Waypoint.fromHolonomicPose(util.wallSideCenterpoint),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[4]));
+
     return createSequence(
         util.reset(startingPose).command(),
         autoShoot1.command(),
@@ -421,7 +427,9 @@ public class Autos {
                 .andThen(util.intakeWhenNear(util.wingGamePieceLocations[2], 1.4))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
-        util.driveAndIntakeCenter(startingPose, 4).command());
+        Commands.parallel(path3.command(), util.fullHandoff())
+        // util.driveAndIntakeCenter(autoShoot3.pose(), 4).command()
+        );
   }
 
   public Command fivePieceLong() {
