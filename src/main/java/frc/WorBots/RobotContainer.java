@@ -90,7 +90,9 @@ public class RobotContainer {
     selector.addRoutine("Close Four", List.of(), autos.fourPieceClose());
     selector.addRoutine("Close Four Alt", List.of(), autos.fourPieceCloseAlt());
 
-    selector.addRoutine("Long Three Wall Side", List.of(), autos.threePieceLongWallSide());
+    selector.addRoutine(
+        "Long Three Wall Side", List.of(), autos.threePieceLongWallSide().command());
+    selector.addRoutine("Long Four Wall Side", List.of(), autos.fourPieceLongWallSide());
     selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
 
     selector.addRoutine("Amp Side Line", List.of(), autos.ampLine());

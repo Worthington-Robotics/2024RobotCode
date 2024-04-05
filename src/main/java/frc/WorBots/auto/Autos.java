@@ -358,7 +358,7 @@ public class Autos {
         autoShoot4.command());
   }
 
-  public Command threePieceLongWallSide() {
+  public CommandWithPose threePieceLongWallSide() {
     final Pose2d startingPose = util.twoPieceStartingLocations[2];
     // Starting shot
     final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 2.8);
@@ -410,6 +410,82 @@ public class Autos {
             Waypoint.fromHolonomicPose(util.wallSideCenterpoint),
             Waypoint.fromHolonomicPose(util.centerGamePieceLocations[4]));
 
+    return new CommandWithPose(
+        createSequence(
+            util.reset(startingPose).command(),
+            autoShoot1.command(),
+            Commands.deadline(
+                path1.command(),
+                util.prepareHandoff()
+                    .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.8))
+                    .andThen(util.prepareShooting(path1.pose()))),
+            // Slight time delay to ensure full stop
+            Commands.waitSeconds(0.25),
+            autoShoot2.command(),
+            Commands.deadline(
+                path2.command().withTimeout(4.3),
+                util.prepareHandoff()
+                    .andThen(util.intakeWhenNear(util.wingGamePieceLocations[2], 1.4))
+                    .andThen(util.prepareShooting(path2.pose()))),
+            autoShoot3.command(),
+            Commands.parallel(path3.command(), util.fullHandoff())),
+        path3.pose());
+  }
+
+  public Command fourPieceLongWallSide() {
+    final Pose2d startingPose = util.twoPieceStartingLocations[2];
+    // Starting shot
+    final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 2.8);
+
+    final Pose2d inFrontOfStagePiece =
+        AllianceFlipUtil.addToFlipped(util.wingGamePieceLocations[2], Units.inchesToMeters(-60));
+
+    final Pose2d shootingPose =
+        util.posePlus(
+            inFrontOfStagePiece,
+            util.transform(Units.inchesToMeters(40.0), Units.inchesToMeters(-45.0)));
+
+    // Intake center piece, then drive up to speaker and shoot
+    final var path1 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot1.pose()),
+            Waypoint.fromHolonomicPose(util.getWingLinePose(autoShoot1.pose(), new Rotation2d())),
+            Waypoint.fromHolonomicPose(
+                util.posePlus(
+                    util.posePlus(
+                        util.centerGamePieceLocations[3],
+                        util.transformY(Units.inchesToMeters(5.0))),
+                    util.transformRotate(
+                        AllianceFlipUtil.flipRotation(
+                            AllianceFlipUtil.apply(Rotation2d.fromDegrees(75)))))),
+            Waypoint.fromHolonomicPose(
+                util.posePlus(util.wallSideCenterpoint, util.transform(1.3, 0.1))),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(shootingPose)));
+    final var autoShoot2 = util.moveAndShoot(path1.pose(), false, false, true, 2.5);
+
+    // Intake stage piece, then shoot from close
+    final var path2 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot2.pose()),
+            Waypoint.fromHolonomicPose(
+                util.posePlus(
+                    inFrontOfStagePiece,
+                    util.transform(Units.inchesToMeters(20.0), Units.inchesToMeters(-24.0)))),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(
+                    util.wingGamePieceLocations[2], Units.inchesToMeters(12))),
+            Waypoint.fromHolonomicPose(
+                util.getAutoShootPose(
+                    util.posePlus(inFrontOfStagePiece, util.transformY(Units.inchesToMeters(8))))));
+    final var autoShoot3 = util.moveAndShoot(path2.pose(), true, false, true, 2.5);
+
+    final var path3 =
+        util.path(
+            Waypoint.fromHolonomicPose(autoShoot3.pose()),
+            Waypoint.fromHolonomicPose(util.wallSideCenterpoint),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[4]),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(shootingPose)));
+
     return createSequence(
         util.reset(startingPose).command(),
         autoShoot1.command(),
@@ -418,8 +494,6 @@ public class Autos {
             util.prepareHandoff()
                 .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 1.8))
                 .andThen(util.prepareShooting(path1.pose()))),
-        // Slight time delay to ensure full stop
-        Commands.waitSeconds(0.25),
         autoShoot2.command(),
         Commands.deadline(
             path2.command().withTimeout(4.3),
@@ -427,9 +501,11 @@ public class Autos {
                 .andThen(util.intakeWhenNear(util.wingGamePieceLocations[2], 1.4))
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
-        Commands.parallel(path3.command(), util.fullHandoff())
-        // util.driveAndIntakeCenter(autoShoot3.pose(), 4).command()
-        );
+        Commands.deadline(
+            path3.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhenNear(util.centerGamePieceLocations[4], 1.4))
+                .andThen(util.prepareShooting(path3.pose()))));
   }
 
   public Command fivePieceLong() {
