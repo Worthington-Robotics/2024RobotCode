@@ -136,6 +136,14 @@ public class AllianceFlipUtil {
     }
   }
 
+  public static Rotation2d negRotation(Rotation2d rotation) {
+    if (shouldFlip()) {
+      return rotation.unaryMinus();
+    } else {
+      return rotation;
+    }
+  }
+
   /**
    * Flips a Pose2d's y component
    *

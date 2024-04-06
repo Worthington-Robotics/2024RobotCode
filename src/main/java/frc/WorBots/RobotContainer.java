@@ -81,7 +81,7 @@ public class RobotContainer {
   }
 
   /** Generates autos and registers them into the auto selector */
-  private void registerAutos() {
+  public void registerAutos() {
     selector = new AutoSelector("Auto Selector 2");
     final Autos autos = new Autos(drive, superstructure, intake, shooter, selector::getResponses);
 
@@ -92,6 +92,7 @@ public class RobotContainer {
 
     selector.addRoutine("Long Three Wall Side", List.of(), autos.threePieceLongWallSide());
     selector.addRoutine("Long Four Wall Side", List.of(), autos.fourPieceLongWallSide());
+    selector.addRoutine("The Adib Special", List.of(), autos.theAdibSpecial());
     selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
 
     selector.addRoutine("Amp Side Line", List.of(), autos.ampLine());

@@ -133,6 +133,9 @@ public class Robot extends TimedRobot {
     } else {
       Lights.getInstance().setMode(LightsMode.WorbotsFlame);
     }
+    if (DriverStation.getAlliance().isEmpty()) {
+      robotContainer.registerAutos();
+    }
   }
 
   @Override

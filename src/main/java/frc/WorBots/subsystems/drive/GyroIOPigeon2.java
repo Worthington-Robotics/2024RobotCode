@@ -39,10 +39,7 @@ public class GyroIOPigeon2 implements GyroIO {
 
   @Override
   public void resetHeading(Rotation2d heading) {
-    pigeon.reset();
-    // If the desired heading is zero, then it is already reset
-    if (heading.getRadians() != 0.0) {
-      pigeon.setYaw(heading.getDegrees());
-    }
+    // pigeon.reset();
+    pigeon.setYaw(heading.getDegrees());
   }
 }
