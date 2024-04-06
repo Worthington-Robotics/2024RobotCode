@@ -29,7 +29,10 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     SUBWOOFER_SHOOT(
         new SuperstructurePose(VecBuilder.fill(0.0, 0.498 - Units.degreesToRadians(2)))),
     /** Wing pass over the stage */
-    WING_PASS(new SuperstructurePose(VecBuilder.fill(0.0, 0.720)));
+    WING_PASS(new SuperstructurePose(VecBuilder.fill(0.0, 0.720))),
+    /** Wing pass over the stage */
+    STRAIGHT_PASS(
+        new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.PIVOT_MAX_ANGLE * 0.85)));
 
     public SuperstructurePose pose;
 

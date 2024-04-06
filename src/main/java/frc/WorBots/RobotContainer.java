@@ -246,6 +246,7 @@ public class RobotContainer {
             new WingPass(
                 drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
         .whileTrue(shootingLightsCommand);
+    operator.povDown().onTrue(superstructure.goToPose(Preset.STRAIGHT_PASS));
     // Flea flick indicator
     operator
         .leftTrigger()
@@ -287,6 +288,7 @@ public class RobotContainer {
     HashMap<String, Command> shootMap = new HashMap<>();
     shootMap.put("amp", shooter.setSpeedContinuous(1750));
     shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(3200));
+    shootMap.put("straight_pass", shooter.setSpeedContinuous(5000));
     shootMap.put("raw", shooter.setSpeedContinuous(3000));
 
     operator
@@ -300,6 +302,9 @@ public class RobotContainer {
                   }
                   if (superstructure.isInPose(Preset.SUBWOOFER_SHOOT)) {
                     return "subwoofer_shoot";
+                  }
+                  if (superstructure.isInPose(Preset.STRAIGHT_PASS)) {
+                    return "straight_pass";
                   }
                   return "raw";
                 }));
