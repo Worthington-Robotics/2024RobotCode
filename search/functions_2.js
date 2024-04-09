@@ -14,12 +14,13 @@ var searchData=
   ['chassisspeedstoarray_11',['chassisSpeedsToArray',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a2bcdad9b5718b2503c10030ce0a1eec2',1,'frc::WorBots::util::debug::Logger']]],
   ['checkerror_12',['checkError',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a5f6433f94444df9fe20a9772d5ae51d4',1,'frc.WorBots.util.math.GeneralMath.checkError(double measurement, double goal, double margin)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a6ce3a805d7348460655f4ee9a0078b8f',1,'frc.WorBots.util.math.GeneralMath.checkError(double error, double margin)']]],
   ['clampmagnitude_13',['clampMagnitude',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['colorlerp_14',['colorLerp',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a84db4ef68d98ac12c9e2f8b0d780edb9',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
-  ['commandwithpose_15',['CommandWithPose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720',1,'frc::WorBots::auto::AutoUtil']]],
-  ['compbool_16',['compBool',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1DebugValue.html#a916ce18c9fd2e09e8adffd9b5d0f49ba',1,'frc::WorBots::util::debug::DebugValue']]],
-  ['compdouble_17',['compDouble',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1DebugValue.html#a3f725d8a42cbcb43d5eaf079258919a3',1,'frc::WorBots::util::debug::DebugValue']]],
-  ['cos_18',['cos',['../classfrc_1_1WorBots_1_1util_1_1math_1_1TrigLookup.html#a8b4b36e7b833594fe06e540ad8ccb0f6',1,'frc::WorBots::util::math::TrigLookup']]],
-  ['countingcache_19',['CountingCache',['../classfrc_1_1WorBots_1_1util_1_1cache_1_1CountingCache.html#a92556b689d240c5c3dae9630469b52a6',1,'frc::WorBots::util::cache::CountingCache']]],
-  ['curve_20',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['customholonomicdrivecontroller_21',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
+  ['clearoverride_14',['clearOverride',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#a547a9a48b71c7ce356eb95ae37efa019',1,'frc::WorBots::subsystems::lights::Lights']]],
+  ['colorlerp_15',['colorLerp',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a84db4ef68d98ac12c9e2f8b0d780edb9',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['commandwithpose_16',['CommandWithPose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a902978671786241fef829b2828ed6720',1,'frc::WorBots::auto::AutoUtil']]],
+  ['compbool_17',['compBool',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1DebugValue.html#a916ce18c9fd2e09e8adffd9b5d0f49ba',1,'frc::WorBots::util::debug::DebugValue']]],
+  ['compdouble_18',['compDouble',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1DebugValue.html#a3f725d8a42cbcb43d5eaf079258919a3',1,'frc::WorBots::util::debug::DebugValue']]],
+  ['cos_19',['cos',['../classfrc_1_1WorBots_1_1util_1_1math_1_1TrigLookup.html#a8b4b36e7b833594fe06e540ad8ccb0f6',1,'frc::WorBots::util::math::TrigLookup']]],
+  ['countingcache_20',['CountingCache',['../classfrc_1_1WorBots_1_1util_1_1cache_1_1CountingCache.html#a92556b689d240c5c3dae9630469b52a6',1,'frc::WorBots::util::cache::CountingCache']]],
+  ['curve_21',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['customholonomicdrivecontroller_22',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
 ];
