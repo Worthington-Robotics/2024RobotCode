@@ -65,6 +65,9 @@ public class Lights extends SubsystemBase {
   private final LightsIO io;
   private LightsMode mode = LightsMode.RedBlue;
 
+  /** The override for the current mode */
+  private Optional<LightsMode> modeOverride = Optional.empty();
+
   private final IntegerSubscriber setModeSub;
   private final IntegerPublisher setModePub;
 
@@ -153,8 +156,12 @@ public class Lights extends SubsystemBase {
     setModePub.set(mode.ordinal());
     SmartDashboard.putString("Lights/Mode", mode.toString());
 
-    // Run the current mode
-    switch (mode) {
+    // Run the current mode or the override
+    LightsMode modeToRun = this.mode;
+    if (modeOverride.isPresent()) {
+      modeToRun = modeOverride.get();
+    }
+    switch (modeToRun) {
       case Rainbow:
         LightsUtil.rainbow(io, 50.0, 1.5);
         break;
@@ -480,6 +487,14 @@ public class Lights extends SubsystemBase {
       }
     }
     this.mode = mode;
+  }
+
+  public void setOverride(LightsMode mode) {
+    this.modeOverride = Optional.of(mode);
+  }
+
+  public void clearOverride() {
+    this.modeOverride = Optional.empty();
   }
 
   /** Sets data interfaces for subsystems */

@@ -247,13 +247,13 @@ public class RobotContainer {
                 drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
         .whileTrue(shootingLightsCommand);
     operator.povDown().onTrue(superstructure.goToPose(Preset.STRAIGHT_PASS));
-    // Flea flick indicator
+    // Light indicator
     operator
         .leftTrigger()
         .toggleOnTrue(
             Commands.startEnd(
-                () -> Lights.getInstance().setMode(LightsMode.Claire),
-                () -> Lights.getInstance().setMode(LightsMode.Delivery)));
+                () -> Lights.getInstance().setOverride(LightsMode.Claire),
+                () -> Lights.getInstance().clearOverride()));
     // Amp preset
     operator.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
     // Setpoint shot
