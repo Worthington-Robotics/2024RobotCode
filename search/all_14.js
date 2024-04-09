@@ -13,6 +13,7 @@ var searchData=
   ['withintolerance_10',['withinTolerance',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#a580d539596c0241044f0ffdc7b0f73c1',1,'frc::WorBots::commands::DriveToPose']]],
   ['withoutdriving_11',['withoutDriving',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html#aa600c1661288b55629d9e5488d7473f7',1,'frc::WorBots::commands::DriveToPose']]],
   ['worbotsbounce_12',['worbotsBounce',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#ac2beb6b279564b18a32f854a154a28b9',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
-  ['wrappingangledifference_13',['wrappingAngleDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#aa2498cbd59dc349e5a852997dd7786e0',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['wrappingdifference_14',['wrappingDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#ab649e4def36fba6aed7f0d3144e64e37',1,'frc::WorBots::util::math::GeneralMath']]]
+  ['worbotsflame_13',['WorbotsFlame',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a11f38c25215103a25e0d565db386b66b',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
+  ['wrappingangledifference_14',['wrappingAngleDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#aa2498cbd59dc349e5a852997dd7786e0',1,'frc::WorBots::util::math::GeneralMath']]],
+  ['wrappingdifference_15',['wrappingDifference',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#ab649e4def36fba6aed7f0d3144e64e37',1,'frc::WorBots::util::math::GeneralMath']]]
 ];
