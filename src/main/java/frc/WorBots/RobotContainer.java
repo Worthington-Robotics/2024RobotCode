@@ -212,7 +212,7 @@ public class RobotContainer {
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
-    driver.rightBumper().onTrue(superstructure.goToPose(Preset.HANDOFF));
+    driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     // Auto handoff toggle
     driver
         .rightBumper()
