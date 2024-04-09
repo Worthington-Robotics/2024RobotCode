@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.auto.AutoSelector;
@@ -45,6 +46,9 @@ public class RobotContainer {
 
   /** State boolean used for auto-stow after feed */
   private boolean hadGamePieceAtStartOfFeed = false;
+
+  /** Whether proper autos with a valid alliance have been generated */
+  private boolean validAutosGenerated = false;
 
   /** The robot container houses the joysticks, subsystems, and autos of the robot. */
   public RobotContainer() {
@@ -157,6 +161,16 @@ public class RobotContainer {
       selector.addRoutine("Characterize Odometry", List.of(), routines.characterizeOdometry());
       selector.addRoutine("Pit Test", List.of(), routines.pitTest(false, vision));
       selector.addRoutine("Full Pit Test", List.of(), routines.pitTest(true, vision));
+    }
+  }
+
+  /** Check autos to make sure that good ones have been generated */
+  public void checkAutos() {
+    if (!validAutosGenerated) {
+      if (DriverStation.getAlliance().isPresent()) {
+        registerAutos();
+        validAutosGenerated = true;
+      }
     }
   }
 
