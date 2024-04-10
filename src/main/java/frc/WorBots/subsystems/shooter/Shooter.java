@@ -58,7 +58,7 @@ public class Shooter extends SubsystemBase {
   private static final double COAST_DOWN_THRESHOLD = -0.3;
 
   /** The default idle speed for the flywheels */
-  private static final double IDLE_SPEED = 500.0;
+  private static final double IDLE_SPEED = 000.0;
 
   /** The voltage to run the feeder wheels at when feeding */
   private static final double FEED_VOLTS = 2.0;

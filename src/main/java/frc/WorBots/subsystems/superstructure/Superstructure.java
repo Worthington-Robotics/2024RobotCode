@@ -156,13 +156,13 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(9.6, 0.12, 0);
-      pivotController.setConstraints(11, 18);
-      pivotFeedForward = new ArmFeedforward(0.045, 0.26, 0.01);
+      pivotController.setGains(7.5, 0.0, 0);
+      pivotController.setConstraints(18, 70);
+      pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 1.0);
 
       elevatorController.setGains(130, 0.2, 0);
-      elevatorController.setConstraints(2.0, 1.65);
-      elevatorFeedForward = new ElevatorFeedforward(0.0, 0.0, 0.0);
+      elevatorController.setConstraints(2.5, 4.0);
+      elevatorFeedForward = new ElevatorFeedforward(0.0, 0.2, 0.0);
     } else { // Sim
       pivotController.setGains(50, 0.25, 0);
       pivotController.setConstraints(12, 8);
@@ -257,7 +257,7 @@ public class Superstructure extends SubsystemBase {
     setpoint = MathUtil.clamp(setpoint, 0.0, ELEVATOR_MAX_METERS);
     final double elevatorVoltage =
         elevatorController.pid.calculate(inputs.elevatorPositionMeters, setpoint)
-            + elevatorFeedForward.calculate(inputs.elevatorVelocityMetersPerSec);
+            + elevatorFeedForward.calculate(0.0);
 
     return elevatorVoltage;
   }
@@ -271,13 +271,12 @@ public class Superstructure extends SubsystemBase {
   private double calculatePivot(double setpoint) {
     // Clamp the setpoint
     setpoint = MathUtil.clamp(setpoint, 0.0, PIVOT_MAX_ANGLE);
-    double pivotVoltage =
-        pivotController.pid.calculate(getPivotPoseRads(), setpoint) + calculatePivotFeedforward();
-
+    double feedback = pivotController.pid.calculate(getPivotPoseRads(), setpoint);
     // Anti-oscillation for the amp pose by reducing output
     if (atAmpPose()) {
-      pivotVoltage *= PIVOT_OSCILLATION_MULTIPLIER;
+      feedback *= PIVOT_OSCILLATION_MULTIPLIER;
     }
+    final double pivotVoltage = feedback + calculatePivotFeedforward(setpoint);
 
     return pivotVoltage;
   }
@@ -287,9 +286,9 @@ public class Superstructure extends SubsystemBase {
    *
    * @return The feedforward value to be added to the control output
    */
-  private double calculatePivotFeedforward() {
-    final double adjusted = getPivotPoseRads() - PIVOT_HORIZONTAL_OFFSET;
-    final double out = pivotFeedForward.calculate(adjusted, inputs.pivot.velocityRadsPerSec);
+  private double calculatePivotFeedforward(double desiredAngle) {
+    final double adjusted = desiredAngle - PIVOT_HORIZONTAL_OFFSET;
+    final double out = pivotFeedForward.calculate(adjusted, 0.0);
     return out;
   }
 
@@ -305,7 +304,7 @@ public class Superstructure extends SubsystemBase {
     final double elevatorVoltage = calculateElevator(elevatorPose);
     final double pivotVoltage = calculatePivot(pivotPose);
     setElevatorVoltage(elevatorVoltage);
-    io.setPivotVoltage(pivotVoltage);
+    setPivotVoltageRaw(pivotVoltage);
   }
 
   /**
