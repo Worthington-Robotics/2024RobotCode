@@ -41,6 +41,8 @@ public class Superstructure extends SubsystemBase {
   /** The initial absolute position of the pivot */
   private double initZeroPoseRad = ABSOLUTE_ZERO_OFFSET;
 
+  private boolean softenFall = false;
+
   /**
    * Whether we have obtained a zero position reading from the absolute encoder. We only need to do
    * this once.
@@ -157,7 +159,7 @@ public class Superstructure extends SubsystemBase {
     this.io = io;
     if (RobotBase.isReal()) { // Real
       pivotController.setGains(7.5, 0.0, 0);
-      pivotController.setConstraints(18, 70);
+      pivotController.setConstraints(18, 80);
       pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 1.0);
 
       elevatorController.setGains(130, 0.2, 0);
@@ -275,6 +277,12 @@ public class Superstructure extends SubsystemBase {
     // Anti-oscillation for the amp pose by reducing output
     if (atAmpPose()) {
       feedback *= PIVOT_OSCILLATION_MULTIPLIER;
+    }
+    // Fall softening
+    if (softenFall) {
+      if (feedback < 0) {
+        feedback *= 0.58;
+      }
     }
     final double pivotVoltage = feedback + calculatePivotFeedforward(setpoint);
 
@@ -493,6 +501,16 @@ public class Superstructure extends SubsystemBase {
    */
   public void setPose(SuperstructurePose.Preset pose) {
     this.setModeVoid(SuperstructureState.POSE);
+    softenFall = false;
+    if (this.setpoint != pose) {
+      if (pose == Preset.STOW || pose == Preset.HOME || pose == Preset.HANDOFF) {
+        softenFall = true;
+      }
+      // Handoff-stow doesn't need it
+      if (this.setpoint == Preset.HANDOFF && pose == Preset.STOW) {
+        softenFall = false;
+      }
+    }
     this.setpoint = pose;
   }
 
@@ -515,6 +533,7 @@ public class Superstructure extends SubsystemBase {
    * @param state The state to be set.
    */
   public void setModeVoid(SuperstructureState state) {
+    softenFall = false;
     if (!state.equals(this.state)) {
       // Zero out manual volts when entering manual mode
       if (state.equals(SuperstructureState.MANUAL)) {

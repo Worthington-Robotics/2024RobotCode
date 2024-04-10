@@ -351,10 +351,7 @@ public class Autos {
                 .andThen(util.prepareShooting(path2.pose()))),
         autoShoot3.command(),
         // Parallel so that we don't stop intaking when we get to the piece
-        Commands.parallel(
-            path3.command(),
-            util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[0], 1.8))),
+        Commands.parallel(path3.command(), util.fullHandoff()),
         autoShoot4.command());
   }
 
