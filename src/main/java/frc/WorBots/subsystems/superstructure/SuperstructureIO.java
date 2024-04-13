@@ -22,6 +22,9 @@ public interface SuperstructureIO {
     public TalonInputsPositional pivot = new TalonInputsPositional("Superstructure", "Pivot Motor");
     public double pivotPositionAbsRad = 0.0;
     public double pivotPositionRelRad = 0.0;
+
+    public TalonInputsPositional climber =
+        new TalonInputsPositional("Superstructure", "Climber Motor");
   }
 
   /**
@@ -37,6 +40,13 @@ public interface SuperstructureIO {
    * @param volts The volts to be set.
    */
   public default void setPivotVoltage(double volts) {}
+
+  /**
+   * Sets the climber motor's voltage.
+   *
+   * @param volts The volts to be set.
+   */
+  public default void setClimberVoltage(double volts) {}
 
   /**
    * Updates the current inputs of the superstructure subsystem.

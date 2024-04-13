@@ -29,6 +29,7 @@ public class Shooter extends SubsystemBase {
   private double topFlywheelRPM = 0.0;
   private double bottomFlywheelRPM = 0.0;
   private double feederWheelVolts = 0.0;
+  private boolean idlingDisabled = false;
 
   // Logging classes
   private final NetworkTable shooterTable = NetworkTableInstance.getDefault().getTable(TABLE_NAME);
@@ -258,12 +259,19 @@ public class Shooter extends SubsystemBase {
    * @return The command to run
    */
   public Command idleCommand() {
-    return this.setSpeedContinuous(IDLE_SPEED);
+    return this.run(
+        () -> {
+          this.idle();
+        });
   }
 
   /** Idles the flywheels */
   public void idle() {
-    this.setSpeedVoid(IDLE_SPEED);
+    if (this.idlingDisabled) {
+      this.setSpeedVoid(0);
+    } else {
+      this.setSpeedVoid(IDLE_SPEED);
+    }
   }
 
   /**
@@ -300,5 +308,10 @@ public class Shooter extends SubsystemBase {
    */
   public boolean hasGamePiece() {
     return hasGamePiece;
+  }
+
+  /** Enable / disable idling */
+  public void setIdlingDisabled(boolean disable) {
+    this.idlingDisabled = disable;
   }
 }

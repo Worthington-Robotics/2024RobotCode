@@ -227,7 +227,15 @@ public class RobotContainer {
         .povDown()
         .toggleOnTrue(
             new SuperstructureManual(
-                superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY()));
+                    superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY())
+                .alongWith(
+                    Commands.startEnd(
+                        () -> {
+                          shooter.setIdlingDisabled(true);
+                        },
+                        () -> {
+                          shooter.setIdlingDisabled(false);
+                        })));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
     final Pose2d ampPose =

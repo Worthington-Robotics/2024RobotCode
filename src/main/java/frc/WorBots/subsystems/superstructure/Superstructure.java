@@ -58,6 +58,9 @@ public class Superstructure extends SubsystemBase {
   /** A supplier for the pivot volts in manual mode */
   private Supplier<Double> manualPivotVolts = () -> 0.0;
 
+  /** A supplier for the cliber volts in manual mode */
+  private Supplier<Double> manualClimberVolts = () -> 0.0;
+
   private final TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
           new TunablePIDGains(TABLE_NAME, "Pivot Gains"),
@@ -225,6 +228,9 @@ public class Superstructure extends SubsystemBase {
           // pivotVolts += calculatePivotFeedforward();
           pivotVolts += 0.12;
           setPivotVoltage(pivotVolts);
+
+          final double climberVolts = manualClimberVolts.get();
+          setClimberVoltageRaw(climberVolts);
           break;
       }
     }
@@ -370,6 +376,15 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
+   * Sets and logs the climber voltage while bypassing software limits
+   *
+   * @param volts The climber voltage
+   */
+  private void setClimberVoltageRaw(double volts) {
+    io.setClimberVoltage(volts);
+  }
+
+  /**
    * Sets the desired shooting angle.
    *
    * @param angle The desired angle in radians.
@@ -421,6 +436,24 @@ public class Superstructure extends SubsystemBase {
    */
   public void setManualPivotVolts(Supplier<Double> supplier) {
     manualPivotVolts = supplier;
+  }
+
+  /**
+   * Sets the desired voltage for manual climbing
+   *
+   * @param volts The desired voltage
+   */
+  public void setManualClimberVolts(double volts) {
+    manualClimberVolts = () -> volts;
+  }
+
+  /**
+   * Sets the desired voltage for manual climbing
+   *
+   * @param volts The desired voltage
+   */
+  public void setManualClimberVolts(Supplier<Double> supplier) {
+    manualClimberVolts = supplier;
   }
 
   /**

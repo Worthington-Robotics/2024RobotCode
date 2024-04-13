@@ -206,6 +206,7 @@ public class Robot extends TimedRobot {
     robotContainer.drive.stop();
     robotContainer.intake.setVolts(0.0);
     robotContainer.shooter.stopFlywheels();
+    robotContainer.shooter.setIdlingDisabled(false);
     robotContainer.shooter.setRawFeederVolts(0.0);
     robotContainer.superstructure.setModeVoid(SuperstructureState.DISABLED);
   }

@@ -21,8 +21,11 @@ public class SuperstructureIOTalon implements SuperstructureIO {
   private final DutyCycleEncoder pivotAbsEncoder;
   private final Encoder pivotRelEncoder;
 
+  private final TalonFX climber;
+
   private final TalonSignalsPositional elevatorSignals;
   private final TalonSignalsPositional pivotSignals;
+  private final TalonSignalsPositional climberSignals;
 
   // Constants
   /** Max number of encoder rotations that the elevator can safely extend */
@@ -42,19 +45,23 @@ public class SuperstructureIOTalon implements SuperstructureIO {
      */
     pivotRelEncoder = new Encoder(8, 7);
     pivotRelEncoder.setDistancePerPulse((2 * Math.PI) / 2048);
+    climber = new TalonFX(20);
 
     resetElevator();
     elevator.setInverted(false);
     elevator.setNeutralMode(NeutralModeValue.Brake);
     pivot.setNeutralMode(NeutralModeValue.Brake);
     pivot.setInverted(true);
+    climber.setNeutralMode(NeutralModeValue.Brake);
 
     elevatorSignals = new TalonSignalsPositional(elevator);
-
     elevator.optimizeBusUtilization();
 
     pivotSignals = new TalonSignalsPositional(pivot);
     pivot.optimizeBusUtilization();
+
+    climberSignals = new TalonSignalsPositional(climber);
+    climber.optimizeBusUtilization();
   }
 
   public void setElevatorVoltage(double volts) {
@@ -65,9 +72,14 @@ public class SuperstructureIOTalon implements SuperstructureIO {
     pivotSignals.setVoltage(pivot, volts, 11);
   }
 
+  public void setClimberVoltage(double volts) {
+    climberSignals.setVoltage(pivot, volts, 3);
+  }
+
   public void updateInputs(SuperstructureIOInputs inputs) {
     elevatorSignals.update(inputs.elevator, elevator);
     pivotSignals.update(inputs.pivot, pivot);
+    climberSignals.update(inputs.climber, climber);
 
     inputs.elevatorPositionMeters = elevator.getPosition().getValue() / ELEVATOR_GEARING;
     inputs.elevatorVelocityMetersPerSec =
