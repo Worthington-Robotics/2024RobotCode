@@ -111,10 +111,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4924fdd88432db774bb03f01be61056e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70210e055c549aef833a907176f3241f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a70210e055c549aef833a907176f3241f">setManualPivotVolts</a> (Supplier&lt; Double &gt; supplier)</td></tr>
 <tr class="separator:a70210e055c549aef833a907176f3241f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09a4747a9c7c3574877dea09c26d11cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a09a4747a9c7c3574877dea09c26d11cf">setManualClimberVolts</a> (double volts)</td></tr>
-<tr class="separator:a09a4747a9c7c3574877dea09c26d11cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb573ba3a59552f74957066ac4215712"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#adb573ba3a59552f74957066ac4215712">setManualClimberVolts</a> (Supplier&lt; Double &gt; supplier)</td></tr>
-<tr class="separator:adb573ba3a59552f74957066ac4215712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333bd15ff321316b4434258510026ef5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a333bd15ff321316b4434258510026ef5">setClimbLocked</a> (boolean locked)</td></tr>
+<tr class="separator:a333bd15ff321316b4434258510026ef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3619bf26c6cdf758571877029bcfcd93"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a3619bf26c6cdf758571877029bcfcd93">isClimbLocked</a> ()</td></tr>
+<tr class="separator:a3619bf26c6cdf758571877029bcfcd93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f66f8ab7bd159729e64bc3af265992d"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a4f66f8ab7bd159729e64bc3af265992d">isAtSetpoint</a> ()</td></tr>
 <tr class="separator:a4f66f8ab7bd159729e64bc3af265992d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34d2575fa2e7042726450a9f129e4152"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a34d2575fa2e7042726450a9f129e4152">isElevatorAtSetpoint</a> ()</td></tr>
@@ -390,6 +390,31 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3619bf26c6cdf758571877029bcfcd93" name="a3619bf26c6cdf758571877029bcfcd93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3619bf26c6cdf758571877029bcfcd93">&#9670;&#160;</a></span>isClimbLocked()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean frc.WorBots.subsystems.superstructure.Superstructure.isClimbLocked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a34d2575fa2e7042726450a9f129e4152" name="a34d2575fa2e7042726450a9f129e4152"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a34d2575fa2e7042726450a9f129e4152">&#9670;&#160;</a></span>isElevatorAtSetpoint()</h2>
 
@@ -610,8 +635,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a09a4747a9c7c3574877dea09c26d11cf" name="a09a4747a9c7c3574877dea09c26d11cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09a4747a9c7c3574877dea09c26d11cf">&#9670;&#160;</a></span>setManualClimberVolts() <span class="overload">[1/2]</span></h2>
+<a id="a333bd15ff321316b4434258510026ef5" name="a333bd15ff321316b4434258510026ef5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a333bd15ff321316b4434258510026ef5">&#9670;&#160;</a></span>setClimbLocked()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -620,10 +645,10 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void frc.WorBots.subsystems.superstructure.Superstructure.setManualClimberVolts </td>
+          <td class="memname">void frc.WorBots.subsystems.superstructure.Superstructure.setClimbLocked </td>
           <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>volts</em></td><td>)</td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>locked</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -633,46 +658,6 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Sets the desired voltage for manual climbing</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">volts</td><td>The desired voltage </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="adb573ba3a59552f74957066ac4215712" name="adb573ba3a59552f74957066ac4215712"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb573ba3a59552f74957066ac4215712">&#9670;&#160;</a></span>setManualClimberVolts() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void frc.WorBots.subsystems.superstructure.Superstructure.setManualClimberVolts </td>
-          <td>(</td>
-          <td class="paramtype">Supplier&lt; Double &gt;&#160;</td>
-          <td class="paramname"><em>supplier</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >Sets the desired voltage for manual climbing</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">volts</td><td>The desired voltage </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

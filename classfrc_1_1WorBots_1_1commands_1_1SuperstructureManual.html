@@ -88,8 +88,8 @@ Inheritance diagram for frc.WorBots.commands.SuperstructureManual:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2662cc57d0888939c94288270a3b3f50"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html#a2662cc57d0888939c94288270a3b3f50">SuperstructureManual</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html">Superstructure</a> superstructure, Supplier&lt; Double &gt; elevatorValue, Supplier&lt; Double &gt; pivotValue)</td></tr>
-<tr class="separator:a2662cc57d0888939c94288270a3b3f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4ece5cb7bfe40b66cfa349f8c8199d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html#ae4ece5cb7bfe40b66cfa349f8c8199d6">SuperstructureManual</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html">Superstructure</a> superstructure, <a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html">Climber</a> climber, Supplier&lt; Double &gt; elevatorValue, Supplier&lt; Double &gt; pivotValue, Supplier&lt; Double &gt; climberValue)</td></tr>
+<tr class="separator:ae4ece5cb7bfe40b66cfa349f8c8199d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a609c49b6161925e3e22e45c9b5141753"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html#a609c49b6161925e3e22e45c9b5141753">initialize</a> ()</td></tr>
 <tr class="separator:a609c49b6161925e3e22e45c9b5141753"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13e55d9a4bd416a5db3509ee01eb589c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html#a13e55d9a4bd416a5db3509ee01eb589c">execute</a> ()</td></tr>
@@ -102,8 +102,8 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Command for manual control of the elevator and pivot using joysticks </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2662cc57d0888939c94288270a3b3f50" name="a2662cc57d0888939c94288270a3b3f50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2662cc57d0888939c94288270a3b3f50">&#9670;&#160;</a></span>SuperstructureManual()</h2>
+<a id="ae4ece5cb7bfe40b66cfa349f8c8199d6" name="ae4ece5cb7bfe40b66cfa349f8c8199d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4ece5cb7bfe40b66cfa349f8c8199d6">&#9670;&#160;</a></span>SuperstructureManual()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -120,6 +120,12 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html">Climber</a>&#160;</td>
+          <td class="paramname"><em>climber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">Supplier&lt; Double &gt;&#160;</td>
           <td class="paramname"><em>elevatorValue</em>, </td>
         </tr>
@@ -127,7 +133,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Supplier&lt; Double &gt;&#160;</td>
-          <td class="paramname"><em>pivotValue</em>&#160;</td>
+          <td class="paramname"><em>pivotValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Supplier&lt; Double &gt;&#160;</td>
+          <td class="paramname"><em>climberValue</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

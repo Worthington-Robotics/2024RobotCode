@@ -9,5 +9,8 @@ var searchData=
   ['pivot_5fhorizontal_5foffset_6',['PIVOT_HORIZONTAL_OFFSET',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a5c7655704dbc7cf378df9d73f69c716b',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
   ['pivot_5fmax_5fangle_7',['PIVOT_MAX_ANGLE',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure.html#a28340fe15f0bb7f3a859138fe0c35c48',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
   ['pose_8',['POSE',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html#ac5a42a31af7e4806a43c08b159a84ccd',1,'frc::WorBots::subsystems::superstructure::Superstructure::SuperstructureState']]],
-  ['positive_9',['Positive',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html#a8724096a327fbc8b32f2b4a264764445',1,'frc::WorBots::util::math::GeneralMath::SnapDirection']]]
+  ['pose_5fdeploy_9',['POSE_DEPLOY',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#a655edda70eb7efd1c2a21805da427485',1,'frc::WorBots::subsystems::climber::Climber']]],
+  ['pose_5fdrop_10',['POSE_DROP',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#a6159d5282b62698825ced48e7fcb1a62',1,'frc::WorBots::subsystems::climber::Climber']]],
+  ['pose_5ffull_5fclimb_11',['POSE_FULL_CLIMB',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#ab477b4b61a1b6d44ac2bcb1e7d2a66af',1,'frc::WorBots::subsystems::climber::Climber']]],
+  ['positive_12',['Positive',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html#a8724096a327fbc8b32f2b4a264764445',1,'frc::WorBots::util::math::GeneralMath::SnapDirection']]]
 ];

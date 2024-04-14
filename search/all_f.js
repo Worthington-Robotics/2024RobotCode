@@ -13,8 +13,8 @@ var searchData=
   ['resetheading_10',['resetHeading',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a8540280c6b08c14ee33820db1278ab95',1,'frc.WorBots.subsystems.drive.Drive.resetHeading()'],['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#a3230f1b3225b474ff5d2eda7c5641c24',1,'frc.WorBots.subsystems.drive.GyroIO.resetHeading()'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#a712fb0695c648f83ca698c17884499a4',1,'frc.WorBots.subsystems.drive.GyroIOPigeon2.resetHeading()'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#afc41bb58f8bfc436a747ee4088386c6c',1,'frc.WorBots.subsystems.drive.GyroIOSim.resetHeading()']]],
   ['resetpose_11',['resetPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#aa1e2b89e581db1b6f01f6a2f746893cd',1,'frc::WorBots::util::math::PoseEstimator']]],
   ['resetunflipped_12',['resetUnflipped',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#aebd719939956d9d0fa2b61c1225c3a17',1,'frc::WorBots::auto::AutoUtil']]],
-  ['ripple_13',['Ripple',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a30ca3137ac65b20c6f56cb032723bc0d',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['ripple_14',['ripple',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a968ef41bcca3e44ce79bde3177491c17',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['ripple_13',['ripple',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a968ef41bcca3e44ce79bde3177491c17',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['ripple_14',['Ripple',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a30ca3137ac65b20c6f56cb032723bc0d',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['robot_15',['Robot',['../classfrc_1_1WorBots_1_1Robot.html',1,'frc::WorBots']]],
   ['robot_2ejava_16',['Robot.java',['../Robot_8java.html',1,'']]],
   ['robot_5fcode_17',['ROBOT_CODE',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#aa95c1aa45f4c4d224f31947ea284ed2f',1,'frc::WorBots::util::debug::StatusPage']]],
@@ -34,7 +34,8 @@ var searchData=
   ['rotationtopose_31',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a6d937a21ed822175b7958d7ad5cd0233',1,'frc::WorBots::util::math::GeomUtil']]],
   ['rotationtotransform_32',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1296067ad70179403938c47dc05416c7',1,'frc::WorBots::util::math::GeomUtil']]],
   ['run_33',['run',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#af50e205d49accf3e3d02e464abe86c35',1,'frc::WorBots::util::StateMachine']]],
-  ['runstate_34',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['runtransitions_35',['runTransitions',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#a661ed6a3f166f6864e59e48ae94f35ea',1,'frc::WorBots::util::StateMachine']]],
-  ['runvelocity_36',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
+  ['runpose_34',['runPose',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#ab9f1af453fb31ec5984397b4d01e0a66',1,'frc::WorBots::subsystems::climber::Climber']]],
+  ['runstate_35',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['runtransitions_36',['runTransitions',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#a661ed6a3f166f6864e59e48ae94f35ea',1,'frc::WorBots::util::StateMachine']]],
+  ['runvelocity_37',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
 ];
