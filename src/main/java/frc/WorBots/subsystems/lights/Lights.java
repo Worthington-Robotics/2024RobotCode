@@ -101,6 +101,8 @@ public class Lights extends SubsystemBase {
   private Supplier<Boolean> hasGamePieceBottom = () -> false;
   private Supplier<Boolean> hasGamePieceTop = () -> false;
   private Supplier<Double> elevatorPercentageRaised = () -> 0.0;
+  private Supplier<Boolean> isClimbLocked = () -> false;
+  private Supplier<Boolean> nearClimbLimit = () -> true;
 
   /** Step in the pit test */
   private int pitTestStep = 0;
@@ -130,6 +132,7 @@ public class Lights extends SubsystemBase {
     WorbotsFlame,
     Ripple,
     Flame,
+    Climbing,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -222,6 +225,9 @@ public class Lights extends SubsystemBase {
       case Flame:
         LightsUtil.flame(io, 0.95, FLAME_COLORS);
         break;
+      case Climbing:
+        climbing();
+        break;
     }
 
     io.periodic();
@@ -286,18 +292,17 @@ public class Lights extends SubsystemBase {
   private void delivery() {
     deliveryState.run(this);
     if (inHandoff.get() && !deliveryState.isInState(startOfIntakeState)) {
-      SmartDashboard.putNumber("Fart 2", Timer.getFPGATimestamp());
-      LightsUtil.blink(
-          io,
-          Color.kWhite,
-          Color.kBlack,
-          intakeBlinkInterval,
-          TimeCache.getInstance().get() - startOfIntakeTime);
+      // LightsUtil.blink(
+      //     io,
+      //     Color.kWhite,
+      //     Color.kBlack,
+      //     intakeBlinkInterval,
+      //     TimeCache.getInstance().get() - startOfIntakeTime);
     }
     SmartDashboard.putString("Lights/Delivery State", deliveryState.getState().getName());
   }
 
-  private static final double intakeBlinkInterval = 0.28;
+  private static final double intakeBlinkInterval = 0.23;
   private final Timer intakeTimer = new Timer();
 
   private class IntakeTransition implements StateTransition<Lights> {
@@ -340,12 +345,8 @@ public class Lights extends SubsystemBase {
 
     @Override
     public Optional<State<Lights>> run(Lights input) {
-      if (inStow.get()) {
-        LightsUtil.worbotsBounce(io);
-        return Optional.empty();
-      }
-
-      LightsUtil.alliance(io);
+      // LightsUtil.alliance(io);
+      LightsUtil.solid(io, Color.kBlack);
       return Optional.empty();
     }
   }
@@ -365,7 +366,6 @@ public class Lights extends SubsystemBase {
     @Override
     public Optional<State<Lights>> run(Lights input) {
       final double halfInterval = intakeBlinkInterval / 2.0;
-      SmartDashboard.putNumber("Fart", TimeCache.getInstance().get() - startOfIntakeTime);
       if (TimeCache.getInstance().get() - startOfIntakeTime >= (halfInterval * 6)) {
         if (hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get())) {
           return Optional.of(readyState);
@@ -374,7 +374,7 @@ public class Lights extends SubsystemBase {
       }
       LightsUtil.blink(
           io,
-          Color.kGreen,
+          Color.kWhite,
           Color.kBlack,
           halfInterval,
           TimeCache.getInstance().get() - startOfIntakeTime);
@@ -398,13 +398,14 @@ public class Lights extends SubsystemBase {
       if (!hasGamePieceBottomDebouncer.calculate(hasGamePieceBottom.get())) {
         return Optional.of(defaultState);
       }
-      // Blink to notify a note is still in the intake
-      LightsUtil.blink(
-          io,
-          Color.kOrangeRed,
-          Color.kBlack,
-          intakeBlinkInterval,
-          TimeCache.getInstance().get() - startOfIntakeTime);
+      // Notify a note is still in the intake
+      LightsUtil.solid(io, Color.kOrangeRed);
+      // LightsUtil.blink(
+      //     io,
+      //     Color.kOrangeRed,
+      //     Color.kBlack,
+      //     intakeBlinkInterval,
+      //     TimeCache.getInstance().get() - startOfIntakeTime);
       return Optional.empty();
     }
   }
@@ -422,7 +423,7 @@ public class Lights extends SubsystemBase {
 
     @Override
     public Optional<State<Lights>> run(Lights input) {
-      LightsUtil.solid(io, Color.kOrangeRed);
+      LightsUtil.solid(io, Color.kWhite);
       if (!hasGamePieceTopDebouncer.calculate(hasGamePieceTop.get())
           && !hasGamePieceBottomDebouncer.calculate(hasGamePieceBottom.get())) {
         return Optional.of(shotState);
@@ -474,6 +475,18 @@ public class Lights extends SubsystemBase {
     LightsUtil.solid(io, Color.kGreen, (double) pitTestStep / (double) (pitTestStepCount - 1));
   }
 
+  private void climbing() {
+    Color color = Color.kSeaGreen;
+    if (nearClimbLimit.get()) {
+      color = Color.kOrangeRed;
+    }
+    if (isClimbLocked.get()) {
+      LightsUtil.solid(io, color);
+    } else {
+      LightsUtil.blink(io, color, Color.kBlack, intakeBlinkInterval, TimeCache.getInstance().get());
+    }
+  }
+
   /**
    * Sets the mode of the lights
    *
@@ -506,7 +519,9 @@ public class Lights extends SubsystemBase {
       Supplier<Boolean> atShootSetpoint,
       Supplier<Boolean> hasGamePieceBottom,
       Supplier<Boolean> hasGamePieceTop,
-      Supplier<Double> elevatorPercentageRaised) {
+      Supplier<Double> elevatorPercentageRaised,
+      Supplier<Boolean> isClimbLocked,
+      Supplier<Boolean> isNearClimbLimit) {
     this.drivePoseSupplier = drivePoseSupplier;
     this.driveSpeedsSupplier = driveSpeedsSupplier;
     this.inHandoff = inHandoff;
@@ -515,6 +530,8 @@ public class Lights extends SubsystemBase {
     this.hasGamePieceBottom = hasGamePieceBottom;
     this.hasGamePieceTop = hasGamePieceTop;
     this.elevatorPercentageRaised = elevatorPercentageRaised;
+    this.isClimbLocked = isClimbLocked;
+    this.nearClimbLimit = isNearClimbLimit;
   }
 
   /** Sets the current step of the pit test in pit test mode */

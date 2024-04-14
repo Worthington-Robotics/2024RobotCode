@@ -80,6 +80,6 @@ public class ShooterIOTalon implements ShooterIO {
 
   @Override
   public void setFeederWheelVoltage(double volts) {
-    feederWheelSignals.setVoltage(feederWheel, volts, 7);
+    feederWheelSignals.setVoltage(feederWheel, volts, 10);
   }
 }

@@ -58,8 +58,8 @@ public class Superstructure extends SubsystemBase {
   /** A supplier for the pivot volts in manual mode */
   private Supplier<Double> manualPivotVolts = () -> 0.0;
 
-  /** A supplier for the cliber volts in manual mode */
-  private Supplier<Double> manualClimberVolts = () -> 0.0;
+  /** Whether to do climb locking */
+  private boolean isClimbLocked = false;
 
   private final TunableProfiledPIDController pivotController =
       new TunableProfiledPIDController(
@@ -222,15 +222,15 @@ public class Superstructure extends SubsystemBase {
           runPose(0.0, shootingAngleRad.get());
           break;
         case MANUAL:
-          final double volts = manualElevatorVolts.get();
-          setElevatorVoltage(volts);
+          double elevatorVolts = manualElevatorVolts.get();
+          if (isClimbLocked) {
+            elevatorVolts += 0.30;
+          }
+          setElevatorVoltage(elevatorVolts);
           double pivotVolts = manualPivotVolts.get();
           // pivotVolts += calculatePivotFeedforward();
-          pivotVolts += 0.12;
+          pivotVolts += 0.0;
           setPivotVoltage(pivotVolts);
-
-          final double climberVolts = manualClimberVolts.get();
-          setClimberVoltageRaw(climberVolts);
           break;
       }
     }
@@ -376,15 +376,6 @@ public class Superstructure extends SubsystemBase {
   }
 
   /**
-   * Sets and logs the climber voltage while bypassing software limits
-   *
-   * @param volts The climber voltage
-   */
-  private void setClimberVoltageRaw(double volts) {
-    io.setClimberVoltage(volts);
-  }
-
-  /**
    * Sets the desired shooting angle.
    *
    * @param angle The desired angle in radians.
@@ -438,22 +429,12 @@ public class Superstructure extends SubsystemBase {
     manualPivotVolts = supplier;
   }
 
-  /**
-   * Sets the desired voltage for manual climbing
-   *
-   * @param volts The desired voltage
-   */
-  public void setManualClimberVolts(double volts) {
-    manualClimberVolts = () -> volts;
+  public void setClimbLocked(boolean locked) {
+    this.isClimbLocked = locked;
   }
 
-  /**
-   * Sets the desired voltage for manual climbing
-   *
-   * @param volts The desired voltage
-   */
-  public void setManualClimberVolts(Supplier<Double> supplier) {
-    manualClimberVolts = supplier;
+  public boolean isClimbLocked() {
+    return this.isClimbLocked;
   }
 
   /**

@@ -10,7 +10,6 @@ package frc.WorBots;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
@@ -19,6 +18,9 @@ import frc.WorBots.auto.AutoSelector.*;
 import frc.WorBots.auto.Autos;
 import frc.WorBots.auto.DebugRoutines;
 import frc.WorBots.commands.*;
+import frc.WorBots.subsystems.climber.Climber;
+import frc.WorBots.subsystems.climber.ClimberIOSim;
+import frc.WorBots.subsystems.climber.ClimberIOTalon;
 import frc.WorBots.subsystems.drive.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.lights.Lights;
@@ -28,7 +30,6 @@ import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.RobotSimulator;
-import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.*;
 
 public class RobotContainer {
@@ -38,6 +39,7 @@ public class RobotContainer {
   public final Superstructure superstructure;
   public final Intake intake;
   public final Shooter shooter;
+  public final Climber climber;
   private AutoSelector selector;
 
   // Joysticks
@@ -46,6 +48,9 @@ public class RobotContainer {
 
   /** State boolean used for auto-stow after feed */
   private boolean hadGamePieceAtStartOfFeed = false;
+
+  /** State boolean used for while we are climbing */
+  private boolean isClimbing = false;
 
   /** Whether proper autos with a valid alliance have been generated */
   private boolean validAutosGenerated = false;
@@ -65,6 +70,7 @@ public class RobotContainer {
       superstructure = new Superstructure(new SuperstructureIOTalon());
       intake = new Intake(new IntakeIOTalon());
       shooter = new Shooter(new ShooterIOTalon());
+      climber = new Climber(new ClimberIOTalon());
     } else { // Sim
       drive =
           new Drive(
@@ -77,6 +83,7 @@ public class RobotContainer {
       superstructure = new Superstructure(new SuperstructureIOSim());
       intake = new Intake(new IntakeIOSim());
       shooter = new Shooter(new ShooterIOSim());
+      climber = new Climber(new ClimberIOSim());
     }
 
     registerAutos();
@@ -186,7 +193,9 @@ public class RobotContainer {
             () -> superstructure.isAtSetpoint() && shooter.isAtSetpoint(),
             intake::hasGamePiece,
             shooter::hasGamePiece,
-            superstructure::getElevatorPercentageRaised);
+            superstructure::getElevatorPercentageRaised,
+            superstructure::isClimbLocked,
+            climber::isNearLimit);
     Lights.getInstance()
         .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     RobotSimulator.getInstance().setDrivePoseInterface(drive::getPose);
@@ -227,23 +236,56 @@ public class RobotContainer {
         .povDown()
         .toggleOnTrue(
             new SuperstructureManual(
-                    superstructure, () -> -operator.getLeftY(), () -> -operator.getRightY())
+                superstructure,
+                climber,
+                () -> -operator.getLeftY(),
+                () -> -operator.getRightY(),
+                () -> 0.0));
+    driver
+        .povUp()
+        .toggleOnTrue(
+            new SuperstructureManual(
+                    superstructure,
+                    climber,
+                    () -> -operator.getLeftY(),
+                    () -> operator.getLeftX(),
+                    () -> operator.getRightY())
                 .alongWith(
                     Commands.startEnd(
                         () -> {
                           shooter.setIdlingDisabled(true);
+                          isClimbing = true;
+                          Lights.getInstance().setMode(LightsMode.Climbing);
+                          superstructure.setClimbLocked(false);
                         },
                         () -> {
                           shooter.setIdlingDisabled(false);
+                          isClimbing = false;
+                          climber.clearSetpoint();
+                          Lights.getInstance().setMode(LightsMode.Delivery);
                         })));
+    driver
+        .x()
+        .toggleOnTrue(
+            Commands.startEnd(
+                () -> {
+                  superstructure.setClimbLocked(true);
+                  climber.setClimbLocked(true);
+                },
+                () -> {
+                  superstructure.setClimbLocked(false);
+                  climber.setClimbLocked(false);
+                }));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
+    driver.a().whileTrue(climber.runPose(Climber.POSE_DEPLOY, 1.0).onlyIf(() -> isClimbing));
+    driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() -> isClimbing));
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
-    final Pose2d ampPose =
-        new Pose2d(
-            AllianceFlipUtil.apply(FieldConstants.Amp.x),
-            FieldConstants.fieldWidth - Units.inchesToMeters(10),
-            Rotation2d.fromDegrees(270));
-    driver.a().whileTrue(new DriveToPose(drive, ampPose));
+    // final Pose2d ampPose =
+    //     new Pose2d(
+    //         AllianceFlipUtil.apply(FieldConstants.Amp.x),
+    //         FieldConstants.fieldWidth - Units.inchesToMeters(10),
+    //         Rotation2d.fromDegrees(270));
+    // driver.a().whileTrue(new DriveToPose(drive, ampPose));
     driver
         .povLeft()
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));
@@ -310,6 +352,7 @@ public class RobotContainer {
     shootMap.put("amp", shooter.setSpeedContinuous(1750));
     shootMap.put("subwoofer_shoot", shooter.setSpeedContinuous(3200));
     shootMap.put("straight_pass", shooter.setSpeedContinuous(5000));
+    shootMap.put("trap", shooter.setSpeedContinuous(650, 650));
     shootMap.put("raw", shooter.setSpeedContinuous(3000));
 
     operator
@@ -318,6 +361,9 @@ public class RobotContainer {
             Commands.select(
                 shootMap,
                 () -> {
+                  if (isClimbing) {
+                    return "trap";
+                  }
                   if (superstructure.isInPose(Preset.AMP)) {
                     return "amp";
                   }

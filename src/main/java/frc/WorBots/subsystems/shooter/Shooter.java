@@ -138,22 +138,22 @@ public class Shooter extends SubsystemBase {
       feederWheelVolts = 0.0;
     } else {
       // Calculate the desired voltages based on the setpoints
-      if (topFlywheelRPM > 0.0) {
+      if (topFlywheelRPM != 0.0) {
         double setpoint =
             topFlywheelController.pid.calculate(inputs.velocityRPMTop, topFlywheelRPM)
                 + topFlywheelFeedForward.calculate(topFlywheelRPM);
-        if (setpoint < COAST_DOWN_THRESHOLD) {
+        if (setpoint < COAST_DOWN_THRESHOLD && topFlywheelRPM > 0) {
           setpoint = 0.0;
         }
         io.setTopFlywheelVolts(setpoint);
       } else {
         io.setTopFlywheelVolts(0);
       }
-      if (bottomFlywheelRPM > 0.0) {
+      if (bottomFlywheelRPM != 0.0) {
         double setpoint =
             bottomFlywheelController.pid.calculate(inputs.velocityRPMBottom, bottomFlywheelRPM)
                 + bottomFlywheelFeedforward.calculate(bottomFlywheelRPM);
-        if (setpoint < COAST_DOWN_THRESHOLD) {
+        if (setpoint < COAST_DOWN_THRESHOLD && bottomFlywheelRPM > 0) {
           setpoint = 0.0;
         }
         io.setBottomFlywheelVolts(setpoint);
@@ -205,6 +205,12 @@ public class Shooter extends SubsystemBase {
     bottomFlywheelRPM = rpm;
   }
 
+  /** Sets the speed of both flywheels */
+  public void setSpeedVoid(double topRPM, double bottomRPM) {
+    topFlywheelRPM = topRPM;
+    bottomFlywheelRPM = bottomRPM;
+  }
+
   /** Returns a command that sets the speed of both flywheels once */
   public Command setSpeed(double rpm) {
     return this.runOnce(
@@ -213,11 +219,19 @@ public class Shooter extends SubsystemBase {
         });
   }
 
-  /** Retusn a command that sets the speed of both flywheels continuously */
+  /** Returns a command that sets the speed of both flywheels continuously */
   public Command setSpeedContinuous(double rpm) {
     return this.run(
         () -> {
           setSpeedVoid(rpm);
+        });
+  }
+
+  /** Returns a command that sets the speed of both flywheels continuously */
+  public Command setSpeedContinuous(double topRPM, double bottomRPM) {
+    return this.run(
+        () -> {
+          setSpeedVoid(topRPM, bottomRPM);
         });
   }
 

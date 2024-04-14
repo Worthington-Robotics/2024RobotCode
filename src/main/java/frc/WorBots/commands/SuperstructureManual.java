@@ -9,6 +9,7 @@ package frc.WorBots.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.WorBots.subsystems.climber.Climber;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
@@ -25,16 +26,27 @@ public class SuperstructureManual extends Command {
   /** Voltage multiplier for the pivot */
   private static final double PIVOT_VOLTS = 6.0;
 
+  /** Voltage multiplier for the climber */
+  private static final double CLIMBER_VOLTS = 5.5;
+
   private final Supplier<Double> elevatorValue;
   private final Supplier<Double> pivotValue;
+  private final Supplier<Double> climberValue;
   private final Superstructure superstructure;
+  private final Climber climber;
 
   public SuperstructureManual(
-      Superstructure superstructure, Supplier<Double> elevatorValue, Supplier<Double> pivotValue) {
+      Superstructure superstructure,
+      Climber climber,
+      Supplier<Double> elevatorValue,
+      Supplier<Double> pivotValue,
+      Supplier<Double> climberValue) {
     this.elevatorValue = elevatorValue;
     this.pivotValue = pivotValue;
+    this.climberValue = climberValue;
     this.superstructure = superstructure;
-    addRequirements(superstructure);
+    this.climber = climber;
+    addRequirements(superstructure, climber);
   }
 
   @Override
@@ -50,6 +62,9 @@ public class SuperstructureManual extends Command {
     joystick = MathUtil.applyDeadband(pivotValue.get(), DEADBAND);
     volts = joystick * PIVOT_VOLTS;
     superstructure.setManualPivotVolts(volts);
+    joystick = MathUtil.applyDeadband(climberValue.get(), DEADBAND);
+    volts = joystick * CLIMBER_VOLTS;
+    climber.setManualClimberVolts(volts);
   }
 
   @Override
@@ -62,5 +77,6 @@ public class SuperstructureManual extends Command {
     superstructure.setModeVoid(SuperstructureState.DISABLED);
     superstructure.setManualElevatorVolts(0.0);
     superstructure.setManualPivotVolts(0.0);
+    climber.setManualClimberVolts(0.0);
   }
 }
