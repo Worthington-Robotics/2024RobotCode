@@ -379,7 +379,8 @@ public class Autos {
                     util.posePlus(
                         util.centerGamePieceLocations[3],
                         util.transform(Units.inchesToMeters(15), Units.inchesToMeters(5.0))),
-                    util.transformRotate(Rotation2d.fromDegrees(25)))),
+                    util.transformRotate(
+                        AllianceFlipUtil.negRotation(Rotation2d.fromDegrees(25))))),
             Waypoint.fromHolonomicPose(
                 util.posePlus(util.wallSideCenterpoint, util.transform(1.3, -0.20))),
             Waypoint.fromHolonomicPose(

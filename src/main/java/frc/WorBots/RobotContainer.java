@@ -87,7 +87,7 @@ public class RobotContainer {
       climber = new Climber(new ClimberIOSim());
     }
 
-    registerAutos();
+    checkAutos();
     createDataInterfaces();
     bindControls();
   }
