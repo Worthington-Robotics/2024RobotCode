@@ -32,6 +32,7 @@ import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.RobotSimulator;
+import frc.WorBots.util.debug.StatusPage;
 import java.util.*;
 
 public class RobotContainer {
@@ -180,6 +181,7 @@ public class RobotContainer {
         registerAutos();
         validAutosGenerated = true;
         SmartDashboard.putBoolean("DB/LED 0", true);
+        StatusPage.reportStatus(StatusPage.AUTOS, true);
       }
     }
     SmartDashboard.putString("DB/String 5", "FMS Says: " + DriverStation.getAlliance().toString());

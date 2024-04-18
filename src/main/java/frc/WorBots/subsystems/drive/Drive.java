@@ -64,6 +64,7 @@ public class Drive extends SubsystemBase {
       driveTable.getDoubleArrayTopic("Measured Module States").publish();
   private final DoubleArrayPublisher posePublisher =
       driveTable.getDoubleArrayTopic("Pose Estimator").publish();
+  private final DoublePublisher yawPublisher = driveTable.getDoubleTopic("Gyro Yaw").publish();
 
   /**
    * The main swerve drive subsystem
@@ -96,6 +97,7 @@ public class Drive extends SubsystemBase {
     updateOdometry(Timer.getFPGATimestamp());
 
     speedSetpointPublisher.set(Logger.chassisSpeedsToArray(setpointSpeeds));
+    yawPublisher.set(gyroInputs.yawPositionRad);
     StatusPage.reportStatus(StatusPage.GYROSCOPE, gyroInputs.connected);
 
     drive();

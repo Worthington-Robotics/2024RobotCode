@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
   // Constants
   /** Distance threshold for the ToF */
-  private static final double DISTANCE_THRESHOLD = 0.0768;
+  private static final double DISTANCE_THRESHOLD = 0.0795;
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down

@@ -53,7 +53,7 @@ public class Handoff extends Command {
         shooter.setRawFeederVolts(0.0);
       }
     } else {
-      if (!intake.hasGamePiece()) {
+      if (!intake.hasGamePiece() && !shooter.hasGamePiece()) {
         final double volts =
             MathUtil.clamp(
                 (intake.getToFDistanceMeters() / INTAKE_DISTANCE_SCALING) * MAX_INTAKE_VOLTAGE,

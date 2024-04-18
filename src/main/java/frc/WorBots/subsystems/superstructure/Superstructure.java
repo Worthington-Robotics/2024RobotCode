@@ -161,7 +161,7 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(7.5, 0.0, 0);
+      pivotController.setGains(9.0, 0.0, 0);
       pivotController.setConstraints(18, 80);
       pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 1.0);
 
@@ -517,9 +517,9 @@ public class Superstructure extends SubsystemBase {
     this.setModeVoid(SuperstructureState.POSE);
     softenFall = false;
     if (this.setpoint != pose) {
-      if (pose == Preset.STOW || pose == Preset.HOME || pose == Preset.HANDOFF) {
-        softenFall = true;
-      }
+      // if (pose == Preset.STOW || pose == Preset.HOME) {
+      //   softenFall = true;
+      // }
       // Handoff-stow doesn't need it
       if (this.setpoint == Preset.HANDOFF && pose == Preset.STOW) {
         softenFall = false;

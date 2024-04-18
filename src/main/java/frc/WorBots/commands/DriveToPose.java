@@ -27,6 +27,7 @@ public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
   private boolean enableDriving;
+  private boolean checkTheta = true;
   private final Supplier<Pose2d> poseSupplier;
 
   private boolean running = false;
@@ -71,6 +72,12 @@ public class DriveToPose extends Command {
   public static DriveToPose withoutDriving(Drive drive, Supplier<Pose2d> poseSupplier) {
     var out = new DriveToPose(drive, poseSupplier);
     out.enableDriving = false;
+    return out;
+  }
+
+  public static DriveToPose ignoreTurn(Drive drive, Supplier<Pose2d> poseSupplier) {
+    var out = new DriveToPose(drive, poseSupplier);
+    out.checkTheta = false;
     return out;
   }
 
@@ -211,7 +218,9 @@ public class DriveToPose extends Command {
     if (enableDriving) {
       out &= driveController.atGoal();
     }
-    out &= thetaController.atGoal();
+    if (checkTheta) {
+      out &= thetaController.atGoal();
+    }
     out |= withinTolerance(Units.inchesToMeters(3.0), Rotation2d.fromDegrees(1.0));
     return out;
   }

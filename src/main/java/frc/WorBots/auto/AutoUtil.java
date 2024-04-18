@@ -251,6 +251,12 @@ public class AutoUtil {
     return new CommandWithPose(driveToPose.until(driveToPose::atGoal), pose);
   }
 
+  /** Drives to a single pose */
+  public CommandWithPose driveToNoTheta(Pose2d pose) {
+    final var driveToPose = DriveToPose.ignoreTurn(drive, () -> pose);
+    return new CommandWithPose(driveToPose.until(driveToPose::atGoal), pose);
+  }
+
   /**
    * Turns the robot in place to a direction
    *
@@ -269,7 +275,7 @@ public class AutoUtil {
    * @return The command
    */
   public Command prepareHandoff() {
-    return superstructure.goToPose(Preset.HANDOFF).withTimeout(2.8);
+    return superstructure.goToPose(Preset.HANDOFF).withTimeout(1.0);
   }
 
   /** Does handoff and intake at the same time, finishing when the game piece is at the shooter */
@@ -538,6 +544,7 @@ public class AutoUtil {
                 () -> {
                   shooter.stopFlywheels();
                   superstructure.setModeVoid(SuperstructureState.POSE);
+                  superstructure.setPose(Preset.HANDOFF);
                 },
                 shooter,
                 superstructure)),

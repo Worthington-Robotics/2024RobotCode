@@ -30,6 +30,7 @@ public class StatusPage {
   private static boolean hasBeenStarted = false;
 
   // System name constants
+  public static final String AUTOS = "Autos";
   public static final String ALL_AUTO_QUESTIONS = "All Auto Questions";
   public static final String AUTO_CHOSEN = "Auto Chosen";
   public static final String ROBOT_CODE = "Robot Code";
@@ -64,6 +65,7 @@ public class StatusPage {
   // Sort in order of priority, from highest to lowest
   /** All systems that the StatusPage reports */
   public static final String[] ALL_SYSTEMS = {
+    AUTOS,
     AUTO_CHOSEN,
     DRIVE_CONTROLLER,
     OPERATOR_CONTROLLER,

@@ -359,7 +359,7 @@ public class Autos {
     final Pose2d startingPose = util.twoPieceStartingLocations[2];
     // Move for starting shot
     final var move1 =
-        util.driveTo(
+        util.driveToNoTheta(
             util.posePlus(
                 startingPose, util.transform(Units.inchesToMeters(32), Units.inchesToMeters(10))));
     // Starting shot
