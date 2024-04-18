@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.WorBots.auto.AutoSelector;
@@ -200,6 +201,16 @@ public class RobotContainer {
         .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     RobotSimulator.getInstance().setDrivePoseInterface(drive::getPose);
     RobotSimulator.getInstance().setSuperstructure(superstructure);
+    Lights.getInstance()
+        .setRumbleCommand(
+            Commands.startEnd(
+                    () -> {
+                      driver.getHID().setRumble(RumbleType.kBothRumble, 0.50);
+                    },
+                    () -> {
+                      driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+                    })
+                .withTimeout(0.3));
   }
 
   /** Binds driver controls to commands */
@@ -281,10 +292,10 @@ public class RobotContainer {
     driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() -> isClimbing));
     // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
     // final Pose2d ampPose =
-    //     new Pose2d(
-    //         AllianceFlipUtil.apply(FieldConstants.Amp.x),
-    //         FieldConstants.fieldWidth - Units.inchesToMeters(10),
-    //         Rotation2d.fromDegrees(270));
+    // new Pose2d(
+    // AllianceFlipUtil.apply(FieldConstants.Amp.x),
+    // FieldConstants.fieldWidth - Units.inchesToMeters(10),
+    // Rotation2d.fromDegrees(270));
     // driver.a().whileTrue(new DriveToPose(drive, ampPose));
     driver
         .povLeft()

@@ -17,6 +17,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.subsystems.lights.LightsUtil.ColorSequence;
 import frc.WorBots.subsystems.lights.LightsUtil.Lava;
@@ -103,6 +105,7 @@ public class Lights extends SubsystemBase {
   private Supplier<Double> elevatorPercentageRaised = () -> 0.0;
   private Supplier<Boolean> isClimbLocked = () -> false;
   private Supplier<Boolean> nearClimbLimit = () -> true;
+  private Command rumbleCommand = Commands.none();
 
   /** Step in the pit test */
   private int pitTestStep = 0;
@@ -361,6 +364,7 @@ public class Lights extends SubsystemBase {
     public void initialize() {
       startOfIntakeTime = TimeCache.getInstance().get();
       intakeTimer.restart();
+      rumbleCommand.schedule();
     }
 
     @Override
@@ -548,5 +552,10 @@ public class Lights extends SubsystemBase {
   /** Sets whether the lights are flashing in pit test mode */
   public void setPitTestFlashing(boolean flashing) {
     this.pitTestFlashing = flashing;
+  }
+
+  /** Sets the rumble command for when a note enters the system */
+  public void setRumbleCommand(Command command) {
+    rumbleCommand = command;
   }
 }
