@@ -41,15 +41,15 @@ public class VisionIOCustom implements VisionIO {
   }
 
   public void updateInputs(VisionIOInputs inputs) {
-    TimestampedDoubleArray[] frame = data.readQueue();
-    int length = frame.length;
+    TimestampedDoubleArray[] frames = data.readQueue();
+    final int length = frames.length;
 
     inputs.timestamps = new double[length];
     inputs.frames = new double[length][];
 
-    for (int i = 0; i < frame.length; i++) {
-      inputs.timestamps[i] = frame[i].timestamp / 1000000.0;
-      inputs.frames[i] = frame[i].value;
+    for (int i = 0; i < length; i++) {
+      inputs.timestamps[i] = frames[i].timestamp / 1000000.0;
+      inputs.frames[i] = frames[i].value;
     }
 
     inputs.fps = subFps.get();
