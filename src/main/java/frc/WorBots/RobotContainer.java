@@ -182,6 +182,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("DB/LED 0", true);
       }
     }
+    SmartDashboard.putString("DB/String 5", "FMS Says: " + DriverStation.getAlliance().toString());
   }
 
   /** Creates supplier data interfaces between robot systems */
