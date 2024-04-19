@@ -728,6 +728,10 @@ public class AutoUtil {
         pose1.getRotation().plus(transform.getRotation()));
   }
 
+  public Pose2d rotatePose(Pose2d pose, Rotation2d rotation) {
+    return posePlus(pose, transformRotate(rotation));
+  }
+
   /** A command with a pose that it will end at */
   public static record CommandWithPose(Command command, Pose2d pose) {}
 }

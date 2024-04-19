@@ -45,6 +45,7 @@ public class ModuleIOTalon implements ModuleIO {
 
   private final Rotation2d encoderOffset;
   private final double wheelRadius;
+  private final boolean isDisabled;
 
   private final TalonSignalsPositional driveSignals;
   private final TalonSignalsPositional turnSignals;
@@ -89,6 +90,7 @@ public class ModuleIOTalon implements ModuleIO {
       default:
         throw new RuntimeException("Invalid swerve module index");
     }
+    isDisabled = false;
     // Configure devices
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
@@ -103,6 +105,9 @@ public class ModuleIOTalon implements ModuleIO {
     turnMotor.getConfigurator().apply(turnConfig);
 
     driveMotor.setNeutralMode(NeutralModeValue.Brake);
+    // if (index == 2) {
+    //   driveMotor.setNeutralMode(NeutralModeValue.Coast);
+    // }
     turnMotor.setNeutralMode(NeutralModeValue.Brake);
 
     driveMotor.setInverted(false);

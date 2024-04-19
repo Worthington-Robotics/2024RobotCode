@@ -742,14 +742,16 @@ public class Autos {
     final var shoot2 = util.moveAndShoot(intake1.pose(), true, false, true, 2.5);
 
     final var farShootPose =
-        util.posePlus(util.wingGamePieceLocations[0], util.transform(Units.inchesToMeters(40), 0));
+        util.posePlus(util.wingGamePieceLocations[0], util.transform(Units.inchesToMeters(50), 0));
 
     // Drive and intake the center piece, then move back
     final var path1 =
         util.path(
             Waypoint.fromHolonomicPose(shoot2.pose()),
-            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
-            // Waypoint.fromHolonomicPose(util.ampSideCenterpoint),
+            Waypoint.fromHolonomicPose(
+                util.rotatePose(
+                    AllianceFlipUtil.addToFlipped(util.centerGamePieceLocations[1], 0.3),
+                    AllianceFlipUtil.negRotation(Rotation2d.fromDegrees(-20)))),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(farShootPose)));
 
     // Make the final shot
@@ -759,7 +761,8 @@ public class Autos {
     final var path2 =
         util.path(
             Waypoint.fromHolonomicPose(shoot3.pose()),
-            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
+            Waypoint.fromHolonomicPose(
+                AllianceFlipUtil.addToFlipped(util.centerGamePieceLocations[0], 0.3)),
             Waypoint.fromHolonomicPose(util.getWingLinePose(startingPose, new Rotation2d())),
             Waypoint.fromHolonomicPose(util.getAutoShootPose(farShootPose)));
 
@@ -776,12 +779,12 @@ public class Autos {
         Commands.parallel(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[0], 1.5))),
+                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[1], 1.5))),
         shoot3.command(),
         Commands.parallel(
             path2.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[1], 1.5))),
+                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[0], 1.5))),
         shoot4.command());
   }
 
