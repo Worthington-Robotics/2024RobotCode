@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
 
   // Constants
   /** Distance threshold for the time of flight to say it has a game piece */
-  public static final double DISTANCE_THRESHOLD = 0.245;
+  public static final double DISTANCE_THRESHOLD = 0.255;
 
   /** Voltage for intaking */
   private static final double INTAKE_VOLTS = 4.25;
