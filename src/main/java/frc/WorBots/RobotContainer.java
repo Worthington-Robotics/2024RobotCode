@@ -110,6 +110,7 @@ public class RobotContainer {
     selector.addRoutine("Long Four", List.of(), autos.fourPieceLong());
 
     selector.addRoutine("Amp Side Line", List.of(), autos.ampLine());
+    selector.addRoutine("Amp Side Line 4", List.of(), autos.ampLineFour());
 
     selector.addRoutine(
         "Close Three",

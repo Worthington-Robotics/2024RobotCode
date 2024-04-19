@@ -106,7 +106,7 @@ public class Superstructure extends SubsystemBase {
   private static final double ELEVATOR_THRESHOLD = 0.027;
 
   /** The error threshold for the pivot, in radians */
-  private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.75);
+  private static final double PIVOT_THRESHOLD = Units.degreesToRadians(0.87);
 
   /** Multiplier for the pivot PID output when we are near the amp pose */
   private static final double PIVOT_OSCILLATION_MULTIPLIER = 0.05;
@@ -161,7 +161,7 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(SuperstructureIO io) {
     this.io = io;
     if (RobotBase.isReal()) { // Real
-      pivotController.setGains(9.0, 0.0, 0);
+      pivotController.setGains(9.7, 0.0, 0);
       pivotController.setConstraints(18, 80);
       pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 1.0);
 
@@ -639,7 +639,7 @@ public class Superstructure extends SubsystemBase {
    * @return Whether we are near handoff
    */
   public boolean inHandoff() {
-    return this.isNearPose(Preset.HANDOFF, 0.02, Units.degreesToRadians(2.8));
+    return this.isNearPose(Preset.HANDOFF, 0.02, Units.degreesToRadians(3.05));
   }
 
   /**

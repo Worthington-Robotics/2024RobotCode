@@ -514,9 +514,9 @@ public class Autos {
         util.posePlus(util.twoPieceStartingLocations[2], util.transform(0.0, 0.13));
     // Move for starting shot
     // final var move1 =
-    //     util.driveTo(
-    //         util.posePlus(
-    //             startingPose, util.transform(Units.inchesToMeters(32),
+    // util.driveTo(
+    // util.posePlus(
+    // startingPose, util.transform(Units.inchesToMeters(32),
     // Units.inchesToMeters(10))));
     // Starting shot
     final var autoShoot1 = util.moveAndShoot(startingPose, true, false, true, 2.8);
@@ -720,6 +720,69 @@ public class Autos {
             util.prepareHandoff()
                 .andThen(util.intakeWhileNear(util.wingGamePieceLocations[0], 1.0))),
         shoot3.command());
+  }
+
+  public Command ampLineFour() {
+    final Pose2d startingPose = util.twoPieceStartingLocations[0];
+
+    // Drive to the better spot before the first shot for a more accurate shot
+    final var drive1 =
+        util.driveTo(AllianceFlipUtil.addToFlipped(startingPose, Units.inchesToMeters(10)));
+
+    // Shoot the loaded game piece
+    final var shoot1 = util.moveAndShoot(drive1.pose(), true, false, true, 2.5);
+
+    // Turn to the correct direction before moving
+    final var turn1 = util.turnTo(shoot1.pose(), AllianceFlipUtil.apply(new Rotation2d()));
+
+    // Intake the piece right behind us
+    final var intake1 = util.driveAndIntakeWing(turn1.pose(), false, false, 0);
+
+    // Shoot the second piece
+    final var shoot2 = util.moveAndShoot(intake1.pose(), true, false, true, 2.5);
+
+    final var farShootPose =
+        util.posePlus(util.wingGamePieceLocations[0], util.transform(Units.inchesToMeters(40), 0));
+
+    // Drive and intake the center piece, then move back
+    final var path1 =
+        util.path(
+            Waypoint.fromHolonomicPose(shoot2.pose()),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[0]),
+            // Waypoint.fromHolonomicPose(util.ampSideCenterpoint),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(farShootPose)));
+
+    // Make the final shot
+    final var shoot3 = util.moveAndShoot(path1.pose(), false, false, true, 2.5);
+
+    // Drive and intake the center piece, then move back
+    final var path2 =
+        util.path(
+            Waypoint.fromHolonomicPose(shoot3.pose()),
+            Waypoint.fromHolonomicPose(util.centerGamePieceLocations[1]),
+            Waypoint.fromHolonomicPose(util.getWingLinePose(startingPose, new Rotation2d())),
+            Waypoint.fromHolonomicPose(util.getAutoShootPose(farShootPose)));
+
+    // Make the final shot
+    final var shoot4 = util.moveAndShoot(path2.pose(), false, false, true, 2.5);
+
+    return createSequence(
+        util.reset(startingPose).command(),
+        drive1.command(),
+        shoot1.command(),
+        turn1.command(),
+        intake1.command(),
+        shoot2.command(),
+        Commands.parallel(
+            path1.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[0], 1.5))),
+        shoot3.command(),
+        Commands.parallel(
+            path2.command(),
+            util.prepareHandoff()
+                .andThen(util.intakeWhileNear(util.wingGamePieceLocations[1], 1.5))),
+        shoot4.command());
   }
 
   public Command mobility() {
