@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['named_0',['named',['../classfrc_1_1WorBots_1_1util_1_1UtilCommands.html#ab650a023ea830ff776cfc594b3101379',1,'frc::WorBots::util::UtilCommands']]],
-  ['namedsequence_1',['namedSequence',['../classfrc_1_1WorBots_1_1util_1_1UtilCommands.html#a11069a5da8c221b7dc77af8f3cdae124',1,'frc::WorBots::util::UtilCommands']]],
-  ['negative_2',['Negative',['../enumfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath_1_1SnapDirection.html#a7c6514e3ccbb5e797d81d5563b3339d5',1,'frc::WorBots::util::math::GeneralMath::SnapDirection']]],
-  ['negrotation_3',['negRotation',['../classfrc_1_1WorBots_1_1util_1_1math_1_1AllianceFlipUtil.html#a6b94ecd87233e3b51cd3997aa8f784e7',1,'frc::WorBots::util::math::AllianceFlipUtil']]],
-  ['network_5ftables_4',['NETWORK_TABLES',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a96d5dfac3fc301c4545b6bb9b5c709a1',1,'frc::WorBots::util::debug::StatusPage']]],
-  ['not_5festopped_5',['NOT_ESTOPPED',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a684983250c1afa3ed894ad8bdace8a8f',1,'frc::WorBots::util::debug::StatusPage']]]
+  ['onepiece_0',['onePiece',['../classfrc_1_1WorBots_1_1auto_1_1Autos.html#ab5a1e4cd65038476467adc3a166936c6',1,'frc::WorBots::auto::Autos']]],
+  ['operator_3dnew_20commandxboxcontroller_1',['operator=new CommandXboxController',['../classfrc_1_1WorBots_1_1RobotContainer.html#a2b9e5f5c72da0b2acdc3c225d0877906',1,'frc::WorBots::RobotContainer']]],
+  ['operator_5fcontroller_2',['OPERATOR_CONTROLLER',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#a411455203c3adac0cf672e4d44f8aa41',1,'frc::WorBots::util::debug::StatusPage']]],
+  ['optimalsequence_3',['optimalSequence',['../classfrc_1_1WorBots_1_1util_1_1UtilCommands.html#ae653cb48d1c6c60dc2a6b6dd0d71cb07',1,'frc::WorBots::util::UtilCommands']]],
+  ['optimizestate_4',['optimizeState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae0724821f4128b179f3909c1ebf533d7',1,'frc::WorBots::subsystems::drive::Module']]]
 ];
