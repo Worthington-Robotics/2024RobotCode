@@ -23,10 +23,10 @@ import frc.WorBots.util.math.GeneralMath;
 public class DriveController {
   // Constants
   /** The percentage of the max drive speed that the robot will drive at */
-  public static final double DRIVE_SPEED_MULTIPLIER = 0.80;
+  public static final double DRIVE_SPEED_MULTIPLIER = 0.85;
 
   /** The max rotational speed in radians per update that the robot will drive at */
-  public static final double ROTATIONAL_SPEED = 5.0;
+  public static final double ROTATIONAL_SPEED = 7.5;
 
   /** The amount of input deadband to apply */
   public static final double DEADBAND = 0.1;
