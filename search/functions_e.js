@@ -14,12 +14,13 @@ var searchData=
   ['robotcontainer_11',['RobotContainer',['../classfrc_1_1WorBots_1_1RobotContainer.html#a4a679aeea438710ebf0d0d24417fe25f',1,'frc::WorBots::RobotContainer']]],
   ['robotinit_12',['robotInit',['../classfrc_1_1WorBots_1_1Robot.html#a73b2963f9c5af74b4732a50fc1443aa9',1,'frc::WorBots::Robot']]],
   ['robotperiodic_13',['robotPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#ac90c67cbc84575dccfcb0921b8820bf3',1,'frc::WorBots::Robot']]],
-  ['rotationsequence_14',['RotationSequence',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1RotationSequence.html#af98159c2d5edd48369542fda2ce42d97',1,'frc::WorBots::util::trajectory::RotationSequence']]],
-  ['rotationtopose_15',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a6d937a21ed822175b7958d7ad5cd0233',1,'frc::WorBots::util::math::GeomUtil']]],
-  ['rotationtotransform_16',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1296067ad70179403938c47dc05416c7',1,'frc::WorBots::util::math::GeomUtil']]],
-  ['run_17',['run',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#af50e205d49accf3e3d02e464abe86c35',1,'frc::WorBots::util::StateMachine']]],
-  ['runpose_18',['runPose',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#ab9f1af453fb31ec5984397b4d01e0a66',1,'frc::WorBots::subsystems::climber::Climber']]],
-  ['runstate_19',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
-  ['runtransitions_20',['runTransitions',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#a661ed6a3f166f6864e59e48ae94f35ea',1,'frc::WorBots::util::StateMachine']]],
-  ['runvelocity_21',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
+  ['rotatepose_14',['rotatePose',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#a53534c3bb4fe794c1f5237d25335257e',1,'frc::WorBots::auto::AutoUtil']]],
+  ['rotationsequence_15',['RotationSequence',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1RotationSequence.html#af98159c2d5edd48369542fda2ce42d97',1,'frc::WorBots::util::trajectory::RotationSequence']]],
+  ['rotationtopose_16',['rotationToPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a6d937a21ed822175b7958d7ad5cd0233',1,'frc::WorBots::util::math::GeomUtil']]],
+  ['rotationtotransform_17',['rotationToTransform',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1296067ad70179403938c47dc05416c7',1,'frc::WorBots::util::math::GeomUtil']]],
+  ['run_18',['run',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#af50e205d49accf3e3d02e464abe86c35',1,'frc::WorBots::util::StateMachine']]],
+  ['runpose_19',['runPose',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#ab9f1af453fb31ec5984397b4d01e0a66',1,'frc::WorBots::subsystems::climber::Climber']]],
+  ['runstate_20',['runState',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Module.html#ae9e913b07ee73c0b5cf9e27a65d9bc79',1,'frc::WorBots::subsystems::drive::Module']]],
+  ['runtransitions_21',['runTransitions',['../classfrc_1_1WorBots_1_1util_1_1StateMachine.html#a661ed6a3f166f6864e59e48ae94f35ea',1,'frc::WorBots::util::StateMachine']]],
+  ['runvelocity_22',['runVelocity',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#ad0568920d97a2bfbd3ae1ec61a764e89',1,'frc::WorBots::subsystems::drive::Drive']]]
 ];
