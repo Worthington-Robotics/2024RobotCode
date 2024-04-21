@@ -176,6 +176,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Clear the currently held setpoint from the climber </p>
 
 </div>
 </div>
@@ -201,6 +202,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Checks if the climber is close to it's climb limit </p>
 
 </div>
 </div>
@@ -263,6 +265,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Returns a command that runs a pose on the climber and clears it when the command is interrupted </p>
 
 </div>
 </div>
@@ -289,6 +292,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Set whether the climbing is locked </p>
 
 </div>
 </div>
@@ -391,6 +395,14 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Set the setpoint for the climber</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">setpoint</td><td>The position setpoint to follow </td></tr>
+    <tr><td class="paramname">direction</td><td>The direction to move for the setpoint. Should be -1 or 1. The climber will not move in the opposite direction when following the setpoint and will just stop after passing it. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -414,6 +426,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >The pose for deploying the climber arms out </p>
 
 </div>
 </div>
@@ -436,6 +449,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >The pose for dropping the hooks after deploying </p>
 
 </div>
 </div>
@@ -458,6 +472,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >The pose for bringing the climb fully up </p>
 
 </div>
 </div>
