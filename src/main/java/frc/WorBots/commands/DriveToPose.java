@@ -183,22 +183,10 @@ public class DriveToPose extends Command {
             new Pose2d(
                 lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position))));
     SmartDashboard.putNumberArray("DriveToPose/DistanceSetpoint", Logger.pose2dToArray(targetPose));
-    // Logger.getInstance().recordOutput("DriveToPose/DistanceMeasured",
-    // currentDistance);
-    // Logger.getInstance()
-    // .recordOutput("DriveToPose/DistanceSetpoint",
-    // driveController.getSetpoint().position);
-    // Logger.getInstance()
-    // .recordOutput("DriveToPose/ThetaMeasured",
-    // currentPose.getRotation().getRadians());
-    // Logger.getInstance()
-    // .recordOutput("DriveToPose/ThetaSetpoint",
-    // thetaController.getSetpoint().position);
     Logger.getInstance()
         .setDriveTrajSetpoint(
             new Pose2d(
                 lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position)));
-    // Logger.getInstance().recordOutput("Odometry/DriveToPoseGoal", targetPose);
   }
 
   @Override

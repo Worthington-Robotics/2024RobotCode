@@ -70,16 +70,21 @@ public class AutoSelector extends SubsystemBase {
   }
 
   /**
-   * Adds an auto to the auto selector.
+   * Adds an auto to the auto selector
    *
-   * @param name The name of the auto.
-   * @param questions The auto questions to be asked.
-   * @param command The command that needs to be ran.
+   * @param name The name of the auto
+   * @param questions The auto questions to be asked
+   * @param command The command that needs to be ran
    */
   public void addRoutine(String name, List<AutoQuestion> questions, Command command) {
     addRoutine(new AutoRoutine(name, questions, command));
   }
 
+  /**
+   * Adds a routine to the auto selector
+   *
+   * @param routine The routine to add
+   */
   public void addRoutine(AutoRoutine routine) {
     if (routine.questions.size() > MAX_QUESTIONS) {
       throw new IllegalArgumentException(
@@ -95,6 +100,12 @@ public class AutoSelector extends SubsystemBase {
     }
   }
 
+  /**
+   * Gets a routine from it's name
+   *
+   * @param name The name of the routine
+   * @return The routine
+   */
   public AutoRoutine getRoutineFromName(String name) {
     AutoRoutine returnRoutine = null;
     for (AutoRoutine routine : routines) {
@@ -105,6 +116,7 @@ public class AutoSelector extends SubsystemBase {
     return returnRoutine;
   }
 
+  /** Creates the answer list for the Dashboard chooser */
   private void createAnswerList() {
     answers.clear();
     for (AutoRoutine routine : routines) {

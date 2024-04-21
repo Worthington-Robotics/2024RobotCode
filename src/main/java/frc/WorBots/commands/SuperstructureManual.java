@@ -14,7 +14,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import java.util.function.Supplier;
 
-/** Command for manual control of the elevator and pivot using joysticks */
+/** Command for manual control of the elevator, pivot, and climber using joysticks */
 public class SuperstructureManual extends Command {
   // Constants
   /** Joystick deadband */

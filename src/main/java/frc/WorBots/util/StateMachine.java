@@ -114,14 +114,17 @@ public class StateMachine<Inputs> {
     }
   }
 
+  /** A single state of the state machine. Should be subclassed for custom states. */
   public static class State<Inputs> {
     protected StateTransition<Inputs>[] transitions;
 
+    /** Create this state with no transitions */
     @SuppressWarnings("unchecked")
     public State() {
       this.transitions = new StateTransition[0];
     }
 
+    /** Create this state with a set of state transitions to run */
     @SafeVarargs
     public State(StateTransition<Inputs>... transitions) {
       this.transitions = transitions;
@@ -164,7 +167,7 @@ public class StateMachine<Inputs> {
 
   /**
    * A transition behavior to another state that can be attached to states to share the same
-   * behavior between them
+   * transition behavior between them
    */
   public static interface StateTransition<Inputs> {
     public default Optional<State<Inputs>> getTransition(Inputs inputs) {

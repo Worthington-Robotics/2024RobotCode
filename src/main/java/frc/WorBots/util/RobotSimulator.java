@@ -37,6 +37,7 @@ public class RobotSimulator {
   /** The state of indexing the game piece in the system */
   private final StateMachine<RobotSimulator> indexState;
 
+  // Data interfaces
   private Superstructure superstructure;
   private Supplier<Pose2d> drivePose = () -> new Pose2d();
   private double intakeVolts = 0.0;

@@ -43,6 +43,7 @@ public class RobotContainer {
   public final Intake intake;
   public final Shooter shooter;
   public final Climber climber;
+
   private AutoSelector selector;
 
   // Joysticks
@@ -296,13 +297,6 @@ public class RobotContainer {
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
     driver.a().whileTrue(climber.runPose(Climber.POSE_DEPLOY, 1.0).onlyIf(() -> isClimbing));
     driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() -> isClimbing));
-    // driver.a().whileTrue(new AmpAlign(drive, () -> -driver.getLeftX()));
-    // final Pose2d ampPose =
-    // new Pose2d(
-    // AllianceFlipUtil.apply(FieldConstants.Amp.x),
-    // FieldConstants.fieldWidth - Units.inchesToMeters(10),
-    // Rotation2d.fromDegrees(270));
-    // driver.a().whileTrue(new DriveToPose(drive, ampPose));
     driver
         .povLeft()
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));

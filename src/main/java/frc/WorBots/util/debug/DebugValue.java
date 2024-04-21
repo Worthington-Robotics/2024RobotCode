@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
 public class DebugValue {
+  /** A debug value that is logged either to NT or the log file */
   public static class DebugDouble {
     private DoublePublisher publisher = null;
     private DoubleLogEntry logEntry = null;
@@ -40,6 +41,7 @@ public class DebugValue {
     }
   }
 
+  /** A debug value that is logged either to NT or the log file */
   public static class DebugBool {
     private BooleanPublisher publisher = null;
     private BooleanLogEntry logEntry = null;
@@ -64,10 +66,12 @@ public class DebugValue {
     }
   }
 
+  /** Returns a logged double that is stored in the log when connected to an FMS */
   public static DebugDouble compDouble(String table, String key) {
     return new DebugDouble(table, key, !DriverStation.isFMSAttached());
   }
 
+  /** Returns a logged boolean that is stored in the log when connected to an FMS */
   public static DebugBool compBool(String table, String key) {
     return new DebugBool(table, key, !DriverStation.isFMSAttached());
   }

@@ -14,8 +14,8 @@ import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
 
 /**
- * This command waits for the driver to intake a game piece, then moves it into the shooter to prep
- * it for shooting.
+ * This command does all of the smart intaking for the system. It will attempt to move the game
+ * piece as far up as it can safely in either the intake or feeder
  */
 public class Handoff extends Command {
   private final Superstructure superstructure;

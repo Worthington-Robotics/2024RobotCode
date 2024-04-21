@@ -7,12 +7,10 @@
 
 package frc.WorBots;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.WorBots.subsystems.lights.Lights;
@@ -23,13 +21,6 @@ import frc.WorBots.util.RobotSimulator;
 import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.debug.StatusPage;
-import frc.WorBots.util.math.ShooterMath;
-
-// import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import frc.WorBots.util.debug.Logger;
-// import frc.WorBots.util.math.GeomUtil;
-// import frc.WorBots.util.math.ShooterMath;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -37,8 +28,6 @@ public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
 
   private PowerDistribution pdp;
-
-  // private UsbCamera camera;
 
   @Override
   public void robotInit() {
@@ -60,9 +49,6 @@ public class Robot extends TimedRobot {
         () -> {
           // Simple status updates
           StatusPage.periodic(pdp);
-          // StatusPage.reportStatus(
-          // StatusPage.DRIVER_CAM,
-          // camera.isConnected() && camera.isEnabled() && camera.isValid());
           StatusPage.reportStatus(
               StatusPage.DRIVE_CONTROLLER, robotContainer.driver.getHID().isConnected());
           StatusPage.reportStatus(
@@ -70,9 +56,8 @@ public class Robot extends TimedRobot {
         },
         kDefaultPeriod);
 
+    // Run our robot code at a higher frequency
     this.addPeriodic(this::periodicFunction, Constants.ROBOT_PERIOD);
-
-    // CameraServer.startAutomaticCapture();
 
     // Ensure caches are updated at the beginning
     TimeCache.getInstance().update();
@@ -84,40 +69,12 @@ public class Robot extends TimedRobot {
 
   /** Periodic function for the robot */
   private void periodicFunction() {
-    CommandScheduler.getInstance().run();
-    // ==== DISABLE BEFORE COMP ====
-    final var robotPose = robotContainer.drive.getPose();
-    final var robotSpeeds = robotContainer.drive.getFieldRelativeSpeeds();
-    final double range = ShooterMath.getGoalDistance(robotPose);
-    SmartDashboard.putNumber("Speaker Range", range);
-    // final var goalPose = ShooterMath.getGoal();
-    // SmartDashboard.putNumberArray("Goal Pose",
-    // Logger.translation2dToArray(goalPose));
-    // var goalAngle = ShooterMath.getGoalToRobotAngle(robotPose);
-    // SmartDashboard.putNumber("Goal to Robot Angle", goalAngle.getRadians());
-
-    var shotData = ShooterMath.calculateShotData(robotPose, robotSpeeds);
-    SmartDashboard.putNumber("Robot.java Shot Angle", shotData.pivotAngle());
-    // SmartDashboard.putString("Shot Confidence",
-    // shotData.confidence().toString());
-    // SmartDashboard.putNumber("Calculated Shooter RPM", shotData.rpm());
-    // final var adjusted = new Pose2d(robotPose.getTranslation(),
-    // shotData.robotAngle());
-    // SmartDashboard.putNumberArray("Adjusted Drive Pose",
-    // Logger.pose2dToArray(adjusted));
-
-    // var nextRobotPose = GeomUtil.applyChassisSpeeds(robotPose, robotSpeeds,
-    // Constants.ROBOT_PERIOD);
-    // SmartDashboard.putNumberArray("Next Robot Pose",
-    // Logger.pose2dToArray(nextRobotPose));
-    // ==========
-
-    final var dist = Units.metersToFeet(robotContainer.drive.getPose().getX() - 0.3556 * 0.0);
-    SmartDashboard.putNumber("Drive Distance", dist);
-
     // Update caches
     TimeCache.getInstance().update();
     AllianceCache.getInstance().update();
+
+    // Run the command scheduler
+    CommandScheduler.getInstance().run();
 
     // Update simulator
     RobotSimulator.getInstance().periodic();

@@ -136,6 +136,7 @@ public class AllianceFlipUtil {
     }
   }
 
+  /** Adds a negative sign to a rotation on the other side of the field */
   public static Rotation2d negRotation(Rotation2d rotation) {
     if (shouldFlip()) {
       return rotation.unaryMinus();

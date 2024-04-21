@@ -80,6 +80,7 @@ public class UtilCommands {
     return new OptimalSequentialCommandGroup(commands);
   }
 
+  /** A command wrapped with a timer that will be shown on SmartDashboard */
   public static class TimedCommand extends Command {
     private Command command;
     private final Timer timer = new Timer();

@@ -30,10 +30,8 @@ import java.util.function.Supplier;
 
 /** Command that drives along a custom holonomic trajectory. Credit to team 6328. */
 public class DriveTrajectory extends Command {
-  private static boolean supportedRobot = true;
   private static double maxVelocityMetersPerSec;
   private static double maxAccelerationMetersPerSec2;
-  // private static double maxDecelerationMetersPerSec2;
   private static double maxCentripetalAccelerationMetersPerSec2;
 
   private PIDController xController = new PIDController(2.5, 0.0, 0.0, Constants.ROBOT_PERIOD);
@@ -85,7 +83,6 @@ public class DriveTrajectory extends Command {
     if (Constants.getSim()) {
       maxVelocityMetersPerSec = Units.inchesToMeters(180.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(155.0);
-      // maxDecelerationMetersPerSec2 = Units.inchesToMeters(155.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(170.0);
 
       xController = new PIDController(2.7, 0, 0.0, Constants.ROBOT_PERIOD);
@@ -95,7 +92,6 @@ public class DriveTrajectory extends Command {
     } else {
       maxVelocityMetersPerSec = Units.inchesToMeters(160.0);
       maxAccelerationMetersPerSec2 = Units.inchesToMeters(600.0);
-      // maxDecelerationMetersPerSec2 = Units.inchesToMeters(600.0);
       maxCentripetalAccelerationMetersPerSec2 = Units.inchesToMeters(130.0);
 
       xController = new PIDController(8.9, 0, 0.0, Constants.ROBOT_PERIOD);
@@ -141,7 +137,7 @@ public class DriveTrajectory extends Command {
       try {
         customGenerator.generate(config, waypoints);
       } catch (Exception exception) {
-        if (supportedRobot && alertOnFail) {
+        if (alertOnFail) {
           exception.printStackTrace();
         }
       }

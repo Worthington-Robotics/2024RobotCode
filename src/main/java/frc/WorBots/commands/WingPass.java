@@ -21,6 +21,10 @@ import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import java.util.function.Supplier;
 
+/**
+ * A command that controls the drive rotation, pivot, and shooter RPM to do passes from the source
+ * to the wing
+ */
 public class WingPass extends Command {
   private final Drive drive;
   private final Superstructure superstructure;

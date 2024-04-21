@@ -98,7 +98,6 @@ public class Lights extends SubsystemBase {
   private Supplier<Pose2d> drivePoseSupplier = () -> new Pose2d();
   private Supplier<ChassisSpeeds> driveSpeedsSupplier = () -> new ChassisSpeeds();
   private Supplier<Boolean> inHandoff = () -> false;
-  private Supplier<Boolean> inStow = () -> false;
   private Supplier<Boolean> atShootSetpoint = () -> false;
   private Supplier<Boolean> hasGamePieceBottom = () -> false;
   private Supplier<Boolean> hasGamePieceTop = () -> false;
@@ -529,7 +528,6 @@ public class Lights extends SubsystemBase {
     this.drivePoseSupplier = drivePoseSupplier;
     this.driveSpeedsSupplier = driveSpeedsSupplier;
     this.inHandoff = inHandoff;
-    this.inStow = inStow;
     this.atShootSetpoint = atShootSetpoint;
     this.hasGamePieceBottom = hasGamePieceBottom;
     this.hasGamePieceTop = hasGamePieceTop;

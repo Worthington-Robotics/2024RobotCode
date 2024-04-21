@@ -67,8 +67,6 @@ public class AmpAlign extends Command {
     final var speeds =
         driveController.getSpeeds(
             x, y, theta, drive.getPose().getRotation(), drive.getMaxLinearSpeedMetersPerSec());
-    // speeds.vxMetersPerSecond = x;
-    // speeds.omegaRadiansPerSecond = theta;
     driveController.drive(drive, speeds);
   }
 }

@@ -721,6 +721,7 @@ public class AutoUtil {
     return new Transform2d(0.0, 0.0, rotation);
   }
 
+  /** Adds a Transform2d to a pose intuitively, just summing the components */
   public Pose2d posePlus(Pose2d pose1, Transform2d transform) {
     return new Pose2d(
         pose1.getX() + transform.getX(),
@@ -728,6 +729,7 @@ public class AutoUtil {
         pose1.getRotation().plus(transform.getRotation()));
   }
 
+  /** Returns a pose rotated by a rotation */
   public Pose2d rotatePose(Pose2d pose, Rotation2d rotation) {
     return posePlus(pose, transformRotate(rotation));
   }
