@@ -45,11 +45,11 @@ public class AutoShoot extends Command {
 
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
-          3.9,
+          6.5,
           0.001,
           0.032,
           new TrapezoidProfile.Constraints(
-              Units.degreesToRadians(150.0), Units.degreesToRadians(700.0)),
+              Units.degreesToRadians(300.0), Units.degreesToRadians(4000.0)),
           Constants.ROBOT_PERIOD);
 
   private final DriveController driveController = new DriveController();
@@ -129,5 +129,6 @@ public class AutoShoot extends Command {
   public void end(boolean interrupted) {
     superstructure.setPose(Preset.STOW);
     Lights.getInstance().setMode(LightsMode.Delivery);
+    shooter.idle();
   }
 }
