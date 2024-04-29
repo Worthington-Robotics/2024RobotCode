@@ -85,7 +85,8 @@ public class ShooterMath {
    * multiplied by the robot period to find the period of time over which to apply the robot
    * velocity to the pose to get the expected pose
    */
-  private static final double PREDICTION_FACTOR = 0.0;
+  private static final TunableDouble PREDICTION_FACTOR =
+      new TunableDouble("Tuning", "Shooting", "Lookahead", 65.0);
 
   /** The amount to adjust the robot pose based on robot velocity and also scaled by goal range */
   private static final double PREDICTION_DISTANCE_FACTOR = 0.0;
@@ -149,10 +150,10 @@ public class ShooterMath {
     final double predictedDistance = getGoalDistance(predicted);
     final Rotation2d predictedGoalToRobotAngle = getGoalToRobotAngle(predicted);
 
-    final double rpm = calculateShooterRPM(distance);
+    final double rpm = calculateShooterRPM(predictedDistance);
     final double pivotAngle = calculatePivotAngle(predictedDistance, predictedGoalToRobotAngle);
-    // final Rotation2d robotAngle = calculateRobotAngle(predicted, robotSpeeds);
-    final Rotation2d robotAngle = getGoalTheta(robot);
+    final Rotation2d robotAngle = calculateRobotAngle(predicted, robotSpeeds);
+    // final Rotation2d robotAngle = getGoalTheta(robot);
     final ShotConfidence confidence = calculateConfidence(distance, goalToRobotAngle, robotSpeeds);
 
     return new ShotData(rpm, pivotAngle, robotAngle, confidence);
@@ -332,7 +333,7 @@ public class ShooterMath {
    */
   public static Pose2d predictNextPose(Pose2d robot, ChassisSpeeds robotSpeeds) {
     final double period =
-        Constants.ROBOT_PERIOD * PREDICTION_FACTOR
+        Constants.ROBOT_PERIOD * PREDICTION_FACTOR.get()
             + Constants.ROBOT_PERIOD * PREDICTION_DISTANCE_FACTOR * getGoalDistance(robot);
     return GeomUtil.applyChassisSpeeds(robot, robotSpeeds, period);
   }
