@@ -19,6 +19,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.WorBots.FieldConstants;
+import frc.WorBots.subsystems.vision.NoteVisionIO.NoteVisionIOInputs;
 import frc.WorBots.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.WorBots.util.cache.Cache.TimeCache;
 import frc.WorBots.util.debug.*;
@@ -36,6 +37,8 @@ import java.util.function.*;
 public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputs[] inputs;
+  private final NoteVisionIO noteIo;
+  private final NoteVisionIOInputs noteInputs;
 
   /** Consumer that receives vision updates out of the subsystem */
   private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
@@ -130,9 +133,15 @@ public class Vision extends SubsystemBase {
       visionTable.getDoubleArrayTopic("Invalid Pose").publish();
   private final IntegerPublisher detectionCountPublisher =
       visionTable.getIntegerTopic("Detection Count").publish();
+  private final DoublePublisher noteThetaPublisher =
+      visionTable.getDoubleTopic("Note Theta").publish();
+  private final DoublePublisher noteRatioPublisher =
+      visionTable.getDoubleTopic("Note Ratio").publish();
 
-  public Vision(VisionIO... io) {
+  public Vision(NoteVisionIO noteIo, VisionIO... io) {
     this.io = io;
+    this.noteIo = noteIo;
+    noteInputs = new NoteVisionIOInputs();
     inputs = new VisionIOInputs[io.length];
     for (int i = 0; i < io.length; i++) {
       inputs[i] = new VisionIOInputs();
@@ -146,6 +155,9 @@ public class Vision extends SubsystemBase {
       io[i].updateInputs(inputs[i]);
       StatusPage.reportStatus(StatusPage.CAM_PREFIX + i, inputs[i].isConnected);
     }
+    noteIo.updateInputs(noteInputs);
+    noteThetaPublisher.set(noteInputs.noteTheta);
+    noteRatioPublisher.set(noteInputs.noteRatio);
 
     seesTag = false;
 
@@ -297,6 +309,26 @@ public class Vision extends SubsystemBase {
   /** Checks if the vision can currently see a tag */
   public boolean canSeeTag() {
     return seesTag;
+  }
+
+  public double getNoteTheta() {
+    return this.noteInputs.noteTheta;
+  }
+
+  public double getNotePitch() {
+    return this.noteInputs.notePitch;
+  }
+
+  public double getNoteArea() {
+    return this.noteInputs.noteArea;
+  }
+
+  public double getNoteRatio() {
+    return this.noteInputs.noteRatio;
+  }
+
+  public boolean hasNoteTarget() {
+    return this.noteInputs.hasTarget;
   }
 
   /**

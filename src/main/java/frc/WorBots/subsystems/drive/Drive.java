@@ -230,7 +230,7 @@ public class Drive extends SubsystemBase {
    * @return The speed of the robot
    */
   public ChassisSpeeds getFieldRelativeSpeeds() {
-    return setpointSpeeds;
+    return ChassisSpeeds.fromRobotRelativeSpeeds(setpointSpeeds, lastGyroYaw);
   }
 
   /**

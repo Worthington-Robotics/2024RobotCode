@@ -152,6 +152,16 @@ public class GeomUtil {
   }
 
   /**
+   * Converts a Translation3d to a Translation2d by extracting two dimensions (X and Z). chain
+   *
+   * @param transform The original translation
+   * @return The resulting translation
+   */
+  public static Translation3d translation2dTo3d(Translation2d translation) {
+    return new Translation3d(translation.getX(), translation.getY(), 0.0);
+  }
+
+  /**
    * Checks if a Transform2d is within a bounding box of two Transform2d corners.
    *
    * @param transform The original translation

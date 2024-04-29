@@ -18,7 +18,7 @@ import frc.WorBots.Constants;
 public class TunableDouble {
   // Set this to false to disable tuning and improve performance.
   // All tunables will just use their default value
-  private static final boolean ENABLE_TUNING = !Constants.IS_COMP && false;
+  private static final boolean ENABLE_TUNING = !Constants.IS_COMP && true;
 
   private double value;
   // We have to keep this around since we need to supply a default
@@ -52,6 +52,7 @@ public class TunableDouble {
     if (ENABLE_TUNING) {
       entry =
           NetworkTableInstance.getDefault().getTable(table).getSubTable(subtable).getEntry(name);
+      this.set(defaultValue);
     }
   }
 

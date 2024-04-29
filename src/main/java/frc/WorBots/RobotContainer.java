@@ -70,7 +70,7 @@ public class RobotContainer {
               new ModuleIOTalon(1),
               new ModuleIOTalon(2),
               new ModuleIOTalon(3));
-      vision = new Vision(new VisionIOCustom(0), new VisionIOCustom(1));
+      vision = new Vision(new NoteVisionIOPhoton(), new VisionIOCustom(0), new VisionIOCustom(1));
       superstructure = new Superstructure(new SuperstructureIOTalon());
       intake = new Intake(new IntakeIOTalon());
       shooter = new Shooter(new ShooterIOTalon());
@@ -83,7 +83,7 @@ public class RobotContainer {
               new ModuleIOSim(1),
               new ModuleIOSim(2),
               new ModuleIOSim(3));
-      vision = new Vision(new VisionIOCustom(0));
+      vision = new Vision(new NoteVisionIOPhoton(), new VisionIOCustom(0));
       superstructure = new Superstructure(new SuperstructureIOSim());
       intake = new Intake(new IntakeIOSim());
       shooter = new Shooter(new ShooterIOSim());
@@ -234,10 +234,15 @@ public class RobotContainer {
 
   /** Binds controls for the main driver */
   private void bindDriverControls() {
+    // Spit
+    // driver
+    //     .leftTrigger()
+    //     .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
+    //     .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver
         .leftTrigger()
-        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
-        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+        .whileTrue(
+            new NoteAlign(drive, vision, () -> -driver.getLeftY(), () -> -driver.getLeftX()));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     // Auto handoff toggle
