@@ -215,6 +215,11 @@ public class Drive extends SubsystemBase {
     return poseEstimator.getLatestPose();
   }
 
+  /** Enable or disable vision updates on the PoseEstimator */
+  public void enableVisionUpdates(boolean enabled) {
+    poseEstimator.enableVisionUpdates(enabled);
+  }
+
   /**
    * Gets the current velocity on the field
    *

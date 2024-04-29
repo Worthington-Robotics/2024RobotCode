@@ -47,6 +47,8 @@ public class PoseEstimator {
   private final NavigableMap<Double, PoseUpdate> updates = new TreeMap<>();
   private final Matrix<N3, N1> q = new Matrix<>(Nat.N3(), Nat.N1());
 
+  private boolean enableVisionUpdates = true;
+
   /**
    * Create a PoseEstimator with standard deviation noise
    *
@@ -78,6 +80,11 @@ public class PoseEstimator {
     update();
   }
 
+  /** Enable or disable vision updates */
+  public void enableVisionUpdates(boolean enabled) {
+    this.enableVisionUpdates = enabled;
+  }
+
   /**
    * Records a new drive movement.
    *
@@ -95,6 +102,10 @@ public class PoseEstimator {
    * @param visionData A list of timestamped vision updates
    */
   public void addVisionData(List<TimestampedVisionUpdate> visionData) {
+    if (!enableVisionUpdates) {
+      return;
+    }
+
     for (TimestampedVisionUpdate timestampedVisionUpdate : visionData) {
       final double timestamp = timestampedVisionUpdate.timestamp();
       final VisionUpdate visionUpdate =

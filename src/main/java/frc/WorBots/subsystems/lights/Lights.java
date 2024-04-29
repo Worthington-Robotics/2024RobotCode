@@ -93,6 +93,9 @@ public class Lights extends SubsystemBase {
   /** Lava mode state */
   private final Lava lava = new Lava();
 
+  /** Color for the solid state */
+  private Color solidColor = Color.kBlack;
+
   // Data interfaces
   private Supplier<Boolean> isTargeted = () -> false;
   private Supplier<Pose2d> drivePoseSupplier = () -> new Pose2d();
@@ -135,6 +138,7 @@ public class Lights extends SubsystemBase {
     Ripple,
     Flame,
     Climbing,
+    Solid,
   }
 
   /** The lights subsystem, which is rather pretty. */
@@ -229,6 +233,9 @@ public class Lights extends SubsystemBase {
         break;
       case Climbing:
         climbing();
+        break;
+      case Solid:
+        LightsUtil.solid(io, solidColor);
         break;
     }
 
@@ -550,6 +557,12 @@ public class Lights extends SubsystemBase {
   /** Sets whether the lights are flashing in pit test mode */
   public void setPitTestFlashing(boolean flashing) {
     this.pitTestFlashing = flashing;
+  }
+
+  /** Sets the lights to a solid color state */
+  public void setSolid(Color color) {
+    this.solidColor = color;
+    setMode(LightsMode.Solid);
   }
 
   /** Sets the rumble command for when a note enters the system */

@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.drive.Drive;
@@ -83,11 +84,11 @@ public class NoteAlign extends Command {
     addRequirements(drive);
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
-    thetaController.setGains(4.0, 0.01, 0.0);
+    thetaController.setGains(4.0, 0.00, 0.0);
     thetaController.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
-    thetaController2.setGains(2.0, 0.01, 0.0);
+    thetaController2.setGains(2.0, 0.00, 0.0);
     thetaController2.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
-    lookaheadFactor = new TunableDouble("Vision", "Tuning", "Note Align Lookahead", 60.0);
+    lookaheadFactor = new TunableDouble("Vision", "Tuning", "Note Align Lookahead", 40.0);
 
     thetaController2.pid.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.pid.setTolerance(THETA_TOLERANCE);
@@ -95,10 +96,12 @@ public class NoteAlign extends Command {
 
   @Override
   public void initialize() {
-    // thetaController.reset(0);
-    Lights.getInstance().setMode(LightsMode.ShootReady);
+    Lights.getInstance().setSolid(Color.kOrangeRed);
     this.hasTargeted = false;
     noteLocation = Optional.empty();
+    // Since the whole tracking system is relative to the note, we actually don't want vision
+    // or the lack of it messing up our pose
+    drive.enableVisionUpdates(false);
   }
 
   @Override
@@ -136,6 +139,7 @@ public class NoteAlign extends Command {
             final Transform2d transform = new Transform2d(distance, 0.0, new Rotation2d());
             final Translation2d translated = drive.getPose().plus(transform).getTranslation();
             noteLocation = Optional.of(translated);
+            Lights.getInstance().setSolid(Color.kGreen);
           }
         }
       }
@@ -175,6 +179,9 @@ public class NoteAlign extends Command {
     // Output info
     SmartDashboard.putNumber(
         "Note Align Theta Controller Error", thetaController.pid.getPositionError());
+
+    SmartDashboard.putNumber(
+        "Note Align Theta Controller Error 2", thetaController2.pid.getPositionError());
   }
 
   @Override
@@ -185,5 +192,6 @@ public class NoteAlign extends Command {
   @Override
   public void end(boolean interrupted) {
     Lights.getInstance().setMode(LightsMode.Delivery);
+    drive.enableVisionUpdates(true);
   }
 }
