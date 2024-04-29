@@ -107,6 +107,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a5adc3af2b450d537f0e57dcf6be9e896"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f79fbd7fcf1bea0dd2207f997e7d6bb"><td class="memItemLeft" align="right" valign="top">static Translation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a2f79fbd7fcf1bea0dd2207f997e7d6bb">translation3dTo2dXZ</a> (Translation3d translation)</td></tr>
 <tr class="separator:a2f79fbd7fcf1bea0dd2207f997e7d6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15478376f98c4d25cfcbd1d9fb103026"><td class="memItemLeft" align="right" valign="top">static Translation3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a15478376f98c4d25cfcbd1d9fb103026">translation2dTo3d</a> (Translation2d translation)</td></tr>
+<tr class="separator:a15478376f98c4d25cfcbd1d9fb103026"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e2952e54d0e41a04cb548bdbf9e1d7b"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a1e2952e54d0e41a04cb548bdbf9e1d7b">translation2dInBoundingBox</a> (Translation2d translation, Translation2d[] bounds)</td></tr>
 <tr class="separator:a1e2952e54d0e41a04cb548bdbf9e1d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a853419ad4b325689b4ed6bb5786d14c9"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a853419ad4b325689b4ed6bb5786d14c9">getChassisSpeedsMagnitude</a> (ChassisSpeeds speeds)</td></tr>
@@ -651,6 +653,40 @@ Static Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">transform</td><td>The original translation </td></tr>
     <tr><td class="paramname">bounds</td><td>The two corners of the bounding box to check for collision with </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting translation </dd></dl>
+
+</div>
+</div>
+<a id="a15478376f98c4d25cfcbd1d9fb103026" name="a15478376f98c4d25cfcbd1d9fb103026"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15478376f98c4d25cfcbd1d9fb103026">&#9670;&#160;</a></span>translation2dTo3d()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Translation3d frc.WorBots.util.math.GeomUtil.translation2dTo3d </td>
+          <td>(</td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>translation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Converts a Translation3d to a Translation2d by extracting two dimensions (X and Z). chain</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>The original translation </td></tr>
   </table>
   </dd>
 </dl>
