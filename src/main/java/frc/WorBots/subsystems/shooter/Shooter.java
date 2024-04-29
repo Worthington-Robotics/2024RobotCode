@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
   // Constants
   /** Distance threshold for the ToF */
-  private static final double DISTANCE_THRESHOLD = 0.0795;
+  private static final double DISTANCE_THRESHOLD = 0.072;
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
@@ -172,6 +172,10 @@ public class Shooter extends SubsystemBase {
     inputs.bottom.publish();
 
     StatusPage.reportStatus(StatusPage.SHOOTER_CONNECTED, inputs.isConnected);
+  }
+
+  public double getToFDistanceMeters() {
+    return inputs.timeOfFlightDistanceMeters;
   }
 
   /**
