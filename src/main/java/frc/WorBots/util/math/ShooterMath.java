@@ -86,7 +86,7 @@ public class ShooterMath {
    * velocity to the pose to get the expected pose
    */
   private static final TunableDouble PREDICTION_FACTOR =
-      new TunableDouble("Tuning", "Shooting", "Lookahead", 65.0);
+      new TunableDouble("Tuning", "Shooting", "Lookahead", 40.0);
 
   /** The amount to adjust the robot pose based on robot velocity and also scaled by goal range */
   private static final double PREDICTION_DISTANCE_FACTOR = 0.0;
