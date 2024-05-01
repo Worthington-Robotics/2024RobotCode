@@ -50,12 +50,12 @@ public class NoteAlign extends Command {
   private static final double POST_LOCK_SPEED_REDUCTION = 1.5;
 
   /** Tolerance for the theta controller to get the initial lock */
-  private static final double LOCK_TOLERANCE = Units.degreesToRadians(0.55);
+  private static final double LOCK_TOLERANCE = Units.degreesToRadians(0.30);
 
   private final TunableDouble lookaheadFactor;
 
   /** Size of the note on the field to stop the lock after */
-  private static final double NOTE_SIZE = FieldConstants.Note.outsideDiameter / 2.0 * 3.8;
+  private static final double NOTE_SIZE = FieldConstants.Note.outsideDiameter / 2.0 * 4.6;
 
   private static boolean ENABLE_3D_TRACKING = true;
 
@@ -105,11 +105,11 @@ public class NoteAlign extends Command {
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     this.rightYSupplier = rightYSupplier;
-    thetaController.setGains(4.0, 0.00, 0.0);
+    thetaController.setGains(4.5, 0.00, 0.0);
     thetaController.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
     thetaController2.setGains(2.0, 0.00, 0.0);
     thetaController2.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
-    lookaheadFactor = new TunableDouble("Vision", "Tuning", "Note Align Lookahead", 40.0);
+    lookaheadFactor = new TunableDouble("Vision", "Tuning", "Note Align Lookahead", 55.0);
 
     thetaController2.pid.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.pid.setTolerance(LOCK_TOLERANCE);
