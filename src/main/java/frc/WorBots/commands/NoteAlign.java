@@ -140,6 +140,7 @@ public class NoteAlign extends Command {
             final Translation2d translated = drive.getPose().plus(transform).getTranslation();
             noteLocation = Optional.of(translated);
             Lights.getInstance().setSolid(Color.kGreen);
+            thetaController2.pid.reset(drive.getRotation().getRadians());
           }
         }
       }
