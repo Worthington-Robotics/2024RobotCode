@@ -32,10 +32,10 @@ public class Handoff extends Command {
   /**
    * The amount to scale the feeder power based on ToF distance. Larger values increase the speed
    */
-  private static final double FEEDER_DISTANCE_SCALING = 1.0;
+  private static final double FEEDER_DISTANCE_SCALING = 1.75;
 
   /** Amount to multiply the intake voltage by when we are in handoff */
-  private static final double HANDOFF_INTAKE_MULTIPLIER = 1.0;
+  private static final double HANDOFF_INTAKE_MULTIPLIER = 1.20;
 
   /** Voltage for the feeder wheels */
   private static final double FEEDER_VOLTAGE = 0.50;
@@ -49,6 +49,7 @@ public class Handoff extends Command {
 
   @Override
   public void execute() {
+    // Intake up to feeder
     if (superstructure.inHandoff()) {
       if (!shooter.hasGamePiece()) {
         intake.setVolts(MAX_INTAKE_VOLTAGE * HANDOFF_INTAKE_MULTIPLIER);
@@ -63,6 +64,7 @@ public class Handoff extends Command {
         shooter.setRawFeederVolts(0.0);
       }
     } else {
+      // Intake only up to intake
       if (!intake.hasGamePiece() && !shooter.hasGamePiece()) {
         final double volts =
             MathUtil.clamp(
