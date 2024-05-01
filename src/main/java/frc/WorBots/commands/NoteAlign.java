@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
+import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.lights.Lights;
 import frc.WorBots.subsystems.lights.Lights.LightsMode;
@@ -35,13 +36,26 @@ import java.util.function.*;
 /** Command for automatic speaker targeting during teleop */
 public class NoteAlign extends Command {
   // Constants
-  /** Speed reduction for the driver while in this mode. Higher values reduce their speed more. */
-  private static final double DRIVE_SPEED_REDUCTION = 1.5;
 
-  /** Tolerance for the theta controller */
-  private static final double THETA_TOLERANCE = Units.degreesToRadians(0.65);
+  /**
+   * Speed reduction for the driver while in this mode, before getting a lock. Higher values reduce
+   * their speed more.
+   */
+  private static final double PRE_LOCK_SPEED_REDUCTION = 2.8;
+
+  /**
+   * Speed reduction for the driver while in this mode, after getting a lock. Higher values reduce
+   * their speed more.
+   */
+  private static final double POST_LOCK_SPEED_REDUCTION = 1.5;
+
+  /** Tolerance for the theta controller to get the initial lock */
+  private static final double LOCK_TOLERANCE = Units.degreesToRadians(0.55);
 
   private final TunableDouble lookaheadFactor;
+
+  /** Size of the note on the field to stop the lock after */
+  private static final double NOTE_SIZE = FieldConstants.Note.outsideDiameter / 2.0 * 3.8;
 
   private static boolean ENABLE_3D_TRACKING = true;
 
@@ -57,13 +71,15 @@ public class NoteAlign extends Command {
 
   private Optional<Translation2d> noteLocation;
 
+  private boolean hasPickedUpNote = false;
+  private boolean hasTargeted = false;
+
   private final Drive drive;
   private final Vision vision;
 
   private final Supplier<Double> leftXSupplier;
   private final Supplier<Double> leftYSupplier;
-
-  private boolean hasTargeted = false;
+  private final Supplier<Double> rightYSupplier;
 
   private final TunableProfiledPIDController thetaController =
       new TunableProfiledPIDController(
@@ -78,12 +94,17 @@ public class NoteAlign extends Command {
   private final DriveController driveController = new DriveController();
 
   public NoteAlign(
-      Drive drive, Vision vision, Supplier<Double> leftXSupplier, Supplier<Double> leftYSupplier) {
+      Drive drive,
+      Vision vision,
+      Supplier<Double> leftXSupplier,
+      Supplier<Double> leftYSupplier,
+      Supplier<Double> rightYSupplier) {
     this.drive = drive;
     this.vision = vision;
     addRequirements(drive);
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
+    this.rightYSupplier = rightYSupplier;
     thetaController.setGains(4.0, 0.00, 0.0);
     thetaController.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
     thetaController2.setGains(2.0, 0.00, 0.0);
@@ -91,15 +112,18 @@ public class NoteAlign extends Command {
     lookaheadFactor = new TunableDouble("Vision", "Tuning", "Note Align Lookahead", 40.0);
 
     thetaController2.pid.enableContinuousInput(-Math.PI, Math.PI);
-    thetaController.pid.setTolerance(THETA_TOLERANCE);
+    thetaController.pid.setTolerance(LOCK_TOLERANCE);
+    // thetaController2.pid.setTolerance(NOTE_PICKUP_THETA_TOLERANCE);
   }
 
   @Override
   public void initialize() {
     Lights.getInstance().setSolid(Color.kOrangeRed);
     this.hasTargeted = false;
+    this.hasPickedUpNote = false;
     noteLocation = Optional.empty();
-    // Since the whole tracking system is relative to the note, we actually don't want vision
+    // Since the whole tracking system is relative to the note, we actually don't
+    // want vision
     // or the lack of it messing up our pose
     drive.enableVisionUpdates(false);
   }
@@ -113,13 +137,12 @@ public class NoteAlign extends Command {
     final double x = leftXSupplier.get();
     final double y = leftYSupplier.get();
 
+    final double maxSpeed =
+        drive.getMaxLinearSpeedMetersPerSec()
+            / (noteLocation.isPresent() ? POST_LOCK_SPEED_REDUCTION : PRE_LOCK_SPEED_REDUCTION);
+    final double baseTurnSpeed = noteLocation.isPresent() ? 0.0 : rightYSupplier.get();
     final ChassisSpeeds driveSpeeds =
-        driveController.getSpeeds(
-            x,
-            y,
-            0.0,
-            drive.getYaw(),
-            drive.getMaxLinearSpeedMetersPerSec() / DRIVE_SPEED_REDUCTION);
+        driveController.getSpeeds(x, y, baseTurnSpeed, drive.getYaw(), maxSpeed);
 
     // Calculate turn
     if (!hasTargeted && vision.hasNoteTarget()) {
@@ -167,6 +190,11 @@ public class NoteAlign extends Command {
       final double thetaVelocity =
           thetaController2.pid.calculate(drive.getRotation().getRadians(), desiredYaw);
       driveSpeeds.omegaRadiansPerSecond = thetaVelocity;
+
+      // Check if we are close enough to the note so that we can stop the command
+      if (drive.getPose().getTranslation().getDistance(noteLocation.get()) < NOTE_SIZE) {
+        hasPickedUpNote = true;
+      }
     }
 
     if (noteLocation.isPresent()) {
@@ -187,7 +215,7 @@ public class NoteAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return hasPickedUpNote;
   }
 
   @Override

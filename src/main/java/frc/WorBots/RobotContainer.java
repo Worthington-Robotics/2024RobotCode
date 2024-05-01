@@ -242,7 +242,12 @@ public class RobotContainer {
     driver
         .leftTrigger()
         .whileTrue(
-            new NoteAlign(drive, vision, () -> -driver.getLeftY(), () -> -driver.getLeftX()));
+            new NoteAlign(
+                drive,
+                vision,
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX(),
+                () -> -driver.getRightX()));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     // Auto handoff toggle

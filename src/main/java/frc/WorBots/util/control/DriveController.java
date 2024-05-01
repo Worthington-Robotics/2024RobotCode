@@ -45,7 +45,7 @@ public class DriveController {
 
   private static final LinearFilter driveFilter = LinearFilter.movingAverage(10);
   private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
-  private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(1);
+  private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(10);
 
   private Timer stopTimer = new Timer();
 
