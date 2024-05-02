@@ -235,10 +235,10 @@ public class RobotContainer {
   /** Binds controls for the main driver */
   private void bindDriverControls() {
     // Spit
-    // driver
-    //     .leftTrigger()
-    //     .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
-    //     .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+    driver
+        .povLeft()
+        .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
+        .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver
         .leftTrigger()
         .whileTrue(

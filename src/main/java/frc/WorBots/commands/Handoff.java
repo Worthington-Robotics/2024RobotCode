@@ -34,6 +34,8 @@ public class Handoff extends Command {
    */
   private static final double FEEDER_DISTANCE_SCALING = 1.75;
 
+  // if Blep make smaller, if continues spinning make bigger
+
   /** Amount to multiply the intake voltage by when we are in handoff */
   private static final double HANDOFF_INTAKE_MULTIPLIER = 1.20;
 
