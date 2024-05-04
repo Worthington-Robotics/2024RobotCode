@@ -285,6 +285,7 @@ public class RobotContainer {
                           isClimbing = true;
                           Lights.getInstance().setMode(LightsMode.Climbing);
                           superstructure.setClimbLocked(false);
+                          climber.setClimbLocked(false);
                         },
                         () -> {
                           shooter.setIdlingDisabled(false);
@@ -297,8 +298,10 @@ public class RobotContainer {
         .toggleOnTrue(
             Commands.startEnd(
                 () -> {
-                  superstructure.setClimbLocked(true);
-                  climber.setClimbLocked(true);
+                  if (isClimbing) {
+                    superstructure.setClimbLocked(true);
+                    climber.setClimbLocked(true);
+                  }
                 },
                 () -> {
                   superstructure.setClimbLocked(false);
