@@ -311,7 +311,7 @@ public class RobotContainer {
     driver.a().whileTrue(climber.runPose(Climber.POSE_DEPLOY, 1.0).onlyIf(() -> isClimbing));
     driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() -> isClimbing));
     driver
-        .povLeft()
+        .povRight()
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));
   }
 
