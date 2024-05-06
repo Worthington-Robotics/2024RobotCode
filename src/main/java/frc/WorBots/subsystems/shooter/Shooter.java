@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.Constants;
 import frc.WorBots.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.TunableDouble;
 import frc.WorBots.util.debug.TunablePIDController;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
 import frc.WorBots.util.math.GeneralMath;
@@ -49,10 +50,14 @@ public class Shooter extends SubsystemBase {
       shooterTable.getBooleanTopic("Has Game Piece").publish();
 
   // Constants
-  /** Distance threshold for the ToF */
-  private static final double DISTANCE_THRESHOLD = 0.057;
 
-  // if blep make bigger, if fall out make smaller
+  /** The position where we want the note to be in meters from the ToF */
+  private static final TunableDouble NOTE_POSITION =
+      new TunableDouble("Shooter", "Tuning", "Note Position", 0.073);
+
+  /** Distance threshold for the note position to say that it is correctly positioned */
+  private static final TunableDouble NOTE_DISTANCE_THRESHOLD =
+      new TunableDouble("Shooter", "Tuning", "Note Distance Threshold", 0.03);
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
@@ -114,7 +119,7 @@ public class Shooter extends SubsystemBase {
     io.updateInputs(inputs);
 
     // Check if we have gamepiece
-    hasGamePiece = inputs.timeOfFlightDistanceMeters < DISTANCE_THRESHOLD;
+    hasGamePiece = inputs.timeOfFlightDistanceMeters < NOTE_POSITION.get();
 
     // Update logging
     topFlywheelSpeedPub.set(inputs.velocityRPMTop);
@@ -328,6 +333,15 @@ public class Shooter extends SubsystemBase {
    */
   public boolean hasGamePiece() {
     return hasGamePiece;
+  }
+
+  /** Returns whether a game piece is in the shooter and in the right position */
+  public boolean isGamePieceInPosition() {
+    return hasGamePiece && Math.abs(getNotePositionDistance()) < NOTE_DISTANCE_THRESHOLD.get();
+  }
+
+  public double getNotePositionDistance() {
+    return inputs.timeOfFlightDistanceMeters - NOTE_POSITION.get();
   }
 
   /** Enable / disable idling */

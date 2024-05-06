@@ -32,15 +32,13 @@ public class Handoff extends Command {
   /**
    * The amount to scale the feeder power based on ToF distance. Larger values increase the speed
    */
-  private static final double FEEDER_DISTANCE_SCALING = 1.75;
-
-  // if Blep make smaller, if continues spinning make bigger
+  private static final double FEEDER_DISTANCE_SCALING = 1.88;
 
   /** Amount to multiply the intake voltage by when we are in handoff */
   private static final double HANDOFF_INTAKE_MULTIPLIER = 1.20;
 
-  /** Voltage for the feeder wheels */
-  private static final double FEEDER_VOLTAGE = 0.50;
+  /** Max voltage for the feeder wheels */
+  private static final double MAX_FEEDER_VOLTAGE = 0.50;
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -57,9 +55,9 @@ public class Handoff extends Command {
         intake.setVolts(MAX_INTAKE_VOLTAGE * HANDOFF_INTAKE_MULTIPLIER);
         final double volts =
             MathUtil.clamp(
-                (shooter.getToFDistanceMeters() * FEEDER_DISTANCE_SCALING) * FEEDER_VOLTAGE,
-                0,
-                FEEDER_VOLTAGE);
+                shooter.getNotePositionDistance() * FEEDER_DISTANCE_SCALING * MAX_FEEDER_VOLTAGE,
+                -MAX_FEEDER_VOLTAGE,
+                MAX_FEEDER_VOLTAGE);
         shooter.setRawFeederVolts(volts);
       } else {
         intake.setVolts(0.0);
@@ -83,7 +81,7 @@ public class Handoff extends Command {
 
   @Override
   public boolean isFinished() {
-    return shooter.hasGamePiece();
+    return shooter.isGamePieceInPosition();
   }
 
   @Override
