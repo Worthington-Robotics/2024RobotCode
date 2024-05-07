@@ -7,7 +7,7 @@ This project contains 4145's robot code for the 2024 CRESCENDO game.
 Code documentation can be found on [GitHub Pages](https://worthington-robotics.github.io/2024RobotCode/index.html)
 
 ## 🛠️ Resources
-Team resources like design info, business documents, and other technical item can be found on our [Resources Page](https://www.worbots4145.org/resources)
+Team resources like design info, business documents, and other technical items can be found on our [Resources Page](https://www.worbots4145.org/resources)
 
 ## 👁️ Vision
 Vision code can be found at [2024Vision](https://github.com/Worthington-Robotics/2024Vision)
