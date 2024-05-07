@@ -48,16 +48,18 @@ public class Shooter extends SubsystemBase {
       shooterTable.getDoubleTopic("Time of Flight Distance").publish();
   private final BooleanPublisher hasGamePiecePub =
       shooterTable.getBooleanTopic("Has Game Piece").publish();
+  private final DoublePublisher noteDistancePub =
+      shooterTable.getDoubleTopic("Note Distance").publish();
 
   // Constants
 
   /** The position where we want the note to be in meters from the ToF */
   private static final TunableDouble NOTE_POSITION =
-      new TunableDouble("Shooter", "Tuning", "Note Position", 0.073);
+      new TunableDouble("Shooter", "Tuning", "Note Position", 0.055);
 
   /** Distance threshold for the note position to say that it is correctly positioned */
   private static final TunableDouble NOTE_DISTANCE_THRESHOLD =
-      new TunableDouble("Shooter", "Tuning", "Note Distance Threshold", 0.03);
+      new TunableDouble("Shooter", "Tuning", "Note Distance Threshold", 0.007);
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
@@ -128,6 +130,7 @@ public class Shooter extends SubsystemBase {
     bottomFlywheelSetpointPub.set(bottomFlywheelRPM);
     timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
     hasGamePiecePub.set(hasGamePiece);
+    noteDistancePub.set(getNotePositionDistance());
 
     // Update tunables
     topFlywheelController.update();
@@ -337,7 +340,7 @@ public class Shooter extends SubsystemBase {
 
   /** Returns whether a game piece is in the shooter and in the right position */
   public boolean isGamePieceInPosition() {
-    return hasGamePiece && Math.abs(getNotePositionDistance()) < NOTE_DISTANCE_THRESHOLD.get();
+    return Math.abs(getNotePositionDistance()) < NOTE_DISTANCE_THRESHOLD.get();
   }
 
   public double getNotePositionDistance() {

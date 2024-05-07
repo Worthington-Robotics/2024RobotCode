@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.*;
 import frc.WorBots.subsystems.shooter.*;
 import frc.WorBots.subsystems.superstructure.*;
+import frc.WorBots.util.debug.TunableDouble;
 
 /**
  * This command does all of the smart intaking for the system. It will attempt to move the game
@@ -29,16 +30,17 @@ public class Handoff extends Command {
   /** The amount to scale the intake power based on ToF distance. Larger values reduce the speed */
   private static final double INTAKE_DISTANCE_SCALING = 0.56;
 
-  /**
-   * The amount to scale the feeder power based on ToF distance. Larger values increase the speed
-   */
-  private static final double FEEDER_DISTANCE_SCALING = 1.88;
-
   /** Amount to multiply the intake voltage by when we are in handoff */
-  private static final double HANDOFF_INTAKE_MULTIPLIER = 1.20;
+  private static final TunableDouble HANDOFF_INTAKE_MULTIPLIER =
+      new TunableDouble("Tuning", "Handoff", "Handoff Intake Multiplier", 4.0);
 
-  /** Max voltage for the feeder wheels */
-  private static final double MAX_FEEDER_VOLTAGE = 0.50;
+  /** Static gain for the intake */
+  private static final TunableDouble INTAKE_STATIC_GAIN =
+      new TunableDouble("Tuning", "Handoff", "Intake Static Gain", 1.0);
+
+  /** Static gain for the feeder */
+  private static final TunableDouble FEEDER_STATIC_GAIN =
+      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.25);
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -51,18 +53,15 @@ public class Handoff extends Command {
   public void execute() {
     // Intake up to feeder
     if (superstructure.inHandoff()) {
-      if (!shooter.hasGamePiece()) {
-        intake.setVolts(MAX_INTAKE_VOLTAGE * HANDOFF_INTAKE_MULTIPLIER);
-        final double volts =
-            MathUtil.clamp(
-                shooter.getNotePositionDistance() * FEEDER_DISTANCE_SCALING * MAX_FEEDER_VOLTAGE,
-                -MAX_FEEDER_VOLTAGE,
-                MAX_FEEDER_VOLTAGE);
-        shooter.setRawFeederVolts(volts);
-      } else {
-        intake.setVolts(0.0);
-        shooter.setRawFeederVolts(0.0);
-      }
+      double intakeVolts =
+          shooter.getNotePositionDistance() * HANDOFF_INTAKE_MULTIPLIER.get() * MAX_INTAKE_VOLTAGE;
+      intakeVolts =
+          MathUtil.clamp(
+              intakeVolts + Math.signum(intakeVolts) * INTAKE_STATIC_GAIN.get(),
+              -MAX_INTAKE_VOLTAGE,
+              MAX_INTAKE_VOLTAGE);
+      intake.setVolts(intakeVolts);
+      shooter.setRawFeederVolts(Math.signum(intakeVolts) * FEEDER_STATIC_GAIN.get());
     } else {
       // Intake only up to intake
       if (!intake.hasGamePiece() && !shooter.hasGamePiece()) {
