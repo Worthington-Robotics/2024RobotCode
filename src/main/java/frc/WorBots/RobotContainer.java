@@ -56,6 +56,9 @@ public class RobotContainer {
   /** State boolean used for while we are climbing */
   private boolean isClimbing = false;
 
+  /** State boolean used for when we are approaching the note during note align */
+  private boolean approachNote = false;
+
   /** Whether proper autos with a valid alliance have been generated */
   private boolean validAutosGenerated = false;
 
@@ -247,7 +250,8 @@ public class RobotContainer {
                 vision,
                 () -> -driver.getLeftY(),
                 () -> -driver.getLeftX(),
-                () -> -driver.getRightX()));
+                () -> -driver.getRightX(),
+                () -> approachNote));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     // Auto handoff toggle
@@ -257,8 +261,14 @@ public class RobotContainer {
             Commands.deadline(
                 new Handoff(intake, superstructure, shooter),
                 Commands.startEnd(
-                    () -> superstructure.setPose(Preset.HANDOFF),
-                    () -> superstructure.setPose(Preset.STOW),
+                    () -> {
+                      superstructure.setPose(Preset.HANDOFF);
+                      approachNote = true;
+                    },
+                    () -> {
+                      superstructure.setPose(Preset.STOW);
+                      approachNote = false;
+                    },
                     superstructure)));
     driver
         .povDown()

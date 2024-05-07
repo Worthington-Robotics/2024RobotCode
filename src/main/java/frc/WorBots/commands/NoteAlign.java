@@ -7,6 +7,7 @@
 
 package frc.WorBots.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -54,6 +55,14 @@ public class NoteAlign extends Command {
 
   private final TunableDouble lookaheadFactor;
 
+  /** Multiplier for approach speed based on distance */
+  private final TunableDouble NOTE_APPROACH_SPEED =
+      new TunableDouble("Vision", "Tuning", "Note Align Approach Speed", 1.0);
+
+  /** Minimum approach speed */
+  private final TunableDouble MIN_APPROACH_SPEED =
+      new TunableDouble("Vision", "Tuning", "Note Align Min Approach Speed", 0.2);
+
   /** Size of the note on the field to stop the lock after */
   private static final double NOTE_SIZE = FieldConstants.Note.outsideDiameter / 2.0 * 4.6;
 
@@ -74,12 +83,21 @@ public class NoteAlign extends Command {
   private boolean hasPickedUpNote = false;
   private boolean hasTargeted = false;
 
+  /**
+   * Whether approach has been started at some point, used to stop the command when approach
+   * finishes
+   */
+  private boolean hasStartedApproach = false;
+
   private final Drive drive;
   private final Vision vision;
 
   private final Supplier<Double> leftXSupplier;
   private final Supplier<Double> leftYSupplier;
   private final Supplier<Double> rightYSupplier;
+
+  /** Whether we should approach the note, based on a user button */
+  private final Supplier<Boolean> approachSupplier;
 
   private final TunableProfiledPIDController thetaController =
       new TunableProfiledPIDController(
@@ -98,13 +116,15 @@ public class NoteAlign extends Command {
       Vision vision,
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier,
-      Supplier<Double> rightYSupplier) {
+      Supplier<Double> rightYSupplier,
+      Supplier<Boolean> approachSupplier) {
     this.drive = drive;
     this.vision = vision;
     addRequirements(drive);
     this.leftXSupplier = leftXSupplier;
     this.leftYSupplier = leftYSupplier;
     this.rightYSupplier = rightYSupplier;
+    this.approachSupplier = approachSupplier;
     thetaController.setGains(4.5, 0.00, 0.0);
     thetaController.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
     thetaController2.setGains(2.0, 0.00, 0.0);
@@ -121,6 +141,7 @@ public class NoteAlign extends Command {
     Lights.getInstance().setSolid(Color.kOrangeRed);
     this.hasTargeted = false;
     this.hasPickedUpNote = false;
+    this.hasStartedApproach = false;
     noteLocation = Optional.empty();
     // Since the whole tracking system is relative to the note, we actually don't
     // want vision
@@ -199,6 +220,22 @@ public class NoteAlign extends Command {
       }
     }
 
+    // Approach the note if button is pressed
+    if (approachSupplier.get() && !hasPickedUpNote) {
+      hasStartedApproach = true;
+
+      NOTE_APPROACH_SPEED.update();
+      MIN_APPROACH_SPEED.update();
+      double speed =
+          noteLocation.isPresent()
+              ? drive.getPose().getTranslation().getDistance(noteLocation.get())
+                  * NOTE_APPROACH_SPEED.getCurrent()
+              : MIN_APPROACH_SPEED.getCurrent();
+      speed =
+          MathUtil.clamp(speed, MIN_APPROACH_SPEED.getCurrent(), NOTE_APPROACH_SPEED.getCurrent());
+      driveSpeeds.vxMetersPerSecond += speed;
+    }
+
     if (noteLocation.isPresent()) {
       SmartDashboard.putNumberArray(
           "Note Position",
@@ -217,7 +254,7 @@ public class NoteAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return hasPickedUpNote;
+    return hasStartedApproach && !approachSupplier.get();
   }
 
   @Override
