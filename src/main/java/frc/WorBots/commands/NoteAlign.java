@@ -141,8 +141,10 @@ public class NoteAlign extends Command {
         drive.getMaxLinearSpeedMetersPerSec()
             / (noteLocation.isPresent() ? POST_LOCK_SPEED_REDUCTION : PRE_LOCK_SPEED_REDUCTION);
     final double baseTurnSpeed = noteLocation.isPresent() ? 0.0 : rightYSupplier.get();
+    // Choose gyro angle based on whether we want to be field or robot relative
+    final Rotation2d gyroAngle = noteLocation.isPresent() ? drive.getYaw() : drive.getYaw();
     final ChassisSpeeds driveSpeeds =
-        driveController.getSpeeds(x, y, baseTurnSpeed, drive.getYaw(), maxSpeed);
+        driveController.getSpeeds(x, y, baseTurnSpeed, gyroAngle, maxSpeed);
 
     // Calculate turn
     if (!hasTargeted && vision.hasNoteTarget()) {
