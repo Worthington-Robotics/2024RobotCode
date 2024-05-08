@@ -32,6 +32,7 @@ import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.RobotSimulator;
+import frc.WorBots.util.UtilCommands;
 import frc.WorBots.util.debug.StatusPage;
 import java.util.*;
 
@@ -239,12 +240,12 @@ public class RobotContainer {
   private void bindDriverControls() {
     // Spit
     driver
-        .povLeft()
+        .leftTrigger()
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver
-        .leftTrigger()
-        .whileTrue(
+        .povRight()
+        .toggleOnTrue(
             new NoteAlign(
                 drive,
                 vision,
@@ -318,10 +319,28 @@ public class RobotContainer {
                   climber.setClimbLocked(false);
                 }));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
-    driver.a().whileTrue(climber.runPose(Climber.POSE_DEPLOY, 1.0).onlyIf(() -> isClimbing));
-    driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() -> isClimbing));
     driver
-        .povRight()
+        .a()
+        .toggleOnTrue(
+            UtilCommands.optimalSequence(
+                // Commands.runOnce(() -> shooter.setIdlingDisabled(true)),
+                superstructure.goToPose(Preset.FANCY_SPIT),
+                // shooter.setRawFeederVoltsCommand(1.4),
+                // Commands.waitSeconds(0.45),
+                shooter.setRawFeederVoltsCommand(-3.5),
+                Commands.waitSeconds(0.25),
+                shooter.setRawFeederVoltsCommand(0.0),
+                Commands.runOnce(
+                    () -> {
+                      superstructure.setPose(Preset.STOW);
+                      shooter.setIdlingDisabled(false);
+                    })));
+    // driver.a().whileTrue(climber.runPose(Climber.POSE_DEPLOY, 1.0).onlyIf(() ->
+    // isClimbing));
+    // driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() ->
+    // isClimbing));
+    driver
+        .start()
         .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(0.0, 0.0, new Rotation2d()))));
   }
 
@@ -343,10 +362,16 @@ public class RobotContainer {
             new WingPass(
                 drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
         .whileTrue(shootingLightsCommand);
+    operator
+        .leftTrigger()
+        .whileTrue(
+            new SmartPass(
+                drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
+        .whileTrue(shootingLightsCommand);
     operator.povDown().onTrue(superstructure.goToPose(Preset.STRAIGHT_PASS));
     // Light indicator
     operator
-        .leftTrigger()
+        .start()
         .toggleOnTrue(
             Commands.startEnd(
                 () -> Lights.getInstance().setOverride(LightsMode.Claire),

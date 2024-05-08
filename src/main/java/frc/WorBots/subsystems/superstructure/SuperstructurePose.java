@@ -32,7 +32,9 @@ public record SuperstructurePose(Vector<N2> vectorPose) {
     WING_PASS(new SuperstructurePose(VecBuilder.fill(0.0, 0.720))),
     /** Wing pass straight into the wing */
     STRAIGHT_PASS(
-        new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.PIVOT_MAX_ANGLE * 0.85)));
+        new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.PIVOT_MAX_ANGLE * 0.45))),
+    /** Fancy spit */
+    FANCY_SPIT(new SuperstructurePose(VecBuilder.fill(0.0, Superstructure.PIVOT_MAX_ANGLE * 0.38)));
 
     public SuperstructurePose pose;
 

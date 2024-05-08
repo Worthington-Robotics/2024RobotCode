@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
@@ -22,6 +23,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.util.control.DriveController;
+import frc.WorBots.util.debug.Logger;
 import frc.WorBots.util.debug.TunableDouble;
 import frc.WorBots.util.math.AllianceFlipUtil;
 import frc.WorBots.util.math.GeomUtil;
@@ -34,10 +36,10 @@ import java.util.function.Supplier;
  */
 public class SmartPass extends Command {
   /** Where the command is aiming to */
-  private static final Translation2d GOAL = new Translation2d(0.0, FieldConstants.fieldWidth);
+  private static final Translation2d GOAL = new Translation2d(1.0, FieldConstants.fieldWidth - 1.8);
 
   /** Lookahead factor for aiming */
-  private static final double LOOKAHEAD_FACTOR = 45.0;
+  private static final double LOOKAHEAD_FACTOR = 0.0;
 
   /** Lookup table for shot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
@@ -55,7 +57,7 @@ public class SmartPass extends Command {
 
   /** RPM for straight shots */
   private static final TunableDouble STRAIGHT_RPM =
-      new TunableDouble("Tuning", "Smart Pass", "Straight RPM", 2600);
+      new TunableDouble("Tuning", "Smart Pass", "Straight RPM", 2000);
 
   private final Drive drive;
   private final Superstructure superstructure;
@@ -90,7 +92,7 @@ public class SmartPass extends Command {
 
   @Override
   public void initialize() {
-    superstructure.setMode(SuperstructureState.SHOOTING);
+    superstructure.setModeVoid(SuperstructureState.SHOOTING);
   }
 
   @Override
@@ -102,11 +104,13 @@ public class SmartPass extends Command {
     final Translation2d goal = AllianceFlipUtil.apply(GOAL);
     // Get angle for the robot
     final double angle =
-        Math.atan2(goal.getX() - robot.getX(), goal.getY() - robot.getY())
-            + Units.degreesToRadians(90);
+        Units.degreesToRadians(630.0)
+            - Math.atan2(goal.getX() - robot.getX(), goal.getY() - robot.getY());
 
     // Choose what aiming to do based on whether we are blocked by the stage or not
-    if (isBlockedByStage(drive.getPose())) {
+    final boolean isBlocked = isBlockedByStage(drive.getPose());
+    SmartDashboard.putBoolean("Smart Pass/Blocked", isBlocked);
+    if (isBlocked) {
       // Lob over stage
       final double distance = robot.getTranslation().getDistance(goal);
       final double pivotAngle = ANGLE_LOOKUP.get(distance);
@@ -130,6 +134,7 @@ public class SmartPass extends Command {
             drive.getMaxLinearSpeedMetersPerSec());
     drive.runVelocity(
         new ChassisSpeeds(driveSpeeds.vxMetersPerSecond, driveSpeeds.vyMetersPerSecond, rv));
+    SmartDashboard.putNumberArray("Smart Pass/Goal", Logger.translation2dToArray(GOAL));
   }
 
   @Override
