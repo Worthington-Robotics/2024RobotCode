@@ -286,8 +286,8 @@ public class Superstructure extends SubsystemBase {
     }
     // Fall softening
     if (softenFall) {
-      if (feedback < 0) {
-        feedback *= 0.58;
+      if (feedback < 0 && getPivotPoseRads() < PIVOT_MAX_ANGLE * 0.8) {
+        feedback *= 0.75;
       }
     }
     final double pivotVoltage = feedback + calculatePivotFeedforward(setpoint);
@@ -517,12 +517,11 @@ public class Superstructure extends SubsystemBase {
     this.setModeVoid(SuperstructureState.POSE);
     softenFall = false;
     if (this.setpoint != pose) {
-      // if (pose == Preset.STOW || pose == Preset.HOME) {
-      //   softenFall = true;
-      // }
-      // Handoff-stow doesn't need it
-      if (this.setpoint == Preset.HANDOFF && pose == Preset.STOW) {
-        softenFall = false;
+      final boolean wasHighPose = this.setpoint == Preset.AMP || this.setpoint == Preset.WING_PASS;
+      final boolean isLowPose =
+          pose == Preset.STOW || pose == Preset.HOME || pose == Preset.HANDOFF;
+      if (wasHighPose && isLowPose) {
+        softenFall = true;
       }
     }
     this.setpoint = pose;
