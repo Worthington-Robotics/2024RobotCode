@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['rainbow_0',['Rainbow',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a5ec8e1171d656db28a7336233c4de85f',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['rainbow_1',['rainbow',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#af896813c98cc25e2137a4bfbf68e45f5',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['rainbow_0',['rainbow',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#af896813c98cc25e2137a4bfbf68e45f5',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['rainbow_1',['Rainbow',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a5ec8e1171d656db28a7336233c4de85f',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['readme_2emd_2',['README.md',['../README_8md.html',1,'']]],
   ['redblue_3',['RedBlue',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a87e52c4c88a94da6ff0708368018937b',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['registerautos_4',['registerAutos',['../classfrc_1_1WorBots_1_1RobotContainer.html#a930d71d3a0514d5eb1871cec38f738db',1,'frc::WorBots::RobotContainer']]],

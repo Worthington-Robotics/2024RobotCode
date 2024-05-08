@@ -27,13 +27,14 @@ var searchData=
   ['autonomousinit_24',['autonomousInit',['../classfrc_1_1WorBots_1_1Robot.html#ab6ef326c60ffe7140c843e16963fe6ab',1,'frc::WorBots::Robot']]],
   ['autonomousperiodic_25',['autonomousPeriodic',['../classfrc_1_1WorBots_1_1Robot.html#af32a66b935d22c1cd1b1c7532630f7f9',1,'frc::WorBots::Robot']]],
   ['autoquestion_26',['AutoQuestion',['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#a480da3c9874b49bd8c8de336d534f2b9',1,'frc::WorBots::auto::AutoSelector']]],
-  ['autos_27',['AUTOS',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#acde52ebe0a183a1f461f9e91bb2ecf76',1,'frc::WorBots::util::debug::StatusPage']]],
-  ['autos_28',['Autos',['../classfrc_1_1WorBots_1_1auto_1_1Autos.html#a0d4c4cf0bd327600d0f8964c1955091d',1,'frc.WorBots.auto.Autos.Autos()'],['../classfrc_1_1WorBots_1_1auto_1_1Autos.html',1,'frc.WorBots.auto.Autos']]],
-  ['autos_2ejava_29',['Autos.java',['../Autos_8java.html',1,'']]],
-  ['autoselector_30',['AutoSelector',['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#acecf64a4c493303e4b988374158d9f01',1,'frc.WorBots.auto.AutoSelector.AutoSelector()'],['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html',1,'frc.WorBots.auto.AutoSelector']]],
-  ['autoselector_2ejava_31',['AutoSelector.java',['../AutoSelector_8java.html',1,'']]],
-  ['autoshoot_32',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#abab99e8aaf600768540056510cc1b160',1,'frc.WorBots.commands.AutoShoot.AutoShoot()'],['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html',1,'frc.WorBots.commands.AutoShoot']]],
-  ['autoshoot_2ejava_33',['AutoShoot.java',['../AutoShoot_8java.html',1,'']]],
-  ['autoutil_34',['AutoUtil',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae04e8b6c63b87540feac719ff615764e',1,'frc.WorBots.auto.AutoUtil.AutoUtil()'],['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html',1,'frc.WorBots.auto.AutoUtil']]],
-  ['autoutil_2ejava_35',['AutoUtil.java',['../AutoUtil_8java.html',1,'']]]
+  ['autos_27',['Autos',['../classfrc_1_1WorBots_1_1auto_1_1Autos.html#a0d4c4cf0bd327600d0f8964c1955091d',1,'frc::WorBots::auto::Autos']]],
+  ['autos_28',['AUTOS',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#acde52ebe0a183a1f461f9e91bb2ecf76',1,'frc::WorBots::util::debug::StatusPage']]],
+  ['autos_29',['Autos',['../classfrc_1_1WorBots_1_1auto_1_1Autos.html',1,'frc::WorBots::auto']]],
+  ['autos_2ejava_30',['Autos.java',['../Autos_8java.html',1,'']]],
+  ['autoselector_31',['AutoSelector',['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html#acecf64a4c493303e4b988374158d9f01',1,'frc.WorBots.auto.AutoSelector.AutoSelector()'],['../classfrc_1_1WorBots_1_1auto_1_1AutoSelector.html',1,'frc.WorBots.auto.AutoSelector']]],
+  ['autoselector_2ejava_32',['AutoSelector.java',['../AutoSelector_8java.html',1,'']]],
+  ['autoshoot_33',['AutoShoot',['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html#abab99e8aaf600768540056510cc1b160',1,'frc.WorBots.commands.AutoShoot.AutoShoot()'],['../classfrc_1_1WorBots_1_1commands_1_1AutoShoot.html',1,'frc.WorBots.commands.AutoShoot']]],
+  ['autoshoot_2ejava_34',['AutoShoot.java',['../AutoShoot_8java.html',1,'']]],
+  ['autoutil_35',['AutoUtil',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae04e8b6c63b87540feac719ff615764e',1,'frc.WorBots.auto.AutoUtil.AutoUtil()'],['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html',1,'frc.WorBots.auto.AutoUtil']]],
+  ['autoutil_2ejava_36',['AutoUtil.java',['../AutoUtil_8java.html',1,'']]]
 ];
