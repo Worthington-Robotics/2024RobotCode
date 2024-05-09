@@ -8,5 +8,6 @@ var searchData=
   ['constants_2ejava_5',['Constants.java',['../Constants_8java.html',1,'']]],
   ['countingcache_2ejava_6',['CountingCache.java',['../CountingCache_8java.html',1,'']]],
   ['customholonomicdrivecontroller_2ejava_7',['CustomHolonomicDriveController.java',['../CustomHolonomicDriveController_8java.html',1,'']]],
-  ['customtrajectorygenerator_2ejava_8',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
+  ['custompathgenerator_2ejava_8',['CustomPathGenerator.java',['../CustomPathGenerator_8java.html',1,'']]],
+  ['customtrajectorygenerator_2ejava_9',['CustomTrajectoryGenerator.java',['../CustomTrajectoryGenerator_8java.html',1,'']]]
 ];

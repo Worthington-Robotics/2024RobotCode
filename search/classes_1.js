@@ -10,5 +10,6 @@ var searchData=
   ['constants_7',['Constants',['../classfrc_1_1WorBots_1_1Constants.html',1,'frc::WorBots']]],
   ['countingcache_8',['CountingCache',['../classfrc_1_1WorBots_1_1util_1_1cache_1_1CountingCache.html',1,'frc::WorBots::util::cache']]],
   ['customholonomicdrivecontroller_9',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html',1,'frc::WorBots::util::trajectory']]],
-  ['customtrajectorygenerator_10',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]]
+  ['custompathgenerator_10',['CustomPathGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomPathGenerator.html',1,'frc::WorBots::util::trajectory']]],
+  ['customtrajectorygenerator_11',['CustomTrajectoryGenerator',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomTrajectoryGenerator.html',1,'frc::WorBots::util::trajectory']]]
 ];
