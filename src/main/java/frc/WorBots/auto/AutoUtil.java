@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.WorBots.FieldConstants;
+import frc.WorBots.commands.DrivePath;
 import frc.WorBots.commands.DriveToPose;
-import frc.WorBots.commands.DriveTrajectory;
 import frc.WorBots.commands.Handoff;
 import frc.WorBots.subsystems.drive.Drive;
 import frc.WorBots.subsystems.intake.Intake;
@@ -241,7 +241,7 @@ public class AutoUtil {
     allConstraints.addAll(extraConstraints);
 
     return new CommandWithPose(
-        new DriveTrajectory(drive, waypoints, allConstraints, 0.0),
+        new DrivePath(drive, waypoints, allConstraints, 0.0),
         waypoints.get(waypoints.size() - 1).getPose());
   }
 

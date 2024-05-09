@@ -45,6 +45,9 @@ public class Drive extends SubsystemBase {
   /** The last field velocity */
   private Twist2d fieldVelocity = new Twist2d();
 
+  /** The last measured robot-relative ChassisSpeeds from odometry */
+  private ChassisSpeeds measuredSpeeds;
+
   /** The last yaw of the gyro, used for delta calculation */
   private Rotation2d lastGyroYaw = new Rotation2d();
 
@@ -169,14 +172,13 @@ public class Drive extends SubsystemBase {
     posePublisher.set(Logger.pose2dToArray(getPose()));
 
     // Update field velocity
-    final ChassisSpeeds measuredChassisSpeeds = kinematics.toChassisSpeeds(measuredStates);
+    measuredSpeeds = kinematics.toChassisSpeeds(measuredStates);
     final Translation2d linearFieldVelocity =
-        new Translation2d(
-                measuredChassisSpeeds.vxMetersPerSecond, measuredChassisSpeeds.vyMetersPerSecond)
+        new Translation2d(measuredSpeeds.vxMetersPerSecond, measuredSpeeds.vyMetersPerSecond)
             .rotateBy(getRotation());
 
     // Update for simulated gyro
-    gyroIO.setExpectedYawVelocity(measuredChassisSpeeds.omegaRadiansPerSecond);
+    gyroIO.setExpectedYawVelocity(measuredSpeeds.omegaRadiansPerSecond);
 
     // Update field velocity twist
     fieldVelocity =
@@ -185,7 +187,7 @@ public class Drive extends SubsystemBase {
             linearFieldVelocity.getY(),
             gyroInputs.connected
                 ? gyroInputs.yawVelocityRadPerSec
-                : measuredChassisSpeeds.omegaRadiansPerSecond);
+                : measuredSpeeds.omegaRadiansPerSecond);
   }
 
   /**
@@ -236,6 +238,15 @@ public class Drive extends SubsystemBase {
    */
   public ChassisSpeeds getFieldRelativeSpeeds() {
     return ChassisSpeeds.fromRobotRelativeSpeeds(setpointSpeeds, lastGyroYaw);
+  }
+
+  /**
+   * Gets the measured robot-relative ChassisSpeeds of the robot
+   *
+   * @return The speed of the robot
+   */
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return measuredSpeeds;
   }
 
   /**
