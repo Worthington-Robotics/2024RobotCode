@@ -13,7 +13,7 @@ var searchData=
   ['characterizeodometry_10',['characterizeOdometry',['../classfrc_1_1WorBots_1_1auto_1_1DebugRoutines.html#aa5020a540ba651d06392a190a0646bb9',1,'frc::WorBots::auto::DebugRoutines']]],
   ['chassisspeedstoarray_11',['chassisSpeedsToArray',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1Logger.html#a2bcdad9b5718b2503c10030ce0a1eec2',1,'frc::WorBots::util::debug::Logger']]],
   ['checkautos_12',['checkAutos',['../classfrc_1_1WorBots_1_1RobotContainer.html#a4caf0ded2562b30f4953eceb4816d29a',1,'frc::WorBots::RobotContainer']]],
-  ['checkerror_13',['checkError',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a5f6433f94444df9fe20a9772d5ae51d4',1,'frc.WorBots.util.math.GeneralMath.checkError(double measurement, double goal, double margin)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a6ce3a805d7348460655f4ee9a0078b8f',1,'frc.WorBots.util.math.GeneralMath.checkError(double error, double margin)']]],
+  ['checkerror_13',['checkError',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a6ce3a805d7348460655f4ee9a0078b8f',1,'frc.WorBots.util.math.GeneralMath.checkError(double error, double margin)'],['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a5f6433f94444df9fe20a9772d5ae51d4',1,'frc.WorBots.util.math.GeneralMath.checkError(double measurement, double goal, double margin)']]],
   ['clampmagnitude_14',['clampMagnitude',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#afb993c9673a372f36f7b635335dc6715',1,'frc::WorBots::util::math::GeneralMath']]],
   ['clearoverride_15',['clearOverride',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights.html#a547a9a48b71c7ce356eb95ae37efa019',1,'frc::WorBots::subsystems::lights::Lights']]],
   ['clearsetpoint_16',['clearSetpoint',['../classfrc_1_1WorBots_1_1subsystems_1_1climber_1_1Climber.html#aafae0a335b6f99f2b59298bb1bedfdaf',1,'frc::WorBots::subsystems::climber::Climber']]],
@@ -27,5 +27,6 @@ var searchData=
   ['cos_24',['cos',['../classfrc_1_1WorBots_1_1util_1_1math_1_1TrigLookup.html#a8b4b36e7b833594fe06e540ad8ccb0f6',1,'frc::WorBots::util::math::TrigLookup']]],
   ['countingcache_25',['CountingCache',['../classfrc_1_1WorBots_1_1util_1_1cache_1_1CountingCache.html#a92556b689d240c5c3dae9630469b52a6',1,'frc::WorBots::util::cache::CountingCache']]],
   ['curve_26',['curve',['../classfrc_1_1WorBots_1_1util_1_1math_1_1GeneralMath.html#a658396a3bcd5212e7b2db356e1ca12a3',1,'frc::WorBots::util::math::GeneralMath']]],
-  ['customholonomicdrivecontroller_27',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]]
+  ['customholonomicdrivecontroller_27',['CustomHolonomicDriveController',['../classfrc_1_1WorBots_1_1util_1_1trajectory_1_1CustomHolonomicDriveController.html#a6b97bc771e5f93788f65c465adc32898',1,'frc::WorBots::util::trajectory::CustomHolonomicDriveController']]],
+  ['cvflipoutput_28',['cvFlipOutput',['../classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1NoteVisionGRIP.html#aa2fcaf95e6274c90ad18440f34dc7607',1,'frc::WorBots::subsystems::vision::NoteVisionGRIP']]]
 ];

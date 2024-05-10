@@ -49,7 +49,9 @@ var menudata={children:[
 {text:"t",url:"functions_t.html#index_t"},
 {text:"u",url:"functions_u.html#index_u"},
 {text:"v",url:"functions_v.html#index_v"},
-{text:"w",url:"functions_w.html#index_w"}]},
+{text:"w",url:"functions_w.html#index_w"},
+{text:"x",url:"functions_x.html#index_x"},
+{text:"y",url:"functions_y.html#index_y"}]},
 {text:"Functions",url:"functions_func.html",children:[
 {text:"a",url:"functions_func.html#index_a"},
 {text:"b",url:"functions_func_b.html#index_b"},
@@ -90,6 +92,8 @@ var menudata={children:[
 {text:"s",url:"functions_vars.html#index_s"},
 {text:"t",url:"functions_vars.html#index_t"},
 {text:"v",url:"functions_vars.html#index_v"},
-{text:"w",url:"functions_vars.html#index_w"}]}]}]},
+{text:"w",url:"functions_vars.html#index_w"},
+{text:"x",url:"functions_vars.html#index_x"},
+{text:"y",url:"functions_vars.html#index_y"}]}]}]},
 {text:"Files",url:"files.html",children:[
 {text:"File List",url:"files.html"}]}]}
