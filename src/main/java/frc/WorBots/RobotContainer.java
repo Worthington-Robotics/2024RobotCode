@@ -62,6 +62,16 @@ public class RobotContainer {
   /** Whether proper autos with a valid alliance have been generated */
   private boolean validAutosGenerated = false;
 
+  private final Command rumbleCommand =
+      Commands.startEnd(
+              () -> {
+                driver.getHID().setRumble(RumbleType.kBothRumble, 0.50);
+              },
+              () -> {
+                driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+              })
+          .withTimeout(0.3);
+
   /** The robot container houses the joysticks, subsystems, and autos of the robot. */
   public RobotContainer() {
     // Setup subsystems
@@ -206,21 +216,13 @@ public class RobotContainer {
             shooter::hasGamePiece,
             superstructure::getElevatorPercentageRaised,
             superstructure::isClimbLocked,
-            climber::isNearLimit);
+            climber::isNearLimit,
+            vision::hasNoteTarget);
     Lights.getInstance()
         .setTargetedSupplier(() -> superstructure.isAtSetpoint() && shooter.isAtSetpoint());
     RobotSimulator.getInstance().setDrivePoseInterface(drive::getPose);
     RobotSimulator.getInstance().setSuperstructure(superstructure);
-    Lights.getInstance()
-        .setRumbleCommand(
-            Commands.startEnd(
-                    () -> {
-                      driver.getHID().setRumble(RumbleType.kBothRumble, 0.50);
-                    },
-                    () -> {
-                      driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-                    })
-                .withTimeout(0.3));
+    Lights.getInstance().setRumbleCommand(rumbleCommand);
   }
 
   /** Binds driver controls to commands */
@@ -251,7 +253,8 @@ public class RobotContainer {
                 () -> -driver.getLeftY(),
                 () -> -driver.getLeftX(),
                 () -> -driver.getRightX(),
-                () -> approachNote));
+                () -> approachNote,
+                rumbleCommand));
     driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
     driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
     // Auto handoff toggle
@@ -373,18 +376,20 @@ public class RobotContainer {
     operator.y().onTrue(superstructure.goToPose(Preset.HANDOFF));
     // Wing pass / flea flick
     operator
-        .a()
+        .leftTrigger()
         .whileTrue(
             new WingPass(
                 drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
         .whileTrue(shootingLightsCommand);
     operator
-        .leftTrigger()
+        .a()
         .whileTrue(
             new SmartPass(
-                drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
-        .whileTrue(shootingLightsCommand);
-    operator.povDown().onTrue(superstructure.goToPose(Preset.STRAIGHT_PASS));
+                drive,
+                superstructure,
+                shooter,
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX()));
     // Light indicator
     operator
         .start()

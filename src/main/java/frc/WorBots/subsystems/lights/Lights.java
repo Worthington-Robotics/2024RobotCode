@@ -107,6 +107,7 @@ public class Lights extends SubsystemBase {
   private Supplier<Double> elevatorPercentageRaised = () -> 0.0;
   private Supplier<Boolean> isClimbLocked = () -> false;
   private Supplier<Boolean> nearClimbLimit = () -> true;
+  private Supplier<Boolean> seesNote = () -> false;
   private Command rumbleCommand = Commands.none();
 
   /** Step in the pit test */
@@ -531,7 +532,8 @@ public class Lights extends SubsystemBase {
       Supplier<Boolean> hasGamePieceTop,
       Supplier<Double> elevatorPercentageRaised,
       Supplier<Boolean> isClimbLocked,
-      Supplier<Boolean> isNearClimbLimit) {
+      Supplier<Boolean> isNearClimbLimit,
+      Supplier<Boolean> seesNote) {
     this.drivePoseSupplier = drivePoseSupplier;
     this.driveSpeedsSupplier = driveSpeedsSupplier;
     this.inHandoff = inHandoff;
@@ -541,6 +543,7 @@ public class Lights extends SubsystemBase {
     this.elevatorPercentageRaised = elevatorPercentageRaised;
     this.isClimbLocked = isClimbLocked;
     this.nearClimbLimit = isNearClimbLimit;
+    this.seesNote = seesNote;
   }
 
   /** Sets the current step of the pit test in pit test mode */

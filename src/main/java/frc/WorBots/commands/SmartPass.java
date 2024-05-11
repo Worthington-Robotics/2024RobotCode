@@ -14,10 +14,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.WorBots.Constants;
 import frc.WorBots.FieldConstants;
 import frc.WorBots.subsystems.drive.Drive;
+import frc.WorBots.subsystems.lights.Lights;
+import frc.WorBots.subsystems.lights.Lights.LightsMode;
 import frc.WorBots.subsystems.shooter.Shooter;
 import frc.WorBots.subsystems.superstructure.Superstructure;
 import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
@@ -47,7 +50,7 @@ public class SmartPass extends Command {
           new double[][] {
             {FieldConstants.Wing.endX, 0.420},
             {FieldConstants.midLineX, 0.720},
-            {AllianceFlipUtil.apply(FieldConstants.Wing.endX), 0.720},
+            {AllianceFlipUtil.applyAgnostic(FieldConstants.Wing.endX), 0.720},
           });
 
   /** Lookup table for RPM */
@@ -56,12 +59,12 @@ public class SmartPass extends Command {
           new double[][] {
             {FieldConstants.Wing.endX, 2300},
             {FieldConstants.midLineX, 3000},
-            {AllianceFlipUtil.apply(FieldConstants.Wing.endX), 4500},
+            {AllianceFlipUtil.applyAgnostic(FieldConstants.Wing.endX), 4500},
           });
 
   /** RPM for straight shots */
   private static final TunableDouble STRAIGHT_RPM =
-      new TunableDouble("Tuning", "Smart Pass", "Straight RPM", 2500);
+      new TunableDouble("Tuning", "Smart Pass", "Straight RPM", 3000);
 
   private final Drive drive;
   private final Superstructure superstructure;
@@ -97,38 +100,52 @@ public class SmartPass extends Command {
   @Override
   public void initialize() {
     superstructure.setModeVoid(SuperstructureState.SHOOTING);
+    turnPID.reset(drive.getRotation().getRadians());
   }
 
   @Override
   public void execute() {
-    // Do aim calculations
-    final Pose2d robot =
-        GeomUtil.applyChassisSpeeds(
-            drive.getPose(), drive.getFieldRelativeSpeeds(), LOOKAHEAD_FACTOR);
-    final Translation2d goal = AllianceFlipUtil.apply(GOAL);
-    // Get angle for the robot
-    final double angle =
-        Units.degreesToRadians(630.0)
-            - Math.atan2(goal.getX() - robot.getX(), goal.getY() - robot.getY());
+    double rv = 0.0;
 
-    // Choose what aiming to do based on whether we are blocked by the stage or not
-    final boolean isBlocked = isBlockedByStage(drive.getPose());
-    SmartDashboard.putBoolean("Smart Pass/Blocked", isBlocked);
-    if (isBlocked) {
-      // Lob over stage
-      final double distance = robot.getTranslation().getDistance(goal);
-      final double pivotAngle = ANGLE_LOOKUP.get(distance);
-      superstructure.setShootingAngleRad(pivotAngle);
-      final double rpm = RPM_LOOKUP.get(distance);
-      shooter.setSpeedVoid(rpm);
+    // Refuse to pass when we are past the opponent's wing line
+    if (AllianceFlipUtil.apply(drive.getPose().getX())
+        >= AllianceFlipUtil.applyAgnostic(FieldConstants.Wing.endX)) {
+      Lights.getInstance().setSolid(Color.kRed);
+      shooter.idle();
+      superstructure.setShootingAngleRad(Preset.HANDOFF.getPivot());
     } else {
-      // Shoot straight
-      superstructure.setShootingAngleRad(Preset.STRAIGHT_PASS.getPivot());
-      final double rpm = STRAIGHT_RPM.get();
-      shooter.setSpeedVoid(rpm);
+      // Do aim calculations
+      final Pose2d robot =
+          GeomUtil.applyChassisSpeeds(
+              drive.getPose(), drive.getFieldRelativeSpeeds(), LOOKAHEAD_FACTOR);
+      final Translation2d goal = AllianceFlipUtil.apply(GOAL);
+      // Get angle for the robot
+      final double angle =
+          Units.degreesToRadians(630.0)
+              - Math.atan2(goal.getX() - robot.getX(), goal.getY() - robot.getY());
+
+      // Choose what aiming to do based on whether we are blocked by the stage or not
+      final boolean isBlocked = isBlockedByStage(drive.getPose());
+      SmartDashboard.putBoolean("Smart Pass/Blocked", isBlocked);
+      if (isBlocked) {
+        // Lob over stage
+        final double distance = robot.getTranslation().getDistance(goal);
+        final double pivotAngle = ANGLE_LOOKUP.get(distance);
+        superstructure.setShootingAngleRad(pivotAngle);
+        final double rpm = RPM_LOOKUP.get(distance);
+        shooter.setSpeedVoid(rpm);
+        Lights.getInstance().setSolid(Color.kBlue);
+      } else {
+        // Shoot straight
+        superstructure.setShootingAngleRad(Preset.STRAIGHT_PASS.getPivot());
+        final double rpm = STRAIGHT_RPM.get();
+        shooter.setSpeedVoid(rpm);
+        Lights.getInstance().setSolid(Color.kPurple);
+      }
+
+      rv = turnPID.calculate(drive.getRotation().getRadians(), angle);
     }
 
-    final double rv = turnPID.calculate(drive.getRotation().getRadians(), angle);
     final ChassisSpeeds driveSpeeds =
         driveController.getSpeeds(
             leftXSupplier.get(),
@@ -146,6 +163,7 @@ public class SmartPass extends Command {
     drive.stop();
     shooter.idle();
     superstructure.setPose(Preset.STOW);
+    Lights.getInstance().setMode(LightsMode.Delivery);
   }
 
   @Override

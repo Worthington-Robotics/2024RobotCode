@@ -103,6 +103,8 @@ public class NoteAlign extends Command {
   /** Whether we should approach the note, based on a user button */
   private final Supplier<Boolean> approachSupplier;
 
+  private final Command rumbleCommand;
+
   private final TunableProfiledPIDController thetaController =
       new TunableProfiledPIDController(
           new TunablePIDGains("Vision", "Note Align Gains"),
@@ -121,7 +123,8 @@ public class NoteAlign extends Command {
       Supplier<Double> leftXSupplier,
       Supplier<Double> leftYSupplier,
       Supplier<Double> rightYSupplier,
-      Supplier<Boolean> approachSupplier) {
+      Supplier<Boolean> approachSupplier,
+      Command rumbleCommand) {
     this.drive = drive;
     this.vision = vision;
     addRequirements(drive);
@@ -129,6 +132,7 @@ public class NoteAlign extends Command {
     this.leftYSupplier = leftYSupplier;
     this.rightYSupplier = rightYSupplier;
     this.approachSupplier = approachSupplier;
+    this.rumbleCommand = rumbleCommand;
     thetaController.setGains(4.5, 0.00, 0.0);
     thetaController.setConstraints(Units.degreesToRadians(150.0), Units.degreesToRadians(700.0));
     thetaController2.setGains(2.0, 0.00, 0.0);
@@ -191,6 +195,7 @@ public class NoteAlign extends Command {
             noteLocation = Optional.of(translated);
             Lights.getInstance().setSolid(Color.kGreen);
             thetaController2.pid.reset(drive.getRotation().getRadians());
+            rumbleCommand.schedule();
           }
         }
       }
@@ -211,9 +216,6 @@ public class NoteAlign extends Command {
                   noteLocation.get().getX() - robot.getX(),
                   noteLocation.get().getY() - robot.getY())
               + Units.degreesToRadians(90);
-      SmartDashboard.putNumberArray(
-          "thing",
-          Logger.pose2dToArray(new Pose2d(robot.getX(), robot.getY(), new Rotation2d(desiredYaw))));
       final double thetaVelocity =
           thetaController2.pid.calculate(drive.getRotation().getRadians(), desiredYaw);
       driveSpeeds.omegaRadiansPerSecond = thetaVelocity;

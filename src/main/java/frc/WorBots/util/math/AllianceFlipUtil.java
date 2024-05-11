@@ -48,6 +48,16 @@ public class AllianceFlipUtil {
     return new Translation2d(FieldConstants.fieldLength - translation.getX(), translation.getY());
   }
 
+  /**
+   * Flips an x value to the other side of the field not based on the current alliance color.
+   *
+   * @param translation The x value to modify
+   * @return The modified x value
+   */
+  public static double applyAgnostic(double x) {
+    return FieldConstants.fieldLength - x;
+  }
+
   /** Flips an x coordinate to the correct side of the field based on the current alliance color. */
   public static double apply(double xCoordinate) {
     if (shouldFlip()) {

@@ -40,7 +40,7 @@ public class Handoff extends Command {
 
   /** Static gain for the feeder */
   private static final TunableDouble FEEDER_STATIC_GAIN =
-      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.2);
+      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.24);
 
   /** Gain for the feeder */
   private static final TunableDouble FEEDER_GAIN =

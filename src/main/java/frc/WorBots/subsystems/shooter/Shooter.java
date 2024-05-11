@@ -121,7 +121,7 @@ public class Shooter extends SubsystemBase {
     io.updateInputs(inputs);
 
     // Check if we have gamepiece
-    hasGamePiece = inputs.timeOfFlightDistanceMeters <= 0.085;
+    hasGamePiece = inputs.timeOfFlightDistanceMeters <= 0.088;
 
     // Update logging
     topFlywheelSpeedPub.set(inputs.velocityRPMTop);
