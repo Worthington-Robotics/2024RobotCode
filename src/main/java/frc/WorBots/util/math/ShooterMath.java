@@ -128,7 +128,7 @@ public class ShooterMath {
   /** Global pivot angle adjustment */
   private static final TunableDouble PIVOT_ADJUSTMENT =
       new TunableDouble(
-          "Tuning", "Shooting", "Global Pivot Adjustment", Units.degreesToRadians(0.85));
+          "Tuning", "Shooting", "Global Pivot Adjustment", Units.degreesToRadians(0.65));
 
   /** Difference confidence levels for a shot */
   public enum ShotConfidence {
