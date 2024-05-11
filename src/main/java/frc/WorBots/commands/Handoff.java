@@ -40,15 +40,15 @@ public class Handoff extends Command {
 
   /** Static gain for the feeder */
   private static final TunableDouble FEEDER_STATIC_GAIN =
-      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.24);
+      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.27);
 
   /** Gain for the feeder */
   private static final TunableDouble FEEDER_GAIN =
-      new TunableDouble("Tuning", "Handoff", "Feeder Gain", 0.45);
+      new TunableDouble("Tuning", "Handoff", "Feeder Gain", 0.48);
 
   /** Max feeder voltage */
   private static final TunableDouble MAX_FEEDER_VOLTAGE =
-      new TunableDouble("Tuning", "Handoff", "Max Feeder Voltage", 0.26);
+      new TunableDouble("Tuning", "Handoff", "Max Feeder Voltage", 0.29);
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;

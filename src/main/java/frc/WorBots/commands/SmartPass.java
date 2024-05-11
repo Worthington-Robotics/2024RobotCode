@@ -59,7 +59,7 @@ public class SmartPass extends Command {
           new double[][] {
             {FieldConstants.Wing.endX, 2300},
             {FieldConstants.midLineX, 3000},
-            {AllianceFlipUtil.applyAgnostic(FieldConstants.Wing.endX), 4500},
+            {AllianceFlipUtil.applyAgnostic(FieldConstants.Wing.endX), 3650},
           });
 
   /** RPM for straight shots */

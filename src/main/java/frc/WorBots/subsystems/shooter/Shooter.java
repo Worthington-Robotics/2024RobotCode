@@ -55,11 +55,11 @@ public class Shooter extends SubsystemBase {
 
   /** The position where we want the note to be in meters from the ToF */
   private static final TunableDouble NOTE_POSITION =
-      new TunableDouble("Shooter", "Tuning", "Note Position", 0.050);
+      new TunableDouble("Shooter", "Tuning", "Note Position", 0.047);
 
   /** Distance threshold for the note position to say that it is correctly positioned */
   private static final TunableDouble NOTE_DISTANCE_THRESHOLD =
-      new TunableDouble("Shooter", "Tuning", "Note Distance Threshold", 0.007);
+      new TunableDouble("Shooter", "Tuning", "Note Distance Threshold", 0.006);
 
   /**
    * Threshold for backwards wheel speed where the PID control will allow the motors to coast down
