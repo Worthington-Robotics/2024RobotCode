@@ -100,6 +100,8 @@ public class DebugRoutines {
             testDrive(),
             waitForNextStep("Superstructure; Handoff"),
             testSuperstructure(),
+            waitForNextStep("Note Vision; Look"),
+            testNoteVision(vision),
             waitForNextStep("Intake; Intake piece"),
             testIntake(),
             waitForNextStep("Shooter; Pose + Shoot"),
@@ -166,6 +168,10 @@ public class DebugRoutines {
         shooter.stopFlywheels(),
         waitForNextStep("Back to stow"),
         superstructure.goToPose(Preset.STOW));
+  }
+
+  private Command testNoteVision(Vision vision) {
+    return Commands.waitUntil(() -> vision.hasNoteTarget());
   }
 
   private Command testVision(Vision vision) {
