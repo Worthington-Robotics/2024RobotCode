@@ -71,6 +71,10 @@ public class Vision extends SubsystemBase {
   private static final Transform3d[] CAMERA_TRANSFORMS =
       new Transform3d[] {RIGHT_SWERVE_MODULE_TRANSFORM, CENTER_TRANSFORM};
 
+  /** Latency for vision updates */
+  private static final TunableDouble LATENCY =
+      new TunableDouble("Vision", "Tuning", "AprilTag Latency", 0.001);
+
   /** Detection weights for each camera */
   private static final double[] CAMERA_WEIGHTS = new double[] {0.9, 1.0};
 
@@ -169,7 +173,7 @@ public class Vision extends SubsystemBase {
     for (int camIndex = 0; camIndex < io.length; camIndex++) {
       final VisionIOInputs camInputs = inputs[camIndex];
       for (int frame = 0; frame < camInputs.timestamps.length; frame++) {
-        final double timestamp = camInputs.timestamps[frame];
+        final double timestamp = camInputs.timestamps[frame] - LATENCY.get();
         final double[] values = camInputs.frames[frame];
 
         if (values.length == 0 || values[0] == 0) {

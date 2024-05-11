@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.WorBots.subsystems.intake.IntakeIO.IntakeIOInputs;
 import frc.WorBots.util.debug.StatusPage;
+import frc.WorBots.util.debug.TunableDouble;
 
 public class Intake extends SubsystemBase {
   private final IntakeIO io;
@@ -39,6 +40,10 @@ public class Intake extends SubsystemBase {
   // Constants
   /** Distance threshold for the time of flight to say it has a game piece */
   public static final double DISTANCE_THRESHOLD = 0.255;
+
+  /** The position where we want the note to be in meters from the ToF */
+  private static final TunableDouble NOTE_POSITION =
+      new TunableDouble("Intake", "Tuning", "Note Position", 0.240);
 
   /** Voltage for intaking */
   private static final double INTAKE_VOLTS = 4.25;
@@ -119,5 +124,9 @@ public class Intake extends SubsystemBase {
    */
   public boolean hasGamePiece() {
     return hasGamepiece;
+  }
+
+  public double getNotePositionDistance() {
+    return inputs.timeOfFlightDistanceMeters - NOTE_POSITION.get();
   }
 }

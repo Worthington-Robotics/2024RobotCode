@@ -9,7 +9,6 @@ package frc.WorBots.subsystems.vision;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.Constants;
 import java.util.ArrayList;
@@ -20,11 +19,6 @@ import org.opencv.core.Point;
 public class NoteVisionIONative implements NoteVisionIO {
   private final NoteVisionGRIP grip = new NoteVisionGRIP();
   private final CvSink camera;
-  private final LinearFilter noteThetaFilter = LinearFilter.movingAverage(6);
-  private final LinearFilter notePitchFilter = LinearFilter.movingAverage(6);
-  private final LinearFilter noteAreaFilter = LinearFilter.movingAverage(6);
-  private final LinearFilter notePixelsXFilter = LinearFilter.movingAverage(6);
-  private final LinearFilter notePixelsYFilter = LinearFilter.movingAverage(6);
 
   public NoteVisionIONative() {
     camera = CameraServer.getVideo(CameraServer.startAutomaticCapture(0));

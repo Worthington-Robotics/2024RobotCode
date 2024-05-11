@@ -377,7 +377,7 @@ public class Autos {
             Waypoint.fromHolonomicPose(
                 util.posePlus(
                     util.posePlus(
-                        util.centerGamePieceLocations[3],
+                        util.testGamePiece,
                         util.transform(Units.inchesToMeters(15), Units.inchesToMeters(5.0))),
                     util.transformRotate(
                         AllianceFlipUtil.negRotation(Rotation2d.fromDegrees(25))))),
@@ -419,7 +419,7 @@ public class Autos {
         Commands.deadline(
             path1.command(),
             util.prepareHandoff()
-                .andThen(util.intakeWhileNear(util.centerGamePieceLocations[3], 2.2))
+                .andThen(util.intakeWhileNear(util.testGamePiece, 2.2))
                 .andThen(util.prepareShooting(path1.pose()))),
         // Slight time delay to ensure full stop
         Commands.waitSeconds(0.25),

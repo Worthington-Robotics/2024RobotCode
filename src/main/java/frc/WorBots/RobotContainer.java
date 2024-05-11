@@ -32,7 +32,6 @@ import frc.WorBots.subsystems.superstructure.*;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.subsystems.vision.*;
 import frc.WorBots.util.RobotSimulator;
-import frc.WorBots.util.UtilCommands;
 import frc.WorBots.util.debug.StatusPage;
 import java.util.*;
 
@@ -244,8 +243,8 @@ public class RobotContainer {
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
     driver
-        .povRight()
-        .toggleOnTrue(
+        .povLeft()
+        .whileTrue(
             new NoteAlign(
                 drive,
                 vision,
@@ -319,22 +318,39 @@ public class RobotContainer {
                   climber.setClimbLocked(false);
                 }));
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
-    driver
-        .a()
-        .toggleOnTrue(
-            UtilCommands.optimalSequence(
-                // Commands.runOnce(() -> shooter.setIdlingDisabled(true)),
-                superstructure.goToPose(Preset.FANCY_SPIT),
-                // shooter.setRawFeederVoltsCommand(1.4),
-                // Commands.waitSeconds(0.45),
-                shooter.setRawFeederVoltsCommand(-3.5),
-                Commands.waitSeconds(0.25),
-                shooter.setRawFeederVoltsCommand(0.0),
-                Commands.runOnce(
-                    () -> {
-                      superstructure.setPose(Preset.STOW);
-                      shooter.setIdlingDisabled(false);
-                    })));
+    // driver
+    //     .a()
+    //     .toggleOnTrue(
+    //         UtilCommands.optimalSequence(
+    //             // Commands.runOnce(() -> shooter.setIdlingDisabled(true)),
+    //             superstructure.goToPose(Preset.FANCY_SPIT),
+    //             // shooter.setRawFeederVoltsCommand(1.4),
+    //             // Commands.waitSeconds(0.45),
+    //             shooter.setRawFeederVoltsCommand(-3.5),
+    //             Commands.waitSeconds(0.25),
+    //             shooter.setRawFeederVoltsCommand(0.0),
+    //             Commands.runOnce(
+    //                 () -> {
+    //                   superstructure.setPose(Preset.STOW);
+    //                   shooter.setIdlingDisabled(false);
+    //                 })));
+    // driver
+    //     .a()
+    //     .toggleOnTrue(
+    //         UtilCommands.optimalSequence(
+    //             Commands.runOnce(() -> shooter.setIdlingDisabled(true)),
+    //             superstructure.goToPose(Preset.HANDOFF),
+    //             Commands.waitSeconds(0.4),
+    //             shooter.setRawFeederVoltsCommand(0.5),
+    //             Commands.waitSeconds(0.1),
+    //             shooter.setRawFeederVoltsCommand(-3.5).alongWith(intake.spitRaw()),
+    //             Commands.waitSeconds(0.5),
+    //             new Handoff(intake, superstructure, shooter),
+    //             Commands.runOnce(
+    //                 () -> {
+    //                   superstructure.setPose(Preset.STOW);
+    //                   shooter.setIdlingDisabled(false);
+    //                 })));
     // driver.a().whileTrue(climber.runPose(Climber.POSE_DEPLOY, 1.0).onlyIf(() ->
     // isClimbing));
     // driver.b().whileTrue(climber.runPose(Climber.POSE_DROP, -1.0).onlyIf(() ->

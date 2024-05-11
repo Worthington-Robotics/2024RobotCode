@@ -27,8 +27,8 @@ public class Handoff extends Command {
   /** Max voltage to run the intake at */
   private static final double MAX_INTAKE_VOLTAGE = 8.2;
 
-  /** The amount to scale the intake power based on ToF distance. Larger values reduce the speed */
-  private static final double INTAKE_DISTANCE_SCALING = 0.56;
+  /** The amount to scale the intake power based on ToF distance */
+  private static final double INTAKE_DISTANCE_SCALING = 5.0;
 
   /** Amount to multiply the intake voltage by when we are in handoff */
   private static final TunableDouble HANDOFF_INTAKE_MULTIPLIER =
@@ -40,7 +40,15 @@ public class Handoff extends Command {
 
   /** Static gain for the feeder */
   private static final TunableDouble FEEDER_STATIC_GAIN =
-      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.35);
+      new TunableDouble("Tuning", "Handoff", "Feeder Static Gain", 0.2);
+
+  /** Gain for the feeder */
+  private static final TunableDouble FEEDER_GAIN =
+      new TunableDouble("Tuning", "Handoff", "Feeder Gain", 0.45);
+
+  /** Max feeder voltage */
+  private static final TunableDouble MAX_FEEDER_VOLTAGE =
+      new TunableDouble("Tuning", "Handoff", "Max Feeder Voltage", 0.26);
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;
@@ -61,14 +69,21 @@ public class Handoff extends Command {
               -MAX_INTAKE_VOLTAGE,
               MAX_INTAKE_VOLTAGE);
       intake.setVolts(intakeVolts);
-      shooter.setRawFeederVolts(Math.signum(intakeVolts) * FEEDER_STATIC_GAIN.get());
+      double feederVolts =
+          shooter.getNotePositionDistance() * FEEDER_GAIN.get() * MAX_FEEDER_VOLTAGE.get();
+      feederVolts =
+          MathUtil.clamp(
+              feederVolts + Math.signum(feederVolts) * FEEDER_STATIC_GAIN.get(),
+              -MAX_FEEDER_VOLTAGE.getCurrent(),
+              MAX_FEEDER_VOLTAGE.getCurrent());
+      shooter.setRawFeederVolts(feederVolts);
     } else {
       // Intake only up to intake
       if (!intake.hasGamePiece() && !shooter.hasGamePiece()) {
         final double volts =
             MathUtil.clamp(
-                (intake.getToFDistanceMeters() / INTAKE_DISTANCE_SCALING) * MAX_INTAKE_VOLTAGE,
-                0,
+                intake.getNotePositionDistance() * INTAKE_DISTANCE_SCALING * MAX_INTAKE_VOLTAGE,
+                -MAX_INTAKE_VOLTAGE,
                 MAX_INTAKE_VOLTAGE);
         intake.setVolts(volts);
       } else {

@@ -36,10 +36,10 @@ import java.util.function.Supplier;
  */
 public class SmartPass extends Command {
   /** Where the command is aiming to */
-  private static final Translation2d GOAL = new Translation2d(1.0, FieldConstants.fieldWidth - 1.1);
+  private static final Translation2d GOAL = new Translation2d(1.0, FieldConstants.fieldWidth - 1.3);
 
   /** Lookahead factor for aiming */
-  private static final double LOOKAHEAD_FACTOR = 1.5;
+  private static final double LOOKAHEAD_FACTOR = 1.34;
 
   /** Lookup table for shot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
@@ -47,6 +47,7 @@ public class SmartPass extends Command {
           new double[][] {
             {FieldConstants.Wing.endX, 0.420},
             {FieldConstants.midLineX, 0.720},
+            {AllianceFlipUtil.apply(FieldConstants.Wing.endX), 0.720},
           });
 
   /** Lookup table for RPM */
@@ -55,6 +56,7 @@ public class SmartPass extends Command {
           new double[][] {
             {FieldConstants.Wing.endX, 2300},
             {FieldConstants.midLineX, 3000},
+            {AllianceFlipUtil.apply(FieldConstants.Wing.endX), 4500},
           });
 
   /** RPM for straight shots */

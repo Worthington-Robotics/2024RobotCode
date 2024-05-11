@@ -57,11 +57,15 @@ public class NoteAlign extends Command {
 
   /** Multiplier for approach speed based on distance */
   private final TunableDouble NOTE_APPROACH_SPEED =
-      new TunableDouble("Vision", "Tuning", "Note Align Approach Speed", 1.0);
+      new TunableDouble("Vision", "Tuning", "Note Align Approach Speed", 1.2);
 
   /** Minimum approach speed */
   private final TunableDouble MIN_APPROACH_SPEED =
       new TunableDouble("Vision", "Tuning", "Note Align Min Approach Speed", 0.2);
+
+  /** Maximum approach speed */
+  private final TunableDouble MAX_APPROACH_SPEED =
+      new TunableDouble("Vision", "Tuning", "Note Align Max Approach Speed", 2.0);
 
   /** Size of the note on the field to stop the lock after */
   private static final double NOTE_SIZE = FieldConstants.Note.outsideDiameter / 2.0 * 4.6;
@@ -231,8 +235,7 @@ public class NoteAlign extends Command {
               ? drive.getPose().getTranslation().getDistance(noteLocation.get())
                   * NOTE_APPROACH_SPEED.getCurrent()
               : MIN_APPROACH_SPEED.getCurrent();
-      speed =
-          MathUtil.clamp(speed, MIN_APPROACH_SPEED.getCurrent(), NOTE_APPROACH_SPEED.getCurrent());
+      speed = MathUtil.clamp(speed, MIN_APPROACH_SPEED.getCurrent(), MAX_APPROACH_SPEED.get());
       driveSpeeds.vxMetersPerSecond += speed;
     }
 

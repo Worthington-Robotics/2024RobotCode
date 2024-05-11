@@ -163,7 +163,7 @@ public class Superstructure extends SubsystemBase {
     if (RobotBase.isReal()) { // Real
       pivotController.setGains(9.7, 0.0, 0);
       pivotController.setConstraints(18, 80);
-      pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 1.0);
+      pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 0.4);
 
       elevatorController.setGains(130, 0.2, 0);
       elevatorController.setConstraints(2.5, 4.0);
@@ -290,7 +290,8 @@ public class Superstructure extends SubsystemBase {
         feedback *= 0.75;
       }
     }
-    final double pivotVoltage = feedback + calculatePivotFeedforward(setpoint);
+    final double pivotVoltage =
+        feedback + calculatePivotFeedforward(setpoint, pivotController.pid.getSetpoint().velocity);
 
     return pivotVoltage;
   }
@@ -300,9 +301,9 @@ public class Superstructure extends SubsystemBase {
    *
    * @return The feedforward value to be added to the control output
    */
-  private double calculatePivotFeedforward(double desiredAngle) {
+  private double calculatePivotFeedforward(double desiredAngle, double velocity) {
     final double adjusted = desiredAngle - PIVOT_HORIZONTAL_OFFSET;
-    final double out = pivotFeedForward.calculate(adjusted, 0.0);
+    final double out = pivotFeedForward.calculate(adjusted, velocity);
     return out;
   }
 

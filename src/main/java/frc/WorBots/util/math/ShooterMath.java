@@ -125,6 +125,11 @@ public class ShooterMath {
             {6.250 - GOAL_ADJUSTMENT, 1.00 * 1.020000},
           });
 
+  /** Global pivot angle adjustment */
+  private static final TunableDouble PIVOT_ADJUSTMENT =
+      new TunableDouble(
+          "Tuning", "Shooting", "Global Pivot Adjustment", Units.degreesToRadians(1.0));
+
   /** Difference confidence levels for a shot */
   public enum ShotConfidence {
     LOW,
@@ -179,7 +184,7 @@ public class ShooterMath {
    * @return The desired fused pivot angle
    */
   public static double calculatePivotAngle(double distance, Rotation2d goalToRobotAngle) {
-    double pivotAngle = PIVOT_ANGLE_LOOKUP.get(distance);
+    double pivotAngle = PIVOT_ANGLE_LOOKUP.get(distance) + PIVOT_ADJUSTMENT.get();
     // Move the pivot slightly down for side shots
     pivotAngle += Math.abs(goalToRobotAngle.getRadians()) * SIDE_SHOT_PIVOT_COEFFICIENT.get();
     return pivotAngle;

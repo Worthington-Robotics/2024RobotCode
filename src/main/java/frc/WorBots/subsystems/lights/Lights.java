@@ -229,7 +229,7 @@ public class Lights extends SubsystemBase {
         LightsUtil.ripple(io, LAVA_COLORS, 5.0, 2.0, 7.0, 0.0);
         break;
       case Flame:
-        LightsUtil.flame(io, 0.95, FLAME_COLORS);
+        LightsUtil.flame(io, 0.75, FLAME_COLORS);
         break;
       case Climbing:
         climbing();

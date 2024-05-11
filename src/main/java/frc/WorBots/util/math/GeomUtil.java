@@ -204,6 +204,10 @@ public class GeomUtil {
    * @return The modified pose
    */
   public static Pose2d applyChassisSpeeds(Pose2d pose, ChassisSpeeds speeds, double period) {
+    // IDK why we have to do this
+    if (AllianceFlipUtil.shouldFlip()) {
+      period *= -1;
+    }
     return new Pose2d(
         pose.getX() + speeds.vxMetersPerSecond * period,
         pose.getY() + speeds.vyMetersPerSecond * period,

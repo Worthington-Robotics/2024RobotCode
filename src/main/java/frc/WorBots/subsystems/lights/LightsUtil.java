@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.WorBots.util.MatchTime;
 import frc.WorBots.util.cache.Cache.AllianceCache;
 import frc.WorBots.util.cache.Cache.TimeCache;
+import frc.WorBots.util.debug.TunableDouble;
 import frc.WorBots.util.math.GeneralMath;
 import frc.WorBots.util.math.GeomUtil;
 import frc.WorBots.util.math.InterpolatingTable;
@@ -94,20 +95,37 @@ public class LightsUtil {
     }
   }
 
-  private static final LinearFilter flameFilter = LinearFilter.movingAverage(5);
+  private static final LinearFilter flameFilter = LinearFilter.movingAverage(17);
+  private static final TunableDouble FLOW_SPEED =
+      new TunableDouble("Tuning", "Lights", "Flame Flow Speed", 15.0);
+  private static final TunableDouble FLOW_SCALE =
+      new TunableDouble("Tuning", "Lights", "Flame Flow Scale", 30.0);
+  private static final TunableDouble FLOW_GAIN =
+      new TunableDouble("Tuning", "Lights", "Flame Flow Gain", 1.3);
 
   /** Creates a flame with the specified height */
   public static void flame(LightsIO io, double height, ColorSequence colors) {
-    final double flicker = 0.45;
+    final double flicker = 0.32;
     final double flickerAmount = flameFilter.calculate(Math.random() * flicker);
     final double scale = height * (1.0 - flicker) + flickerAmount;
+    final double ebb = (TrigLookup.sin(TimeCache.getInstance().get()) + 1.0) / 8.0;
     for (int i = 0; i < io.getCount(); i++) {
-      final double scalarPosition = (double) i / io.getCount();
-      final double pos = scalarPosition / scale;
+      final double scalePosition = (double) i / io.getCount();
+      final double pos = scalePosition / scale - ebb;
+      final double flow =
+          (TrigLookup.sin(
+                      TimeCache.getInstance().get() * -FLOW_SPEED.get()
+                          + scalePosition * FLOW_SCALE.get())
+                  + 1.0)
+              / 2.0
+              * FLOW_GAIN.get()
+              * pos;
+
       if (pos > 1.0) {
         io.setLED(i, Color.kBlack);
       } else {
-        final Color color = colors.sample(pos);
+        Color color = colors.sample(pos);
+        color = new Color(color.red - flow, color.green - flow, color.blue - flow);
         io.setLED(i, color);
       }
     }

@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase {
 
   /** The position where we want the note to be in meters from the ToF */
   private static final TunableDouble NOTE_POSITION =
-      new TunableDouble("Shooter", "Tuning", "Note Position", 0.058);
+      new TunableDouble("Shooter", "Tuning", "Note Position", 0.050);
 
   /** Distance threshold for the note position to say that it is correctly positioned */
   private static final TunableDouble NOTE_DISTANCE_THRESHOLD =

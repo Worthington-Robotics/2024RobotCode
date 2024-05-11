@@ -52,6 +52,9 @@ public class AutoUtil {
   /** Adjusted locations of center game pieces */
   public final Pose2d[] centerGamePieceLocations;
 
+  /** Test location for the 4th game piece on the wing line instead */
+  public final Pose2d testGamePiece;
+
   /** Positions for shooting from */
   public final Pose2d[] shootingPositions;
 
@@ -128,6 +131,8 @@ public class AutoUtil {
           pose(FieldConstants.GamePieces.centerPieces[3]),
           pose(FieldConstants.GamePieces.centerPieces[4]),
         };
+    testGamePiece =
+        pose(FieldConstants.Wing.endX, FieldConstants.GamePieces.centerPieces[3].getY());
     shootingPositions =
         new Pose2d[] {
           pose(3.68, 5.80), pose(2.88, 5.54), pose(2.50, 3.49),
