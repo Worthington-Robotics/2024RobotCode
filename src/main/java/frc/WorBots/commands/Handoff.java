@@ -48,7 +48,7 @@ public class Handoff extends Command {
 
   /** Max feeder voltage */
   private static final TunableDouble MAX_FEEDER_VOLTAGE =
-      new TunableDouble("Tuning", "Handoff", "Max Feeder Voltage", 0.29);
+      new TunableDouble("Tuning", "Handoff", "Max Feeder Voltage", 0.35);
 
   public Handoff(Intake intake, Superstructure superstructure, Shooter shooter) {
     this.intake = intake;

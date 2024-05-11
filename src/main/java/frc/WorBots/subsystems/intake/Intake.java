@@ -118,6 +118,22 @@ public class Intake extends SubsystemBase {
   }
 
   /**
+   * Returns a command that runs the intake slowly
+   *
+   * @return The command
+   */
+  public Command eject() {
+    return this.run(
+            () -> {
+              setpointVolts = INTAKE_VOLTS / 2.0;
+            })
+        .finallyDo(
+            () -> {
+              setpointVolts = 0.0;
+            });
+  }
+
+  /**
    * Gets wether or not a game piece is currently held.
    *
    * @return The command.
