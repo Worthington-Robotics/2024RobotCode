@@ -109,6 +109,9 @@ public class GeneralMath {
    *     return extraneous results
    */
   public static double getScalarPosition(double value, double min, double max) {
+    if (max < min) {
+      return 1.0 - (value + max) / (min - max);
+    }
     return (value - min) / (max - min);
   }
 
@@ -121,6 +124,9 @@ public class GeneralMath {
    * @return The scaled value
    */
   public static double scale(double value, double min, double max) {
+    if (max < min) {
+      return max + (1.0 - value) * (min - max);
+    }
     return min + value * (max - min);
   }
 

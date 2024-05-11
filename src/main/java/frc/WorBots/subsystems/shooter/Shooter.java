@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase {
 
   /** The position where we want the note to be in meters from the ToF */
   private static final TunableDouble NOTE_POSITION =
-      new TunableDouble("Shooter", "Tuning", "Note Position", 0.055);
+      new TunableDouble("Shooter", "Tuning", "Note Position", 0.058);
 
   /** Distance threshold for the note position to say that it is correctly positioned */
   private static final TunableDouble NOTE_DISTANCE_THRESHOLD =
@@ -71,7 +71,7 @@ public class Shooter extends SubsystemBase {
   private static final double IDLE_SPEED = 500.0;
 
   /** The voltage to run the feeder wheels at when feeding */
-  private static final double FEED_VOLTS = 2.0;
+  private static final double FEED_VOLTS = 2.5;
 
   /** Error threshold for the shooter wheels, in RPM */
   private static final double RPM_THRESHOLD = 100.0;
@@ -121,7 +121,7 @@ public class Shooter extends SubsystemBase {
     io.updateInputs(inputs);
 
     // Check if we have gamepiece
-    hasGamePiece = inputs.timeOfFlightDistanceMeters < NOTE_POSITION.get();
+    hasGamePiece = inputs.timeOfFlightDistanceMeters <= 0.085;
 
     // Update logging
     topFlywheelSpeedPub.set(inputs.velocityRPMTop);

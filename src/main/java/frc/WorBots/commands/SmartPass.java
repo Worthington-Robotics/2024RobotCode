@@ -36,15 +36,16 @@ import java.util.function.Supplier;
  */
 public class SmartPass extends Command {
   /** Where the command is aiming to */
-  private static final Translation2d GOAL = new Translation2d(1.0, FieldConstants.fieldWidth - 1.8);
+  private static final Translation2d GOAL = new Translation2d(1.0, FieldConstants.fieldWidth - 1.1);
 
   /** Lookahead factor for aiming */
-  private static final double LOOKAHEAD_FACTOR = 0.0;
+  private static final double LOOKAHEAD_FACTOR = 1.5;
 
   /** Lookup table for shot angle */
   private static final InterpolatingTable ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
+            {FieldConstants.Wing.endX, 0.420},
             {FieldConstants.midLineX, 0.720},
           });
 
@@ -52,12 +53,13 @@ public class SmartPass extends Command {
   private static final InterpolatingTable RPM_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {FieldConstants.midLineX, 3200},
+            {FieldConstants.Wing.endX, 2300},
+            {FieldConstants.midLineX, 3000},
           });
 
   /** RPM for straight shots */
   private static final TunableDouble STRAIGHT_RPM =
-      new TunableDouble("Tuning", "Smart Pass", "Straight RPM", 2000);
+      new TunableDouble("Tuning", "Smart Pass", "Straight RPM", 2500);
 
   private final Drive drive;
   private final Superstructure superstructure;
@@ -151,7 +153,12 @@ public class SmartPass extends Command {
 
   /** Check if a pose is blocked by the stage for the pass */
   private boolean isBlockedByStage(Pose2d pose) {
-    return AllianceFlipUtil.apply(pose.getX()) > FieldConstants.Stage.foot2Center.getX()
-        && pose.getY() < FieldConstants.Stage.foot2Center.getY();
+    final double x = AllianceFlipUtil.apply(pose.getX());
+    final double y = pose.getY();
+    final boolean farBlocked =
+        x > FieldConstants.Stage.foot2Center.getX() && y < FieldConstants.Stage.foot2Center.getY();
+    final boolean sideBlocked =
+        x > FieldConstants.Stage.foot1Center.getX() && y < FieldConstants.Stage.foot1Center.getY();
+    return farBlocked || sideBlocked;
   }
 }
