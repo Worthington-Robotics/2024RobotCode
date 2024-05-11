@@ -88,8 +88,8 @@ Inheritance diagram for frc.WorBots.commands.NoteAlign:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a033c608bac47f8c0d7735abb8aad18d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1NoteAlign.html#a033c608bac47f8c0d7735abb8aad18d6">NoteAlign</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a> drive, <a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html">Vision</a> vision, Supplier&lt; Double &gt; leftXSupplier, Supplier&lt; Double &gt; leftYSupplier, Supplier&lt; Double &gt; rightYSupplier, Supplier&lt; Boolean &gt; approachSupplier)</td></tr>
-<tr class="separator:a033c608bac47f8c0d7735abb8aad18d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbacd83b6fdb7a47902f9ef8c8eada29"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1NoteAlign.html#acbacd83b6fdb7a47902f9ef8c8eada29">NoteAlign</a> (<a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html">Drive</a> drive, <a class="el" href="classfrc_1_1WorBots_1_1subsystems_1_1vision_1_1Vision.html">Vision</a> vision, Supplier&lt; Double &gt; leftXSupplier, Supplier&lt; Double &gt; leftYSupplier, Supplier&lt; Double &gt; rightYSupplier, Supplier&lt; Boolean &gt; approachSupplier, Command rumbleCommand)</td></tr>
+<tr class="separator:acbacd83b6fdb7a47902f9ef8c8eada29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade18ca7cdacb6ae097e4a1ff38de37c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1NoteAlign.html#ade18ca7cdacb6ae097e4a1ff38de37c8">initialize</a> ()</td></tr>
 <tr class="separator:ade18ca7cdacb6ae097e4a1ff38de37c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4440c6b731202653dafd5c66c2865a7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1commands_1_1NoteAlign.html#a4440c6b731202653dafd5c66c2865a7c">execute</a> ()</td></tr>
@@ -102,8 +102,8 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Command for automatic speaker targeting during teleop </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a033c608bac47f8c0d7735abb8aad18d6" name="a033c608bac47f8c0d7735abb8aad18d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a033c608bac47f8c0d7735abb8aad18d6">&#9670;&#160;</a></span>NoteAlign()</h2>
+<a id="acbacd83b6fdb7a47902f9ef8c8eada29" name="acbacd83b6fdb7a47902f9ef8c8eada29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbacd83b6fdb7a47902f9ef8c8eada29">&#9670;&#160;</a></span>NoteAlign()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -145,7 +145,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Supplier&lt; Boolean &gt;&#160;</td>
-          <td class="paramname"><em>approachSupplier</em>&#160;</td>
+          <td class="paramname"><em>approachSupplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Command&#160;</td>
+          <td class="paramname"><em>rumbleCommand</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
