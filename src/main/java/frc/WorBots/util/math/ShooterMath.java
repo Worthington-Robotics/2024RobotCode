@@ -103,7 +103,7 @@ public class ShooterMath {
   private static final InterpolatingTable PIVOT_ANGLE_LOOKUP =
       new InterpolatingTable(
           new double[][] {
-            {1.096 - GOAL_ADJUSTMENT, 1.00 * 0.463140},
+            {1.096 - GOAL_ADJUSTMENT, 1.00 * 0.462140},
             {1.406 - GOAL_ADJUSTMENT, 1.00 * 0.495600},
             {1.750 - GOAL_ADJUSTMENT, 1.00 * 0.652000},
             {2.197 - GOAL_ADJUSTMENT, 1.00 * 0.771996},
@@ -128,7 +128,7 @@ public class ShooterMath {
   /** Global pivot angle adjustment */
   private static final TunableDouble PIVOT_ADJUSTMENT =
       new TunableDouble(
-          "Tuning", "Shooting", "Global Pivot Adjustment", Units.degreesToRadians(0.0));
+          "Tuning", "Shooting", "Global Pivot Adjustment", Units.degreesToRadians(0.85));
 
   /** Difference confidence levels for a shot */
   public enum ShotConfidence {
