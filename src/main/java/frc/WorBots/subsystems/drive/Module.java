@@ -77,7 +77,7 @@ public class Module {
 
     // Stray module correction
     optimizedState.speedMetersPerSecond *=
-        GeneralMath.curve(Math.cos(io.getInputs().turnPositionErrorRad), 1.5);
+        GeneralMath.curve(Math.cos(io.getInputs().turnPositionErrorRad), 1.0);
 
     return optimizedState;
   }

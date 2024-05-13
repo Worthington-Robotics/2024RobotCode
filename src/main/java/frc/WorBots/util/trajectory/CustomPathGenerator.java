@@ -239,6 +239,7 @@ public class CustomPathGenerator {
       State state, RotationSequence.State holonomicRotation) {
     var out = new PathPlannerTrajectory.State();
     out.accelerationMpsSq = state.accelerationMetersPerSecondSq;
+    out.velocityMps = state.velocityMetersPerSecond;
     out.curvatureRadPerMeter = state.curvatureRadPerMeter;
     out.timeSeconds = state.timeSeconds;
     out.positionMeters = state.poseMeters.getTranslation();

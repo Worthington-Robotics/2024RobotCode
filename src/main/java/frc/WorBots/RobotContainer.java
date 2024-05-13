@@ -179,6 +179,8 @@ public class RobotContainer {
         Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)), drive)
             .withTimeout(10));
 
+    selector.addRoutine("Test Auto", List.of(), autos.testAuto());
+
     selector.addRoutine("Do Nothing", List.of(), Commands.none());
 
     if (Constants.ENABLE_DEBUG_ROUTINES) {

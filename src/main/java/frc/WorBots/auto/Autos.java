@@ -56,6 +56,19 @@ public class Autos {
     util = new AutoUtil(drive, superstructure, intake, shooter);
   }
 
+  public Command testAuto() {
+    final Pose2d startingPose = util.startingLocations[1];
+
+    // Intake center piece, then drive up to speaker and shoot
+    final var path1 =
+        util.path(
+            Waypoint.fromHolonomicPose(startingPose),
+            Waypoint.fromHolonomicPose(util.ampSideCenterpoint),
+            Waypoint.fromHolonomicPose(util.getWingLinePose(startingPose, new Rotation2d())));
+
+    return createSequence(util.reset(startingPose).command(), path1.command());
+  }
+
   public Command onePiece() {
     return selectFromStartingLocation(this::onePiece);
   }
