@@ -108,8 +108,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a44dc363300b8c4c595bebf9ec16e916a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e1322e14eee66363202097a94cfe514"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#a7e1322e14eee66363202097a94cfe514">TURN_CURVE_AMOUNT</a> = 2.0</td></tr>
 <tr class="separator:a7e1322e14eee66363202097a94cfe514"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe2f06b30ed797df90f0cd4eac59c434"><td class="memItemLeft" align="right" valign="top">static final double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#abe2f06b30ed797df90f0cd4eac59c434">BRAKE_DELAY</a> = 0.3</td></tr>
-<tr class="separator:abe2f06b30ed797df90f0cd4eac59c434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add5250ee4c9038c80757d1fcd5fc7e8b"><td class="memItemLeft" align="right" valign="top">static final <a class="el" href="classfrc_1_1WorBots_1_1util_1_1debug_1_1TunableDouble.html">TunableDouble</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#add5250ee4c9038c80757d1fcd5fc7e8b">BRAKE_DELAY</a></td></tr>
+<tr class="separator:add5250ee4c9038c80757d1fcd5fc7e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Controller for teleoperated driving </p>
@@ -346,8 +346,8 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="abe2f06b30ed797df90f0cd4eac59c434" name="abe2f06b30ed797df90f0cd4eac59c434"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe2f06b30ed797df90f0cd4eac59c434">&#9670;&#160;</a></span>BRAKE_DELAY</h2>
+<a id="add5250ee4c9038c80757d1fcd5fc7e8b" name="add5250ee4c9038c80757d1fcd5fc7e8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add5250ee4c9038c80757d1fcd5fc7e8b">&#9670;&#160;</a></span>BRAKE_DELAY</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,7 +356,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">final double frc.WorBots.util.control.DriveController.BRAKE_DELAY = 0.3</td>
+          <td class="memname">final <a class="el" href="classfrc_1_1WorBots_1_1util_1_1debug_1_1TunableDouble.html">TunableDouble</a> frc.WorBots.util.control.DriveController.BRAKE_DELAY</td>
         </tr>
       </table>
   </td>
@@ -365,7 +365,9 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >The amount of time in seconds after which to force brake </p>
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <span class="keyword">new</span> TunableDouble(<span class="stringliteral">&quot;Tuning&quot;</span>, <span class="stringliteral">&quot;Drive&quot;</span>, <span class="stringliteral">&quot;Brake Delay&quot;</span>, 0.3)</div>
+</div><!-- fragment --><p >The amount of time in seconds after which to force brake </p>
 
 </div>
 </div>

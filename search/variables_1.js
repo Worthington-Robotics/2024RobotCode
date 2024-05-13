@@ -5,6 +5,6 @@ var searchData=
   ['betweenoneandtwo_2',['betweenOneandTwo',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ad8e18edc65b9af8a04fd5b45c54003d5',1,'frc::WorBots::auto::AutoUtil']]],
   ['betweenzeroandone_3',['betweenZeroAndOne',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#ae6214ab14844f947f889a4d1c14ae837',1,'frc::WorBots::auto::AutoUtil']]],
   ['both_5faxes_4',['BOTH_AXES',['../enumfrc_1_1WorBots_1_1subsystems_1_1vision_1_1NoteVisionGRIP_1_1FlipCode.html#af7e68710deb4f12803c324a7afb9acc5',1,'frc::WorBots::subsystems::vision::NoteVisionGRIP::FlipCode']]],
-  ['brake_5fdelay_5',['BRAKE_DELAY',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#abe2f06b30ed797df90f0cd4eac59c434',1,'frc::WorBots::util::control::DriveController']]],
+  ['brake_5fdelay_5',['BRAKE_DELAY',['../classfrc_1_1WorBots_1_1util_1_1control_1_1DriveController.html#add5250ee4c9038c80757d1fcd5fc7e8b',1,'frc::WorBots::util::control::DriveController']]],
   ['brownout_6',['BROWNOUT',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#ae3d5a789e3f575c676769df6643e8d82',1,'frc::WorBots::util::debug::StatusPage']]]
 ];
