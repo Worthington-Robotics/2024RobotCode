@@ -20,7 +20,7 @@ public class Module {
   /**
    * The minimum speed percentage of the maximum that can be set before angle changes are ignored
    */
-  private static final double ANTI_JITTER_THRESHOLD = 0.02;
+  private static final double ANTI_JITTER_THRESHOLD = 0.01;
 
   /**
    * This module represents one swerve module, which includes a turn motor, and drive motor.
@@ -76,7 +76,8 @@ public class Module {
     }
 
     // Stray module correction
-    optimizedState.speedMetersPerSecond *= Math.cos(io.getInputs().turnPositionErrorRad);
+    optimizedState.speedMetersPerSecond *=
+        GeneralMath.curve(Math.cos(io.getInputs().turnPositionErrorRad), 1.5);
 
     return optimizedState;
   }

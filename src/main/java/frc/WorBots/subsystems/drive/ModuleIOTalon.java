@@ -20,6 +20,8 @@ import frc.WorBots.Constants;
 import frc.WorBots.util.HardwareUtils.TalonSignalsPositional;
 import frc.WorBots.util.debug.TunablePIDController;
 import frc.WorBots.util.debug.TunablePIDController.TunablePIDGains;
+import frc.WorBots.util.debug.TunablePIDController.TunableProfiledPIDController;
+import frc.WorBots.util.debug.TunablePIDController.TunableTrapezoidConstraints;
 
 public class ModuleIOTalon implements ModuleIO {
   private static final double DRIVE_MULTIPLIER = 0.9579;
@@ -35,9 +37,13 @@ public class ModuleIOTalon implements ModuleIO {
   private static final TunablePIDGains driveFeedbackGains =
       new TunablePIDGains("Drive/Gains", "SModule Drive Feedback");
   private final TunablePIDController driveFeedback = new TunablePIDController(driveFeedbackGains);
+  private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(0.00, 0.05);
   private static final TunablePIDGains turnFeedbackGains =
       new TunablePIDGains("Drive/Gains", "SModule Turn Feedback");
-  private final TunablePIDController turnFeedback = new TunablePIDController(turnFeedbackGains);
+  private static final TunableTrapezoidConstraints turnFeedbackConstraints =
+      new TunableTrapezoidConstraints("Drive/Gains", "SModule Turn Constraints");
+  private final TunableProfiledPIDController turnFeedback =
+      new TunableProfiledPIDController(turnFeedbackGains, turnFeedbackConstraints);
 
   private final TalonFX driveMotor;
   private final TalonFX turnMotor;
@@ -54,6 +60,7 @@ public class ModuleIOTalon implements ModuleIO {
     driveFeedbackGains.setGains(0.015, 0.001, 0.0);
     turnFeedbackGains.setGains(6.05, 0.019, 0.0);
     turnFeedback.pid.enableContinuousInput(-Math.PI, Math.PI);
+    turnFeedbackConstraints.setConstraints(360.0, 1500.0);
 
     inputs = new ModuleIOInputs(index);
 
@@ -144,6 +151,8 @@ public class ModuleIOTalon implements ModuleIO {
     inputs.turnPositionErrorRad = turnFeedback.pid.getPositionError();
 
     inputs.isConnected = inputs.turn.isConnected && inputs.drive.isConnected;
+
+    // turnSignals.setVoltage(turnMotor, TURN_VOLTS.get(), 11.0);
   }
 
   public ModuleIOInputs getInputs() {
@@ -159,7 +168,10 @@ public class ModuleIOTalon implements ModuleIO {
   }
 
   public void setAngle(double angleRadians) {
-    setTurnVoltage(turnFeedback.pid.calculate(inputs.turnAbsolutePositionRad, angleRadians));
+    final double feedback =
+        turnFeedback.pid.calculate(inputs.turnAbsolutePositionRad, angleRadians);
+    final double feedforward = turnFeedforward.calculate(turnFeedback.pid.getSetpoint().velocity);
+    setTurnVoltage(feedback + feedforward);
   }
 
   public void setDriveVoltage(double volts) {

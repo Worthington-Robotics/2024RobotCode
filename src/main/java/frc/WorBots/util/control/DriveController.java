@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.WorBots.subsystems.drive.Drive;
+import frc.WorBots.util.debug.TunableDouble;
 import frc.WorBots.util.math.GeneralMath;
 
 /** Controller for teleoperated driving */
@@ -41,13 +42,20 @@ public class DriveController {
   public static final double TURN_CURVE_AMOUNT = 2.0;
 
   /** The amount of time in seconds after which to force brake */
-  public static final double BRAKE_DELAY = 0.3;
+  public static final TunableDouble BRAKE_DELAY =
+      new TunableDouble("Tuning", "Drive", "Brake Delay", 0.3);
 
   private static final LinearFilter driveFilter = LinearFilter.movingAverage(10);
   private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
   private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(20);
 
   private Timer stopTimer = new Timer();
+
+  /**
+   * Last demanded vector of the drive, used to have smooth braking while moving in the same
+   * direction
+   */
+  private Translation2d lastVector = new Translation2d();
 
   /** Construct a new DriveController */
   public DriveController() {
@@ -101,14 +109,20 @@ public class DriveController {
       double x, double y, double theta, Rotation2d robotRotation, double maxSpeed) {
     // Get direction and magnitude of linear axes
     double linearMagnitude = Math.hypot(x, y);
+    Rotation2d linearDirection = new Rotation2d(x, y);
     SmartDashboard.putNumber("Drive Magnitude", linearMagnitude);
-    final Rotation2d linearDirection = new Rotation2d(x, y);
 
     // Apply deadband
     linearMagnitude = MathUtil.applyDeadband(linearMagnitude, DEADBAND);
+    // Stopping
     if (linearMagnitude == 0.0) {
-      if (stopTimer.hasElapsed(BRAKE_DELAY)) {
+      if (stopTimer.hasElapsed(BRAKE_DELAY.get())) {
         driveFilter.reset();
+      } else {
+        // Smooth stop from our last vector
+        // linearDirection = lastVector.getAngle();
+        // linearMagnitude = (1.0 - stopTimer.get() / BRAKE_DELAY.getCurrent()) *
+        // lastVector.getNorm();
       }
     } else {
       stopTimer.reset();
@@ -134,7 +148,7 @@ public class DriveController {
                     new Translation2d(linearMagnitude, new Rotation2d()), new Rotation2d()))
             .getTranslation();
 
-    // Convert to meters per second
+    lastVector = linearVelocity;
 
     // Filter max speed to prevent large speed changes
     final double maximumSpeed = maxSpeedFilter.calculate(maxSpeed * DRIVE_SPEED_MULTIPLIER);
