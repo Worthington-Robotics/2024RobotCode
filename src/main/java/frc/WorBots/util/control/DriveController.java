@@ -45,9 +45,9 @@ public class DriveController {
   public static final TunableDouble BRAKE_DELAY =
       new TunableDouble("Tuning", "Drive", "Brake Delay", 0.3);
 
-  private static final LinearFilter driveFilter = LinearFilter.movingAverage(10);
-  private static final LinearFilter turnFilter = LinearFilter.movingAverage(1);
-  private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(20);
+  private static final LinearFilter driveFilter = LinearFilter.movingAverage(13);
+  private static final LinearFilter turnFilter = LinearFilter.movingAverage(3);
+  private static final LinearFilter maxSpeedFilter = LinearFilter.movingAverage(24);
 
   private Timer stopTimer = new Timer();
 
@@ -123,6 +123,7 @@ public class DriveController {
         // linearDirection = lastVector.getAngle();
         // linearMagnitude = (1.0 - stopTimer.get() / BRAKE_DELAY.getCurrent()) *
         // lastVector.getNorm();
+        // SmartDashboard.putNumber("Linear Magnitude", linearMagnitude);
       }
     } else {
       stopTimer.reset();

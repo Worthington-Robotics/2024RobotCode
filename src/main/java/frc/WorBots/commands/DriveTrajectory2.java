@@ -168,7 +168,7 @@ public class DriveTrajectory2 extends Command {
     // path
     DISTANCE_THRESHOLD.update();
     for (int i = 0; i < lookahead; i++) {
-      if (i > trajectory.getStates().size()) {
+      if (i + index >= trajectory.getStates().size()) {
         break;
       }
 

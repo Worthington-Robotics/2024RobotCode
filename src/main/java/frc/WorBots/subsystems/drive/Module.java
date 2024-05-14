@@ -9,6 +9,7 @@ package frc.WorBots.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.WorBots.util.control.SwerveSetpointFilter;
 import frc.WorBots.util.debug.StatusPage;
 import frc.WorBots.util.math.GeneralMath;
 
@@ -16,6 +17,7 @@ public class Module {
   private final int index;
   private final ModuleIO io;
   private SwerveModuleState lastSetpoint = new SwerveModuleState();
+  private final SwerveSetpointFilter filter = new SwerveSetpointFilter();
 
   /**
    * The minimum speed percentage of the maximum that can be set before angle changes are ignored
@@ -65,7 +67,7 @@ public class Module {
    * @return The optimized state
    */
   public SwerveModuleState optimizeState(SwerveModuleState state) {
-    SwerveModuleState optimizedState = state;
+    SwerveModuleState optimizedState = filter.calculate(state);
     // Get the wrapping absolute angle delta
     final Rotation2d delta = GeneralMath.wrappingAngleDifference(state.angle, getAngle());
     // Turns greater than 90 degrees can just have the module flip its direction
