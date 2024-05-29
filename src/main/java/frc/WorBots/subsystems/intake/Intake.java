@@ -36,6 +36,8 @@ public class Intake extends SubsystemBase {
       intakeTable.getBooleanTopic("Has Game Piece").publish();
   private final DoublePublisher timeOfFlightDistancePub =
       intakeTable.getDoubleTopic("Time of Flight Distance").publish();
+  private final DoublePublisher currentDrawPub =
+      intakeTable.getDoubleTopic("Current Draw").publish();
 
   // Constants
   /** Distance threshold for the time of flight to say it has a game piece */
@@ -82,6 +84,7 @@ public class Intake extends SubsystemBase {
     setpointPub.set(setpointVolts);
     hasGamePiecePub.set(hasGamepiece);
     timeOfFlightDistancePub.set(inputs.timeOfFlightDistanceMeters);
+    currentDrawPub.set(inputs.currentDraw);
   }
 
   public double getSetpointVolts() {

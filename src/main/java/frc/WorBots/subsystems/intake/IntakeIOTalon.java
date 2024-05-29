@@ -7,6 +7,7 @@
 
 package frc.WorBots.subsystems.intake;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.playingwithfusion.TimeOfFlight;
@@ -19,6 +20,7 @@ public class IntakeIOTalon implements IntakeIO {
   private TimeOfFlight timeOfFlight;
 
   private final TalonSignalsPositional motorSignals;
+  private final StatusSignal<Double> currentDrawSignal;
 
   private final LinearFilter tofFilter = LinearFilter.movingAverage(1);
 
@@ -30,15 +32,19 @@ public class IntakeIOTalon implements IntakeIO {
     intakeMotor.setInverted(false);
 
     motorSignals = new TalonSignalsPositional(intakeMotor);
+    currentDrawSignal = intakeMotor.getTorqueCurrent();
+    currentDrawSignal.setUpdateFrequency(100.0);
     intakeMotor.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
     motorSignals.update(inputs.motor, intakeMotor);
+    StatusSignal.refreshAll(currentDrawSignal);
     inputs.isConnected = inputs.motor.isConnected;
 
     inputs.timeOfFlightDistanceMeters = tofFilter.calculate(timeOfFlight.getRange()) / 1000;
+    inputs.currentDraw = currentDrawSignal.getValue();
   }
 
   @Override

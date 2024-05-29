@@ -24,7 +24,7 @@ import frc.WorBots.util.math.GeneralMath;
 public class DriveController {
   // Constants
   /** The percentage of the max drive speed that the robot will drive at */
-  public static final double DRIVE_SPEED_MULTIPLIER = 0.85;
+  public static final double DRIVE_SPEED_MULTIPLIER = 0.45;
 
   /** The max rotational speed in radians per update that the robot will drive at */
   public static final double ROTATIONAL_SPEED = 7.5;

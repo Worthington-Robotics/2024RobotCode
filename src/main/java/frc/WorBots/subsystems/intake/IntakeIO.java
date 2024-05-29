@@ -14,6 +14,7 @@ public interface IntakeIO {
   public static class IntakeIOInputs {
     TalonInputsPositional motor = new TalonInputsPositional("Intake", "Motor");
     double timeOfFlightDistanceMeters = 0.0;
+    double currentDraw = 0.0;
     boolean isConnected = false;
   }
 

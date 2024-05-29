@@ -239,6 +239,10 @@ public class GeomUtil {
     return pose1.getDistance(pose2) <= threshold;
   }
 
+  public static double dot(Translation2d v1, Translation2d v2) {
+    return (v1.getX() * v2.getX()) + (v1.getY() * v2.getY());
+  }
+
   /**
    * Discretizes a ChassisSpeeds with an additional correction for drift
    *
@@ -262,5 +266,29 @@ public class GeomUtil {
             twistForPose.dy / Constants.ROBOT_PERIOD,
             twistForPose.dtheta / Constants.ROBOT_PERIOD);
     return corrected;
+  }
+
+  public static Translation2d pointToLineSegmentProjection(
+      Translation2d p, Translation2d l1, Translation2d l2) {
+    final double lengthSquared = Math.pow(l1.getDistance(l2), 2);
+    if (lengthSquared == 0.0) {
+      return l1;
+    }
+    final double t = Math.max(0, Math.min(1, dot(p.minus(l1), l2.minus(l1)) / lengthSquared));
+    final Translation2d projection =
+        l1.plus(l2.minus(l1).times(t)); // Projection falls on the segment
+    return projection;
+  }
+
+  public static double pointToLineSegmentDistance(
+      Translation2d p, Translation2d l1, Translation2d l2) {
+    final double lengthSquared = Math.pow(l1.getDistance(l2), 2);
+    if (lengthSquared == 0.0) {
+      return p.getDistance(l1);
+    }
+    final double t = Math.max(0, Math.min(1, dot(p.minus(l1), l2.minus(l1)) / lengthSquared));
+    final Translation2d projection =
+        l1.plus(l2.minus(l1).times(t)); // Projection falls on the segment
+    return p.getDistance(projection);
   }
 }
