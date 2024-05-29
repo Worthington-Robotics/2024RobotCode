@@ -79,5 +79,6 @@ var searchData=
   ['superstructureiotalon_76',['SuperstructureIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIOTalon.html#a9ee351f7ba4be6b907e46c7ce1e25b6d',1,'frc::WorBots::subsystems::superstructure::SuperstructureIOTalon']]],
   ['superstructuremanual_77',['SuperstructureManual',['../classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html#ae4ece5cb7bfe40b66cfa349f8c8199d6',1,'frc::WorBots::commands::SuperstructureManual']]],
   ['superstructurepose_78',['SuperstructurePose',['../namespacefrc_1_1WorBots_1_1subsystems_1_1superstructure.html#a968e463ca32497b258bde9ea5271cdd0',1,'frc::WorBots::subsystems::superstructure']]],
-  ['switchablechooser_79',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1SwitchableChooser.html#a167711ad595f2f385ebc8d1cec2f0a4d',1,'frc::WorBots::util::debug::SwitchableChooser']]]
+  ['swervesetpointfilter_79',['SwerveSetpointFilter',['../classfrc_1_1WorBots_1_1util_1_1control_1_1SwerveSetpointFilter.html#aa3458098f2ce8e48715773d25a7fa286',1,'frc::WorBots::util::control::SwerveSetpointFilter']]],
+  ['switchablechooser_80',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1SwitchableChooser.html#a167711ad595f2f385ebc8d1cec2f0a4d',1,'frc::WorBots::util::debug::SwitchableChooser']]]
 ];

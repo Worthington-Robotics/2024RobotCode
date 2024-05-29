@@ -14,5 +14,6 @@ var searchData=
   ['superstructureiotalon_2ejava_11',['SuperstructureIOTalon.java',['../SuperstructureIOTalon_8java.html',1,'']]],
   ['superstructuremanual_2ejava_12',['SuperstructureManual.java',['../SuperstructureManual_8java.html',1,'']]],
   ['superstructurepose_2ejava_13',['SuperstructurePose.java',['../SuperstructurePose_8java.html',1,'']]],
-  ['switchablechooser_2ejava_14',['SwitchableChooser.java',['../SwitchableChooser_8java.html',1,'']]]
+  ['swervesetpointfilter_2ejava_14',['SwerveSetpointFilter.java',['../SwerveSetpointFilter_8java.html',1,'']]],
+  ['switchablechooser_2ejava_15',['SwitchableChooser.java',['../SwitchableChooser_8java.html',1,'']]]
 ];

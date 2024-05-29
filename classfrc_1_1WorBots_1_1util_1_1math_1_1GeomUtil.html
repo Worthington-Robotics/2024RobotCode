@@ -119,8 +119,14 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7fd73196118078186757c312144e5e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6e407e8133c0bb3b54d0f3f85d9ece9"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#ab6e407e8133c0bb3b54d0f3f85d9ece9">isTranslation2dNear</a> (Translation2d pose1, Translation2d pose2, double threshold)</td></tr>
 <tr class="separator:ab6e407e8133c0bb3b54d0f3f85d9ece9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a322cfe1d4ee5bf58a2dd4f4833b7846a"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a322cfe1d4ee5bf58a2dd4f4833b7846a">dot</a> (Translation2d v1, Translation2d v2)</td></tr>
+<tr class="separator:a322cfe1d4ee5bf58a2dd4f4833b7846a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a592f1157d56d67daa35a7eebfa924f2f"><td class="memItemLeft" align="right" valign="top">static ChassisSpeeds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a592f1157d56d67daa35a7eebfa924f2f">driftCorrectChassisSpeeds</a> (ChassisSpeeds speeds, double driftRate)</td></tr>
 <tr class="separator:a592f1157d56d67daa35a7eebfa924f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8bad7ee01a0147b4dc3f26e5c566d52"><td class="memItemLeft" align="right" valign="top">static Translation2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#af8bad7ee01a0147b4dc3f26e5c566d52">pointToLineSegmentProjection</a> (Translation2d p, Translation2d l1, Translation2d l2)</td></tr>
+<tr class="separator:af8bad7ee01a0147b4dc3f26e5c566d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a139c458211746a95d815dbd07993be7b"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfrc_1_1WorBots_1_1util_1_1math_1_1GeomUtil.html#a139c458211746a95d815dbd07993be7b">pointToLineSegmentDistance</a> (Translation2d p, Translation2d l1, Translation2d l2)</td></tr>
+<tr class="separator:a139c458211746a95d815dbd07993be7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -180,6 +186,42 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The modified pose </dd></dl>
+
+</div>
+</div>
+<a id="a322cfe1d4ee5bf58a2dd4f4833b7846a" name="a322cfe1d4ee5bf58a2dd4f4833b7846a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a322cfe1d4ee5bf58a2dd4f4833b7846a">&#9670;&#160;</a></span>dot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.GeomUtil.dot </td>
+          <td>(</td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>v1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>v2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -408,6 +450,90 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new twist </dd></dl>
+
+</div>
+</div>
+<a id="a139c458211746a95d815dbd07993be7b" name="a139c458211746a95d815dbd07993be7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a139c458211746a95d815dbd07993be7b">&#9670;&#160;</a></span>pointToLineSegmentDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double frc.WorBots.util.math.GeomUtil.pointToLineSegmentDistance </td>
+          <td>(</td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>l1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>l2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af8bad7ee01a0147b4dc3f26e5c566d52" name="af8bad7ee01a0147b4dc3f26e5c566d52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8bad7ee01a0147b4dc3f26e5c566d52">&#9670;&#160;</a></span>pointToLineSegmentProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Translation2d frc.WorBots.util.math.GeomUtil.pointToLineSegmentProjection </td>
+          <td>(</td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>l1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Translation2d&#160;</td>
+          <td class="paramname"><em>l2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

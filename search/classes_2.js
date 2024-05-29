@@ -7,5 +7,7 @@ var searchData=
   ['drivepath_4',['DrivePath',['../classfrc_1_1WorBots_1_1commands_1_1DrivePath.html',1,'frc::WorBots::commands']]],
   ['drivetopose_5',['DriveToPose',['../classfrc_1_1WorBots_1_1commands_1_1DriveToPose.html',1,'frc::WorBots::commands']]],
   ['drivetrajectory_6',['DriveTrajectory',['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory.html',1,'frc::WorBots::commands']]],
-  ['drivewithjoysticks_7',['DriveWithJoysticks',['../classfrc_1_1WorBots_1_1commands_1_1DriveWithJoysticks.html',1,'frc::WorBots::commands']]]
+  ['drivetrajectory2_7',['DriveTrajectory2',['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory2.html',1,'frc::WorBots::commands']]],
+  ['drivetrajectory3_8',['DriveTrajectory3',['../classfrc_1_1WorBots_1_1commands_1_1DriveTrajectory3.html',1,'frc::WorBots::commands']]],
+  ['drivewithjoysticks_9',['DriveWithJoysticks',['../classfrc_1_1WorBots_1_1commands_1_1DriveWithJoysticks.html',1,'frc::WorBots::commands']]]
 ];

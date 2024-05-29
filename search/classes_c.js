@@ -18,5 +18,6 @@ var searchData=
   ['superstructureiotalon_15',['SuperstructureIOTalon',['../classfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1SuperstructureIOTalon.html',1,'frc::WorBots::subsystems::superstructure']]],
   ['superstructuremanual_16',['SuperstructureManual',['../classfrc_1_1WorBots_1_1commands_1_1SuperstructureManual.html',1,'frc::WorBots::commands']]],
   ['superstructurestate_17',['SuperstructureState',['../enumfrc_1_1WorBots_1_1subsystems_1_1superstructure_1_1Superstructure_1_1SuperstructureState.html',1,'frc::WorBots::subsystems::superstructure::Superstructure']]],
-  ['switchablechooser_18',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1SwitchableChooser.html',1,'frc::WorBots::util::debug']]]
+  ['swervesetpointfilter_18',['SwerveSetpointFilter',['../classfrc_1_1WorBots_1_1util_1_1control_1_1SwerveSetpointFilter.html',1,'frc::WorBots::util::control']]],
+  ['switchablechooser_19',['SwitchableChooser',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1SwitchableChooser.html',1,'frc::WorBots::util::debug']]]
 ];
