@@ -162,7 +162,7 @@ public class Superstructure extends SubsystemBase {
     this.io = io;
     if (RobotBase.isReal()) { // Real
       pivotController.setGains(9.7, 0.0, 0);
-      pivotController.setConstraints(18, 80);
+      pivotController.setConstraints(18, 45);
       pivotFeedForward = new ArmFeedforward(0.00, 0.3613565, 0.4);
 
       elevatorController.setGains(130, 0.2, 0);

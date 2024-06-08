@@ -66,7 +66,7 @@ public class ShooterMath {
    * will be (1 - RPM_FALLOFF_COEFFICIENT) * MAX_SHOOTER_RPM, which will be when the robot is
    * CLOSEST_RANGE away from the goal
    */
-  private static final double RPM_FALLOFF_COEFFICIENT = 0.1;
+  private static final double RPM_FALLOFF_COEFFICIENT = 0.5;
 
   // Side shot constants
 
