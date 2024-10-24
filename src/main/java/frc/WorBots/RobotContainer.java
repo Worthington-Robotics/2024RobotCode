@@ -377,13 +377,12 @@ public class RobotContainer {
     operator.b().onTrue(superstructure.goToPose(Preset.STOW));
     operator.y().onTrue(superstructure.goToPose(Preset.HANDOFF));
     // Wing pass / flea flick
-    // operator
-    //     .leftTrigger()
-    //     .whileTrue(
-    //         new WingPass(
-    //             drive, superstructure, shooter, () -> -driver.getLeftY(), () ->
-    // -driver.getLeftX()))
-    //     .whileTrue(shootingLightsCommand);
+    operator
+        .leftTrigger()
+        .whileTrue(
+            new WingPass(
+                drive, superstructure, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
+        .whileTrue(shootingLightsCommand);
     operator
         .a()
         .whileTrue(
@@ -429,20 +428,20 @@ public class RobotContainer {
                         superstructure.setPose(Preset.STOW);
                       }
                     }));
-    operator
-        .leftTrigger()
-        .onTrue(Commands.runOnce(() -> hadGamePieceAtStartOfFeed = shooter.hasGamePiece()))
-        .whileTrue(shooter.feed())
-        .onFalse(
-            Commands.waitSeconds(0.2)
-                .andThen(
-                    () -> {
-                      if (hadGamePieceAtStartOfFeed
-                          && !shooter.hasGamePiece()
-                          && !intake.hasGamePiece()) {
-                        superstructure.setPose(Preset.STOW);
-                      }
-                    }));
+    // operator
+    //     .leftTrigger()
+    //     .onTrue(Commands.runOnce(() -> hadGamePieceAtStartOfFeed = shooter.hasGamePiece()))
+    //     .whileTrue(shooter.feed())
+    //     .onFalse(
+    //         Commands.waitSeconds(0.2)
+    //             .andThen(
+    //                 () -> {
+    //                   if (hadGamePieceAtStartOfFeed
+    //                       && !shooter.hasGamePiece()
+    //                       && !intake.hasGamePiece()) {
+    //                     superstructure.setPose(Preset.STOW);
+    //                   }
+    //                 }));
 
     // Contextual shooting
     HashMap<String, Command> shootMap = new HashMap<>();
