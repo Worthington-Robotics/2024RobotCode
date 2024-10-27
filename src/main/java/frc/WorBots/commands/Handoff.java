@@ -44,7 +44,7 @@ public class Handoff extends Command {
 
   /** Gain for the feeder */
   private static final TunableDouble FEEDER_GAIN =
-      new TunableDouble("Tuning", "Handoff", "Feeder Gain", 0.48);
+      new TunableDouble("Tuning", "Handoff", "Feeder Gain", 0.50);
 
   /** Max feeder voltage */
   private static final TunableDouble MAX_FEEDER_VOLTAGE =
