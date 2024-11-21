@@ -100,8 +100,6 @@ public class DebugRoutines {
             testDrive(),
             waitForNextStep("Superstructure; Handoff"),
             testSuperstructure(),
-            waitForNextStep("Note Vision; Look"),
-            testNoteVision(vision),
             waitForNextStep("Intake; Intake piece"),
             testIntake(),
             waitForNextStep("Shooter; Pose + Shoot"),

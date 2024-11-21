@@ -28,7 +28,7 @@ public class Handoff extends Command {
   private static final double MAX_INTAKE_VOLTAGE = 8.2;
 
   /** The amount to scale the intake power based on ToF distance */
-  private static final double INTAKE_DISTANCE_SCALING = 5.0;
+  private static final double INTAKE_DISTANCE_SCALING = 2.7;
 
   /** Amount to multiply the intake voltage by when we are in handoff */
   private static final TunableDouble HANDOFF_INTAKE_MULTIPLIER =
