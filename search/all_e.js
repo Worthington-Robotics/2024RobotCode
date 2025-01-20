@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['rainbow_0',['Rainbow',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a5ec8e1171d656db28a7336233c4de85f',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['rainbow_1',['rainbow',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#af896813c98cc25e2137a4bfbf68e45f5',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['rainbow_0',['rainbow',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#af896813c98cc25e2137a4bfbf68e45f5',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['rainbow_1',['Rainbow',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a5ec8e1171d656db28a7336233c4de85f',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['readme_2emd_2',['README.md',['../README_8md.html',1,'']]],
   ['redblue_3',['RedBlue',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a87e52c4c88a94da6ff0708368018937b',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['registerautos_4',['registerAutos',['../classfrc_1_1WorBots_1_1RobotContainer.html#a930d71d3a0514d5eb1871cec38f738db',1,'frc::WorBots::RobotContainer']]],
@@ -13,8 +13,8 @@ var searchData=
   ['resetheading_10',['resetHeading',['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1Drive.html#a8540280c6b08c14ee33820db1278ab95',1,'frc.WorBots.subsystems.drive.Drive.resetHeading()'],['../interfacefrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIO.html#a3230f1b3225b474ff5d2eda7c5641c24',1,'frc.WorBots.subsystems.drive.GyroIO.resetHeading()'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOPigeon2.html#a712fb0695c648f83ca698c17884499a4',1,'frc.WorBots.subsystems.drive.GyroIOPigeon2.resetHeading()'],['../classfrc_1_1WorBots_1_1subsystems_1_1drive_1_1GyroIOSim.html#afc41bb58f8bfc436a747ee4088386c6c',1,'frc.WorBots.subsystems.drive.GyroIOSim.resetHeading()']]],
   ['resetpose_11',['resetPose',['../classfrc_1_1WorBots_1_1util_1_1math_1_1PoseEstimator.html#aa1e2b89e581db1b6f01f6a2f746893cd',1,'frc::WorBots::util::math::PoseEstimator']]],
   ['resetunflipped_12',['resetUnflipped',['../classfrc_1_1WorBots_1_1auto_1_1AutoUtil.html#aebd719939956d9d0fa2b61c1225c3a17',1,'frc::WorBots::auto::AutoUtil']]],
-  ['ripple_13',['Ripple',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a30ca3137ac65b20c6f56cb032723bc0d',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
-  ['ripple_14',['ripple',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a968ef41bcca3e44ce79bde3177491c17',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['ripple_13',['ripple',['../classfrc_1_1WorBots_1_1subsystems_1_1lights_1_1LightsUtil.html#a968ef41bcca3e44ce79bde3177491c17',1,'frc::WorBots::subsystems::lights::LightsUtil']]],
+  ['ripple_14',['Ripple',['../enumfrc_1_1WorBots_1_1subsystems_1_1lights_1_1Lights_1_1LightsMode.html#a30ca3137ac65b20c6f56cb032723bc0d',1,'frc::WorBots::subsystems::lights::Lights::LightsMode']]],
   ['robot_15',['Robot',['../classfrc_1_1WorBots_1_1Robot.html',1,'frc::WorBots']]],
   ['robot_2ejava_16',['Robot.java',['../Robot_8java.html',1,'']]],
   ['robot_5fcode_17',['ROBOT_CODE',['../classfrc_1_1WorBots_1_1util_1_1debug_1_1StatusPage.html#aa95c1aa45f4c4d224f31947ea284ed2f',1,'frc::WorBots::util::debug::StatusPage']]],
