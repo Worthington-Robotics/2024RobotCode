@@ -42,4 +42,7 @@ public class Constants {
 
   /** The length of the robot in meters */
   public static final double ROBOT_LENGTH = Units.inchesToMeters(28);
+
+  public static final double SHOW_RPM = 1200;
+  public static final double SHOW_ANGLE = 0.45;
 }

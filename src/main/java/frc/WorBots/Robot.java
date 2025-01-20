@@ -51,8 +51,8 @@ public class Robot extends TimedRobot {
           StatusPage.periodic(pdp);
           StatusPage.reportStatus(
               StatusPage.DRIVE_CONTROLLER, robotContainer.driver.getHID().isConnected());
-          StatusPage.reportStatus(
-              StatusPage.OPERATOR_CONTROLLER, robotContainer.operator.getHID().isConnected());
+          // StatusPage.reportStatus(
+          // StatusPage.OPERATOR_CONTROLLER, robotContainer.operator.getHID().isConnected());
         },
         kDefaultPeriod);
 

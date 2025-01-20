@@ -9,7 +9,6 @@ package frc.WorBots.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +23,7 @@ import frc.WorBots.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.WorBots.subsystems.superstructure.SuperstructurePose.Preset;
 import frc.WorBots.util.control.DriveController;
 import frc.WorBots.util.math.ShooterMath;
+import frc.WorBots.util.math.ShooterMath.ShotConfidence;
 import frc.WorBots.util.math.ShooterMath.ShotData;
 import java.util.function.*;
 
@@ -89,11 +89,13 @@ public class AutoShoot extends Command {
     final Pose2d robotPose = drive.getPose();
 
     // Run shot
-    final ShotData shot = ShooterMath.calculateShotData(robotPose, drive.getFieldRelativeSpeeds());
+    final ShotData shot =
+        new ShotData(
+            Constants.SHOW_RPM, Constants.SHOW_ANGLE, robotPose.getRotation(), ShotConfidence.HIGH);
     shooter.setSpeedVoid(shot.rpm());
     superstructure.setShootingAngleRad(shot.pivotAngle());
 
-    // Run driving
+    /*    // Run driving
     final double x = leftXSupplier.get();
     final double y = leftYSupplier.get();
 
@@ -112,7 +114,7 @@ public class AutoShoot extends Command {
 
     driveSpeeds.omegaRadiansPerSecond = thetaVelocity;
 
-    driveController.drive(drive, driveSpeeds);
+    driveController.drive(drive, driveSpeeds); */
 
     // Output info
     SmartDashboard.putNumber("Goal Range", ShooterMath.getGoalDistance(drive.getPose()));

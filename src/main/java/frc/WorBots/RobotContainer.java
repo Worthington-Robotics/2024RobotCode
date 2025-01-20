@@ -48,7 +48,8 @@ public class RobotContainer {
 
   // Joysticks
   public final CommandXboxController driver = new CommandXboxController(0);
-  public final CommandXboxController operator = new CommandXboxController(1);
+
+  // public final CommandXboxController operator = new CommandXboxController(1);
 
   /** State boolean used for auto-stow after feed */
   private boolean hadGamePieceAtStartOfFeed = false;
@@ -236,29 +237,48 @@ public class RobotContainer {
     shooter.setDefaultCommand(shooter.idleCommand());
 
     bindDriverControls();
-    bindOperatorControls();
+    // bindOperatorControls();
   }
 
   /** Binds controls for the main driver */
   private void bindDriverControls() {
+    final Command shootingLightsCommand =
+        Commands.startEnd(
+            () -> Lights.getInstance().setMode(LightsMode.ShootReady),
+            () -> Lights.getInstance().setMode(LightsMode.Delivery));
+    // wierd lights stuff
     // Spit
     driver
         .leftTrigger()
         .whileTrue(intake.spitRaw().alongWith(shooter.setRawFeederVoltsCommand(-1.2)))
         .onFalse(shooter.setRawFeederVoltsCommand(0.0));
+    /*  driver
+    .povLeft()
+    .whileTrue(
+        new NoteAlign(
+            drive,
+            vision,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> -driver.getRightX(),
+            () -> approachNote,
+            rumbleCommand)); */
+    driver.a().onTrue(superstructure.goToPose(Preset.STOW));
     driver
-        .povLeft()
-        .whileTrue(
-            new NoteAlign(
-                drive,
-                vision,
-                () -> -driver.getLeftY(),
-                () -> -driver.getLeftX(),
-                () -> -driver.getRightX(),
-                () -> approachNote,
-                rumbleCommand));
-    driver.leftBumper().onTrue(superstructure.goToPose(Preset.STOW));
-    driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter));
+        .leftBumper()
+        .onTrue(Commands.runOnce(() -> hadGamePieceAtStartOfFeed = shooter.hasGamePiece()))
+        .whileTrue(shooter.feed().alongWith(intake.eject()))
+        .onFalse(
+            Commands.waitSeconds(0.2)
+                .andThen(
+                    () -> {
+                      if (hadGamePieceAtStartOfFeed
+                          && !shooter.hasGamePiece()
+                          && !intake.hasGamePiece()) {
+                        superstructure.setPose(Preset.STOW);
+                      }
+                    }));
+    // driver.rightTrigger().whileTrue(new Handoff(intake, superstructure, shooter)); //TODO rebind
     // Auto handoff toggle
     driver
         .rightBumper()
@@ -276,6 +296,12 @@ public class RobotContainer {
                     },
                     superstructure)));
     driver
+        .rightTrigger()
+        .whileTrue(
+            new AutoShoot(
+                superstructure, drive, shooter, () -> -driver.getLeftY(), () -> -driver.getLeftX()))
+        .onFalse(Commands.runOnce(() -> shooter.idle(), shooter));
+    /*     driver
         .povDown()
         .toggleOnTrue(
             new SuperstructureManual(
@@ -307,21 +333,8 @@ public class RobotContainer {
                           isClimbing = false;
                           climber.clearSetpoint();
                           Lights.getInstance().setMode(LightsMode.Delivery);
-                        })));
-    driver
-        .x()
-        .toggleOnTrue(
-            Commands.startEnd(
-                () -> {
-                  if (isClimbing) {
-                    superstructure.setClimbLocked(true);
-                    climber.setClimbLocked(true);
-                  }
-                },
-                () -> {
-                  superstructure.setClimbLocked(false);
-                  climber.setClimbLocked(false);
-                }));
+                        }))); */
+    driver.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
     driver.y().onTrue(Commands.runOnce(() -> drive.resetHeading(new Rotation2d())));
     // driver
     //     .a()
@@ -366,7 +379,7 @@ public class RobotContainer {
   }
 
   /** Binds controls for the secondary driver */
-  private void bindOperatorControls() {
+  /* private void bindOperatorControls() {
     // Command that shows targeting lights
     final Command shootingLightsCommand =
         Commands.startEnd(
@@ -400,7 +413,7 @@ public class RobotContainer {
                 () -> Lights.getInstance().setOverride(LightsMode.Claire),
                 () -> Lights.getInstance().clearOverride()));
     // Amp preset
-    operator.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand);
+    operator.x().onTrue(superstructure.goToPose(Preset.AMP)).whileTrue(shootingLightsCommand); //TODO
     // Setpoint shot
     operator
         .povUp()
@@ -471,7 +484,7 @@ public class RobotContainer {
                   }
                   return "raw";
                 }));
-  }
+  } */
 
   public Command getAutonomousCommand() {
     return selector.getCommand();
