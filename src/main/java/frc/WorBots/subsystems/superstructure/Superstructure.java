@@ -85,7 +85,7 @@ public class Superstructure extends SubsystemBase {
   private static final double PIVOT_FORWARD_LIMIT_DISTANCE = 1.05;
 
   /** The offset for the pivot abs encoder, in radians */
-  private static final double ABSOLUTE_ZERO_OFFSET = 0.2827;
+  private static final double ABSOLUTE_ZERO_OFFSET = 0.2943;
 
   /** The minimum value for the absolute encoder */
   private static final double ABSOLUTE_MIN_VALUE = 0.265;
